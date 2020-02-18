@@ -15,7 +15,7 @@ export class TodoList extends React.Component {
     }
 
     render() {
-        const state = store.getState();
+        console.log(`render state: ${JSON.stringify(store.getState())}`);
         return (
             <View style={{position: "relative"}}>
                 <Button title="Add task"
@@ -23,7 +23,8 @@ export class TodoList extends React.Component {
                             this.props.navigation.navigate(CreateTodo.name)
                         }/>
                 <FlatList style={style.container}
-                          data={state}
+                          data={store.getState().todos}
+                          keyExtractor={item => item.id}
                           renderItem={({item}) =>
                               <View style={style.item}>
                                   <Text style={style.itemTitle}>{item.title}</Text>

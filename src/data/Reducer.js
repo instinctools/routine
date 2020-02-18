@@ -1,9 +1,11 @@
-import {ACTION_TODO_ADD, ACTION_TODO_RESET} from "./Action";
 import moment from "moment";
 
 export const PERIOD_DAY = `PERIOD_DAY`;
 export const PERIOD_WEEK = `PERIOD_WEEK`;
 export const PERIOD_MONTH = `PERIOD_MONTH`;
+
+export const ACTION_TODO_ADD = `ACTION_TODO_ADD`;
+export const ACTION_TODO_RESET = `ACTION_TODO_RESET`;
 
 export function todoReducer(state = [], action) {
     switch (action.type) {
@@ -12,6 +14,7 @@ export function todoReducer(state = [], action) {
                 ...state,
                 {
                     id: action.id,
+                    title: action.title,
                     periodUnit: action.periodUnit,
                     period: action.period,
                     timestamp: calculateTimestamp(action.periodUnit, action.period)
@@ -45,5 +48,5 @@ const calculateTimestamp = (periodUnit, period) => {
             date.add(period, `d`);
             break;
     }
-    return date();
+    return date.toISOString();
 };
