@@ -2,3 +2,5 @@
 __Once task list. No calendar. No date. No priority.__
 
 `Implemented on React Native`
+
+![Promo image](/images/promo.png)
