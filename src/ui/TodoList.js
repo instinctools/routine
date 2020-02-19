@@ -54,5 +54,7 @@ const adjustTime = (todos) => {
         return Object.assign({}, item, {
             timestamp: diffTime
         })
+    }).slice().sort((value1, value2) => {
+        return value1.timestamp - value2.timestamp
     });
 };
