@@ -4,6 +4,7 @@ import {style} from '../styles/TodoListStyle';
 import {CreateTodo} from '../ui/CreateTodo';
 import {store} from "../data/Store";
 import {resetTodo} from "../data/Action";
+import moment from "moment";
 
 export class TodoList extends React.Component {
 
@@ -17,6 +18,7 @@ export class TodoList extends React.Component {
 
     render() {
         console.log(`render state: ${JSON.stringify(store.getState())}`);
+        const todos = adjustTime(store.getState().todos);
         return (
             <View style={{position: "relative"}}>
                 <Button title="Add task"
@@ -24,7 +26,7 @@ export class TodoList extends React.Component {
                             this.props.navigation.navigate(CreateTodo.name)
                         }/>
                 <FlatList style={style.container}
-                          data={store.getState().todos}
+                          data={todos}
                           keyExtractor={item => item.id}
                           renderItem={({item}) =>
                               <TouchableOpacity
@@ -43,3 +45,14 @@ export class TodoList extends React.Component {
         );
     }
 }
+
+const adjustTime = (todos) => {
+    let currentTime = moment();
+    return todos.map((item) => {
+        let todoTime = moment(item.timestamp);
+        let diffTime = todoTime.diff(currentTime, `d`);
+        return Object.assign({}, item, {
+            timestamp: diffTime
+        })
+    });
+};
