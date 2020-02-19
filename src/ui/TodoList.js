@@ -1,8 +1,9 @@
-import {Button, FlatList, Text, View} from 'react-native';
+import {Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {style} from '../styles/TodoListStyle';
 import {CreateTodo} from '../ui/CreateTodo';
 import {store} from "../data/Store";
+import {resetTodo} from "../data/Action";
 
 export class TodoList extends React.Component {
 
@@ -26,10 +27,15 @@ export class TodoList extends React.Component {
                           data={store.getState().todos}
                           keyExtractor={item => item.id}
                           renderItem={({item}) =>
-                              <View style={style.item}>
-                                  <Text style={style.itemTitle}>{item.title}</Text>
-                                  <Text>{item.timestamp}</Text>
-                              </View>
+                              <TouchableOpacity
+                                  onPress={() => {
+                                      resetTodo(item.id)
+                                  }}>
+                                  <View style={style.item}>
+                                      <Text style={style.itemTitle}>{item.title}</Text>
+                                      <Text>{item.timestamp}</Text>
+                                  </View>
+                              </TouchableOpacity>
                           }
                 />
             </View>
