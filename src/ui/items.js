@@ -1,37 +1,28 @@
 import {Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {style} from '../styles/TodoListStyle';
-import {CreateTodo} from '../ui/CreateTodo';
-import {store} from "../data/Store";
-import {resetTodo} from "../data/Action";
 import moment from "moment";
+import {connect} from "react-redux";
+import Action from '../action/todos';
 
 export class TodoList extends React.Component {
-
-    componentDidMount() {
-        this.unsubscribe = store.subscribe(() => this.forceUpdate())
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe()
-    }
-
     render() {
-        console.log(`render state: ${JSON.stringify(store.getState())}`);
-        const todos = adjustTime(store.getState().todos);
+        console.log(`TodoList render state: ${JSON.stringify(this.state)}`);
+        console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
+        const items = this.state ? adjustTime(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
                 <Button title="Add task"
                         onPress={() =>
-                            this.props.navigation.navigate(CreateTodo.name)
+                            this.props.navigation.navigate("Details")
                         }/>
                 <FlatList style={style.container}
-                          data={todos}
+                          data={items}
                           keyExtractor={item => item.id}
                           renderItem={({item}) =>
                               <TouchableOpacity
                                   onPress={() => {
-                                      resetTodo(item.id)
+                                      this.props.resetTodo(item.id)
                                   }}>
                                   <View style={style.item}>
                                       <Text style={style.itemTitle}>{item.title}</Text>
@@ -44,7 +35,19 @@ export class TodoList extends React.Component {
 
         );
     }
+
+    static getDerivedStateFromProps(props, state) {
+        return {...state, items: props.items};
+    }
 }
+
+export default connect(
+    previousState => {
+        const {todos} = previousState;
+        return {...todos};
+    },
+    Action
+)(TodoList);
 
 const adjustTime = (todos) => {
     let currentTime = moment();

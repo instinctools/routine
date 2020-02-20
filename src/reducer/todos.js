@@ -1,17 +1,17 @@
+import Action from "../action/todos";
 import moment from "moment";
 
-export const PERIOD_DAY = `PERIOD_DAY`;
-export const PERIOD_WEEK = `PERIOD_WEEK`;
-export const PERIOD_MONTH = `PERIOD_MONTH`;
+const _initialState = {
+    items: [],
+    selectedFilter: 'all'
+};
 
-export const ACTION_TODO_ADD = `ACTION_TODO_ADD`;
-export const ACTION_TODO_RESET = `ACTION_TODO_RESET`;
-
-export function todoReducer(state = [], action) {
-    switch (action.type) {
-        case ACTION_TODO_ADD:
-            return [
-                ...state,
+export const reducer = (state = _initialState, action) => {
+    const newState = { ...state };
+    switch(action.type) {
+        case Action.Type.TODO_ADD: {
+            newState.items = [
+                ...newState.items,
                 {
                     id: action.id,
                     title: action.title,
@@ -20,8 +20,10 @@ export function todoReducer(state = [], action) {
                     timestamp: calculateTimestamp(action.periodUnit, action.period)
                 }
             ];
-        case ACTION_TODO_RESET:
-            return state.map((todo, _) => {
+            break;
+        }
+        case Action.Type.TODO_RESET: {
+            newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.id) {
                     return Object.assign({}, todo, {
                         timestamp: calculateTimestamp(todo.periodUnit, todo.period)
@@ -29,21 +31,22 @@ export function todoReducer(state = [], action) {
                 }
                 return todo
             });
-        default:
-            return state
+            break;
+        }
     }
-}
+    return newState;
+};
 
 const calculateTimestamp = (periodUnit, period) => {
     let date = moment();
     switch (periodUnit) {
-        case PERIOD_WEEK:
+        case Action.Period.WEEK:
             date.add(period, `w`);
             break;
-        case PERIOD_MONTH:
+        case Action.Period.MONTH:
             date.add(period, `M`);
             break;
-        case PERIOD_DAY:
+        case Action.Period.DAY:
         default:
             date.add(period, `d`);
             break;
