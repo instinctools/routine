@@ -1,40 +1,43 @@
 import {Button, Picker, TextInput, View} from 'react-native';
 import React from 'react';
-import {PERIOD_DAY, PERIOD_MONTH, PERIOD_WEEK} from "../data/Reducer";
-import {addTodo} from "../data/Action";
+import {connect} from "react-redux";
+import Action from '../action/todos';
 
-
-export class CreateTodo extends React.Component {
+export class DetailsScreen extends React.Component {
     constructor() {
         super();
         this.state = {
             title: "",
-            periodUnit: PERIOD_DAY,
-            period: 1
+            periodUnit: Action.Period.DAY,
+            period: '1'
         }
     }
 
     render() {
+        console.log(`CreateTodo render state: ${JSON.stringify(this.state)}`);
+        console.log(`CreateTodo render props: ${JSON.stringify(this.props)}`);
         return (
             <View>
                 <TextInput
                     placeholder="Enter title"
                     onChangeText={title => this.setState({title: title})}
+                    value={this.state.title}
                 />
                 <TextInput
                     keyboardType="numeric"
                     placeholder="Enter period"
                     onChangeText={period => this.setState({period: period})}
+                    value={this.state.period}
                 />
                 <Picker
                     selectedValue={this.state.periodUnit}
                     onValueChange={(itemValue, _) => this.setState({periodUnit: itemValue})}>
-                    <Picker.Item label={PERIOD_DAY} value={PERIOD_DAY}/>
-                    <Picker.Item label={PERIOD_WEEK} value={PERIOD_WEEK}/>
-                    <Picker.Item label={PERIOD_MONTH} value={PERIOD_MONTH}/>
+                    <Picker.Item label={Action.Period.DAY} value={Action.Period.DAY}/>
+                    <Picker.Item label={Action.Period.WEEK} value={Action.Period.WEEK}/>
+                    <Picker.Item label={Action.Period.MONTH} value={Action.Period.MONTH}/>
                 </Picker>
                 <Button title={`SAVE CHANGES`} onPress={() => {
-                    addTodo(this.state.title, this.state.periodUnit, this.state.period);
+                    this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
                     this.props.navigation.pop();
                 }
                 }/>
@@ -42,3 +45,8 @@ export class CreateTodo extends React.Component {
         );
     }
 }
+
+export default connect(
+    null,
+    Action
+)(DetailsScreen);
