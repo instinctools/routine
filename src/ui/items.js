@@ -1,4 +1,4 @@
-import {Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Swipeable from 'react-native-swipeable-row';
 import {style} from '../styles/TodoListStyle';
@@ -61,7 +61,24 @@ export class TodoList extends React.Component {
                                   <TouchableOpacity
                                       onPress={() => {
                                           this.props.resetTodo(item.id)
-                                      }}>
+                                      }}
+                                      onLongPress={() =>
+                                          Alert.alert(
+                                              '',
+                                              "Are you sure want to delete this task?",
+                                              [
+                                                  {
+                                                      text: 'Cancel',
+                                                      style: 'cancel',
+                                                  },
+                                                  {
+                                                      text: 'Delete',
+                                                      onPress: () => this.props.deleteTodo(item.id)
+                                                  },
+                                              ]
+                                          )
+                                      }
+                                  >
                                       <View style={style.item}>
                                           <Text style={style.itemTitle}>{item.title}</Text>
                                           <Text>{item.timestamp}</Text>

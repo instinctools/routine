@@ -7,6 +7,7 @@ const _initialState = {
 };
 
 export const reducer = (state = _initialState, action) => {
+    console.log(`reducer action: ${JSON.stringify(action)}`);
     const newState = { ...state };
     switch(action.type) {
         case Action.Type.TODO_ADD: {
@@ -31,6 +32,15 @@ export const reducer = (state = _initialState, action) => {
                 }
                 return todo
             });
+            break;
+        }
+        case Action.Type.TODO_DELETE: {
+            newState.items = [...newState.items];
+            const index = newState.items.map((item) => { return item.id; })
+                .indexOf(action.id);
+            if (index > -1) {
+                newState.items.splice(index, 1);
+            }
             break;
         }
     }
