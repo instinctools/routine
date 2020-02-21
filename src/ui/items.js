@@ -60,7 +60,7 @@ export class TodoList extends React.Component {
                               >
                                   <TouchableOpacity
                                       onPress={() => {
-                                          this.props.resetTodo(item.id)
+                                          this.props.navigation.navigate("Details", {id: item.id})
                                       }}
                                       onLongPress={() =>
                                           Alert.alert(
