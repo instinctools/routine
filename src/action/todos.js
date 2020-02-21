@@ -1,7 +1,8 @@
 const Action = {
     Type: {
         TODO_ADD: 'todo-add',
-        TODO_RESET: 'todo-reset'
+        TODO_RESET: 'todo-reset',
+        TODO_DELETE: 'todo-delete',
     },
     Period: {
         DAY: 'DAY',
@@ -26,6 +27,13 @@ Action.resetTodo = id => {
     console.log(`action resetTodo id: ${id}`);
     return {
         type: Action.Type.TODO_RESET,
+        id
+    };
+};
+Action.deleteTodo = id => {
+    console.log(`action deleteTodo id: ${id}`);
+    return {
+        type: Action.Type.TODO_DELETE,
         id
     };
 };
