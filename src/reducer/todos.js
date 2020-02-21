@@ -23,6 +23,21 @@ export const reducer = (state = _initialState, action) => {
             ];
             break;
         }
+        case Action.Type.TODO_EDIT: {
+            newState.items = newState.items.map((todo, _) => {
+                if (todo.id === action.id) {
+                    return {
+                        id: action.id,
+                        title: action.title,
+                        periodUnit: action.periodUnit,
+                        period: action.period,
+                        timestamp: calculateTimestamp(action.periodUnit, action.period)
+                    }
+                }
+                return todo
+            });
+            break;
+        }
         case Action.Type.TODO_RESET: {
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.id) {
