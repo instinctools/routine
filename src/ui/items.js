@@ -5,7 +5,7 @@ import {style} from '../styles/TodoListStyle';
 import moment from "moment";
 import {connect} from "react-redux";
 import Action from '../action/todos';
-import {Period} from "../constants";
+import {calculateTargetDate, prettyPeriod} from "../utils";
 
 export class TodoList extends React.Component {
 
@@ -47,7 +47,7 @@ export class TodoList extends React.Component {
                 </View>
             </View>
         );
-        const items = this.state ? adjustTime(this.state.items) : [];
+        const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
                 <Button title="Add task"
@@ -116,43 +116,15 @@ export default connect(
     Action
 )(TodoList);
 
-const adjustTime = (todos) => {
+const toUiModels = (todos) => {
     let currentTime = moment().startOf("day");
     return todos.map((item) => {
         let todoTime = moment(item.timestamp);
-        let diffDays = todoTime.diff(currentTime, `d`);
-        let targetDate = undefined;
-        if (diffDays === 0) {
-            targetDate = "Today"
-        } else if (diffDays === 1) {
-            targetDate = "Tomorrow"
-        } else if (diffDays === 7) {
-            targetDate = "1 week left"
-        } else if (diffDays > 1 && diffDays < 7) {
-            targetDate = `${diffDays} days left`
-        } else if (diffDays === -1) {
-            targetDate = "Yesterday"
-        } else if (diffDays < -1) {
-            targetDate = todoTime.fromNow();
-        }
-        let period = undefined;
-        if (item.period === "1") {
-            if (item.periodUnit === Period.DAY) {
-                period = "Every day"
-            } else if (item.periodUnit === Period.WEEK) {
-                period = "Once a week"
-            } else if (item.periodUnit === Period.MONTH) {
-                period = "Once a month"
-            }
-        } else {
-            period = `Every ${item.period} ${item.periodUnit.toLowerCase()}s`
-        }
-        // console.log(`adjustTime: todoTime=${todoTime.format("YYYY-MM-DD")}; when=${targetDate}; diffDays=${diffDays}`);
         return {
             ...item,
-            diff: diffDays,
-            targetDate,
-            periodStr: period
+            diff: todoTime.diff(currentTime, `d`),
+            targetDate: calculateTargetDate(todoTime),
+            periodStr: prettyPeriod(item.period, item.periodUnit)
         };
     }).slice().sort((value1, value2) => {
         return value1.diff - value2.diff

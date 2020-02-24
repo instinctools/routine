@@ -1,6 +1,5 @@
 import Action from "../action/todos";
-import moment from "moment";
-import {Period} from "../constants";
+import {calculateTimestamp} from "../utils";
 
 const _initialState = {
     items: [],
@@ -19,7 +18,7 @@ export const reducer = (state = _initialState, action) => {
                     title: action.title,
                     periodUnit: action.periodUnit,
                     period: action.period,
-                    timestamp: calculateTimestamp(action.periodUnit, action.period)
+                    timestamp: calculateTimestamp(action.period, action.periodUnit)
                 }
             ];
             break;
@@ -32,7 +31,7 @@ export const reducer = (state = _initialState, action) => {
                         title: action.title,
                         periodUnit: action.periodUnit,
                         period: action.period,
-                        timestamp: calculateTimestamp(action.periodUnit, action.period)
+                        timestamp: calculateTimestamp(action.period, action.periodUnit)
                     }
                 }
                 return todo
@@ -43,7 +42,7 @@ export const reducer = (state = _initialState, action) => {
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.id) {
                     return Object.assign({}, todo, {
-                        timestamp: calculateTimestamp(todo.periodUnit, todo.period)
+                        timestamp: calculateTimestamp(todo.period, todo.periodUnit)
                     })
                 }
                 return todo
@@ -61,21 +60,4 @@ export const reducer = (state = _initialState, action) => {
         }
     }
     return newState;
-};
-
-const calculateTimestamp = (periodUnit, period) => {
-    let date = moment();
-    switch (periodUnit) {
-        case Period.WEEK:
-            date.add(period, `w`);
-            break;
-        case Period.MONTH:
-            date.add(period, `M`);
-            break;
-        case Period.DAY:
-        default:
-            date.add(period, `d`);
-            break;
-    }
-    return date.format("YYYY-MM-DD");
 };
