@@ -8,6 +8,11 @@ import Action from '../action/todos';
 
 export class TodoList extends React.Component {
 
+    constructor(props, context) {
+        super(props, context);
+        this.state = {items: []}
+    }
+
     render() {
         console.log(`TodoList render state: ${JSON.stringify(this.state)}`);
         console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
