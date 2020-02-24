@@ -4,10 +4,18 @@ import {connect} from "react-redux";
 import Action from '../action/todos';
 
 export class DetailsScreen extends React.Component {
+
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            period: '1',
+            periodUnit: Action.Period.DAY
+        }
+    }
+
     render() {
         console.log(`CreateTodo render state: ${JSON.stringify(this.state)}`);
         console.log(`CreateTodo render props: ${JSON.stringify(this.props)}`);
-        const itemId = this.state && this.state.id >= 0 ? this.state.id : undefined;
         return (
             <View>
                 <TextInput
@@ -29,8 +37,8 @@ export class DetailsScreen extends React.Component {
                     <Picker.Item label={Action.Period.MONTH} value={Action.Period.MONTH}/>
                 </Picker>
                 <Button title={`SAVE CHANGES`} onPress={() => {
-                    if (itemId) {
-                        this.props.editTodo(itemId, this.state.title, this.state.periodUnit, this.state.period);
+                    if (this.state.id) {
+                        this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
                     } else {
                         this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
                     }
@@ -42,17 +50,13 @@ export class DetailsScreen extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        if (state) {
-            return state
+        const params = props.navigation.state.params;
+        const id = params && params.id >= 0 ? params.id : undefined;
+        if (id) {
+            const item = props.items.find(todo => todo.id === id);
+            return {...state, id, ...item};
         } else {
-            const params = props.navigation.state.params;
-            const id = params && params.id >= 0 ? params.id : undefined;
-            if (id) {
-                const item = props.items.find(todo => todo.id === id);
-                return {id, ...item};
-            } else {
-                return null
-            }
+            return state;
         }
     }
 }
