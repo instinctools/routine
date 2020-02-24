@@ -84,9 +84,14 @@ export class TodoList extends React.Component {
                                           )
                                       }
                                   >
-                                      <View style={style.item}>
-                                          <Text style={style.itemTitle}>{item.title}</Text>
-                                          <Text>{item.timestamp}</Text>
+                                      <View style={{...style.item, backgroundColor: 'lightgray'}}>
+                                          <View style={style.itemHeader}>
+                                              <Text>{item.title}</Text>
+                                          </View>
+                                          <View style={style.itemFooter}>
+                                              <Text>{item.periodStr}</Text>
+                                              <Text>{item.targetDate}</Text>
+                                          </View>
                                       </View>
                                   </TouchableOpacity>
                               </Swipeable>
@@ -111,14 +116,44 @@ export default connect(
 )(TodoList);
 
 const adjustTime = (todos) => {
-    let currentTime = moment();
+    let currentTime = moment().startOf("day");
     return todos.map((item) => {
         let todoTime = moment(item.timestamp);
-        let diffTime = todoTime.diff(currentTime, `d`);
-        return Object.assign({}, item, {
-            timestamp: diffTime
-        })
+        let diffDays = todoTime.diff(currentTime, `d`);
+        let targetDate = undefined;
+        if (diffDays === 0) {
+            targetDate = "Today"
+        } else if (diffDays === 1) {
+            targetDate = "Tomorrow"
+        } else if (diffDays === 7) {
+            targetDate = "1 week left"
+        } else if (diffDays > 1 && diffDays < 7) {
+            targetDate = `${diffDays} days left`
+        } else if (diffDays === -1) {
+            targetDate = "Yesterday"
+        } else if (diffDays < -1) {
+            targetDate = todoTime.fromNow();
+        }
+        let period = undefined;
+        if (item.period === "1") {
+            if (item.periodUnit === Action.Period.DAY) {
+                period = "Every day"
+            } else if (item.periodUnit === Action.Period.WEEK) {
+                period = "Once a week"
+            } else if (item.periodUnit === Action.Period.MONTH) {
+                period = "Once a month"
+            }
+        } else {
+            period = `Every ${item.period} ${item.periodUnit.toLowerCase()}s`
+        }
+        // console.log(`adjustTime: todoTime=${todoTime.format("YYYY-MM-DD")}; when=${targetDate}; diffDays=${diffDays}`);
+        return {
+            ...item,
+            diff: diffDays,
+            targetDate,
+            periodStr: period
+        };
     }).slice().sort((value1, value2) => {
-        return value1.timestamp - value2.timestamp
+        return value1.diff - value2.diff
     });
 };

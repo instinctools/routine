@@ -76,5 +76,5 @@ const calculateTimestamp = (periodUnit, period) => {
             date.add(period, `d`);
             break;
     }
-    return date.toISOString();
+    return date.format("YYYY-MM-DD");
 };
