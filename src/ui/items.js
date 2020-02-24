@@ -5,6 +5,7 @@ import {style} from '../styles/TodoListStyle';
 import moment from "moment";
 import {connect} from "react-redux";
 import Action from '../action/todos';
+import {Period} from "../constants";
 
 export class TodoList extends React.Component {
 
@@ -136,11 +137,11 @@ const adjustTime = (todos) => {
         }
         let period = undefined;
         if (item.period === "1") {
-            if (item.periodUnit === Action.Period.DAY) {
+            if (item.periodUnit === Period.DAY) {
                 period = "Every day"
-            } else if (item.periodUnit === Action.Period.WEEK) {
+            } else if (item.periodUnit === Period.WEEK) {
                 period = "Once a week"
-            } else if (item.periodUnit === Action.Period.MONTH) {
+            } else if (item.periodUnit === Period.MONTH) {
                 period = "Once a month"
             }
         } else {

@@ -4,11 +4,6 @@ const Action = {
         TODO_EDIT: 'todo-edit',
         TODO_RESET: 'todo-reset',
         TODO_DELETE: 'todo-delete',
-    },
-    Period: {
-        DAY: 'DAY',
-        WEEK: 'WEEK',
-        MONTH: 'MONTH'
     }
 };
 

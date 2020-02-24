@@ -2,6 +2,7 @@ import {Button, Picker, TextInput, View} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
 import Action from '../action/todos';
+import {Period} from "../constants";
 
 export class DetailsScreen extends React.Component {
 
@@ -9,7 +10,7 @@ export class DetailsScreen extends React.Component {
         super(props, context);
         this.state = {
             period: '1',
-            periodUnit: Action.Period.DAY
+            periodUnit: Period.DAY
         }
     }
 
@@ -32,9 +33,9 @@ export class DetailsScreen extends React.Component {
                 <Picker
                     selectedValue={this.state.periodUnit}
                     onValueChange={(itemValue, _) => this.setState({periodUnit: itemValue})}>
-                    <Picker.Item label={Action.Period.DAY} value={Action.Period.DAY}/>
-                    <Picker.Item label={Action.Period.WEEK} value={Action.Period.WEEK}/>
-                    <Picker.Item label={Action.Period.MONTH} value={Action.Period.MONTH}/>
+                    <Picker.Item label={Period.DAY} value={Period.DAY}/>
+                    <Picker.Item label={Period.WEEK} value={Period.WEEK}/>
+                    <Picker.Item label={Period.MONTH} value={Period.MONTH}/>
                 </Picker>
                 <Button title={`SAVE CHANGES`} onPress={() => {
                     if (this.state.id) {
