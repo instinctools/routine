@@ -1,5 +1,6 @@
 import Action from "../action/todos";
 import moment from "moment";
+import {Period} from "../constants";
 
 const _initialState = {
     items: [],
@@ -65,13 +66,13 @@ export const reducer = (state = _initialState, action) => {
 const calculateTimestamp = (periodUnit, period) => {
     let date = moment();
     switch (periodUnit) {
-        case Action.Period.WEEK:
+        case Period.WEEK:
             date.add(period, `w`);
             break;
-        case Action.Period.MONTH:
+        case Period.MONTH:
             date.add(period, `M`);
             break;
-        case Action.Period.DAY:
+        case Period.DAY:
         default:
             date.add(period, `d`);
             break;
