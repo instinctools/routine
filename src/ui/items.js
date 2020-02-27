@@ -25,7 +25,8 @@ export class TodoList extends React.Component {
                 flexDirection: "row"
             }}>
                 <View style={{
-                    backgroundColor: 'red',
+                    padding: 8,
+                    backgroundColor: 'green',
                     alignSelf: 'center'
                 }}>
                     <Text>Reset</Text>
@@ -40,10 +41,11 @@ export class TodoList extends React.Component {
                 flexDirection: "row"
             }}>
                 <View style={{
+                    padding: 8,
                     backgroundColor: 'red',
                     alignSelf: 'center'
                 }}>
-                    <Text>Reset</Text>
+                    <Text>Delete</Text>
                 </View>
             </View>
         );
@@ -62,28 +64,26 @@ export class TodoList extends React.Component {
                                   leftContent={swipeLeftContent}
                                   rightContent={swipeRightContent}
                                   onLeftActionRelease={() => this.props.resetTodo(item.id)}
-                                  onRightActionRelease={() => this.props.resetTodo(item.id)}
+                                  onRightActionRelease={() =>
+                                      Alert.alert(
+                                          '',
+                                          "Are you sure want to delete this task?",
+                                          [
+                                              {
+                                                  text: 'Cancel',
+                                                  style: 'cancel',
+                                              },
+                                              {
+                                                  text: 'Delete',
+                                                  onPress: () => this.props.deleteTodo(item.id)
+                                              },
+                                          ]
+                                      )}
                               >
                                   <TouchableOpacity
                                       onPress={() => {
                                           this.props.navigation.navigate("Details", {id: item.id})
                                       }}
-                                      onLongPress={() =>
-                                          Alert.alert(
-                                              '',
-                                              "Are you sure want to delete this task?",
-                                              [
-                                                  {
-                                                      text: 'Cancel',
-                                                      style: 'cancel',
-                                                  },
-                                                  {
-                                                      text: 'Delete',
-                                                      onPress: () => this.props.deleteTodo(item.id)
-                                                  },
-                                              ]
-                                          )
-                                      }
                                   >
                                       <View style={{...style.item, backgroundColor: 'lightgray'}}>
                                           <View style={style.itemHeader}>
