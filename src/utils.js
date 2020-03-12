@@ -39,7 +39,7 @@ export const calculateTargetDate = (date) => {
 };
 
 export const prettyPeriod = (period, periodUnit) => {
-    if (period === "1") {
+    if (period === 1) {
         if (periodUnit === Period.DAY) {
             return "Every day"
         } else if (periodUnit === Period.WEEK) {
