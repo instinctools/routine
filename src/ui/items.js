@@ -1,4 +1,4 @@
-import {Alert, Button, FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Button, FlatList, Text, TouchableOpacity, View, Image} from 'react-native';
 import React from 'react';
 import Swipeable from 'react-native-swipeable-row';
 import {style} from '../styles/TodoListStyle';
@@ -9,9 +9,34 @@ import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../utils";
 
 export class TodoList extends React.Component {
 
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: 'Routine',
+            headerTitleStyle: {
+                fontSize: 32,
+                fontWeight: 'bold'
+            },
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={navigation.getParam('navigateToDetails')}>
+                    <Image
+                        style={{width: 50, height: 50}}
+                        source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
+                    />
+                </TouchableOpacity>
+            )
+        }
+    };
+
     constructor(props, context) {
         super(props, context);
         this.state = {items: []}
+    }
+
+    componentDidMount() {
+        this.props.navigation.setParams({
+            navigateToDetails: () => (this.props.navigation.navigate(`Details`))
+        });
     }
 
     render() {
@@ -52,10 +77,6 @@ export class TodoList extends React.Component {
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
-                <Button title="Add task"
-                        onPress={() =>
-                            this.props.navigation.navigate("Details")
-                        }/>
                 <FlatList style={style.container}
                           data={items}
                           keyExtractor={item => item.id}
