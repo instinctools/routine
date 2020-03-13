@@ -3,7 +3,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createAppContainer} from 'react-navigation';
 import {Provider} from "react-redux";
 
-import {store} from "./src/store";
+import { store, persistor } from './src/store';
+import { PersistGate } from 'redux-persist/integration/react'
 
 import TodoList from './src/ui/items';
 import TodoDetails from './src/ui/details';
@@ -24,7 +25,9 @@ export default class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppContainer />
+                <PersistGate loading={null} persistor={persistor}>
+                    <AppContainer />
+                </PersistGate>
             </Provider>
         );
     }
