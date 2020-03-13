@@ -5,7 +5,7 @@ import {style} from '../styles/TodoListStyle';
 import moment from "moment";
 import {connect} from "react-redux";
 import Action from '../action/todos';
-import {calculateTargetDate, prettyPeriod} from "../utils";
+import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../utils";
 
 export class TodoList extends React.Component {
 
@@ -83,9 +83,8 @@ export class TodoList extends React.Component {
                                   <TouchableOpacity
                                       onPress={() => {
                                           this.props.navigation.navigate("Details", {id: item.id})
-                                      }}
-                                  >
-                                      <View style={{...style.item, backgroundColor: 'lightgray'}}>
+                                      }}>
+                                      <View style={{...style.item, backgroundColor: item.backgroundColor}}>
                                           <View style={style.itemHeader}>
                                               <Text>{item.title}</Text>
                                           </View>
@@ -117,16 +116,19 @@ export default connect(
 )(TodoList);
 
 const toUiModels = (todos) => {
-    let currentTime = moment().startOf("day");
-    return todos.map((item) => {
+    const currentTime = moment().startOf("day");
+    const uiTodos = [];
+    for (let i = 0; i < todos.length; i++) {
+        const item = todos[i];
         let todoTime = moment(item.timestamp);
-        return {
-            ...item,
+        uiTodos.push({
             diff: todoTime.diff(currentTime, `d`),
             targetDate: calculateTargetDate(todoTime),
-            periodStr: prettyPeriod(item.period, item.periodUnit)
-        };
-    }).slice().sort((value1, value2) => {
+            periodStr: prettyPeriod(item.period, item.periodUnit),
+            backgroundColor: pickColorBetween(i)
+        })
+    }
+    return uiTodos.slice().sort((value1, value2) => {
         return value1.diff - value2.diff
     });
 };
