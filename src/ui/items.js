@@ -86,11 +86,11 @@ export class TodoList extends React.Component {
                                       }}>
                                       <View style={{...style.item, backgroundColor: item.backgroundColor}}>
                                           <View style={style.itemHeader}>
-                                              <Text>{item.title}</Text>
+                                              <Text style={style.itemHeaderText}>{item.title}</Text>
                                           </View>
                                           <View style={style.itemFooter}>
-                                              <Text>{item.periodStr}</Text>
-                                              <Text>{item.targetDate}</Text>
+                                              <Text style={style.itemFooterText}>{item.periodStr}</Text>
+                                              <Text style={style.itemFooterText}>{item.targetDate}</Text>
                                           </View>
                                       </View>
                                   </TouchableOpacity>
@@ -122,6 +122,7 @@ const toUiModels = (todos) => {
         const item = todos[i];
         let todoTime = moment(item.timestamp);
         uiTodos.push({
+            title: item.title,
             diff: todoTime.diff(currentTime, `d`),
             targetDate: calculateTargetDate(todoTime),
             periodStr: prettyPeriod(item.period, item.periodUnit),

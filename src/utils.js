@@ -55,12 +55,11 @@ export const prettyPeriod = (period, periodUnit) => {
     return null;
 };
 
-export const pickColorBetween = (index, maxIndex = 30, color1 = [255, 255, 0], color2 = [235, 0, 0]) => {
+export const pickColorBetween = (index, maxIndex = 15, color1 = [253, 180, 76], color2 = [236, 47, 103]) => {
     let w1 = 1;
     if (index < maxIndex) {
         w1 = index / maxIndex
     }
-    console.log(`weight: ${w1}`);
     const w2 = 1 - w1;
     const colorRGB = [Math.round(color1[0] * w1 + color2[0] * w2),
         Math.round(color1[1] * w1 + color2[1] * w2),
