@@ -38,35 +38,17 @@ export class TodoList extends React.Component {
         console.log(`TodoList render state: ${JSON.stringify(this.state)}`);
         console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
         const swipeLeftContent = (
-            <View style={{
-                flex: 1,
-                backgroundColor: 'blue',
-                justifyContent: 'flex-end',
-                flexDirection: "row"
-            }}>
-                <View style={{
-                    padding: 8,
-                    backgroundColor: 'green',
-                    alignSelf: 'center'
-                }}>
-                    <Text>Reset</Text>
-                </View>
+            <View style={{ flex: 1, alignItems: 'flex-end'}}>
+                <Text style={todoListStyle.itemSwipeContent}>
+                    Reset
+                </Text>
             </View>
         );
         const swipeRightContent = (
-            <View style={{
-                flex: 1,
-                backgroundColor: 'blue',
-                justifyContent: 'flex-start',
-                flexDirection: "row"
-            }}>
-                <View style={{
-                    padding: 8,
-                    backgroundColor: 'red',
-                    alignSelf: 'center'
-                }}>
-                    <Text>Delete</Text>
-                </View>
+            <View style={{ flex: 1}}>
+                <Text style={todoListStyle.itemSwipeContent}>
+                    Delete
+                </Text>
             </View>
         );
         const items = this.state ? toUiModels(this.state.items) : [];
