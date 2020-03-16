@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export const style = StyleSheet.create({
+export const todoListStyle = StyleSheet.create({
     container: {
         marginVertical: 0,
     },
@@ -28,5 +28,19 @@ export const style = StyleSheet.create({
     itemFooterText:{
         fontSize: 14,
         color: `rgba(255, 255, 255, 0.7)`
+    }
+});
+
+export const toolbarStyle = StyleSheet.create({
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold'
+    },
+    menuIcon:{
+        width: 48,
+        height: 48,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });

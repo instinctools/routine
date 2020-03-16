@@ -1,28 +1,23 @@
-import {Alert, Button, FlatList, Text, TouchableOpacity, View, Image} from 'react-native';
+import {Alert, Button, FlatList, Text, TouchableOpacity, View, TouchableHighlight} from 'react-native';
 import React from 'react';
 import Swipeable from 'react-native-swipeable-row';
-import {style} from '../styles/TodoListStyle';
+import {todoListStyle, toolbarStyle} from '../styles/Styles';
 import moment from "moment";
 import {connect} from "react-redux";
 import Action from '../action/todos';
 import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../utils";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export class TodoList extends React.Component {
 
     static navigationOptions = ({navigation}) => {
         return {
             title: 'Routine',
-            headerTitleStyle: {
-                fontSize: 32,
-                fontWeight: 'bold'
-            },
+            headerTitleStyle: toolbarStyle.title,
             headerRight: () => (
-                <TouchableOpacity
+                <TouchableOpacity style={toolbarStyle.menuIcon}
                     onPress={navigation.getParam('navigateToDetails')}>
-                    <Image
-                        style={{width: 50, height: 50}}
-                        source={{uri: 'https://reactnative.dev/img/tiny_logo.png'}}
-                    />
+                    <Icon name="md-add" size={24}/>
                 </TouchableOpacity>
             )
         }
@@ -77,7 +72,7 @@ export class TodoList extends React.Component {
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
-                <FlatList style={style.container}
+                <FlatList style={todoListStyle.container}
                           data={items}
                           keyExtractor={item => item.id}
                           renderItem={({item}) =>
@@ -105,13 +100,13 @@ export class TodoList extends React.Component {
                                       onPress={() => {
                                           this.props.navigation.navigate("Details", {id: item.id})
                                       }}>
-                                      <View style={{...style.item, backgroundColor: item.backgroundColor}}>
-                                          <View style={style.itemHeader}>
-                                              <Text style={style.itemHeaderText}>{item.title}</Text>
+                                      <View style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}>
+                                          <View style={todoListStyle.itemHeader}>
+                                              <Text style={todoListStyle.itemHeaderText}>{item.title}</Text>
                                           </View>
-                                          <View style={style.itemFooter}>
-                                              <Text style={style.itemFooterText}>{item.periodStr}</Text>
-                                              <Text style={style.itemFooterText}>{item.targetDate}</Text>
+                                          <View style={todoListStyle.itemFooter}>
+                                              <Text style={todoListStyle.itemFooterText}>{item.periodStr}</Text>
+                                              <Text style={todoListStyle.itemFooterText}>{item.targetDate}</Text>
                                           </View>
                                       </View>
                                   </TouchableOpacity>
