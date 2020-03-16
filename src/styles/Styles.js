@@ -28,6 +28,17 @@ export const todoListStyle = StyleSheet.create({
     itemFooterText:{
         fontSize: 14,
         color: `rgba(255, 255, 255, 0.7)`
+    },
+    itemSwipeContent:{
+        flex: 1,
+        width: 96,
+        backgroundColor: '#E3E3E3',
+        textAlignVertical: "center",
+        textAlign: "center",
+        borderRadius: 10,
+        fontSize:20,
+        color: `#FFFFFF`,
+        marginVertical: 4
     }
 });
 
