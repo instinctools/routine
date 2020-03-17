@@ -39,7 +39,7 @@ export const calculateTargetDate = (date) => {
 };
 
 export const prettyPeriod = (period, periodUnit) => {
-    if (period === "1") {
+    if (period === 1) {
         if (periodUnit === Period.DAY) {
             return "Every day"
         } else if (periodUnit === Period.WEEK) {
@@ -53,4 +53,16 @@ export const prettyPeriod = (period, periodUnit) => {
         return `Every ${period} ${periodUnit.toLowerCase()}s`
     }
     return null;
+};
+
+export const pickColorBetween = (index, maxIndex = 15, color1 = [253, 180, 76], color2 = [236, 47, 103]) => {
+    let w1 = 1;
+    if (index < maxIndex) {
+        w1 = index / maxIndex
+    }
+    const w2 = 1 - w1;
+    const colorRGB = [Math.round(color1[0] * w1 + color2[0] * w2),
+        Math.round(color1[1] * w1 + color2[1] * w2),
+        Math.round(color1[2] * w1 + color2[2] * w2)];
+    return `rgba(${colorRGB[0]}, ${colorRGB[1]}, ${colorRGB[2]}, 1)`;
 };
