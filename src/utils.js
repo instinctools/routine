@@ -20,7 +20,8 @@ export const calculateTimestamp = (period, periodUnit, from = moment()) => {
 };
 
 export const calculateTargetDate = (date) => {
-    let diffDays = date.diff(moment(), `d`);
+    let startOfDay = moment().startOf("day");
+    let diffDays = date.diff(startOfDay, `d`);
     if (diffDays === 0) {
         return "Today"
     } else if (diffDays === 1) {
