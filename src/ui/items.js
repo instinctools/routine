@@ -8,6 +8,9 @@ import Action from '../action/todos';
 import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../utils";
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
+const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
+
 export class TodoList extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -37,64 +40,13 @@ export class TodoList extends React.Component {
     render() {
         console.log(`TodoList render state: ${JSON.stringify(this.state)}`);
         console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
-        const swipeLeftContent = (
-            <View style={{ flex: 1, alignItems: 'flex-end'}}>
-                <Text style={todoListStyle.itemSwipeContent}>
-                    Reset
-                </Text>
-            </View>
-        );
-        const swipeRightContent = (
-            <View style={{ flex: 1}}>
-                <Text style={todoListStyle.itemSwipeContent}>
-                    Delete
-                </Text>
-            </View>
-        );
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
                 <FlatList style={todoListStyle.container}
                           data={items}
                           keyExtractor={item => item.id}
-                          renderItem={({item}) =>
-                              <Swipeable
-                                  leftContent={swipeLeftContent}
-                                  rightContent={swipeRightContent}
-                                  onLeftActionRelease={() => this.props.resetTodo(item.id)}
-                                  onRightActionRelease={() =>
-                                      Alert.alert(
-                                          '',
-                                          "Are you sure want to delete this task?",
-                                          [
-                                              {
-                                                  text: 'Cancel',
-                                                  style: 'cancel',
-                                              },
-                                              {
-                                                  text: 'Delete',
-                                                  onPress: () => this.props.deleteTodo(item.id)
-                                              },
-                                          ]
-                                      )}
-                              >
-                                  <TouchableOpacity
-                                      onPress={() => {
-                                          this.props.navigation.navigate("Details", {id: item.id})
-                                      }}>
-                                      <View style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}>
-                                          <View style={todoListStyle.itemHeader}>
-                                              <Text style={todoListStyle.itemHeaderText}>{item.title}</Text>
-                                          </View>
-                                          <View style={todoListStyle.itemFooter}>
-                                              <Text style={todoListStyle.itemFooterText}>{item.periodStr}</Text>
-                                              <Text style={todoListStyle.itemFooterText}>{item.targetDate}</Text>
-                                          </View>
-                                      </View>
-                                      {createSeparator(item.isLastExpired)}
-                                  </TouchableOpacity>
-                              </Swipeable>
-                          }
+                          renderItem={({item}) => createItemView(item, this.props)}
                 />
             </View>
 
@@ -106,13 +58,55 @@ export class TodoList extends React.Component {
     }
 }
 
-const createSeparator = (isLastExpired) => {
-    if (isLastExpired) {
+const createItemView = (item, props) => {
+    if (item.itemType === ITEM_TYPE_SEPARATOR) {
         return <View style={todoListStyle.itemExpiredSeparator}/>
     } else {
-        return undefined
+        return <Swipeable
+            leftContent={createSwipeableContent(`Reset`, `flex-end`)}
+            rightContent={createSwipeableContent(`Delete`, `flex-start`)}
+            onLeftActionRelease={() => props.resetTodo(item.id)}
+            onRightActionRelease={() =>
+                Alert.alert(
+                    '',
+                    "Are you sure want to delete this task?",
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Delete',
+                            onPress: () => props.deleteTodo(item.id)
+                        },
+                    ]
+                )}
+        >
+            <TouchableOpacity
+                onPress={() => {
+                    this.props.navigation.navigate("Details", {id: item.id})
+                }}>
+                <View style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}>
+                    <View style={todoListStyle.itemHeader}>
+                        <Text style={todoListStyle.itemHeaderText}>{item.title}</Text>
+                    </View>
+                    <View style={todoListStyle.itemFooter}>
+                        <Text style={todoListStyle.itemFooterText}>{item.periodStr}</Text>
+                        <Text style={todoListStyle.itemFooterText}>{item.targetDate}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </Swipeable>
     }
 };
+
+const createSwipeableContent = (text, alignItems) => (
+    <View style={{ flex: 1, alignItems: alignItems}}>
+        <Text style={todoListStyle.itemSwipeContent}>
+            {text}
+        </Text>
+    </View>
+);
 
 export default connect(
     previousState => {
@@ -133,18 +127,17 @@ const toUiModels = (todos) => {
         const item = sortTodos[i];
         let todoTime = moment(item.timestamp);
         if (!lastExpiredTodoFound && !todoTime.isBefore(currentTime)) {
-            const lastExpiredTodo = uiTodos[i - 1];
-            if (lastExpiredTodo !== undefined) {
-                lastExpiredTodo.isLastExpired = true
+            if (uiTodos.length > 0) {
+                uiTodos.push({itemType: ITEM_TYPE_SEPARATOR});
             }
             lastExpiredTodoFound = true
         }
         uiTodos.push({
-            id: item.id,
-            title: item.title,
+            ...item,
             targetDate: calculateTargetDate(todoTime),
             periodStr: prettyPeriod(item.period, item.periodUnit),
-            backgroundColor: pickColorBetween(i)
+            backgroundColor: pickColorBetween(i),
+            itemType: ITEM_TYPE_TODO
         })
     }
     return uiTodos;
