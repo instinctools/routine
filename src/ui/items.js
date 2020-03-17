@@ -84,7 +84,7 @@ const createItemView = (item, props) => {
         >
             <TouchableOpacity
                 onPress={() => {
-                    this.props.navigation.navigate("Details", {id: item.id})
+                    props.navigation.navigate("Details", {id: item.id})
                 }}>
                 <View style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}>
                     <View style={todoListStyle.itemHeader}>
