@@ -39,6 +39,12 @@ export const todoListStyle = StyleSheet.create({
         fontSize:20,
         color: `#FFFFFF`,
         marginVertical: 4
+    },
+    itemExpiredSeparator:{
+        height: 1,
+        marginVertical: 12,
+        marginHorizontal: 16,
+        backgroundColor: "rgba(0,0,0,0.2)"
     }
 });
 

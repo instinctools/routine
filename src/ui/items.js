@@ -91,6 +91,7 @@ export class TodoList extends React.Component {
                                               <Text style={todoListStyle.itemFooterText}>{item.targetDate}</Text>
                                           </View>
                                       </View>
+                                      {createSeparator(item.isLastExpired)}
                                   </TouchableOpacity>
                               </Swipeable>
                           }
@@ -105,6 +106,14 @@ export class TodoList extends React.Component {
     }
 }
 
+const createSeparator = (isLastExpired) => {
+    if (isLastExpired) {
+        return <View style={todoListStyle.itemExpiredSeparator}/>
+    } else {
+        return undefined
+    }
+};
+
 export default connect(
     previousState => {
         const {todos} = previousState;
@@ -115,19 +124,28 @@ export default connect(
 
 const toUiModels = (todos) => {
     const currentTime = moment().startOf("day");
+    const sortTodos = todos.slice().sort((value1, value2) => {
+        return moment(value1.timestamp).diff(currentTime, `d`) - moment(value2.timestamp).diff(currentTime, `d`)
+    });
     const uiTodos = [];
-    for (let i = 0; i < todos.length; i++) {
-        const item = todos[i];
+    let lastExpiredTodoFound = false;
+    for (let i = 0; i < sortTodos.length; i++) {
+        const item = sortTodos[i];
         let todoTime = moment(item.timestamp);
+        if (!lastExpiredTodoFound && !todoTime.isBefore(currentTime)) {
+            const lastExpiredTodo = uiTodos[i - 1];
+            if (lastExpiredTodo !== undefined) {
+                lastExpiredTodo.isLastExpired = true
+            }
+            lastExpiredTodoFound = true
+        }
         uiTodos.push({
+            id: item.id,
             title: item.title,
-            diff: todoTime.diff(currentTime, `d`),
             targetDate: calculateTargetDate(todoTime),
             periodStr: prettyPeriod(item.period, item.periodUnit),
             backgroundColor: pickColorBetween(i)
         })
     }
-    return uiTodos.slice().sort((value1, value2) => {
-        return value1.diff - value2.diff
-    });
+    return uiTodos;
 };
