@@ -44,7 +44,7 @@ export class TodoList extends React.Component {
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <View style={{position: "relative"}}>
-                <FlatList style={todoListStyle.container}
+                <FlatList contentContainerStyle={todoListStyle.container}
                           data={items}
                           keyExtractor={item => item.id}
                           renderItem={({item}) => createItemView(item, this.props)}

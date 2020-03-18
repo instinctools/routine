@@ -2,7 +2,8 @@ import {StyleSheet} from 'react-native';
 
 export const todoListStyle = StyleSheet.create({
     container: {
-        marginVertical: 12,
+        paddingTop: 12,
+        paddingBottom: 12
     },
     item: {
         flexDirection: `column`,
