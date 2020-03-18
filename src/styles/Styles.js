@@ -54,11 +54,14 @@ export const toolbarStyle = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold'
     },
-    menuIcon:{
+    menuItem:{
         width: 48,
         height: 48,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 32
+    },
+    menuText: {
+        fontWeight: 'bold'
     }
 });

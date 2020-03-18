@@ -20,7 +20,7 @@ export class TodoList extends React.Component {
             title: 'Routine',
             headerTitleStyle: toolbarStyle.title,
             headerRight: () => (
-                    <TouchableRipple style={toolbarStyle.menuIcon}
+                    <TouchableRipple style={toolbarStyle.menuItem}
                                      borderless={true}
                                      onPress={navigation.getParam('navigateToDetails')}>
                         <Icon name="md-add" size={24}/>
