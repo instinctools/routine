@@ -1,3 +1,5 @@
+import uuid from "react-native-uuid";
+
 const Action = {
     Type: {
         TODO_ADD: 'todo-add',
@@ -7,13 +9,11 @@ const Action = {
     }
 };
 
-let id = 0;
-
 Action.addTodo = (title, periodUnit, period) => {
     console.log(`action addTodo, text: ${title}; periodUnit: ${periodUnit}; period: ${period}`);
     return {
         type: Action.Type.TODO_ADD,
-        id: ++id,
+        id: uuid.v1(),
         title,
         periodUnit,
         period
