@@ -5,7 +5,7 @@ import Action from '../action/todos';
 import {Period} from "../constants";
 
 const initialState = {
-    period: '1',
+    period: 1,
     periodUnit: Period.DAY
 };
 
@@ -29,7 +29,7 @@ export class DetailsScreen extends React.Component {
                     keyboardType="numeric"
                     placeholder="Enter period"
                     onChangeText={period => this.setState({period: period})}
-                    value={this.state.period}
+                    value={this.state.period.toString()}
                 />
                 <Picker
                     selectedValue={this.state.periodUnit}
