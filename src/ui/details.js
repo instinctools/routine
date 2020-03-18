@@ -1,9 +1,10 @@
-import {Picker, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Picker, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
 import Action from '../action/todos';
 import {Period} from "../constants";
 import {toolbarStyle} from "../styles/Styles";
+import {TouchableRipple} from "react-native-paper";
 
 const initialState = {
     period: 1,
@@ -13,14 +14,28 @@ const initialState = {
 export class DetailsScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
+        const {params} = navigation.state;
+        console.log(`navigationOptions: params=${JSON.stringify(params)}`);
+        const canBeSaved = params ? params.canBeSaved : undefined;
         return {
             title: '',
-            headerRight: () => (
-                <TouchableOpacity style={toolbarStyle.menuItem}
-                    onPress={navigation.getParam('done')}>
-                    <Text style={toolbarStyle.menuText}>Done</Text>
-                </TouchableOpacity>
-            )
+            headerRight: () => {
+                if (canBeSaved) {
+                    return (
+                        <TouchableRipple style={toolbarStyle.menuItem}
+                                         onPress={navigation.getParam('done')}>
+                            <Text style={toolbarStyle.menuText}>Done</Text>
+                        </TouchableRipple>
+                    )
+                } else {
+                    return (
+                        <View style={toolbarStyle.menuItem}>
+                            <Text>Done</Text>
+                        </View>
+                    )
+
+                }
+            }
         }
     };
 
@@ -40,6 +55,14 @@ export class DetailsScreen extends React.Component {
                 this.props.navigation.pop();
             }
         });
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.canBeSaved !== this.state.canBeSaved) {
+            this.props.navigation.setParams({
+                canBeSaved: this.state.canBeSaved
+            });
+        }
     }
 
     render() {
@@ -65,17 +88,6 @@ export class DetailsScreen extends React.Component {
                     <Picker.Item label={Period.WEEK} value={Period.WEEK}/>
                     <Picker.Item label={Period.MONTH} value={Period.MONTH}/>
                 </Picker>
-                {/*<Button
-                    disabled={!this.state.title || !this.state.period || !this.state.periodUnit}
-                    title={`SAVE CHANGES`} onPress={() => {
-                    if (this.state.id) {
-                        this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
-                    } else {
-                        this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
-                    }
-                    this.props.navigation.pop();
-                }
-                }/>*/}
             </View>
         );
     }
@@ -85,11 +97,12 @@ export class DetailsScreen extends React.Component {
         const id = params && params.id ? params.id : undefined;
         console.log(`CreateTodo DerivedState state: ${JSON.stringify(state)}`);
         console.log(`CreateTodo DerivedState props: ${JSON.stringify(props)}`);
+        const canBeSaved = !(!state.title || !state.period || !state.periodUnit);
         if (id) {
             const item = props.items.find(todo => todo.id === id);
-            return {...initialState, ...item, ...state, id};
+            return {...initialState, ...item, ...state, id, canBeSaved};
         } else {
-            return {...initialState, ...state};
+            return {...initialState, ...state, canBeSaved};
         }
     }
 }
