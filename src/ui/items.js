@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
+const SEPARATOR_ID = -1;
 
 export class TodoList extends React.Component {
 
@@ -128,7 +129,10 @@ const toUiModels = (todos) => {
         let todoTime = moment(item.timestamp);
         if (!lastExpiredTodoFound && !todoTime.isBefore(currentTime)) {
             if (uiTodos.length > 0) {
-                uiTodos.push({itemType: ITEM_TYPE_SEPARATOR});
+                uiTodos.push({
+                    id: SEPARATOR_ID,
+                    itemType: ITEM_TYPE_SEPARATOR
+                });
             }
             lastExpiredTodoFound = true
         }
