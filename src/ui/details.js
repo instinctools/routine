@@ -38,7 +38,9 @@ export class DetailsScreen extends React.Component {
                     <Picker.Item label={Period.WEEK} value={Period.WEEK}/>
                     <Picker.Item label={Period.MONTH} value={Period.MONTH}/>
                 </Picker>
-                <Button title={`SAVE CHANGES`} onPress={() => {
+                <Button
+                    disabled={!this.state.title || !this.state.period || !this.state.periodUnit}
+                    title={`SAVE CHANGES`} onPress={() => {
                     if (this.state.id) {
                         this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
                     } else {
