@@ -57,8 +57,8 @@ export const toolbarStyle = StyleSheet.create({
     menuIcon:{
         width: 48,
         height: 48,
-        flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 32
     }
 });

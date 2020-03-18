@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import Action from '../action/todos';
 import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../utils";
 import Icon from 'react-native-vector-icons/Ionicons';
+import {TouchableRipple} from 'react-native-paper';
 
 const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -19,10 +20,11 @@ export class TodoList extends React.Component {
             title: 'Routine',
             headerTitleStyle: toolbarStyle.title,
             headerRight: () => (
-                <TouchableOpacity style={toolbarStyle.menuIcon}
-                    onPress={navigation.getParam('navigateToDetails')}>
-                    <Icon name="md-add" size={24}/>
-                </TouchableOpacity>
+                    <TouchableRipple style={toolbarStyle.menuIcon}
+                                     borderless={true}
+                                     onPress={navigation.getParam('navigateToDetails')}>
+                        <Icon name="md-add" size={24}/>
+                    </TouchableRipple>
             )
         }
     };
@@ -83,11 +85,13 @@ const createItemView = (item, props) => {
                     ]
                 )}
         >
-            <TouchableOpacity
+            <TouchableRipple
+                style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}
+                borderless={true}
                 onPress={() => {
                     props.navigation.navigate("Details", {id: item.id})
                 }}>
-                <View style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}>
+                <View>
                     <View style={todoListStyle.itemHeader}>
                         <Text style={todoListStyle.itemHeaderText}>{item.title}</Text>
                     </View>
@@ -96,13 +100,13 @@ const createItemView = (item, props) => {
                         <Text style={todoListStyle.itemFooterText}>{item.targetDate}</Text>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableRipple>
         </Swipeable>
     }
 };
 
 const createSwipeableContent = (text, alignItems) => (
-    <View style={{ flex: 1, alignItems: alignItems}}>
+    <View style={{flex: 1, alignItems: alignItems}}>
         <Text style={todoListStyle.itemSwipeContent}>
             {text}
         </Text>
