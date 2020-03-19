@@ -49,7 +49,7 @@ export class TodoList extends React.Component {
                 <FlatList contentContainerStyle={todoListStyle.container}
                           data={items}
                           keyExtractor={item => item.id}
-                          renderItem={({item}) => createItemView(item, this.props)}
+                          renderItem={({item}) => createItemView(item, this)}
                 />
             </View>
 
@@ -61,14 +61,19 @@ export class TodoList extends React.Component {
     }
 }
 
-const createItemView = (item, props) => {
+const createItemView = (item, component) => {
     if (item.itemType === ITEM_TYPE_SEPARATOR) {
         return <View style={todoListStyle.itemExpiredSeparator}/>
     } else {
         return <Swipeable
-            leftContent={createSwipeableContent(`Reset`, `flex-end`)}
-            rightContent={createSwipeableContent(`Delete`, `flex-start`)}
-            onLeftActionRelease={() => props.resetTodo(item.id)}
+            onSwipeComplete={() => (component.props.changeMenuActivationState(item.id, false))}
+            onLeftActionActivate={() => (component.props.changeMenuActivationState(item.id, true))}
+            onLeftActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
+            onRightActionActivate={() => (component.props.changeMenuActivationState(item.id, true))}
+            onRightActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
+            leftContent={createSwipeableContent(`Reset`, `flex-end`, item.isMenuActivated)}
+            rightContent={createSwipeableContent(`Delete`, `flex-start`, item.isMenuActivated)}
+            onLeftActionRelease={() => component.props.resetTodo(item.id)}
             onRightActionRelease={() =>
                 Alert.alert(
                     '',
@@ -80,7 +85,7 @@ const createItemView = (item, props) => {
                         },
                         {
                             text: 'Delete',
-                            onPress: () => props.deleteTodo(item.id)
+                            onPress: () => component.props.deleteTodo(item.id)
                         },
                     ]
                 )}
@@ -89,7 +94,7 @@ const createItemView = (item, props) => {
                 style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}
                 borderless={true}
                 onPress={() => {
-                    props.navigation.navigate("Details", {id: item.id})
+                    component.props.navigation.navigate("Details", {id: item.id})
                 }}>
                 <View>
                     <View style={todoListStyle.itemHeader}>
@@ -105,13 +110,20 @@ const createItemView = (item, props) => {
     }
 };
 
-const createSwipeableContent = (text, alignItems) => (
-    <View style={{flex: 1, alignItems: alignItems}}>
-        <Text style={todoListStyle.itemSwipeContent}>
+const createSwipeableContent = (text, alignItems, isMenuActivated) => {
+    let color;
+    if (isMenuActivated) {
+        color = `#b2b2b2`
+    } else {
+        color = '#E3E3E3'
+    }
+
+    return <View style={{flex: 1, alignItems: alignItems}}>
+        <Text style={{...todoListStyle.itemSwipeContent, backgroundColor: color}}>
             {text}
         </Text>
     </View>
-);
+};
 
 export default connect(
     previousState => {

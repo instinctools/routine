@@ -58,6 +58,17 @@ export const reducer = (state = _initialState, action) => {
             }
             break;
         }
+        case Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE: {
+            newState.items = newState.items.map((item) => {
+                if (item.id === action.id) {
+                    return Object.assign({}, item, {
+                        isMenuActivated: action.isMenuActivated
+                    })
+                }
+                return item
+            });
+            break;
+        }
     }
     return newState;
 };

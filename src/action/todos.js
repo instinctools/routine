@@ -6,6 +6,7 @@ const Action = {
         TODO_EDIT: 'todo-edit',
         TODO_RESET: 'todo-reset',
         TODO_DELETE: 'todo-delete',
+        TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
     }
 };
 
@@ -41,6 +42,15 @@ Action.deleteTodo = id => {
     return {
         type: Action.Type.TODO_DELETE,
         id
+    };
+};
+
+Action.changeMenuActivationState = (id, isMenuActivated) => {
+    console.log(`action change menu activation state id: ${id}, isActivated: ${isMenuActivated}`);
+    return {
+        type: Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE,
+        id,
+        isMenuActivated
     };
 };
 
