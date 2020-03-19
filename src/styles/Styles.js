@@ -49,6 +49,13 @@ export const todoListStyle = StyleSheet.create({
     }
 });
 
+export const todoDetailsStyle = StyleSheet.create({
+    periodUnitContainer: {
+        flexDirection: `row`,
+        justifyContent: 'space-evenly',
+    },
+});
+
 export const toolbarStyle = StyleSheet.create({
     title: {
         fontSize: 32,

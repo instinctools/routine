@@ -3,3 +3,5 @@ export const Period = {
     WEEK: 'WEEK',
     MONTH: 'MONTH'
 };
+
+export const PeriodsList = Object.values(Period);

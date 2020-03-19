@@ -1,10 +1,10 @@
-import {Picker, Text, TextInput, View} from 'react-native';
+import {Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
 import Action from '../action/todos';
-import {Period} from "../constants";
-import {toolbarStyle} from "../styles/Styles";
-import {TouchableRipple} from "react-native-paper";
+import {Period, PeriodsList} from "../constants";
+import {todoDetailsStyle, toolbarStyle} from "../styles/Styles";
+import {Chip, TouchableRipple} from "react-native-paper";
 
 const initialState = {
     period: 1,
@@ -82,13 +82,11 @@ export class DetailsScreen extends React.Component {
                     onChangeText={period => this.setState({period: period})}
                     value={this.state.period.toString()}
                 />
-                <Picker
-                    selectedValue={this.state.periodUnit}
-                    onValueChange={(itemValue, _) => this.setState({periodUnit: itemValue})}>
-                    <Picker.Item label={Period.DAY} value={Period.DAY}/>
-                    <Picker.Item label={Period.WEEK} value={Period.WEEK}/>
-                    <Picker.Item label={Period.MONTH} value={Period.MONTH}/>
-                </Picker>
+                {periodUnitSelectors(
+                    PeriodsList,
+                    this.state.periodUnit,
+                    (unit) => this.setState({periodUnit: unit})
+                )}
             </View>
         );
     }
@@ -105,6 +103,29 @@ export class DetailsScreen extends React.Component {
         } else {
             return {...initialState, ...state, canBeSaved};
         }
+    }
+}
+
+const periodUnitSelectors = (units, selected, onPress) => (
+    <View style={todoDetailsStyle.periodUnitContainer}>
+        {units.map(function (unit, _) {
+            return <PeriodUnitSelector unit={unit} selectedUnit={selected} onPress={() => onPress(unit)}/>;
+        })}
+    </View>
+);
+
+class PeriodUnitSelector extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <Chip mode="outlined"
+                  selected={this.props.unit === this.props.selectedUnit}
+                  onPress={this.props.onPress}>
+                {this.props.unit}
+            </Chip>
+        )
     }
 }
 
