@@ -23,6 +23,7 @@ export class DetailsScreen extends React.Component {
                 if (canBeSaved) {
                     return (
                         <TouchableRipple style={toolbarStyle.menuItem}
+                                         borderless={true}
                                          onPress={navigation.getParam('done')}>
                             <Text style={toolbarStyle.menuText}>Done</Text>
                         </TouchableRipple>
