@@ -50,7 +50,17 @@ export const todoListStyle = StyleSheet.create({
 });
 
 export const todoDetailsStyle = StyleSheet.create({
+    root: {
+        padding: 8,
+    },
+    title: {
+        padding: 8,
+    },
+    period: {
+        padding: 8,
+    },
     periodUnitContainer: {
+        padding: 8,
         flexDirection: `row`,
         justifyContent: 'space-evenly',
     },

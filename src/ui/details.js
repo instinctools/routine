@@ -1,10 +1,10 @@
-import {Text, TextInput, View} from 'react-native';
+import {Text, View, ScrollView} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
 import Action from '../action/todos';
 import {Period, PeriodsList} from "../constants";
 import {todoDetailsStyle, toolbarStyle} from "../styles/Styles";
-import {Chip, TouchableRipple} from "react-native-paper";
+import {Chip, TextInput, TouchableRipple} from "react-native-paper";
 
 const initialState = {
     period: 1,
@@ -70,24 +70,31 @@ export class DetailsScreen extends React.Component {
         console.log(`CreateTodo render state: ${JSON.stringify(this.state)}`);
         console.log(`CreateTodo render props: ${JSON.stringify(this.props)}`);
         return (
-            <View>
-                <TextInput
-                    placeholder="Enter title"
-                    onChangeText={title => this.setState({title: title})}
-                    value={this.state.title}
-                />
-                <TextInput
-                    keyboardType="numeric"
-                    placeholder="Enter period"
-                    onChangeText={period => this.setState({period: period})}
-                    value={this.state.period.toString()}
-                />
-                {periodUnitSelectors(
-                    PeriodsList,
-                    this.state.periodUnit,
-                    (unit) => this.setState({periodUnit: unit})
-                )}
-            </View>
+            <ScrollView>
+                <View style={todoDetailsStyle.root}>
+                    <TextInput
+                        style={todoDetailsStyle.title}
+                        mode="outlined"
+                        multiline={true}
+                        label="Title"
+                        onChangeText={title => this.setState({title: title})}
+                        value={this.state.title}
+                    />
+                    <TextInput
+                        style={todoDetailsStyle.period}
+                        mode="outlined"
+                        keyboardType="numeric"
+                        label="Repeat"
+                        onChangeText={period => this.setState({period: period})}
+                        value={this.state.period.toString()}
+                    />
+                    {periodUnitSelectors(
+                        PeriodsList,
+                        this.state.periodUnit,
+                        (unit) => this.setState({periodUnit: unit})
+                    )}
+                </View>
+            </ScrollView>
         );
     }
 
@@ -118,6 +125,7 @@ class PeriodUnitSelector extends React.Component {
     constructor(props) {
         super(props)
     }
+
     render() {
         return (
             <Chip mode="outlined"
