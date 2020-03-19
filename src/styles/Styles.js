@@ -49,16 +49,36 @@ export const todoListStyle = StyleSheet.create({
     }
 });
 
+export const todoDetailsStyle = StyleSheet.create({
+    root: {
+        padding: 8,
+    },
+    title: {
+        padding: 8,
+    },
+    period: {
+        padding: 8,
+    },
+    periodUnitContainer: {
+        padding: 8,
+        flexDirection: `row`,
+        justifyContent: 'space-evenly',
+    },
+});
+
 export const toolbarStyle = StyleSheet.create({
     title: {
         fontSize: 32,
         fontWeight: 'bold'
     },
-    menuIcon:{
+    menuItem:{
         width: 48,
         height: 48,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 32
+    },
+    menuText: {
+        fontWeight: 'bold'
     }
 });
