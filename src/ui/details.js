@@ -55,7 +55,7 @@ export class DetailsScreen extends React.Component {
 
     static getDerivedStateFromProps(props, state) {
         const params = props.navigation.state.params;
-        const id = params && params.id >= 0 ? params.id : undefined;
+        const id = params && params.id ? params.id : undefined;
         console.log(`CreateTodo DerivedState state: ${JSON.stringify(state)}`);
         console.log(`CreateTodo DerivedState props: ${JSON.stringify(props)}`);
         if (id) {
