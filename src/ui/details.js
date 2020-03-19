@@ -76,7 +76,6 @@ export class DetailsScreen extends React.Component {
                     <TextInput
                         style={todoDetailsStyle.title}
                         mode="outlined"
-                        multiline={true}
                         label="Title"
                         onChangeText={title => this.setState({title: title})}
                         value={this.state.title}
