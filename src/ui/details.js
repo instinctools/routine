@@ -76,7 +76,7 @@ export class DetailsScreen extends React.Component {
                     <TextInput
                         style={todoDetailsStyle.title}
                         mode="outlined"
-                        label="Title"
+                        label="What do you want to do?"
                         onChangeText={title => this.setState({title: title})}
                         value={this.state.title}
                     />
