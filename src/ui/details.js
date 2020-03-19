@@ -4,7 +4,8 @@ import {connect} from "react-redux";
 import Action from '../action/todos';
 import {Period, PeriodsList} from "../constants";
 import {todoDetailsStyle, toolbarStyle} from "../styles/Styles";
-import {Chip, TextInput, TouchableRipple} from "react-native-paper";
+import {TextInput, TouchableRipple} from "react-native-paper";
+import PeriodUnitSelector from "./PeriodUnitSelector";
 
 const initialState = {
     period: 1,
@@ -84,13 +85,14 @@ export class DetailsScreen extends React.Component {
                         style={todoDetailsStyle.period}
                         mode="outlined"
                         keyboardType="numeric"
-                        label="Repeat"
+                        label="Repeat every"
                         onChangeText={period => this.setState({period: period})}
                         value={this.state.period.toString()}
                     />
                     {periodUnitSelectors(
                         PeriodsList,
                         this.state.periodUnit,
+                        this.state.period,
                         (unit) => this.setState({periodUnit: unit})
                     )}
                 </View>
@@ -113,29 +115,18 @@ export class DetailsScreen extends React.Component {
     }
 }
 
-const periodUnitSelectors = (units, selected, onPress) => (
+const periodUnitSelectors = (units, selected, amount, onPress) => (
     <View style={todoDetailsStyle.periodUnitContainer}>
         {units.map(function (unit, _) {
-            return <PeriodUnitSelector unit={unit} selectedUnit={selected} onPress={() => onPress(unit)}/>;
+            return <PeriodUnitSelector
+                unit={unit}
+                selectedUnit={selected}
+                amount={amount}
+                onPress={() => onPress(unit)}/>;
         })}
     </View>
 );
 
-class PeriodUnitSelector extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <Chip mode="outlined"
-                  selected={this.props.unit === this.props.selectedUnit}
-                  onPress={this.props.onPress}>
-                {this.props.unit}
-            </Chip>
-        )
-    }
-}
 
 export default connect(
     previousState => {
