@@ -58,7 +58,11 @@ export class TodoList extends React.Component {
     }
 
     static getDerivedStateFromProps(props, state) {
-        return {...state, items: props.items};
+        return {
+            ...state,
+            items: props.items,
+            isScrollAvailable: props.isScrollAvailable
+        };
     }
 }
 
