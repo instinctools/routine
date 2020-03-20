@@ -31,7 +31,10 @@ export class TodoList extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = {items: []}
+        this.state = {
+            items: [],
+            isScrollAvailable: true
+        }
     }
 
     componentDidMount() {
@@ -47,6 +50,7 @@ export class TodoList extends React.Component {
         return (
             <View style={{position: "relative"}}>
                 <FlatList contentContainerStyle={todoListStyle.container}
+                          scrollEnabled = {this.state.isScrollAvailable}
                           data={items}
                           keyExtractor={item => item.id}
                           renderItem={({item}) => createItemView(item, this)}
@@ -71,6 +75,8 @@ const createItemView = (item, component) => {
             onLeftActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
             onRightActionActivate={() => (component.props.changeMenuActivationState(item.id, true))}
             onRightActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
+            onSwipeStart={() => (component.props.changeScrollState(false))}
+            onSwipeRelease={() => (component.props.changeScrollState(true))}
             leftContent={createSwipeableContent(`Reset`, `flex-end`, item.isMenuActivated)}
             rightContent={createSwipeableContent(`Delete`, `flex-start`, item.isMenuActivated)}
             onLeftActionRelease={() => component.props.resetTodo(item.id)}
@@ -127,8 +133,10 @@ const createSwipeableContent = (text, alignItems, isMenuActivated) => {
 
 export default connect(
     previousState => {
-        const {todos} = previousState;
-        return {...todos};
+        return {
+            items: previousState.todos.items,
+            isScrollAvailable: previousState.isScrollAvailable
+        };
     },
     Action
 )(TodoList);

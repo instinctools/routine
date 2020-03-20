@@ -7,6 +7,7 @@ const Action = {
         TODO_RESET: 'todo-reset',
         TODO_DELETE: 'todo-delete',
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
+        CHANGE_SCROLL_STATE: `change-scroll-state`
     }
 };
 
@@ -51,6 +52,14 @@ Action.changeMenuActivationState = (id, isMenuActivated) => {
         type: Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE,
         id,
         isMenuActivated
+    };
+};
+
+Action.changeScrollState = (isScrollAvailable) => {
+    console.log(`action change scroll isScrollAvailable: ${isScrollAvailable}`);
+    return {
+        type: Action.Type.CHANGE_SCROLL_STATE,
+        isScrollAvailable
     };
 };
 

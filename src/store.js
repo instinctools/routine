@@ -1,5 +1,6 @@
 import {combineReducers, createStore} from 'redux';
-import {reducer as todos} from './reducer/todos';
+import {reducer} from './reducer/todos';
+import {scrollStateReducer} from "./reducer/todos";
 import AsyncStorage from '@react-native-community/async-storage';
 import { persistReducer, persistStore } from "redux-persist";
 
@@ -9,6 +10,7 @@ const persistConfig = {
 };
 
 export const store = createStore(combineReducers({
-    todos: persistReducer(persistConfig, todos)
+    todos: persistReducer(persistConfig, reducer),
+    isScrollAvailable: scrollStateReducer
 }));
 export const persistor = persistStore(store);

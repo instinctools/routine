@@ -3,7 +3,15 @@ import {calculateTimestamp} from "../utils";
 
 const _initialState = {
     items: [],
-    selectedFilter: 'all'
+    selectedFilter: 'all',
+};
+
+export const scrollStateReducer = (state = true, action) => {
+   if (action.type === Action.Type.CHANGE_SCROLL_STATE) {
+       return action.isScrollAvailable
+   } else {
+       return state
+   }
 };
 
 export const reducer = (state = _initialState, action) => {
