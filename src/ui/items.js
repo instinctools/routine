@@ -20,11 +20,11 @@ export class TodoList extends React.Component {
             title: 'Routine',
             headerTitleStyle: toolbarStyle.title,
             headerRight: () => (
-                    <TouchableRipple style={toolbarStyle.menuItem}
-                                     borderless={true}
-                                     onPress={navigation.getParam('navigateToDetails')}>
-                        <Icon name="md-add" size={24}/>
-                    </TouchableRipple>
+                <TouchableRipple style={toolbarStyle.menuItem}
+                                 borderless={true}
+                                 onPress={navigation.getParam('navigateToDetails')}>
+                    <Icon name="md-add" size={24}/>
+                </TouchableRipple>
             )
         }
     };
@@ -48,15 +48,12 @@ export class TodoList extends React.Component {
         console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
-            <View style={{position: "relative"}}>
-                <FlatList contentContainerStyle={todoListStyle.container}
-                          scrollEnabled = {this.state.isScrollAvailable}
-                          data={items}
-                          keyExtractor={item => item.id}
-                          renderItem={({item}) => createItemView(item, this)}
-                />
-            </View>
-
+            <FlatList contentContainerStyle={todoListStyle.container}
+                      scrollEnabled={this.state.isScrollAvailable}
+                      data={items}
+                      keyExtractor={item => item.id}
+                      renderItem={({item}) => createItemView(item, this)}
+            />
         );
     }
 
