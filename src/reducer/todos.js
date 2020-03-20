@@ -3,7 +3,15 @@ import {calculateTimestamp} from "../utils";
 
 const _initialState = {
     items: [],
-    selectedFilter: 'all'
+    selectedFilter: 'all',
+};
+
+export const scrollStateReducer = (state = true, action) => {
+   if (action.type === Action.Type.CHANGE_SCROLL_STATE) {
+       return action.isScrollAvailable
+   } else {
+       return state
+   }
 };
 
 export const reducer = (state = _initialState, action) => {
@@ -56,6 +64,17 @@ export const reducer = (state = _initialState, action) => {
             if (index > -1) {
                 newState.items.splice(index, 1);
             }
+            break;
+        }
+        case Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE: {
+            newState.items = newState.items.map((item) => {
+                if (item.id === action.id) {
+                    return Object.assign({}, item, {
+                        isMenuActivated: action.isMenuActivated
+                    })
+                }
+                return item
+            });
             break;
         }
     }
