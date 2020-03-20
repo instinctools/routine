@@ -33,7 +33,10 @@ export class TodoList extends React.Component {
         super(props, context);
         this.state = {
             items: [],
-            isScrollAvailable: true
+            swipeable: {
+                id: undefined,
+                isMenuActivated: false
+            }
         }
     }
 
@@ -49,7 +52,7 @@ export class TodoList extends React.Component {
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
             <FlatList contentContainerStyle={todoListStyle.container}
-                      scrollEnabled={this.state.isScrollAvailable}
+                      scrollEnabled={!(this.state.swipeable.id)}
                       data={items}
                       keyExtractor={item => item.id}
                       renderItem={({item}) => createItemView(item, this)}
@@ -61,7 +64,7 @@ export class TodoList extends React.Component {
         return {
             ...state,
             items: props.items,
-            isScrollAvailable: props.isScrollAvailable
+            swipeable: props.swipeable
         };
     }
 }
@@ -70,16 +73,18 @@ const createItemView = (item, component) => {
     if (item.itemType === ITEM_TYPE_SEPARATOR) {
         return <View style={todoListStyle.itemExpiredSeparator}/>
     } else {
+        const isMenuActivated = component.state.swipeable.id === item.id && component.state.swipeable.isMenuActivated;
         return <Swipeable
-            onSwipeComplete={() => (component.props.changeMenuActivationState(item.id, false))}
-            onLeftActionActivate={() => (component.props.changeMenuActivationState(item.id, true))}
-            onLeftActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
-            onRightActionActivate={() => (component.props.changeMenuActivationState(item.id, true))}
-            onRightActionDeactivate={() => (component.props.changeMenuActivationState(item.id, false))}
-            onSwipeStart={() => (component.props.changeScrollState(false))}
-            onSwipeRelease={() => (component.props.changeScrollState(true))}
-            leftContent={createSwipeableContent(`Reset`, `flex-end`, item.isMenuActivated)}
-            rightContent={createSwipeableContent(`Delete`, `flex-start`, item.isMenuActivated)}
+            onLeftActionActivate={() => (component.props.changeMenuActivationState(true))}
+            onLeftActionDeactivate={() => (component.props.changeMenuActivationState(false))}
+            onRightActionActivate={() => (component.props.changeMenuActivationState(true))}
+            onRightActionDeactivate={() => (component.props.changeMenuActivationState(false))}
+
+            onSwipeStart={() => (component.props.changeSwipeableState(item.id))}
+            onSwipeRelease={() => (component.props.changeSwipeableState(undefined))}
+
+            leftContent={createSwipeableContent(`Reset`, `flex-end`, isMenuActivated)}
+            rightContent={createSwipeableContent(`Delete`, `flex-start`, isMenuActivated)}
             onLeftActionRelease={() => component.props.resetTodo(item.id)}
             onRightActionRelease={() =>
                 Alert.alert(
@@ -136,7 +141,7 @@ export default connect(
     previousState => {
         return {
             items: previousState.todos.items,
-            isScrollAvailable: previousState.isScrollAvailable
+            swipeable: previousState.swipeable
         };
     },
     Action

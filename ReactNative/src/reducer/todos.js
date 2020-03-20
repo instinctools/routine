@@ -6,12 +6,18 @@ const _initialState = {
     selectedFilter: 'all',
 };
 
-export const scrollStateReducer = (state = true, action) => {
-   if (action.type === Action.Type.CHANGE_SCROLL_STATE) {
-       return action.isScrollAvailable
-   } else {
-       return state
-   }
+export const swipeableReducer = (state = {
+    id: undefined,
+    isMenuActivated: false
+}, action) => {
+    switch (action.type) {
+        case Action.Type.CHANGE_SWIPEABLE_STATE:
+            return {...state, id: action.id, isMenuActivated: false};
+        case Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE:
+            return {...state, isMenuActivated: action.isMenuActivated};
+        default:
+            return state;
+    }
 };
 
 export const reducer = (state = _initialState, action) => {
