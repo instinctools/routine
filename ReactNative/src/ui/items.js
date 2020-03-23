@@ -51,7 +51,8 @@ export class TodoList extends React.Component {
         console.log(`TodoList render props: ${JSON.stringify(this.props)}`);
         const items = this.state ? toUiModels(this.state.items) : [];
         return (
-            <FlatList contentContainerStyle={todoListStyle.container}
+            <FlatList style = {{flex: 1}}
+                      contentContainerStyle={todoListStyle.container}
                       scrollEnabled={!(this.state.swipeable.id)}
                       data={items}
                       keyExtractor={item => item.id}
