@@ -125,16 +125,21 @@ const createItemView = (item, component) => {
 const createSwipeableContent = (text, alignItems, isMenuActivated) => {
     let color;
     if (isMenuActivated) {
-        color = `#b2b2b2`
+        color = `#b2b2b2`;
     } else {
-        color = '#E3E3E3'
+        color = '#E3E3E3';
     }
 
     return <View style={{flex: 1, alignItems: alignItems}}>
-        <Text style={{...todoListStyle.itemSwipeContent, backgroundColor: color}}>
-            {text}
-        </Text>
-    </View>
+        <View style={{
+            ...todoListStyle.itemSwipeContent,
+            backgroundColor: color,
+        }}>
+            <Text style={todoListStyle.itemSwipeText}>
+                {text}
+            </Text>
+        </View>
+    </View>;
 };
 
 export default connect(

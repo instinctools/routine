@@ -33,13 +33,15 @@ export const todoListStyle = StyleSheet.create({
     },
     itemSwipeContent:{
         flex: 1,
+        justifyContent: `center`,
+        alignItems: `center`,
         width: 96,
-        textAlignVertical: "center",
-        textAlign: "center",
         borderRadius: 10,
-        fontSize:20,
-        color: `#FFFFFF`,
         marginVertical: 4
+    },
+    itemSwipeText:{
+        fontSize:20,
+        color: `#FFFFFF`
     },
     itemExpiredSeparator:{
         height: 1,
