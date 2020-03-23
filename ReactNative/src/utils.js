@@ -55,7 +55,7 @@ export const prettyPeriod = (period, periodUnit) => {
     return null;
 };
 
-export const pickColorBetween = (index, maxIndex = 15, color1 = [253, 180, 76], color2 = [236, 47, 103]) => {
+export const pickColorBetween = (index, maxIndex = 15, color1 = [255, 190, 67], color2 = [255, 57, 55]) => {
     let w1 = 1;
     if (index < maxIndex) {
         w1 = index / maxIndex
