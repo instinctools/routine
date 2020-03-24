@@ -82,7 +82,7 @@ const createItemView = (item, component) => {
             onRightActionDeactivate={() => (component.props.changeMenuActivationState(false))}
 
             onSwipeStart={() => (component.props.changeSwipeableState(item.id))}
-            onSwipeRelease={() => (component.props.changeSwipeableState(undefined))}
+            onSwipeComplete={() => (component.props.changeSwipeableState(undefined))}
 
             leftContent={createSwipeableContent(`Reset`, `flex-end`, isMenuActivated)}
             rightContent={createSwipeableContent(`Delete`, `flex-start`, isMenuActivated)}
