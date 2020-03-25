@@ -7,7 +7,7 @@ const Action = {
         TODO_RESET: 'todo-reset',
         TODO_DELETE: 'todo-delete',
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
-        CHANGE_SWIPEABLE_STATE: `change-swipeable-state`
+        CHANGE_SCROLL_STATE: `change-scroll-state`
     }
 };
 
@@ -46,19 +46,11 @@ Action.deleteTodo = id => {
     };
 };
 
-Action.changeMenuActivationState = (isMenuActivated) => {
-    console.log(`action change menu activation state isMenuActivated: ${isMenuActivated}`);
+Action.changeScrollState = (isScrollEnabled) => {
+    console.log(`action change scroll state isScrollEnabled: ${isScrollEnabled}`);
     return {
-        type: Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE,
-        isMenuActivated
-    };
-};
-
-Action.changeSwipeableState = (id) => {
-    console.log(`action change swipeable state: ${id}`);
-    return {
-        type: Action.Type.CHANGE_SWIPEABLE_STATE,
-        id
+        type: Action.Type.CHANGE_SCROLL_STATE,
+        isScrollEnabled
     };
 };
 

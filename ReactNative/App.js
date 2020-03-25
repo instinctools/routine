@@ -7,7 +7,7 @@ import {store, persistor} from './src/store';
 import {PersistGate} from 'redux-persist/integration/react'
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 
-import TodoList from './src/ui/items';
+import TodoList from './src/ui/todos/TodoList';
 import TodoDetails from './src/ui/details';
 
 const AppNavigator = createStackNavigator(

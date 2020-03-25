@@ -4,20 +4,7 @@ import {calculateTimestamp} from "../utils";
 const _initialState = {
     items: [],
     selectedFilter: 'all',
-};
-
-export const swipeableReducer = (state = {
-    id: undefined,
-    isMenuActivated: false
-}, action) => {
-    switch (action.type) {
-        case Action.Type.CHANGE_SWIPEABLE_STATE:
-            return {...state, id: action.id, isMenuActivated: false};
-        case Action.Type.TODO_CHANGE_MENU_ACTIVATION_STATE:
-            return {...state, isMenuActivated: action.isMenuActivated};
-        default:
-            return state;
-    }
+    isScrollEnabled: true
 };
 
 export const reducer = (state = _initialState, action) => {
@@ -81,6 +68,10 @@ export const reducer = (state = _initialState, action) => {
                 }
                 return item
             });
+            break;
+        }
+        case Action.Type.CHANGE_SCROLL_STATE:{
+            newState.isScrollEnabled = action.isScrollEnabled;
             break;
         }
     }
