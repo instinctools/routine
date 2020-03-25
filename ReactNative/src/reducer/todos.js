@@ -4,7 +4,11 @@ import {calculateTimestamp} from "../utils";
 const _initialState = {
     items: [],
     selectedFilter: 'all',
-    isScrollEnabled: true
+    isScrollEnabled: true,
+    menuActivation: {
+        id: undefined,
+        isMenuActivated: false
+    }
 };
 
 export const reducer = (state = _initialState, action) => {
@@ -72,6 +76,13 @@ export const reducer = (state = _initialState, action) => {
         }
         case Action.Type.CHANGE_SCROLL_STATE:{
             newState.isScrollEnabled = action.isScrollEnabled;
+            break;
+        }
+        case Action.Type.CHANGE_MENU_ACTIVATION_STATE:{
+            newState.menuActivation = {
+                id: action.id,
+                isMenuActivated: action.isMenuActivated
+            };
             break;
         }
     }

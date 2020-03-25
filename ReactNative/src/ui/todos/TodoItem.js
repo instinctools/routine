@@ -10,16 +10,9 @@ import {withNavigation} from 'react-navigation';
 
 class TodoItem extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            isLeftActionActivated: false,
-            isRightActionActivated: false,
-        }
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
         return JSON.stringify(nextProps.item) !== JSON.stringify(this.props.item) ||
+            JSON.stringify(nextProps.isMenuActivated) !== JSON.stringify(this.props.isMenuActivated) ||
             JSON.stringify(nextState) !== JSON.stringify(this.state);
     }
 
@@ -30,14 +23,14 @@ class TodoItem extends React.Component {
             return <View style={todoListStyle.itemExpiredSeparator}/>
         } else {
             return <Swipeable
-                onLeftActionActivate={() => this.setState({isLeftActionActivated: true})}
-                onLeftActionDeactivate={() => this.setState({isLeftActionActivated: false})}
-                onRightActionActivate={() => this.setState({isRightActionActivated: true})}
-                onRightActionDeactivate={() => this.setState({isRightActionActivated: false})}
+                onLeftActionActivate={() => this.props.changeMenuActivationState(item.id, true)}
+                onLeftActionDeactivate={() => this.props.changeMenuActivationState(item.id, false)}
+                onRightActionActivate={() => this.props.changeMenuActivationState(item.id, true)}
+                onRightActionDeactivate={() => this.props.changeMenuActivationState(item.id, false)}
                 onSwipeStart={() => (this.props.changeScrollState(false))}
                 onSwipeComplete={() => (this.props.changeScrollState(true))}
-                leftContent={createSwipeableContent(`Reset`, `flex-end`, this.state.isLeftActionActivated)}
-                rightContent={createSwipeableContent(`Delete`, `flex-start`, this.state.isRightActionActivated)}
+                leftContent={createSwipeableContent(`Reset`, `flex-end`, this.props.isMenuActivated)}
+                rightContent={createSwipeableContent(`Delete`, `flex-start`, this.props.isMenuActivated)}
                 onLeftActionRelease={() => this.props.resetTodo(item.id)}
                 onRightActionRelease={() =>
                     Alert.alert(
@@ -96,4 +89,11 @@ const createSwipeableContent = (text, alignItems, isMenuActivated) => {
     </View>;
 };
 
-export default withNavigation(connect(null, Action)(TodoItem))
+const mapStateToProps = (state, ownProps) => {
+    return {
+        isMenuActivated: state.todos.menuActivation.id === ownProps.item.id && state.todos.menuActivation.isMenuActivated
+    };
+};
+
+
+export default withNavigation(connect(mapStateToProps, Action)(TodoItem))
