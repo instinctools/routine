@@ -6,12 +6,21 @@ import {TouchableRipple} from "react-native-paper";
 import Action from "../../action/todos";
 import {connect} from "react-redux";
 import {ITEM_TYPE_SEPARATOR} from "./TodoList";
-import { withNavigation } from 'react-navigation';
+import {withNavigation} from 'react-navigation';
 
-class TodoItem extends React.PureComponent {
+class TodoItem extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {
+            isLeftActionActivated: false,
+            isRightActionActivated: false,
+        }
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return JSON.stringify(nextProps.item) === JSON.stringify(this.props);
+        return JSON.stringify(nextProps.item) !== JSON.stringify(this.props.item) ||
+            JSON.stringify(nextState) !== JSON.stringify(this.state);
     }
 
     render() {
@@ -21,10 +30,14 @@ class TodoItem extends React.PureComponent {
             return <View style={todoListStyle.itemExpiredSeparator}/>
         } else {
             return <Swipeable
+                onLeftActionActivate={() => this.setState({isLeftActionActivated: true})}
+                onLeftActionDeactivate={() => this.setState({isLeftActionActivated: false})}
+                onRightActionActivate={() => this.setState({isRightActionActivated: true})}
+                onRightActionDeactivate={() => this.setState({isRightActionActivated: false})}
                 onSwipeStart={() => (this.props.changeScrollState(false))}
                 onSwipeComplete={() => (this.props.changeScrollState(true))}
-                leftContent={createSwipeableContent(`Reset`, `flex-end`, false)}
-                rightContent={createSwipeableContent(`Delete`, `flex-start`, false)}
+                leftContent={createSwipeableContent(`Reset`, `flex-end`, this.state.isLeftActionActivated)}
+                rightContent={createSwipeableContent(`Delete`, `flex-start`, this.state.isRightActionActivated)}
                 onLeftActionRelease={() => this.props.resetTodo(item.id)}
                 onRightActionRelease={() =>
                     Alert.alert(
