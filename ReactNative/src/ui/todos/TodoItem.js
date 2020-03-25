@@ -6,10 +6,16 @@ import {TouchableRipple} from "react-native-paper";
 import Action from "../../action/todos";
 import {connect} from "react-redux";
 import {ITEM_TYPE_SEPARATOR} from "./TodoList";
+import { withNavigation } from 'react-navigation';
 
 class TodoItem extends React.PureComponent {
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return JSON.stringify(nextProps.item) === JSON.stringify(this.props);
+    }
+
     render() {
-        const item = this.props.item;
+        const {item} = this.props;
         console.log(`TodoItem render: item: ${JSON.stringify(item)}`);
         if (item.itemType === ITEM_TYPE_SEPARATOR) {
             return <View style={todoListStyle.itemExpiredSeparator}/>
@@ -77,4 +83,4 @@ const createSwipeableContent = (text, alignItems, isMenuActivated) => {
     </View>;
 };
 
-export default connect(null, Action)(TodoItem)
+export default withNavigation(connect(null, Action)(TodoItem))

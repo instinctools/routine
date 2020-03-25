@@ -1,13 +1,13 @@
 import {FlatList} from 'react-native';
 import React from 'react';
 import {todoListStyle, toolbarStyle} from '../../styles/Styles';
-import moment from "moment";
 import {connect} from "react-redux";
 import Action from '../../action/todos';
-import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../../utils";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
+import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../../utils";
+import moment from "moment";
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
