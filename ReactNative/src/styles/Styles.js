@@ -52,10 +52,10 @@ export const todoListStyle = StyleSheet.create({
 
 export const todoDetailsStyle = StyleSheet.create({
     root: {
-        padding: 8,
+        marginHorizontal: 16,
     },
     title: {
-        padding: 8,
+        fontSize: 30
     },
     period: {
         padding: 8,
@@ -65,6 +65,34 @@ export const todoDetailsStyle = StyleSheet.create({
         flexDirection: `row`,
         justifyContent: 'space-evenly',
     },
+    separatorContainer: {
+        marginTop: 16,
+        flexDirection: `row`,
+        alignItems: `center`
+    },
+    separatorLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: `#000000`
+    },
+    separatorText: {
+        marginLeft: 24,
+        flexGrow: 1,
+        paddingHorizontal: 16,
+        backgroundColor: `#ffffff`,
+        position: 'absolute',
+        alignSelf: 'center'
+    },
+    periodSelectorContainer:{
+        height: 68,
+        justifyContent: `center`,
+        borderRadius: 10,
+        marginVertical: 8
+    },
+    periodSelectorText:{
+        fontSize: 20,
+        paddingLeft: 16
+    }
 });
 
 export const toolbarStyle = StyleSheet.create({

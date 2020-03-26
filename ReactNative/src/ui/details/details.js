@@ -1,11 +1,11 @@
-import {Text, View, ScrollView} from 'react-native';
+import {ScrollView, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
-import Action from '../action/todos';
-import {Period, PeriodsList} from "../constants";
-import {todoDetailsStyle, toolbarStyle} from "../styles/Styles";
-import {TextInput, TouchableRipple} from "react-native-paper";
-import PeriodUnitSelector from "./PeriodUnitSelector";
+import Action from '../../action/todos';
+import {Period, PeriodsList} from "../../constants";
+import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
+import {TouchableRipple} from "react-native-paper";
+import PeriodSelector from "./PeriodSelector";
 
 const initialState = {
     period: 1,
@@ -75,25 +75,16 @@ export class DetailsScreen extends React.Component {
                 <View style={todoDetailsStyle.root}>
                     <TextInput
                         style={todoDetailsStyle.title}
-                        mode="outlined"
-                        label="What do you want to do?"
+                        multiline={true}
+                        placeholder="Type recurring task name..."
                         onChangeText={title => this.setState({title: title})}
                         value={this.state.title}
                     />
-                    <TextInput
-                        style={todoDetailsStyle.period}
-                        mode="outlined"
-                        keyboardType="numeric"
-                        label="Repeat every"
-                        onChangeText={period => this.setState({period: period})}
-                        value={this.state.period.toString()}
-                    />
-                    {periodUnitSelectors(
-                        PeriodsList,
-                        this.state.periodUnit,
-                        this.state.period,
-                        (unit) => this.setState({periodUnit: unit})
-                    )}
+                    <View style={todoDetailsStyle.separatorContainer}>
+                        <View style={todoDetailsStyle.separatorLine}/>
+                        <Text style={todoDetailsStyle.separatorText}>Repeat</Text>
+                    </View>
+                    <PeriodSelector periodList={PeriodsList}/>
                 </View>
             </ScrollView>
         );
