@@ -8,14 +8,25 @@
 
 import Foundation
 
-enum Period: String, CaseIterable {
-    case day = "day"
-    case week = "week"
-    case month = "month"
-    case year = "year"
+enum Period: Int, CaseIterable {
+    case day
+    case week
+    case month
+    case year
     
     var title: String {
-        return "Every \(self.rawValue)"
+        let period: String
+        switch self {
+        case .day:
+            period = "day"
+        case .week:
+            period = "week"
+        case .month:
+            period = "month"
+        case .year:
+            period = "year"
+        }
+        return "Every \(period)"
     }
     
     private var calendarComponent: Calendar.Component {

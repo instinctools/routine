@@ -9,10 +9,16 @@
 import UIKit
 import Foundation
 
+struct Test {
+    
+}
+
 class Task {
     
+    var id: UUID
     var title: String
     var period: Period
+    var startDate: Date
     
     private var colors: [UIColor] = [
         UIColor.systemRed,
@@ -49,25 +55,27 @@ class Task {
         }
         return ""
     }
+
     
-    private var startDate: Date
-    private var endDate: Date
+    private var endDate: Date {
+        return period.calculateDate(withStardDate: startDate)
+    }
 
     private var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         return formatter
     }()
 
-    init(title: String, period: Period) {
+    init(id: UUID = UUID(), title: String, period: Period) {
+        self.id = id
         self.title = title
         self.period = period
         let now = Date()
         self.startDate = now
-        self.endDate = period.calculateDate(withStardDate: now)
     }
     
     func reset() {
-        self.endDate = period.calculateDate(withStardDate: Date())
+        self.startDate = Date()
     }
     
     private func calculateTimeLeft(start: Date, end: Date) -> Int {

@@ -18,6 +18,8 @@
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
 		DDF0C620242CA3810031299A /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61F242CA3810031299A /* Period.swift */; };
+		DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */; };
+		DDF0C62E242D1EAC0031299A /* TaskRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C62D242D1EAC0031299A /* TaskRepository.swift */; };
 		DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F22428BE25003456DA /* AppDelegate.swift */; };
 		DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F42428BE25003456DA /* SceneDelegate.swift */; };
 		DDF395F72428BE25003456DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F62428BE25003456DA /* ContentView.swift */; };
@@ -40,6 +42,8 @@
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
 		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
 		DDF0C61F242CA3810031299A /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
+		DDF0C625242CE7C10031299A /* Task.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task.xcdatamodel; sourceTree = "<group>"; };
+		DDF0C62D242D1EAC0031299A /* TaskRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRepository.swift; sourceTree = "<group>"; };
 		DDF395EF2428BE25003456DA /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF395F22428BE25003456DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDF395F42428BE25003456DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +96,23 @@
 			path = Representable;
 			sourceTree = "<group>";
 		};
+		DDDF3597242D577300D62C12 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				DDF0C62D242D1EAC0031299A /* TaskRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		DDF0C623242CE7980031299A /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF3597242D577300D62C12 /* Repository */,
+				DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		DDF395E62428BE25003456DA = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +136,7 @@
 				DD0B1505242B45D100A8ED3C /* ViewControllers */,
 				DDF396082428BE55003456DA /* Views */,
 				DDF3960C2428BE9F003456DA /* Models */,
+				DDF0C623242CE7980031299A /* CoreData */,
 				DDF3960A2428BE6D003456DA /* Resource */,
 				DDF3960B2428BE7A003456DA /* Supporting Files */,
 				DDF395FA2428BE27003456DA /* Preview Content */,
@@ -260,6 +282,8 @@
 				DDABAABB242A5A3900281879 /* DismissingKeyboard.swift in Sources */,
 				DD0B150E242B53AA00A8ED3C /* TaskView.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
+				DDF0C62E242D1EAC0031299A /* TaskRepository.swift in Sources */,
+				DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
 				DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */,
@@ -487,6 +511,19 @@
 			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				DDF0C625242CE7C10031299A /* Task.xcdatamodel */,
+			);
+			currentVersion = DDF0C625242CE7C10031299A /* Task.xcdatamodel */;
+			path = Routine.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = DDF395E72428BE25003456DA /* Project object */;
 }
