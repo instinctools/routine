@@ -29,8 +29,11 @@ const createButton = (period, isSelected) => {
         onPress={() => {
 
         }}>
-        <Text style={{...todoDetailsStyle.periodSelectorText, color: textColor}}>
-            Every {period.toLowerCase()}
-        </Text>
+        <View style={todoDetailsStyle.periodSelectorContainerWrapper}>
+            <Text style={{...todoDetailsStyle.periodSelectorText, color: textColor}}>
+                Every {period.toLowerCase()}
+            </Text>
+            <View style={{...todoDetailsStyle.periodSelectorIndicator, backgroundColor: textColor}}/>
+        </View>
     </TouchableRipple>
 };

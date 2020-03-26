@@ -86,14 +86,23 @@ export const todoDetailsStyle = StyleSheet.create({
         alignSelf: 'center'
     },
     periodSelectorContainer:{
-        height: 68,
-        justifyContent: `center`,
         borderRadius: 10,
         marginVertical: 8
     },
+    periodSelectorContainerWrapper:{
+        flexDirection: `row`,
+        flex: 1,
+        alignItems: `center`,
+        margin: 16
+    },
     periodSelectorText:{
+        flex: 1,
         fontSize: 20,
-        paddingLeft: 16
+    },
+    periodSelectorIndicator:{
+        width: 12,
+        height: 12,
+        borderRadius: 8
     }
 });
 
