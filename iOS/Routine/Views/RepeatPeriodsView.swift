@@ -8,27 +8,17 @@
 
 import SwiftUI
 
-struct Period: Identifiable, Equatable {
-    let id = UUID()
-    let title: String
-}
-
 struct RepeatPeriodsView: View {
-    
-    private var periods = [
-        Period(title: "Every day"),
-        Period(title: "Every week"),
-        Period(title: "Every month"),
-        Period(title: "Every year")
-    ]
-    
-    @State private var selectedPeriod: Period?
+        
+    @State var selectedPeriod: Period?
     @State private var text: String = ""
+    
+    var onSelect: (Period) -> Void
     
     var body: some View {
         VStack {
             LabelledDivider(label: "Repeat")
-            ForEach(periods) { (period) in
+            ForEach(Period.allCases, id: \.rawValue) { (period) in
                 HStack {
                     Text(period.title)
                         .font(Font.system(size: 24, weight: .medium))
@@ -42,10 +32,11 @@ struct RepeatPeriodsView: View {
                 }
                 .background(self.isSelected(period: period) ? Color.gray : .init(UIColor.systemGroupedBackground))
                 .cornerRadius(12)
-                    .frame(height: 44)
-                    .padding(.vertical, 8)
+                .frame(height: 44)
+                .padding(.vertical, 8)
                 .onTapGesture {
                     self.selectedPeriod = period
+                    self.onSelect(period)
                 }
             }
             Spacer()
@@ -59,6 +50,6 @@ struct RepeatPeriodsView: View {
 
 struct TaskView_Previews: PreviewProvider {
     static var previews: some View {
-        RepeatPeriodsView()
+        RepeatPeriodsView(onSelect: {_ in})
     }
 }

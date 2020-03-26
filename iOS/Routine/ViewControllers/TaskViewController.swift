@@ -45,12 +45,13 @@ class TaskViewController: UIViewController {
     )
     
     private lazy var repeatView: UIView = UIHostingController(
-        rootView: RepeatPeriodsView()
+        rootView: RepeatPeriodsView(selectedPeriod: task?.period, onSelect: onSelectPeriod)
     ).view
 
     private let placeholder = "Type recurring task name..."
     
     private let task: Task?
+    private var selectedPeriod: Period?
     private let onTask: (Task) -> Void
     
     init(task: Task? = nil, onTask: @escaping (Task) -> Void) {
@@ -78,6 +79,7 @@ class TaskViewController: UIViewController {
         if let title = task?.title, !title.isEmpty {
             textView.text = title
             textView.textColor = .label
+            selectedPeriod = task?.period
         }
         
         view.backgroundColor = .systemBackground
@@ -102,7 +104,11 @@ class TaskViewController: UIViewController {
     }
     
     @objc private func didTapDoneButton() {
-        let task = Task(title: textView.text, repeatPeriod: "", executionTime: "")
+        guard let period = selectedPeriod else { return }
+        let task = Task(
+            title: textView.text,
+            period: period
+        )
         onTask(task)
         dismiss(animated: true)
     }
@@ -129,7 +135,12 @@ class TaskViewController: UIViewController {
     }
     
     private func update(withTitle title: String) {
-        doneButton.isEnabled = !title.isEmpty && title != placeholder
+        doneButton.isEnabled = !title.isEmpty && title != placeholder && selectedPeriod != nil
+    }
+    
+    private func onSelectPeriod(_ period: Period) {
+        selectedPeriod = period
+        update(withTitle: textView.text)
     }
 }
 

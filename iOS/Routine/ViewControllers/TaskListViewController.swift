@@ -51,6 +51,11 @@ private extension TaskListViewController {
         tableView.reloadData()
     }
     
+    private func resetTask(at index: Int) {
+        tasks[index].reset()
+        tableView.reloadData()
+    }
+    
     private func removeTask(at indexPath: IndexPath) {
         tasks.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .right)
@@ -107,6 +112,7 @@ extension TaskListViewController {
     ) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
+            self.resetTask(at: indexPath.row)
             completion(true)
         }
         action.backgroundColor = .systemBackground

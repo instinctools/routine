@@ -17,6 +17,7 @@
 		DDD23120242A4D1B004194BB /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311F242A4D1B004194BB /* TextView.swift */; };
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
+		DDF0C620242CA3810031299A /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61F242CA3810031299A /* Period.swift */; };
 		DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F22428BE25003456DA /* AppDelegate.swift */; };
 		DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F42428BE25003456DA /* SceneDelegate.swift */; };
 		DDF395F72428BE25003456DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F62428BE25003456DA /* ContentView.swift */; };
@@ -38,6 +39,7 @@
 		DDD2311F242A4D1B004194BB /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
 		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
+		DDF0C61F242CA3810031299A /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		DDF395EF2428BE25003456DA /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF395F22428BE25003456DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDF395F42428BE25003456DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF3960D2428BEAB003456DA /* Task.swift */,
+				DDF0C61F242CA3810031299A /* Period.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */,
 				DDFAD42A24294BC5009584FC /* TableView.swift in Sources */,
 				DDF395F72428BE25003456DA /* ContentView.swift in Sources */,
+				DDF0C620242CA3810031299A /* Period.swift in Sources */,
 				DD0E14F02428BFD200AE0C78 /* TaskRowView.swift in Sources */,
 				DDD23120242A4D1B004194BB /* TextView.swift in Sources */,
 				DDF396072428BE4B003456DA /* TaskListView.swift in Sources */,

@@ -21,22 +21,20 @@ struct TaskRowView: View {
                 Spacer()
             }
             .padding(.bottom, 8)
-            .padding([.top, .leading, .trailing], 14)
             
             HStack {
-                Text(task.repeatPeriod)
+                Text(task.period.title)
                     .font(Font.system(size: 14, weight: .light))
                     .foregroundColor(Color.white)
                 Spacer()
-                Text(task.executionTime)
+                Text(task.timeLeft)
                     .font(Font.system(size: 14, weight: .light))
                     .foregroundColor(Color.white)
             }
-            .padding([.leading, .trailing, .bottom], 14)
         }
-        .background(Color.pink)
+        .padding(.all, 14)
+        .background(Color(task.color))
         .cornerRadius(12)
-        .padding(.vertical, 6)
     }
 }
 
