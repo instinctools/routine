@@ -3,11 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
+		DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1508242B46D100A8ED3C /* PeriodView.swift */; };
+		DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD0B150B242B51A700A8ED3C /* SnapKit */; };
+		DD0B150E242B53AA00A8ED3C /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B150D242B53AA00A8ED3C /* TaskView.swift */; };
 		DD0E14F02428BFD200AE0C78 /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0E14EF2428BFD200AE0C78 /* TaskRowView.swift */; };
+		DDABAABB242A5A3900281879 /* DismissingKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDABAABA242A5A3900281879 /* DismissingKeyboard.swift */; };
+		DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */; };
+		DDD23120242A4D1B004194BB /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311F242A4D1B004194BB /* TextView.swift */; };
+		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
+		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
 		DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F22428BE25003456DA /* AppDelegate.swift */; };
 		DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F42428BE25003456DA /* SceneDelegate.swift */; };
 		DDF395F72428BE25003456DA /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F62428BE25003456DA /* ContentView.swift */; };
@@ -20,7 +29,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		DD0B1508242B46D100A8ED3C /* PeriodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodView.swift; sourceTree = "<group>"; };
+		DD0B150D242B53AA00A8ED3C /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		DD0E14EF2428BFD200AE0C78 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
+		DDABAABA242A5A3900281879 /* DismissingKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissingKeyboard.swift; sourceTree = "<group>"; };
+		DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatPeriodsView.swift; sourceTree = "<group>"; };
+		DDD2311F242A4D1B004194BB /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
+		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
 		DDF395EF2428BE25003456DA /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF395F22428BE25003456DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDF395F42428BE25003456DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,12 +56,40 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DD0B1505242B45D100A8ED3C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				DDF0C61D242BCDE50031299A /* TaskListViewController.swift */,
+				DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		DDABAAB9242A5A2100281879 /* Modifier */ = {
+			isa = PBXGroup;
+			children = (
+				DDABAABA242A5A3900281879 /* DismissingKeyboard.swift */,
+			);
+			path = Modifier;
+			sourceTree = "<group>";
+		};
+		DDD23121242A529D004194BB /* Representable */ = {
+			isa = PBXGroup;
+			children = (
+				DDFAD42924294BC5009584FC /* TableView.swift */,
+				DDD2311F242A4D1B004194BB /* TextView.swift */,
+				DD0B150D242B53AA00A8ED3C /* TaskView.swift */,
+			);
+			path = Representable;
+			sourceTree = "<group>";
+		};
 		DDF395E62428BE25003456DA = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				DDF396092428BE61003456DA /* Delegate */,
+				DD0B1505242B45D100A8ED3C /* ViewControllers */,
 				DDF396082428BE55003456DA /* Views */,
 				DDF3960C2428BE9F003456DA /* Models */,
 				DDF3960A2428BE6D003456DA /* Resource */,
@@ -85,10 +131,14 @@
 		DDF396082428BE55003456DA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDABAAB9242A5A2100281879 /* Modifier */,
+				DDD23121242A529D004194BB /* Representable */,
 				DDF395F62428BE25003456DA /* ContentView.swift */,
 				DDF396062428BE4B003456DA /* TaskListView.swift */,
 				DD0E14EF2428BFD200AE0C78 /* TaskRowView.swift */,
-				DDFAD42924294BC5009584FC /* TableView.swift */,
+				DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */,
+				DD0B1508242B46D100A8ED3C /* PeriodView.swift */,
+				DDDAF313242A55B30027BC74 /* LabelledDivider.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -143,6 +193,9 @@
 			dependencies = (
 			);
 			name = Routine;
+			packageProductDependencies = (
+				DD0B150B242B51A700A8ED3C /* SnapKit */,
+			);
 			productName = Routine;
 			productReference = DDF395EF2428BE25003456DA /* Routine.app */;
 			productType = "com.apple.product-type.application";
@@ -171,6 +224,9 @@
 				Base,
 			);
 			mainGroup = DDF395E62428BE25003456DA;
+			packageReferences = (
+				DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = DDF395F02428BE25003456DA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -198,13 +254,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDABAABB242A5A3900281879 /* DismissingKeyboard.swift in Sources */,
+				DD0B150E242B53AA00A8ED3C /* TaskView.swift in Sources */,
+				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
+				DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */,
 				DDF3960E2428BEAB003456DA /* Task.swift in Sources */,
+				DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */,
 				DDFAD42A24294BC5009584FC /* TableView.swift in Sources */,
 				DDF395F72428BE25003456DA /* ContentView.swift in Sources */,
 				DD0E14F02428BFD200AE0C78 /* TaskRowView.swift in Sources */,
+				DDD23120242A4D1B004194BB /* TextView.swift in Sources */,
 				DDF396072428BE4B003456DA /* TaskListView.swift in Sources */,
+				DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */,
+				DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +464,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD0B150B242B51A700A8ED3C /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DDF395E72428BE25003456DA /* Project object */;
 }

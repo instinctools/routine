@@ -8,10 +8,17 @@
 
 import Foundation
 
-struct Task {
+class Task {
+    
     var title: String
     var repeatPeriod: String
     var executionTime: String
+
+    init(title: String, repeatPeriod: String, executionTime: String) {
+        self.title = title
+        self.repeatPeriod = repeatPeriod
+        self.executionTime = executionTime
+    }
 }
 
 extension Task {

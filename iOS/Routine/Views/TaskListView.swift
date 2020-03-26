@@ -16,24 +16,20 @@ struct TaskListView: View {
     ]
     
     var body: some View {
-//        List {
-//            ForEach(tasks, id: \.title) { task in
+        List {
+            ForEach(tasks, id: \.title) { task in
+                TaskRowView(task: task)
+                    .frame(height: 44)
+                    .padding()
+            }
+            .onDelete(perform: delete)
+        }.animation(.default)
+//        TableView(
+//            data: tasks,
+//            content: { (task) in
 //                TaskRowView(task: task)
 //            }
-//            .onDelete(perform: delete)
-//        }.animation(.default)
-        TableView(
-            data: tasks,
-            content: { (task) in
-                TaskRowView(task: task)
-            },
-            resetActionView: {
-                ZStack {
-                    Color.gray
-                    Text("Reset")
-                }
-            }
-        )
+//        )
     }
     
     func delete(at offsets: IndexSet) {

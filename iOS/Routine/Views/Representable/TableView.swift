@@ -9,12 +9,28 @@
 import SwiftUI
 import UIKit
 
-struct TableView<Data, RowContent: View, ActionContent: View>: UIViewRepresentable {
+class TableViewCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension UITableViewCell {
+    static var reuseIdentifier: String {
+        return String(describing: type(of: self))
+    }
+}
+
+struct TableView<Data, Content: View>: UIViewRepresentable {
 
     var data: [Data]
-    var content: (Data) -> RowContent
-    var resetActionView: (() -> ActionContent)? = nil
-    var onReset: ((Int) -> Void)? = nil
+    var content: (Data) -> Content
+//    var onReset: ((Int) -> Void)? = nil
 
     func makeUIView(context: Context) -> UITableView {
         let tableView = UITableView()
@@ -23,7 +39,7 @@ struct TableView<Data, RowContent: View, ActionContent: View>: UIViewRepresentab
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
 
-        let id = String(describing: UITableViewCell.self)
+        let id = String(describing: TableViewCell.self)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: id)
 
         return tableView
@@ -34,17 +50,16 @@ struct TableView<Data, RowContent: View, ActionContent: View>: UIViewRepresentab
         uiView.reloadData()
     }
     
-    func makeCoordinator() -> Coordinator<Data, RowContent, ActionContent> {
+    func makeCoordinator() -> Coordinator<Data, Content> {
         return Coordinator(data: data, content: content)
     }
 }
 
-class Coordinator<Data, RowContent, ActionContent>: NSObject, UITableViewDelegate, UITableViewDataSource where RowContent: View, ActionContent: View {
+class Coordinator<Data, Content>: NSObject, UITableViewDelegate, UITableViewDataSource where Content: View {
     
     var data: [Data]
 //    var id: KeyPath<Items.Element, String>
-    var rowContent: (Data) -> RowContent
-    var actionContent: () -> ActionContent
+    var content: (Data) -> Content
     
     init(data: [Data], content: @escaping (Data) -> Content) {
         self.data = data
@@ -58,10 +73,10 @@ class Coordinator<Data, RowContent, ActionContent>: NSObject, UITableViewDelegat
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = String(describing: UITableViewCell.self)
+        let identifier = String(describing: TableViewCell.self)
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let swiftUIView: UIView = UIHostingController(
-            rootView: rowContent(data[indexPath.row])
+            rootView: content(data[indexPath.row])
         ).view
         swiftUIView.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addSubview(swiftUIView)
@@ -78,19 +93,14 @@ class Coordinator<Data, RowContent, ActionContent>: NSObject, UITableViewDelegat
     
     func tableView(_ tableView: UITableView,
                    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let action = UIContextualAction(style: .destructive, title: "Reset") {  (contextualAction, view, completion) in
-            
+        let action = UIContextualAction(style: .normal, title: "") {  (contextualAction, view, completion) in
             completion(true)
         }
-        action.image = 
+
+        action.backgroundColor = .clear
+        action.image = UIImage(named: "Reset")
         let swipeActions = UISwipeActionsConfiguration(actions: [action])
 
         return swipeActions
-    }
-    
-    func tableView(_ tableView: UITableView,
-                   commit editingStyle: UITableViewCell.EditingStyle,
-                   forRowAt indexPath: IndexPath) {
-        
     }
 }
