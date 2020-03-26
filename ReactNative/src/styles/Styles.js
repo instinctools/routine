@@ -73,13 +73,15 @@ export const todoDetailsStyle = StyleSheet.create({
     separatorLine: {
         flex: 1,
         height: 1,
-        backgroundColor: `#000000`
+        backgroundColor: `#AAA9A9`
     },
     separatorText: {
         marginLeft: 24,
         flexGrow: 1,
         paddingHorizontal: 16,
         backgroundColor: `#ffffff`,
+        color: `#AAA9A9`,
+        fontSize: 16,
         position: 'absolute',
         alignSelf: 'center'
     },

@@ -14,6 +14,12 @@ const AppNavigator = createStackNavigator(
     {
         Items: TodoList,
         Details: TodoDetails,
+    },{
+        defaultNavigationOptions: () => ({
+            cardStyle: {
+                backgroundColor: "#ffffff",
+            },
+        })
     }
 );
 
