@@ -1,18 +1,12 @@
 import {ScrollView, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {connect} from "react-redux";
-import Action from '../../action/todos';
-import {Period, PeriodsList} from "../../constants";
 import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
 import {TouchableRipple} from "react-native-paper";
 import PeriodSelector from "./PeriodSelector";
+import ActionEditTodo from "../../action/EditTodoAction";
 
-const initialState = {
-    period: 1,
-    periodUnit: Period.DAY
-};
-
-export class DetailsScreen extends React.Component {
+class DetailsScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
         const {params} = navigation.state;
@@ -41,18 +35,13 @@ export class DetailsScreen extends React.Component {
         }
     };
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {}
-    }
-
     componentDidMount() {
         this.props.navigation.setParams({
             done: () => {
                 if (this.state.id) {
-                    this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
+                    // this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
                 } else {
-                    this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
+                    // this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
                 }
                 this.props.navigation.pop();
             }
@@ -60,16 +49,15 @@ export class DetailsScreen extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevState.canBeSaved !== this.state.canBeSaved) {
+        if (prevProps.canBeSaved !== this.props.canBeSaved) {
             this.props.navigation.setParams({
-                canBeSaved: this.state.canBeSaved
+                canBeSaved: this.props.canBeSaved
             });
         }
     }
 
     render() {
-        console.log(`CreateTodo render state: ${JSON.stringify(this.state)}`);
-        console.log(`CreateTodo render props: ${JSON.stringify(this.props)}`);
+        console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
         return (
             <ScrollView>
                 <View style={todoDetailsStyle.root}>
@@ -77,51 +65,26 @@ export class DetailsScreen extends React.Component {
                         style={todoDetailsStyle.title}
                         multiline={true}
                         placeholder="Type recurring task name..."
-                        onChangeText={title => this.setState({title: title})}
-                        value={this.state.title}
+                        onChangeText={title => this.props.editTodoTitle(title)}
                     />
                     <View style={todoDetailsStyle.separatorContainer}>
                         <View style={todoDetailsStyle.separatorLine}/>
                         <Text style={todoDetailsStyle.separatorText}>Repeat</Text>
                     </View>
-                    <PeriodSelector periodList={PeriodsList}/>
+                    <PeriodSelector/>
                 </View>
             </ScrollView>
         );
     }
-
-    static getDerivedStateFromProps(props, state) {
-        const params = props.navigation.state.params;
-        const id = params && params.id ? params.id : undefined;
-        console.log(`CreateTodo DerivedState state: ${JSON.stringify(state)}`);
-        console.log(`CreateTodo DerivedState props: ${JSON.stringify(props)}`);
-        const canBeSaved = !(!state.title || !state.period || !state.periodUnit);
-        if (id) {
-            const item = props.items.find(todo => todo.id === id);
-            return {...initialState, ...item, ...state, id, canBeSaved};
-        } else {
-            return {...initialState, ...state, canBeSaved};
-        }
-    }
 }
 
-const periodUnitSelectors = (units, selected, amount, onPress) => (
-    <View style={todoDetailsStyle.periodUnitContainer}>
-        {units.map(function (unit, _) {
-            return <PeriodUnitSelector
-                unit={unit}
-                selectedUnit={selected}
-                amount={amount}
-                onPress={() => onPress(unit)}/>;
-        })}
-    </View>
-);
-
+const mapStateToProps = (state) => {
+    return {
+        canBeSaved: !(!state.editTodo.title || !state.editTodo.period || !state.editTodo.periodUnit)
+    }
+};
 
 export default connect(
-    previousState => {
-        const {todos} = previousState;
-        return {...todos};
-    },
-    Action
+    mapStateToProps,
+    ActionEditTodo
 )(DetailsScreen);
