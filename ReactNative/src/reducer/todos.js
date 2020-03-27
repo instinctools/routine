@@ -2,68 +2,61 @@ import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
 import {calculateTimestamp} from "../utils";
 import {Period} from "../constants";
+import uuid from "react-native-uuid";
 
-const _initialState = {
+export const TODO_INITIAL_STATE = {
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
     menuActivation: {
         id: undefined,
         isMenuActivated: false
+    },
+    editTodo: {
+        id: undefined,
+        title: undefined,
+        period: 1,
+        periodUnit: Period.DAY
     }
 };
 
-const editTodoInitialState = {
-    title: undefined,
-    period: 1,
-    periodUnit: Period.DAY
-};
-
-export const editTodoReducer = (state = editTodoInitialState, action) => {
-    switch (action.type) {
-        case ActionEditTodo.Type.TODO_EDIT_TITLE:
-            return {...state, title: action.title};
-        case ActionEditTodo.Type.TODO_EDIT_PERIOD:
-            return {...state, period: action.period};
-        case ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT:
-            return {...state, periodUnit: action.periodUnit};
-        default:
-            return state;
-    }
-};
-
-export const reducer = (state = _initialState, action) => {
+export const reducer = (state = TODO_INITIAL_STATE, action) => {
     console.log(`reducer action: ${JSON.stringify(action)}`);
     const newState = {...state};
     switch (action.type) {
         case Action.Type.TODO_ADD: {
-            newState.items = [
-                ...newState.items,
-                {
+            const newTodo = {...newState.editTodo};
+            if (newTodo.id) {
+                newState.items = newState.items.map((todo, _) => {
+                    if (todo.id === newTodo.id) {
+                        return newTodo
+                    }
+                    return todo
+                });
+            } else {
+                newState.items = [
+                    ...newState.items, {
+                        ...newTodo,
+                        id: uuid.v1()
+                    }
+                ];
+            }
+            break;
+        }
+        case Action.Type.TODO_SELECT:
+            if (action.id){
+                newState.editTodo = {
                     id: action.id,
                     title: action.title,
-                    periodUnit: action.periodUnit,
                     period: action.period,
-                    timestamp: calculateTimestamp(action.period, action.periodUnit)
+                    periodUnit: action.periodUnit
                 }
-            ];
-            break;
-        }
-        case Action.Type.TODO_EDIT: {
-            newState.items = newState.items.map((todo, _) => {
-                if (todo.id === action.id) {
-                    return {
-                        id: action.id,
-                        title: action.title,
-                        periodUnit: action.periodUnit,
-                        period: action.period,
-                        timestamp: calculateTimestamp(action.period, action.periodUnit)
-                    }
+            } else {
+                newState.editTodo = {
+                    ...TODO_INITIAL_STATE.editTodo
                 }
-                return todo
-            });
+            }
             break;
-        }
         case Action.Type.TODO_RESET: {
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.id) {
@@ -108,6 +101,26 @@ export const reducer = (state = _initialState, action) => {
             };
             break;
         }
+        case ActionEditTodo.Type.TODO_EDIT_TITLE:
+            newState.editTodo = {
+                ...newState.editTodo,
+                title: action.title
+            };
+            break;
+        case ActionEditTodo.Type.TODO_EDIT_PERIOD:
+            newState.editTodo = {
+                ...newState.editTodo,
+                period: action.period
+            };
+            break;
+        case ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT:
+            newState.editTodo = {
+                ...newState.editTodo,
+                periodUnit: action.periodUnit
+            };
+            break;
+        default:
+            return state;
     }
     return newState;
 };

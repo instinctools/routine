@@ -1,5 +1,5 @@
 import {combineReducers, createStore} from 'redux';
-import {reducer, editTodoReducer} from './reducer/todos';
+import {reducer} from './reducer/todos';
 import AsyncStorage from '@react-native-community/async-storage';
 import {persistReducer, persistStore} from "redux-persist";
 
@@ -9,7 +9,6 @@ const persistConfig = {
 };
 
 export const store = createStore(combineReducers({
-    todos: persistReducer(persistConfig, reducer),
-    editTodo: editTodoReducer
+    todos: persistReducer(persistConfig, reducer)
 }));
 export const persistor = persistStore(store);

@@ -52,7 +52,8 @@ class TodoItem extends React.Component {
                     style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}
                     borderless={true}
                     onPress={() => {
-                        this.props.navigation.navigate("Details", {id: item.id})
+                        this.props.selectTodo(item.id, item.title, item.period, item.periodUnit);
+                        this.props.navigation.navigate("Details")
                     }}>
                     <View>
                         <View style={todoListStyle.itemHeader}>

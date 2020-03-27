@@ -5,6 +5,7 @@ import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
 import {TouchableRipple} from "react-native-paper";
 import PeriodSelector from "./PeriodSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
+import Action from "../../action/todos";
 
 class DetailsScreen extends React.Component {
 
@@ -38,26 +39,19 @@ class DetailsScreen extends React.Component {
     componentDidMount() {
         this.props.navigation.setParams({
             done: () => {
-                if (this.state.id) {
-                    // this.props.editTodo(this.state.id, this.state.title, this.state.periodUnit, this.state.period);
-                } else {
-                    // this.props.addTodo(this.state.title, this.state.periodUnit, this.state.period);
-                }
+                this.props.addTodo();
                 this.props.navigation.pop();
             }
         });
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.canBeSaved !== this.props.canBeSaved) {
-            this.props.navigation.setParams({
-                canBeSaved: this.props.canBeSaved
-            });
-        }
+    componentWillUnmount() {
+        this.props.selectTodo()
     }
 
     render() {
         console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
+        this.props.navigation.setParams({canBeSaved: this.props.canBeSaved});
         return (
             <ScrollView>
                 <View style={todoDetailsStyle.root}>
@@ -80,11 +74,13 @@ class DetailsScreen extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        canBeSaved: !(!state.editTodo.title || !state.editTodo.period || !state.editTodo.periodUnit)
+        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit)
     }
 };
 
 export default connect(
-    mapStateToProps,
-    ActionEditTodo
+    mapStateToProps, {
+        ...ActionEditTodo,
+        ...Action
+    }
 )(DetailsScreen);

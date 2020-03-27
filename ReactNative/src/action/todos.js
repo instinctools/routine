@@ -1,9 +1,7 @@
-import uuid from "react-native-uuid";
-
 const Action = {
     Type: {
         TODO_ADD: 'todo-add',
-        TODO_EDIT: 'todo-edit',
+        TODO_SELECT: 'todo-select',
         TODO_RESET: 'todo-reset',
         TODO_DELETE: 'todo-delete',
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
@@ -12,26 +10,24 @@ const Action = {
     }
 };
 
-Action.addTodo = (title, periodUnit, period) => {
-    console.log(`action addTodo, text: ${title}; periodUnit: ${periodUnit}; period: ${period}`);
+Action.addTodo = () => {
+    console.log(`action addTodo`);
     return {
-        type: Action.Type.TODO_ADD,
-        id: uuid.v1(),
-        title,
-        periodUnit,
-        period
+        type: Action.Type.TODO_ADD
     };
 };
-Action.editTodo = (id, title, periodUnit, period) => {
-    console.log(`action editTodo, id: ${id}; text: ${title}; periodUnit: ${periodUnit}; period: ${period}`);
+
+Action.selectTodo = (id, title, period, periodUnit) => {
+    console.log(`action select todo, id: ${id} title: ${title} period: ${period} periodUnit: ${periodUnit}`);
     return {
-        type: Action.Type.TODO_EDIT,
+        type: Action.Type.TODO_SELECT,
         id,
         title,
-        periodUnit,
-        period
-    };
+        period,
+        periodUnit
+    }
 };
+
 Action.resetTodo = id => {
     console.log(`action resetTodo id: ${id}`);
     return {

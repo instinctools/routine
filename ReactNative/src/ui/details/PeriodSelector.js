@@ -42,7 +42,7 @@ const createButton = (props, period) => {
 
 const mapStateToProps = (state) => {
     return {
-        selectedPeriodUnit: state.editTodo.periodUnit
+        selectedPeriodUnit: state.todos.editTodo.periodUnit
     };
 };
 
