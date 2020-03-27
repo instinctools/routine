@@ -68,6 +68,7 @@ class DetailsScreen extends React.Component {
                         multiline={true}
                         placeholder="Type recurring task name..."
                         onChangeText={title => this.props.editTodoTitle(title)}
+                        value={this.props.title}
                     />
                     <View style={todoDetailsStyle.separatorContainer}>
                         <View style={todoDetailsStyle.separatorLine}/>
@@ -82,7 +83,8 @@ class DetailsScreen extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit)
+        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit),
+        title: state.todos.editTodo.title
     }
 };
 
