@@ -45,13 +45,21 @@ class DetailsScreen extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        const canBeSaved = this.props.navigation.getParam(`canBeSaved`);
+        if (canBeSaved !== this.props.canBeSaved) {
+            this.props.navigation.setParams({
+                canBeSaved: this.props.canBeSaved
+            });
+        }
+    }
+
     componentWillUnmount() {
         this.props.selectTodo()
     }
 
     render() {
         console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
-        this.props.navigation.setParams({canBeSaved: this.props.canBeSaved});
         return (
             <ScrollView>
                 <View style={todoDetailsStyle.root}>
