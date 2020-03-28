@@ -1,8 +1,9 @@
 const ActionEditTodo = {
     Type: {
-        TODO_EDIT_TITLE: `todo-edit-title`,
-        TODO_EDIT_PERIOD: `todo-edit-period`,
-        TODO_EDIT_PERIOD_UNIT: `todo-edit-period-unit`,
+        TODO_EDIT_TITLE: `TODO_EDIT_TITLE`,
+        TODO_EDIT_PERIOD: `TODO_EDIT_PERIOD`,
+        TODO_EDIT_PERIOD_UNIT: `TODO_EDIT_PERIOD_UNIT`,
+        TODO_EDIT_CHANGE_PERIOD_SELECTOR: `TODO_EDIT_CHANGE_PERIOD_SELECTOR`,
     }
 };
 
@@ -27,6 +28,14 @@ ActionEditTodo.editTodoPeriodUnit = (periodUnit) => {
     return {
         type: ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT,
         periodUnit
+    };
+};
+
+ActionEditTodo.changePeriodSelector = (isVisible) => {
+    console.log(`edit todo change period selector state: ${isVisible}`);
+    return {
+        type: ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR,
+        isVisible
     };
 };
 

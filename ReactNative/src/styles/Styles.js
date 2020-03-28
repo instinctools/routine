@@ -85,24 +85,41 @@ export const todoDetailsStyle = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center'
     },
-    periodSelectorContainer:{
+    periodUnitSelectorContainer:{
         borderRadius: 10,
         marginVertical: 8
     },
-    periodSelectorContainerWrapper:{
+    periodUnitSelectorContainerWrapper:{
         flexDirection: `row`,
         flex: 1,
         alignItems: `center`,
         margin: 16
     },
-    periodSelectorText:{
+    periodUnitSelectorText:{
         flex: 1,
         fontSize: 20,
     },
-    periodSelectorIndicator:{
+    periodUnitSelectorIndicator:{
         width: 12,
         height: 12,
         borderRadius: 8
+    },
+    periodSelectorContainer: {
+        flex: 1,
+        justifyContent: `flex-end`,
+        backgroundColor: `rgba(0, 0, 0, 0.2)`
+    },
+    periodSelectorCancelWrapper: {
+        backgroundColor: `#F1F1F1`,
+        borderRadius: 16
+    },
+    periodSelectorCancel: {
+        borderRadius: 16,
+        alignSelf: 'flex-start',
+        padding: 16
+    },
+    periodSelectorPicker: {
+        backgroundColor: `#F1F1F1`
     }
 });
 

@@ -16,7 +16,8 @@ export const TODO_INITIAL_STATE = {
         id: undefined,
         title: undefined,
         period: 1,
-        periodUnit: Period.DAY
+        periodUnit: Period.DAY,
+        isPeriodSelectorVisible: false
     }
 };
 
@@ -117,6 +118,12 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             newState.editTodo = {
                 ...newState.editTodo,
                 periodUnit: action.periodUnit
+            };
+            break;
+        case ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR:
+            newState.editTodo = {
+                ...newState.editTodo,
+                isPeriodSelectorVisible: action.isVisible
             };
             break;
         default:

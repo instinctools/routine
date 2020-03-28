@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from "react-redux";
 import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
 import {TouchableRipple} from "react-native-paper";
-import PeriodSelector from "./PeriodSelector";
+import PeriodSelector from "./PeriodUnitSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
 

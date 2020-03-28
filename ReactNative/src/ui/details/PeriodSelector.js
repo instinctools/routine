@@ -1,48 +1,51 @@
-import React from 'react';
-import {View} from 'react-native';
-import {Text, TouchableRipple} from "react-native-paper";
-import {todoDetailsStyle} from "../../styles/Styles";
+import {Modal, Text, View} from 'react-native';
+import {Picker} from "react-native-wheel-datepicker";
+import {TouchableRipple} from "react-native-paper";
+import React from "react";
 import {connect} from "react-redux";
 import ActionEditTodo from "../../action/EditTodoAction";
-import {PeriodsList} from "../../constants";
+import {todoDetailsStyle} from "../../styles/Styles";
 
-const bgSelected = `#878787`;
-const bgUnSelected = `#F1F1F1`;
+const pickerData = () => {
+    const array = [];
+    for (let i = 1; i <= 100; i++) {
+        array.push(i);
+    }
+    return array;
+};
 
-const textSelected = `#F1F1F1`;
-const textUnselected = `#878787`;
 
 class PeriodSelector extends React.Component {
     render() {
         console.log(`PeriodSelector render props: ${JSON.stringify(this.props)}`);
-        return <View style={{marginTop: 24}}>
-            {PeriodsList.map(period => {
-                return createButton(this.props, period)
-            })}
-        </View>
+        return <Modal animationType="slide"
+                      visible={this.props.isVisible}
+                      transparent={true}>
+            <View
+                style={todoDetailsStyle.periodSelectorContainer}>
+                <View style={todoDetailsStyle.periodSelectorCancelWrapper}>
+                    <TouchableRipple
+                        style={todoDetailsStyle.periodSelectorCancel}
+                        borderless={true}
+                        onPress={() => this.props.changePeriodSelector(false)}>
+                        <Text>Close</Text>
+                    </TouchableRipple>
+                    <Picker
+                        style={todoDetailsStyle.periodSelectorPicker}
+                        selectedValue={this.props.period}
+                        pickerData={pickerData()}
+                        onValueChange={value => this.props.editTodoPeriod(value)}/>
+                </View>
+            </View>
+        </Modal>
+
     }
 }
 
-const createButton = (props, period) => {
-    const isSelected = period === props.selectedPeriodUnit;
-    const bgColor = isSelected ? bgSelected : bgUnSelected;
-    const textColor = isSelected ? textSelected : textUnselected;
-    return <TouchableRipple
-        style={{...todoDetailsStyle.periodSelectorContainer, backgroundColor: bgColor}}
-        borderless={true}
-        onPress={() => (props.editTodoPeriodUnit(period))}>
-        <View style={todoDetailsStyle.periodSelectorContainerWrapper}>
-            <Text style={{...todoDetailsStyle.periodSelectorText, color: textColor}}>
-                Every {period.toLowerCase()}
-            </Text>
-            <View style={{...todoDetailsStyle.periodSelectorIndicator, backgroundColor: textColor}}/>
-        </View>
-    </TouchableRipple>
-};
-
 const mapStateToProps = (state) => {
     return {
-        selectedPeriodUnit: state.todos.editTodo.periodUnit
+        period: state.todos.editTodo.period,
+        isVisible: state.todos.editTodo.isPeriodSelectorVisible
     };
 };
 
