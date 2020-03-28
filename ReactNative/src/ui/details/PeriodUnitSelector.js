@@ -35,9 +35,6 @@ const createButton = (props, period) => {
         borderless={true}
         onPress={() => {
             props.editTodoPeriodUnit(period);
-            if (period === Period.DAY) {
-                props.changePeriodSelector(true)
-            }
         }}>
         <View style={todoDetailsStyle.periodUnitSelectorContainerWrapper}>
             <Text style={{...todoDetailsStyle.periodUnitSelectorText, color: textColor}}>
