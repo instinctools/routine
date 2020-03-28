@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TaskView: UIViewControllerRepresentable {
     func makeUIViewController(context: UIViewControllerRepresentableContext<TaskView>) -> TaskViewController {
-        let viewController = TaskViewController(onTask: {_ in})
+        let viewController = TaskViewController(viewModel: .init())
         viewController.modalPresentationStyle = .fullScreen
         return viewController
     }

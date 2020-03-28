@@ -8,23 +8,25 @@
 
 import CoreData
 
-//private lazy var persistentContainer: NSPersistentContainer = {
-//    let container = NSPersistentContainer(name: "Routine")
-//    container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//        if let error = error as NSError? {
-//            fatalError("Unresolved error \(error), \(error.userInfo)")
-//        }
-//    })
-//    return container
-//}()
-
-class TaskRepository {
+class TasksRepository {
     
     private let persistentContainer: NSPersistentContainer
     
     private lazy var context: NSManagedObjectContext = {
         return persistentContainer.viewContext
     }()
+    
+    init() {
+        self.persistentContainer = {
+            let container = NSPersistentContainer(name: "Routine")
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                if let error = error as NSError? {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
+            })
+            return container
+        }()
+    }
     
     init(persistentContainer: NSPersistentContainer) {
         self.persistentContainer = persistentContainer
@@ -61,7 +63,7 @@ class TaskRepository {
             if let taskUpdate = try getTasks(withId: task.id) {
                 taskUpdate.setValue(task.title, forKey: "title")
                 taskUpdate.setValue(task.period.rawValue, forKey: "period")
-                taskUpdate.setValue(task.startDate, forKey: "stardDate")
+                taskUpdate.setValue(task.startDate, forKey: "startDate")
                 saveContext()
             }
         } catch {

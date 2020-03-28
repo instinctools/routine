@@ -8,7 +8,20 @@
 
 import UIKit
 import SwiftUI
+import Combine
 import SnapKit
+
+extension View {
+    var uiView: UIView {
+        return UIHostingController(rootView: self).view
+    }
+}
+
+extension UIBarButtonItem {
+    convenience init(barButtonSystemItem systemItem: UIBarButtonItem.SystemItem) {
+        self.init(barButtonSystemItem: systemItem, target: nil, action: nil)
+    }
+}
 
 class TaskViewController: UIViewController {
     
@@ -27,36 +40,26 @@ class TaskViewController: UIViewController {
         return view
     }()
     
-    private lazy var textView: UITextView = {
-        let textView = UITextView()
+    private lazy var textView: PlaceholderTextView = {
+        let textView = PlaceholderTextView()
+        textView.textLimit = 40
+        textView.placeholder = "Type recurring task name..."
         textView.font = .systemFont(ofSize: 30, weight: .medium)
-        textView.isScrollEnabled = false
-        textView.autocorrectionType = .no
-        textView.delegate = self
-        textView.text = placeholder
-        textView.textColor = .lightGray
         return textView
     }()
     
-    private lazy var doneButton = UIBarButtonItem(
-        barButtonSystemItem: .done,
-        target: self,
-        action: #selector(didTapDoneButton)
-    )
+    private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
+    private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     
-    private lazy var repeatView: UIView = UIHostingController(
-        rootView: RepeatPeriodsView(selectedPeriod: task?.period, onSelect: onSelectPeriod)
-    ).view
-
-    private let placeholder = "Type recurring task name..."
+    private lazy var repeatView = RepeatPeriodsView(
+        selectedPeriod: viewModel.selectedPeriod, onSelect: viewModel.setPeriod
+    ).uiView
+        
+    @ObservedObject var viewModel: TaskDetailsViewModel
+    private var cancellables: Set<AnyCancellable> = []
     
-    private let task: Task?
-    private var selectedPeriod: Period?
-    private let onTask: (Task) -> Void
-    
-    init(task: Task? = nil, onTask: @escaping (Task) -> Void) {
-        self.task = task
-        self.onTask = onTask
+    init(viewModel: TaskDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,27 +71,11 @@ class TaskViewController: UIViewController {
         super.viewDidLoad()
         setupLayout()
         setupViews()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        update(withTitle: textView.text)
+        bindViewModel()
     }
     
     private func setupViews() {
-        if let title = task?.title, !title.isEmpty {
-            textView.text = title
-            textView.textColor = .label
-            selectedPeriod = task?.period
-        }
-        
         view.backgroundColor = .systemBackground
-        
-        let cancelButton = UIBarButtonItem(
-            barButtonSystemItem: .cancel,
-            target: self,
-            action: #selector(didTapCancelButton)
-        )
         
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.setLeftBarButton(cancelButton, animated: false)
@@ -99,21 +86,7 @@ class TaskViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
     }
     
-    @objc private func didTapCancelButton() {
-        dismiss(animated: true)
-    }
-    
-    @objc private func didTapDoneButton() {
-        guard let period = selectedPeriod else { return }
-        let task = Task(
-            title: textView.text,
-            period: period
-        )
-        onTask(task)
-        dismiss(animated: true)
-    }
-    
-    private func setupLayout() {
+    private func setupLayout() {        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
@@ -134,50 +107,36 @@ class TaskViewController: UIViewController {
         }
     }
     
-    private func update(withTitle title: String) {
-        doneButton.isEnabled = !title.isEmpty && title != placeholder && selectedPeriod != nil
+    private func bindViewModel() {
+        let output = viewModel.transform(input: .init(
+            title: textView.textPublisher,
+            doneButtonDidTap: doneButton.tap.eraseToAnyPublisher())
+        )
+        
+        cancelButton.tap
+            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
+            .store(in: &cancellables)
+
+        output.doneButtonIsEnabled
+            .assign(to: \.isEnabled, on: doneButton)
+            .store(in: &cancellables)
+        
+        output.title
+            .assign(to: \.text, on: textView)
+            .store(in: &cancellables)
+        
+        output.onClose
+            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
+            .store(in: &cancellables)
     }
     
-    private func onSelectPeriod(_ period: Period) {
-        selectedPeriod = period
-        update(withTitle: textView.text)
+    private func dismiss() {
+        dismiss(animated: true)
     }
 }
 
-extension TaskViewController: UITextViewDelegate {
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .lightGray {
-            textView.text = nil
-            textView.textColor = .label
-        }
-        update(withTitle: textView.text)
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = self.placeholder
-            textView.textColor = .lightGray
-        }
-        update(withTitle: textView.text)
-    }
-    
-    func textView(_ textView: UITextView,
-                  shouldChangeTextIn range: NSRange,
-                  replacementText text: String) -> Bool {
-        
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        
-        let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        let textLimit = 50
-        if newText.count > textLimit { return false }
-        
-        update(withTitle: newText)
-        
-        return true
+func weakify <T: AnyObject>(_ owner: T, _ f: @escaping (T) -> () -> Void) -> () -> Void {
+    return { [weak owner] in
+        return owner.map { f($0)() }
     }
 }
-
-

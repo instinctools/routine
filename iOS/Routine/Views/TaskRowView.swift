@@ -10,12 +10,12 @@ import SwiftUI
 
 struct TaskRowView: View {
     
-    var task: Task
+    var viewModel: TaskViewModel
     
     var body: some View {
         VStack {
             HStack {
-                Text(task.title)
+                Text(viewModel.title)
                     .font(Font.system(size: 19, weight: .semibold))
                     .foregroundColor(Color.white)
                 Spacer()
@@ -23,23 +23,23 @@ struct TaskRowView: View {
             .padding(.bottom, 8)
             
             HStack {
-                Text(task.period.title)
+                Text(viewModel.title)
                     .font(Font.system(size: 14, weight: .light))
                     .foregroundColor(Color.white)
                 Spacer()
-                Text(task.timeLeft)
+                Text(viewModel.timeLeft)
                     .font(Font.system(size: 14, weight: .light))
                     .foregroundColor(Color.white)
             }
         }
         .padding(.all, 14)
-        .background(Color(task.color))
+        .background(Color(viewModel.color))
         .cornerRadius(12)
     }
 }
 
 struct TaskRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskRowView(task: Task.mock)
+        TaskRowView(viewModel: TaskViewModel(task: .mock))
     }
 }

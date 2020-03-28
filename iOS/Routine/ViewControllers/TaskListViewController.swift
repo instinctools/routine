@@ -9,10 +9,12 @@
 import UIKit
 import SwiftUI
 import SnapKit
+import Combine
 
 class TaskListViewController: UITableViewController {
     
-    private var tasks: [Task] = [Task.mock, Task.mock2]
+    private let viewModel = TaskListViewModel()
+    private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,35 +32,27 @@ class TaskListViewController: UITableViewController {
         )
         navigationItem.setRightBarButton(addButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
+        
+        viewModel.objectWillChange
+            .sink(receiveValue: tableView.reloadData)
+            .store(in: &cancellables)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refreshData()
     }
     
     @objc private func didTapAddButton() {
-        let rootViewController = TaskViewController(onTask: addTask)
+        showTaskView()
+    }
+    
+    private func showTaskView(task: Task? = nil) {
+        let viewModel = TaskDetailsViewModel(task: task)
+        let rootViewController = TaskViewController(viewModel: viewModel)
         let viewController = UINavigationController(rootViewController: rootViewController)
         viewController.modalPresentationStyle = .fullScreen
         navigationController?.present(viewController, animated: true)
-    }
-}
-
-private extension TaskListViewController {
-    private func addTask(_ task: Task) {
-        tasks.append(task)
-        tableView.reloadData()
-    }
-    
-    private func updateTask(_ task: Task, at index: Int) {
-        tasks[index] = task
-        tableView.reloadData()
-    }
-    
-    private func resetTask(at index: Int) {
-        tasks[index].reset()
-        tableView.reloadData()
-    }
-    
-    private func removeTask(at indexPath: IndexPath) {
-        tasks.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .right)
     }
 }
 
@@ -67,7 +61,7 @@ extension TaskListViewController {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return tasks.count
+        return viewModel.tasksCount
     }
     
     override func tableView(
@@ -78,7 +72,10 @@ extension TaskListViewController {
             withIdentifier: TableViewCell.reuseIdentifier,
             for: indexPath
         )
-        let rootView = TaskRowView(task: tasks[indexPath.row])
+        
+        let task = viewModel.task(at: indexPath.row)
+        let rowViewModel = TaskViewModel(task: task)
+        let rootView = TaskRowView(viewModel: rowViewModel)
         let view: UIView = UIHostingController(rootView: rootView).view
         view.backgroundColor = .clear
         cell.backgroundColor = .clear
@@ -97,13 +94,8 @@ extension TaskListViewController {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        let task = tasks[indexPath.row]
-        let rootViewController = TaskViewController(task: task) { (updatedTask) in
-            self.updateTask(updatedTask, at: indexPath.row)
-        }
-        let viewController = UINavigationController(rootViewController: rootViewController)
-        viewController.modalPresentationStyle = .fullScreen
-        navigationController?.present(viewController, animated: true)
+        let index = indexPath.row
+        showTaskView(task: viewModel.task(at: index))
     }
     
     override func tableView(
@@ -112,7 +104,7 @@ extension TaskListViewController {
     ) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.resetTask(at: indexPath.row)
+            self.viewModel.resetTask(at: indexPath.row)
             completion(true)
         }
         action.backgroundColor = .systemBackground
@@ -128,7 +120,8 @@ extension TaskListViewController {
     ) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.removeTask(at: indexPath)
+            self.viewModel.deleteTask(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .right)
             completion(true)
         }
 
