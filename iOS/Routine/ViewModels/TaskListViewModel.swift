@@ -11,6 +11,7 @@ import Combine
 
 class TaskListViewModel: ObservableObject {
     
+    let objectWillChange = ObservableObjectPublisher()
     private(set) var tasks: [Task] = []
     
     var tasksCount: Int {
@@ -18,10 +19,6 @@ class TaskListViewModel: ObservableObject {
     }
     
     private let repository = TasksRepository()
-        
-    init() {
-        
-    }
     
     func resetTask(at index: Int) {
         let task = tasks[index]

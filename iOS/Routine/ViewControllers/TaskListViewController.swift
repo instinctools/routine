@@ -13,7 +13,7 @@ import Combine
 
 class TaskListViewController: UITableViewController {
     
-    private let viewModel = TaskListViewModel()
+    private var viewModel = TaskListViewModel()
     private var cancellables: Set<AnyCancellable> = []
     
     override func viewDidLoad() {
@@ -107,6 +107,7 @@ extension TaskListViewController {
             self.viewModel.resetTask(at: indexPath.row)
             completion(true)
         }
+        
         action.backgroundColor = .systemBackground
         action.image = UIImage(named: "Reset")
         let swipeActions = UISwipeActionsConfiguration(actions: [action])

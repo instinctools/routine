@@ -50,7 +50,7 @@ class TasksRepository {
     }
 
     func add(task: Task) {
-        let taskEntity = TaskEntity(context: persistentContainer.viewContext)
+        let taskEntity = TaskEntity(context: context)
         taskEntity.id = task.id
         taskEntity.title = task.title
         taskEntity.period = Int16(task.period.rawValue)
