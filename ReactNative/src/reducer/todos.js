@@ -26,7 +26,8 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
     const newState = {...state};
     switch (action.type) {
         case Action.Type.TODO_ADD: {
-            const newTodo = {...newState.editTodo};
+            const newTodo = {...newState.editTodo, timestamp: calculateTimestamp(newState.editTodo.period, newState.editTodo.periodUnit)};
+            delete newTodo.isPeriodSelectorVisible;
             if (newTodo.id) {
                 newState.items = newState.items.map((todo, _) => {
                     if (todo.id === newTodo.id) {
