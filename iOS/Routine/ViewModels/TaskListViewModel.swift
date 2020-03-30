@@ -38,7 +38,7 @@ class TaskListViewModel: ObservableObject {
     }
     
     func refreshData() {
-        tasks = repository.getAllTasks()
+        tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
         objectWillChange.send()
     }
 }

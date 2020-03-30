@@ -14,6 +14,10 @@ class Task {
     var title: String
     var period: Period
     var startDate: Date
+    
+    var finishDate: Date {
+        return period.calculateDate(withStardDate: startDate)
+    }
 
     init(id: UUID = UUID(), title: String, period: Period) {
         self.id = id

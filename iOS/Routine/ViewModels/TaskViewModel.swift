@@ -46,12 +46,8 @@ class TaskViewModel {
         UIColor.systemYellow
     ]
     
-    private var endDate: Date {
-        return task.period.calculateDate(withStardDate: task.startDate)
-    }
-    
     private var daysLeft: Int {
-        return calculateTimeLeft(start: task.startDate, end: endDate)
+        return calculateTimeLeft(start: task.startDate, end: task.finishDate)
     }
     
     let task: Task
