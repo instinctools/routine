@@ -66,6 +66,7 @@ const toUiModels = (todos) => {
     });
     const uiTodos = [];
     let lastExpiredTodoFound = false;
+    let lastExpiredTodoIndex = 0;
     for (let i = 0; i < sortTodos.length; i++) {
         const item = sortTodos[i];
         let todoTime = moment(item.timestamp);
@@ -75,14 +76,18 @@ const toUiModels = (todos) => {
                     id: SEPARATOR_ID,
                     itemType: ITEM_TYPE_SEPARATOR
                 });
+                lastExpiredTodoIndex = i - 1;
             }
-            lastExpiredTodoFound = true
+            lastExpiredTodoFound = true;
         }
+
+        const todoColor = lastExpiredTodoFound ? pickColorBetween(i - lastExpiredTodoIndex + 1) : `#FF0000`;
+
         uiTodos.push({
             ...item,
             targetDate: calculateTargetDate(todoTime),
             periodStr: prettyPeriod(item.period, item.periodUnit),
-            backgroundColor: pickColorBetween(i),
+            backgroundColor: todoColor,
             itemType: ITEM_TYPE_TODO
         })
     }
