@@ -23,7 +23,7 @@ struct TaskRowView: View {
             .padding(.bottom, 8)
             
             HStack {
-                Text(viewModel.title)
+                Text(viewModel.period)
                     .font(Font.system(size: 14, weight: .light))
                     .foregroundColor(Color.white)
                 Spacer()
@@ -35,11 +35,13 @@ struct TaskRowView: View {
         .padding(.all, 14)
         .background(Color(viewModel.color))
         .cornerRadius(12)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
     }
 }
 
 struct TaskRowView_Previews: PreviewProvider {
     static var previews: some View {
-        TaskRowView(viewModel: TaskViewModel(task: .mock))
+        TaskRowView(viewModel: TaskViewModel(task: .mock, index: 0))
     }
 }

@@ -81,8 +81,6 @@ class PlaceholderTextView: UIView {
         setupLayout()
     }
     
-    private var cancellables: Set<AnyCancellable> = []
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -90,7 +88,7 @@ class PlaceholderTextView: UIView {
     private func setupLayout() {
         addSubview(placeholderTextView)
         addSubview(textView)
-                
+        
         placeholderTextView.snp.makeConstraints { (make) in
             make.leading.equalTo(snp.leading)
             make.top.equalTo(snp.top)

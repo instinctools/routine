@@ -15,25 +15,21 @@ class TaskViewModel {
     var period: String
     
     var color: UIColor {
-        if daysLeft < 0 {
-            return colors[0]
-        } else if daysLeft < 2 {
-            return colors[1]
-        } else if daysLeft < 6 {
-            return colors[2]
-        }
-        return colors[3]
+        return .init(red: 255, green: CGFloat(30*index)/255, blue: 0, alpha: 1.0)
     }
     
     var timeLeft: String {
-        let weekDays = 7
-        if daysLeft == 0 {
+        if daysLeft < -2 {
+            return "\(daysLeft) days ago"
+        } else if daysLeft < -1 {
+            return "Yesterday"
+        } else if daysLeft == 0 {
             return "Today"
         } else if daysLeft == 1 {
             return "Tomorrow"
-        } else if (2...weekDays-1).contains(daysLeft) {
+        } else if (2..<7).contains(daysLeft) {
             return "\(daysLeft) days left"
-        } else if (weekDays...weekDays*2-1).contains(daysLeft) {
+        } else if daysLeft == 7 {
             return "1 week left"
         }
         return ""
@@ -47,22 +43,16 @@ class TaskViewModel {
     ]
     
     private var daysLeft: Int {
-        return calculateTimeLeft(start: task.startDate, end: task.finishDate)
+        return Calendar.current.dateComponents([.day], from: task.startDate, to: task.finishDate).day!
     }
     
     let task: Task
+    private let index: Int
     
-    init(task: Task) {
+    init(task: Task, index: Int) {
         self.task = task
         self.title = task.title
         self.period = task.period.title
-    }
-    
-    func reset() {
-        task.startDate = Date()
-    }
-    
-    private func calculateTimeLeft(start: Date, end: Date) -> Int {
-        return Calendar.current.dateComponents([.day], from: start, to: end).day!
+        self.index = index
     }
 }

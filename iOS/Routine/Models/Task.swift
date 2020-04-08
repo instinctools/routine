@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Task {
+struct Task: Hashable {
     
     var id: UUID
     var title: String
@@ -19,12 +19,11 @@ class Task {
         return period.calculateDate(withStardDate: startDate)
     }
 
-    init(id: UUID = UUID(), title: String, period: Period) {
+    init(id: UUID = UUID(), title: String, period: Period, startDate: Date = Date()) {
         self.id = id
         self.title = title
         self.period = period
-        let now = Date()
-        self.startDate = now
+        self.startDate = startDate
     }
 }
 

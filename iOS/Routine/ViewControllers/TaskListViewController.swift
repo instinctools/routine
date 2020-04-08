@@ -11,19 +11,37 @@ import SwiftUI
 import SnapKit
 import Combine
 
-class TaskListViewController: UITableViewController {
+final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> where SectionIdentifierType : Hashable, ItemIdentifierType : Hashable {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+}
+
+final class TaskListViewController: UITableViewController {
     
     private var viewModel = TaskListViewModel()
     private var cancellables: Set<AnyCancellable> = []
+    private lazy var dataSource = makeDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupView()
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refreshData()
+    }
+    
+    private func setupView() {
         navigationItem.largeTitleDisplayMode = .always
         navigationItem.title = "Routine"
         tableView.separatorStyle = .none
-        tableView.register(TableViewCell.self,
-                           forCellReuseIdentifier: TableViewCell.reuseIdentifier)
+        tableView.register(TaskTableViewCell.self,
+                           forCellReuseIdentifier: TaskTableViewCell.reuseIdentifier)
+        tableView.dataSource = dataSource
         
         let addButton = UIBarButtonItem(
             barButtonSystemItem: .add,
@@ -32,15 +50,12 @@ class TaskListViewController: UITableViewController {
         )
         navigationItem.setRightBarButton(addButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
-        
-        viewModel.objectWillChange
-            .sink(receiveValue: tableView.reloadData)
-            .store(in: &cancellables)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        viewModel.refreshData()
+    private func bindViewModel() {
+        viewModel.objectWillChange
+            .sink(receiveValue: reloadTableView)
+            .store(in: &cancellables)
     }
     
     @objc private func didTapAddButton() {
@@ -56,55 +71,67 @@ class TaskListViewController: UITableViewController {
     }
 }
 
+// MARK: - UITableView
 extension TaskListViewController {
-    override func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return viewModel.tasksCount
+    enum Section {
+        case futureTasks
+        case expiredTasks
     }
     
-    override func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: TableViewCell.reuseIdentifier,
-            for: indexPath
-        )
-        
-        let task = viewModel.task(at: indexPath.row)
-        let rowViewModel = TaskViewModel(task: task)
-        let rootView = TaskRowView(viewModel: rowViewModel)
-        let view: UIView = UIHostingController(rootView: rootView).view
-        view.backgroundColor = .clear
-        cell.backgroundColor = .clear
-        cell.contentView.addSubview(view)
-
-        view.snp.makeConstraints { (make) in
-            make.leading.equalTo(cell.contentView.layoutMarginsGuide.snp.leading)
-            make.trailing.equalTo(cell.contentView.layoutMarginsGuide.snp.trailing)
-            make.top.equalTo(cell.contentView.layoutMarginsGuide.snp.top)
-            make.bottom.equalTo(cell.contentView.layoutMarginsGuide.snp.bottom)
+    private func reloadTableView() {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
+        snapshot.appendSections([.expiredTasks, .futureTasks])
+        snapshot.appendItems(self.viewModel.expiredTasks, toSection: .expiredTasks)
+        snapshot.appendItems(self.viewModel.futureTasks, toSection: .futureTasks)
+        DispatchQueue.main.async {
+            self.dataSource.apply(snapshot, animatingDifferences: true)
         }
-        return cell
     }
     
-    override func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
-        let index = indexPath.row
-        showTaskView(task: viewModel.task(at: index))
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, Task> {
+        return TableViewDiffableDataSource(
+            tableView: tableView,
+            cellProvider: {  tableView, indexPath, task in
+                let cell = tableView.dequeueReusableCell(
+                    withIdentifier: TaskTableViewCell.reuseIdentifier,
+                    for: indexPath
+                ) as! TaskTableViewCell
+                let task = self.viewModel.getTask(at: indexPath.row, section: indexPath.section)
+                let rowViewModel = TaskViewModel(task: task, index: indexPath.row)
+                cell.host(TaskRowView(viewModel: rowViewModel), parent: self)
+                return cell
+            }
+        )
+    }
+}
+
+// MARK: - UITableViewDelegate
+extension TaskListViewController {
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 1, !viewModel.expiredTasks.isEmpty {
+            return VStack { Divider().background(Color.gray) }.uiView
+        }
+        return nil
     }
     
-    override func tableView(
-        _ tableView: UITableView,
-        leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    ) -> UISwipeActionsConfiguration? {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 1, !viewModel.expiredTasks.isEmpty {
+            return 5
+        }
+        return 0
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let task = viewModel.getTask(at: indexPath.row, section: indexPath.section)
+        showTaskView(task: task)
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                            leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.viewModel.resetTask(at: indexPath.row)
+            self.viewModel.resetTask(at: indexPath.row, section: indexPath.section)
             completion(true)
         }
         
@@ -115,14 +142,14 @@ extension TaskListViewController {
         return swipeActions
     }
     
-    override func tableView(
-        _ tableView: UITableView,
-        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    ) -> UISwipeActionsConfiguration? {
+    override func tableView(_ tableView: UITableView,
+                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.viewModel.deleteTask(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .right)
+            let task = self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
+            var snapshot = self.dataSource.snapshot()
+            snapshot.deleteItems([task])
+            self.dataSource.apply(snapshot, animatingDifferences: true)
             completion(true)
         }
 
