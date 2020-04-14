@@ -39,7 +39,8 @@ class TasksRepository {
                 return .init(
                     id: entity.id ?? UUID(),
                     title: entity.title ?? "",
-                    period: Period(rawValue: Int(entity.period)) ?? .day
+                    period: Period(rawValue: Int(entity.period)) ?? .day,
+                    startDate: entity.startDate ?? .init()
                 )
             }
             return tasks

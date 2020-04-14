@@ -40,11 +40,10 @@ class TaskListViewModel: ObservableObject {
         refreshData()
     }
     
-    func deleteTask(at index: Int, section: Int) -> Task {
+    func deleteTask(at index: Int, section: Int) {
         let task = getTask(at: index, section: section)
         tasks[section]?.remove(at: index)
         repository.delete(task: task)
-        return task
     }
     
     func refreshData() {

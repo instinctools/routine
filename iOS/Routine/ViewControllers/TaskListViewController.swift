@@ -81,15 +81,13 @@ extension TaskListViewController {
     private func reloadTableView() {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
         snapshot.appendSections([.expiredTasks, .futureTasks])
-        snapshot.appendItems(self.viewModel.expiredTasks, toSection: .expiredTasks)
-        snapshot.appendItems(self.viewModel.futureTasks, toSection: .futureTasks)
-        DispatchQueue.main.async {
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-        }
+        snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
+        snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func makeDataSource() -> UITableViewDiffableDataSource<Section, Task> {
-        return TableViewDiffableDataSource(
+        let dataSource: UITableViewDiffableDataSource<Section, Task> = TableViewDiffableDataSource(
             tableView: tableView,
             cellProvider: {  tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
@@ -102,6 +100,8 @@ extension TaskListViewController {
                 return cell
             }
         )
+        dataSource.defaultRowAnimation = .right
+        return dataSource
     }
 }
 
@@ -110,14 +110,14 @@ extension TaskListViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1, !viewModel.expiredTasks.isEmpty {
-            return VStack { Divider().background(Color.gray) }.uiView
+            return VStack { Divider().background(Color.gray) }.padding().uiView
         }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1, !viewModel.expiredTasks.isEmpty {
-            return 5
+        if section == 1, !viewModel.expiredTasks.isEmpty, !viewModel.futureTasks.isEmpty {
+            return 16
         }
         return 0
     }
@@ -146,10 +146,18 @@ extension TaskListViewController {
                             trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            let task = self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
+//            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//            alert.addAction(.init(title: "Delete", style: .destructive, handler: { (_) in
+            guard let task = self.dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
             var snapshot = self.dataSource.snapshot()
             snapshot.deleteItems([task])
             self.dataSource.apply(snapshot, animatingDifferences: true)
+            self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
+//            }))
+//            alert.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+//            self.present(alert, animated: true, completion: nil)
             completion(true)
         }
 
