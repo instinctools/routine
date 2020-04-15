@@ -12,29 +12,31 @@ import UIKit
 class HostingTableViewCell<Content: View>: UITableViewCell {
 
     private weak var controller: UIHostingController<Content>?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        controller?.willMove(toParent: nil)
+        controller?.removeFromParent()
+        contentView.subviews.forEach { $0.removeFromSuperview() }
+    }
 
     func host(_ view: Content, parent: UIViewController) {
-        if let controller = controller {
-            controller.rootView = view
-            controller.view.layoutIfNeeded()
-        } else {
-            let swiftUICellViewController = UIHostingController(rootView: view)
-            controller = swiftUICellViewController
-            swiftUICellViewController.view.backgroundColor = .clear
+        let swiftUICellViewController = UIHostingController(rootView: view)
+        controller = swiftUICellViewController
+        swiftUICellViewController.view.backgroundColor = .clear
 
-            layoutIfNeeded()
+        layoutIfNeeded()
 
-            parent.addChild(swiftUICellViewController)
-            contentView.addSubview(swiftUICellViewController.view)
-            swiftUICellViewController.view.snp.makeConstraints { (make) in
-                make.leading.equalTo(contentView.snp.leading)
-                make.trailing.equalTo(contentView.snp.trailing)
-                make.top.equalTo(contentView.snp.top)
-                make.bottom.equalTo(contentView.snp.bottom)
-            }
-            swiftUICellViewController.didMove(toParent: parent)
-            swiftUICellViewController.view.layoutIfNeeded()
+        parent.addChild(swiftUICellViewController)
+        contentView.addSubview(swiftUICellViewController.view)
+        swiftUICellViewController.view.snp.makeConstraints { (make) in
+            make.leading.equalTo(contentView.snp.leading)
+            make.trailing.equalTo(contentView.snp.trailing)
+            make.top.equalTo(contentView.snp.top)
+            make.bottom.equalTo(contentView.snp.bottom)
         }
+        swiftUICellViewController.didMove(toParent: parent)
+        swiftUICellViewController.view.layoutIfNeeded()
     }
 }
 

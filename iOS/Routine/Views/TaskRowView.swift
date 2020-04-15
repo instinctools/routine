@@ -24,11 +24,11 @@ struct TaskRowView: View {
             
             HStack {
                 Text(viewModel.period)
-                    .font(Font.system(size: 14, weight: .light))
+                    .font(Font.system(size: 14, weight: .medium))
                     .foregroundColor(Color.white)
                 Spacer()
                 Text(viewModel.timeLeft)
-                    .font(Font.system(size: 14, weight: .light))
+                    .font(Font.system(size: 14, weight: .medium))
                     .foregroundColor(Color.white)
             }
         }
@@ -40,8 +40,8 @@ struct TaskRowView: View {
     }
 }
 
-struct TaskRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        TaskRowView(viewModel: TaskViewModel(task: .mock, index: 0))
-    }
-}
+//struct TaskRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TaskRowView(viewModel: TaskViewModel(task: .mock, index: 0))
+//    }
+//}

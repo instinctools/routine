@@ -8,59 +8,60 @@
 
 import Foundation
 import Combine
+import UIKit
 
-class TaskListViewModel: ObservableObject {
+final class TaskListViewModel {
     
-    let objectWillChange = ObservableObjectPublisher()
-    
-    private var tasks: [Int: [Task]] = [:]
+    private var allTasks: [TaskViewModel] = []
+    private var tasksSections: [Int: [TaskViewModel]] = [:]
 
-    var expiredTasks: [Task] {
-        return tasks[0] ?? []
+    var expiredTasks: [TaskViewModel] {
+        return tasksSections[0] ?? []
     }
-    var futureTasks: [Task] {
-        return tasks[1] ?? []
+    var futureTasks: [TaskViewModel] {
+        return tasksSections[1] ?? []
     }
     
     private let repository = TasksRepository()
     
-    func getTask(at index: Int, section: Int) -> Task {
-        return (tasks[section] ?? [])[index]
+    func getTask(at indexPath: IndexPath) -> TaskViewModel {
+        return (tasksSections[indexPath.section] ?? [])[indexPath.row]
     }
     
-    func resetTask(at index: Int, section: Int) {
-        let task = getTask(at: index, section: section)
-        let resetedTask = Task(
-            id: task.id,
-            title: task.title,
-            period: task.period,
-            startDate: Date()
-        )
-        repository.update(task: resetedTask)
+    func resetTask(at indexPath: IndexPath) {
+        var task = getTask(at: indexPath).task
+        task.startDate = .init()
+        repository.update(task: task)
+        refreshData()
     }
     
-    func deleteTask(at index: Int, section: Int) {
-        let task = getTask(at: index, section: section)
-        tasks[section]?.remove(at: index)
+    func deleteTask(at indexPath: IndexPath) {
+        let task = getTask(at: indexPath).task
+        tasksSections[indexPath.section]?.remove(at: indexPath.row)
         repository.delete(task: task)
     }
     
     func refreshData() {
-        self.tasks.removeAll()
-
-        let tasks = repository.getAllTasks()
-        var futureTasks: [Task] = []
-        var expiredTasks: [Task] = []
-        for task in tasks {
+        let tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
+        
+        var futureTasks: [TaskViewModel] = []
+        var expiredTasks: [TaskViewModel] = []
+        
+        for index in 0..<tasks.count {
+            let task = tasks[index]
+            let interval = min(220 / tasks.count, 30)
+            let color = UIColor(red: 255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
+            let viewModel = TaskViewModel(task: task, color: color)
+            
             if task.finishDate < Date() {
-                expiredTasks.append(task)
+                expiredTasks.append(viewModel)
             } else {
-                futureTasks.append(task)
+                futureTasks.append(viewModel)
             }
         }
-        self.tasks[0] = expiredTasks.sorted(by: { $0.finishDate < $1.finishDate })
-        self.tasks[1] = futureTasks.sorted(by: { $0.finishDate < $1.finishDate })
-                
-        objectWillChange.send()
+        
+        self.tasksSections[0] = expiredTasks
+        self.tasksSections[1] = futureTasks
+        self.allTasks = expiredTasks + futureTasks
     }
 }

@@ -62,9 +62,9 @@ class TasksRepository {
     func update(task: Task) {
         do {
             if let taskUpdate = try getTasks(withId: task.id) {
-                taskUpdate.setValue(task.title, forKey: "title")
-                taskUpdate.setValue(task.period.rawValue, forKey: "period")
-                taskUpdate.setValue(task.startDate, forKey: "startDate")
+                taskUpdate.title = task.title
+                taskUpdate.period = Int16(task.period.rawValue)
+                taskUpdate.startDate = task.startDate
                 saveContext()
             }
         } catch {

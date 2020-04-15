@@ -21,7 +21,7 @@ class TaskDetailsViewModel: ObservableObject {
     }
     
     @Published private(set) var selectedPeriod: Period?
-    @Published private(set) var title: String
+    @Published var title: String
         
     private let task: Task?
     private let repository = TasksRepository()
@@ -48,8 +48,8 @@ class TaskDetailsViewModel: ObservableObject {
             .withLatestFrom(taskPublisher)
 //            .flatMap { return taskPublisher }
             .map { [weak self] (title, period) in
-                guard let `self` = self else { return }
-                guard let period = period else { return }
+                guard let `self` = self, let period = period else { return }
+                
                 if let task = self.task {
                     let task = Task(
                         id: task.id,

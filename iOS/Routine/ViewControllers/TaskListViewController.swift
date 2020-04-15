@@ -19,20 +19,19 @@ final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierTyp
 
 final class TaskListViewController: UITableViewController {
     
-    private var viewModel = TaskListViewModel()
-    private var cancellables: Set<AnyCancellable> = []
+    private let viewModel = TaskListViewModel()
     private lazy var dataSource = makeDataSource()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
-        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewModel.refreshData()
+        reloadTableView()
     }
     
     private func setupView() {
@@ -51,13 +50,7 @@ final class TaskListViewController: UITableViewController {
         navigationItem.setRightBarButton(addButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
     }
-    
-    private func bindViewModel() {
-        viewModel.objectWillChange
-            .sink(receiveValue: reloadTableView)
-            .store(in: &cancellables)
-    }
-    
+
     @objc private func didTapAddButton() {
         showTaskView()
     }
@@ -79,23 +72,45 @@ extension TaskListViewController {
     }
     
     private func reloadTableView() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Task>()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, TaskViewModel>()
         snapshot.appendSections([.expiredTasks, .futureTasks])
         snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
         snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
+        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadSections)
+    }
+    
+    private func resetTableViewItem(atIndexPath indexPath: IndexPath) {
+        viewModel.resetTask(at: indexPath)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: reloadTableView)
+    }
+    
+    //Using for reloading colors
+    private func reloadSections() {
+        var snpashot = dataSource.snapshot()
+        snpashot.reloadSections([.expiredTasks, .futureTasks])
+        dataSource.apply(snpashot, animatingDifferences: false)
+    }
+    
+    private func deleteTableViewItem(atIndexPath indexPath: IndexPath) {
+        guard let task = dataSource.itemIdentifier(for: indexPath) else {
+            return
+        }
+        viewModel.deleteTask(at: indexPath)
+        
+        var snapshot = dataSource.snapshot()
+        snapshot.deleteItems([task])
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-    private func makeDataSource() -> UITableViewDiffableDataSource<Section, Task> {
-        let dataSource: UITableViewDiffableDataSource<Section, Task> = TableViewDiffableDataSource(
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, TaskViewModel> {
+        let dataSource: UITableViewDiffableDataSource<Section, TaskViewModel> = TableViewDiffableDataSource(
             tableView: tableView,
             cellProvider: {  tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
                     withIdentifier: TaskTableViewCell.reuseIdentifier,
                     for: indexPath
                 ) as! TaskTableViewCell
-                let task = self.viewModel.getTask(at: indexPath.row, section: indexPath.section)
-                let rowViewModel = TaskViewModel(task: task, index: indexPath.row)
+                let rowViewModel = self.viewModel.getTask(at: indexPath)
                 cell.host(TaskRowView(viewModel: rowViewModel), parent: self)
                 return cell
             }
@@ -123,7 +138,7 @@ extension TaskListViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let task = viewModel.getTask(at: indexPath.row, section: indexPath.section)
+        let task = viewModel.getTask(at: indexPath).task
         showTaskView(task: task)
     }
     
@@ -131,44 +146,27 @@ extension TaskListViewController {
                             leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            guard let task = self.dataSource.itemIdentifier(for: indexPath) else {
-                return
-            }
-            self.viewModel.resetTask(at: indexPath.row, section: indexPath.section)
-            var snapshot = self.dataSource.snapshot()
-            snapshot.reloadItems([task])
-            self.dataSource.apply(snapshot, animatingDifferences: true)
+            self.resetTableViewItem(atIndexPath: indexPath)
             completion(true)
         }
         
         action.backgroundColor = .systemBackground
         action.image = UIImage(named: "Reset")
-        let swipeActions = UISwipeActionsConfiguration(actions: [action])
 
-        return swipeActions
+        return UISwipeActionsConfiguration(actions: [action])
     }
     
     override func tableView(_ tableView: UITableView,
                             trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            guard let task = self.dataSource.itemIdentifier(for: indexPath) else {
-                return
-            }
-            self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
-            var snapshot = self.dataSource.snapshot()
-            snapshot.deleteItems([task])
-            self.dataSource.apply(snapshot, animatingDifferences: true, completion: {
-                var snapshot = self.dataSource.snapshot()
-                snapshot.reloadSections([.expiredTasks, .futureTasks])
-                self.dataSource.apply(snapshot, animatingDifferences: false)
-            })
+            self.deleteTableViewItem(atIndexPath: indexPath)
             completion(true)
         }
+        
         action.backgroundColor = .systemBackground
         action.image = UIImage(named: "Delete")
-        let swipeActions = UISwipeActionsConfiguration(actions: [action])
 
-        return swipeActions
+        return UISwipeActionsConfiguration(actions: [action])
     }
 }

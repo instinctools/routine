@@ -116,12 +116,18 @@ class TaskViewController: UIViewController {
             .sink(receiveValue: weakify(self, TaskViewController.dismiss))
             .store(in: &cancellables)
 
+        output.onClose
+            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
+            .store(in: &cancellables)
+
         output.doneButtonIsEnabled
             .assign(to: \.isEnabled, on: doneButton)
             .store(in: &cancellables)
-        
-        output.onClose
-            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
+                
+        textView.textPublisher
+            .sink { (value) in
+                self.viewModel.title = value
+            }
             .store(in: &cancellables)
         
         viewModel.$title
