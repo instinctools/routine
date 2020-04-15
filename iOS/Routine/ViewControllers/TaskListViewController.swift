@@ -131,7 +131,13 @@ extension TaskListViewController {
                             leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
+            guard let task = self.dataSource.itemIdentifier(for: indexPath) else {
+                return
+            }
             self.viewModel.resetTask(at: indexPath.row, section: indexPath.section)
+            var snapshot = self.dataSource.snapshot()
+            snapshot.reloadItems([task])
+            self.dataSource.apply(snapshot, animatingDifferences: true)
             completion(true)
         }
         
@@ -146,23 +152,21 @@ extension TaskListViewController {
                             trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-//            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-//            alert.addAction(.init(title: "Delete", style: .destructive, handler: { (_) in
             guard let task = self.dataSource.itemIdentifier(for: indexPath) else {
                 return
             }
+            self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
             var snapshot = self.dataSource.snapshot()
             snapshot.deleteItems([task])
-            self.dataSource.apply(snapshot, animatingDifferences: true)
-            self.viewModel.deleteTask(at: indexPath.row, section: indexPath.section)
-//            }))
-//            alert.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
-//            self.present(alert, animated: true, completion: nil)
+            self.dataSource.apply(snapshot, animatingDifferences: true, completion: {
+                var snapshot = self.dataSource.snapshot()
+                snapshot.reloadSections([.expiredTasks, .futureTasks])
+                self.dataSource.apply(snapshot, animatingDifferences: false)
+            })
             completion(true)
         }
-
         action.backgroundColor = .systemBackground
-        action.image = UIImage(named: "Reset")
+        action.image = UIImage(named: "Delete")
         let swipeActions = UISwipeActionsConfiguration(actions: [action])
 
         return swipeActions

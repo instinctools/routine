@@ -37,7 +37,6 @@ class TaskListViewModel: ObservableObject {
             startDate: Date()
         )
         repository.update(task: resetedTask)
-        refreshData()
     }
     
     func deleteTask(at index: Int, section: Int) {

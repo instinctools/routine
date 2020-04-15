@@ -12,19 +12,16 @@ import Combine
 class TaskDetailsViewModel: ObservableObject {
     
     struct Input {
-        let title: AnyPublisher<String, Never>
         let doneButtonDidTap: AnyPublisher<Void, Never>
     }
     
     struct Output {
-        let title: AnyPublisher<String, Never>
         let doneButtonIsEnabled: AnyPublisher<Bool, Never>
         let onClose: AnyPublisher<Void, Never>
     }
     
-    private(set) var title: AnyPublisher<String, Never>?
-    private(set) var doneButtonIsEnabled: CurrentValueSubject<Bool, Never>
     @Published private(set) var selectedPeriod: Period?
+    @Published private(set) var title: String
         
     private let task: Task?
     private let repository = TasksRepository()
@@ -33,7 +30,7 @@ class TaskDetailsViewModel: ObservableObject {
     init(task: Task? = nil) {
         self.task = task
         self.selectedPeriod = task?.period
-        self.doneButtonIsEnabled = .init(false)
+        self.title = task?.title ?? ""
     }
     
     func setPeriod(_ period: Period) {
@@ -41,9 +38,8 @@ class TaskDetailsViewModel: ObservableObject {
     }
     
     func transform(input: Input) -> Output {
-        let taskPublisher = Publishers.CombineLatest(input.title, $selectedPeriod)
+        let taskPublisher = Publishers.CombineLatest($title, $selectedPeriod)
         
-        let titleSubject = CurrentValueSubject<String, Never>(task?.title ?? "")
         let doneButtonIsEnabled = taskPublisher
             .map { !$0.isEmpty && $1 != nil }
             .eraseToAnyPublisher()
@@ -73,8 +69,7 @@ class TaskDetailsViewModel: ObservableObject {
             }
             .eraseToAnyPublisher()
         
-        return .init(title: titleSubject.eraseToAnyPublisher(),
-                     doneButtonIsEnabled: doneButtonIsEnabled,
+        return .init(doneButtonIsEnabled: doneButtonIsEnabled,
                      onClose: onClosePublisher)
     }
 }

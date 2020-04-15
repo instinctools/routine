@@ -109,7 +109,6 @@ class TaskViewController: UIViewController {
     
     private func bindViewModel() {
         let output = viewModel.transform(input: .init(
-            title: textView.textPublisher,
             doneButtonDidTap: doneButton.tap.eraseToAnyPublisher())
         )
         
@@ -121,12 +120,12 @@ class TaskViewController: UIViewController {
             .assign(to: \.isEnabled, on: doneButton)
             .store(in: &cancellables)
         
-        output.title
-            .assign(to: \.text, on: textView)
-            .store(in: &cancellables)
-        
         output.onClose
             .sink(receiveValue: weakify(self, TaskViewController.dismiss))
+            .store(in: &cancellables)
+        
+        viewModel.$title
+            .assign(to: \.text, on: textView)
             .store(in: &cancellables)
     }
     
