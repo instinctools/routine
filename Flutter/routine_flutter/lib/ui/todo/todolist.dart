@@ -16,24 +16,23 @@ class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            Strings.APP_NAME,
-            textAlign: TextAlign.left,
-            textScaleFactor: 1.5,
-          ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => print('on add clicked'),
-            )
-          ],
+      appBar: AppBar(
+        title: Text(
+          Strings.APP_NAME,
         ),
-        body: ListView.builder(
-            itemCount: tasks.length,
-            padding: EdgeInsets.all(Dimens.COMMON_PADDING_DOUBLE),
-            itemBuilder: (context, i) {
-              return TodoItem(Todo(tasks[i]));
-            }));
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () => print('on add clicked'),
+          )
+        ],
+      ),
+      body: ListView.builder(
+          itemCount: tasks.length,
+          padding: EdgeInsets.all(Dimens.COMMON_PADDING),
+          itemBuilder: (context, i) {
+            return TodoItem(Todo(tasks[i]), i);
+          }),
+    );
   }
 }
