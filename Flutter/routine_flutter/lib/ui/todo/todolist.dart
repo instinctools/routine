@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 
 class TodoList extends StatefulWidget {
@@ -17,7 +18,7 @@ class _TodoListState extends State<TodoList> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            Strings.appName,
+            Strings.APP_NAME,
             textAlign: TextAlign.left,
             textScaleFactor: 1.5,
           ),
@@ -30,14 +31,9 @@ class _TodoListState extends State<TodoList> {
         ),
         body: ListView.builder(
             itemCount: tasks.length,
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(Dimens.COMMON_PADDING_DOUBLE),
             itemBuilder: (context, i) {
-              return ListTile(
-                  title: Text(
-                tasks[i],
-                textAlign: TextAlign.center,
-                style: _biggerSize,
-              ));
+              return TodoItem(Todo(tasks[i]));
             }));
   }
 }
