@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class Strings {
   static const String APP_NAME = 'Routine';
+
+  static const String EDIT_CANCEL_BUTTON_TEXT = 'Cancel';
+  static const String EDIT_DONE_BUTTON_TEXT = 'Done';
 }
 
 class Dimens {

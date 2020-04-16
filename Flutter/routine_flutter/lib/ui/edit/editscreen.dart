@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/utils/consts.dart';
+import 'package:routine_flutter/utils/styles.dart';
 
 class EditScreen extends StatefulWidget {
   final String value;
@@ -25,11 +27,17 @@ class _EditScreenState extends State<EditScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             FlatButton(
-              child: Text('Cancel'),
+              child: Text(
+                Strings.EDIT_CANCEL_BUTTON_TEXT,
+                style: Styles.edit_appbar_cancel_text_style,
+              ),
               onPressed: () => Navigator.pop(context),
             ),
             FlatButton(
-              child: Text('Done'),
+              child: Text(
+                Strings.EDIT_DONE_BUTTON_TEXT,
+                style: Styles.edit_appbar_done_text_style,
+              ),
               onPressed: () => print('Done clicked!!'),
             )
           ],
