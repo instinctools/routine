@@ -5,6 +5,8 @@ class Strings {
 
   static const String EDIT_CANCEL_BUTTON_TEXT = 'Cancel';
   static const String EDIT_DONE_BUTTON_TEXT = 'Done';
+  static const String edit_text_input_hint = 'Type recurring task name...';
+  static const String edit_input_error_message = 'Title should be not empty!';
 }
 
 class Dimens {
