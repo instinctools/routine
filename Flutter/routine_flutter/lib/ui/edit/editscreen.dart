@@ -54,8 +54,19 @@ class _EditScreenState extends State<EditScreen> {
           ],
         ),
       ),
-      body: Center(
-        child: TitleInputForm(_controller, _titleFormKey),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            TitleInputForm(_controller, _titleFormKey),
+            Padding(
+              padding: EdgeInsets.only(top: 16.0),
+              child: DividerWithLabel(),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -83,11 +94,46 @@ class _TitleInputFormState extends State<TitleInputForm> {
         validator: (value) =>
             value.isNotEmpty ? null : Strings.edit_input_error_message,
         decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(),
+            border: InputBorder.none,
             hintStyle: Styles.edit_input_text_style,
             hintText: Strings.edit_text_input_hint,
             errorStyle: Styles.edit_input_error_style),
       ),
+    );
+  }
+}
+
+class DividerWithLabel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Container(
+            margin: EdgeInsets.only(right: Dimens.COMMON_PADDING),
+            child: Divider(
+                thickness: Dimens.edit_divider_thickness,
+                color: Colors.black26),
+          ),
+        ),
+        Text(
+          Strings.edit_divider_label,
+          style: Styles.edit_divider_label_style,
+        ),
+        Expanded(
+          flex: 4,
+          child: Container(
+            margin: EdgeInsets.only(left: Dimens.COMMON_PADDING),
+            child: Divider(
+              thickness: Dimens.edit_divider_thickness,
+              color: Colors.black26,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
