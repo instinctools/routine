@@ -11,8 +11,8 @@ import Combine
 
 struct TaskViewModel: Hashable {
     
-    var task: Task
-    var color: UIColor
+    let task: Task
+    let color: UIColor
     
     var title: String {
         return task.title
@@ -52,11 +52,13 @@ struct TaskViewModel: Hashable {
         hasher.combine(task.id)
         hasher.combine(task.period.rawValue)
         hasher.combine(task.title)
+        hasher.combine(color)
     }
 
     static func ==(lhs: TaskViewModel, rhs: TaskViewModel) -> Bool {
         return lhs.task.id == rhs.task.id &&
             lhs.task.period.rawValue == rhs.task.period.rawValue &&
-            lhs.task.title == rhs.task.title
+            lhs.task.title == rhs.task.title &&
+            lhs.color == rhs.color
     }
 }

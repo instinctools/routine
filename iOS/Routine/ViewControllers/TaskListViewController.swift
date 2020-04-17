@@ -72,23 +72,27 @@ extension TaskListViewController {
     }
     
     private func reloadTableView() {
+        dataSource.defaultRowAnimation = .right
         var snapshot = NSDiffableDataSourceSnapshot<Section, TaskViewModel>()
         snapshot.appendSections([.expiredTasks, .futureTasks])
         snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
         snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
-        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadSections)
+        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadColors)
     }
     
     private func resetTableViewItem(atIndexPath indexPath: IndexPath) {
         viewModel.resetTask(at: indexPath)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: reloadTableView)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: reloadTableView)
     }
     
-    //Using for reloading colors
-    private func reloadSections() {
-        var snpashot = dataSource.snapshot()
-        snpashot.reloadSections([.expiredTasks, .futureTasks])
-        dataSource.apply(snpashot, animatingDifferences: false)
+    private func reloadColors() {
+        viewModel.reloadColors()
+        dataSource.defaultRowAnimation = .fade
+        var snapshot = NSDiffableDataSourceSnapshot<Section, TaskViewModel>()
+        snapshot.appendSections([.expiredTasks, .futureTasks])
+        snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
+        snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func deleteTableViewItem(atIndexPath indexPath: IndexPath) {
@@ -97,15 +101,16 @@ extension TaskListViewController {
         }
         viewModel.deleteTask(at: indexPath)
         
+        dataSource.defaultRowAnimation = .right
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([task])
-        dataSource.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadColors)
     }
     
     private func makeDataSource() -> UITableViewDiffableDataSource<Section, TaskViewModel> {
         let dataSource: UITableViewDiffableDataSource<Section, TaskViewModel> = TableViewDiffableDataSource(
             tableView: tableView,
-            cellProvider: {  tableView, indexPath, task in
+            cellProvider: { tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
                     withIdentifier: TaskTableViewCell.reuseIdentifier,
                     for: indexPath
@@ -115,7 +120,6 @@ extension TaskListViewController {
                 return cell
             }
         )
-        dataSource.defaultRowAnimation = .right
         return dataSource
     }
 }

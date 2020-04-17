@@ -12,7 +12,8 @@ import UIKit
 
 final class TaskListViewModel {
     
-    private var allTasks: [TaskViewModel] = []
+    private var allTasks: [Task] = []
+    private var allTasksViewModels: Set<TaskViewModel> = []
     private var tasksSections: [Int: [TaskViewModel]] = [:]
 
     var expiredTasks: [TaskViewModel] {
@@ -41,7 +42,7 @@ final class TaskListViewModel {
         repository.delete(task: task)
     }
     
-    func refreshData() {
+    func reloadColors() {
         let tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
         
         var futureTasks: [TaskViewModel] = []
@@ -62,6 +63,41 @@ final class TaskListViewModel {
         
         self.tasksSections[0] = expiredTasks
         self.tasksSections[1] = futureTasks
-        self.allTasks = expiredTasks + futureTasks
+        self.allTasks = tasks
+        self.allTasksViewModels = Set(expiredTasks + futureTasks)
+    }
+    
+    func refreshData() {
+        if allTasks.isEmpty {
+            reloadColors()
+            return
+        }
+        let tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
+        
+        if allTasks == tasks {
+            return
+        }
+        
+        var futureTasks: [TaskViewModel] = []
+        var expiredTasks: [TaskViewModel] = []
+        
+        for index in 0..<tasks.count {
+            let task = tasks[index]
+            
+            let oldViewModel = allTasksViewModels.first(where: { $0.task.id == task.id })
+            let color = oldViewModel?.color ?? .red
+            let viewModel = TaskViewModel(task: task, color: color)
+            
+            if task.finishDate < Date() {
+                expiredTasks.append(viewModel)
+            } else {
+                futureTasks.append(viewModel)
+            }
+        }
+        
+        self.tasksSections[0] = expiredTasks
+        self.tasksSections[1] = futureTasks
+        self.allTasks = tasks
+        self.allTasksViewModels = Set(expiredTasks + futureTasks)
     }
 }
