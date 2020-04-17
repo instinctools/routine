@@ -8,7 +8,7 @@
 
 import CoreData
 
-class TasksRepository {
+final class TasksRepository {
     
     private let persistentContainer: NSPersistentContainer
     
@@ -72,9 +72,9 @@ class TasksRepository {
         }
     }
     
-    func delete(task: Task) {
+    func deleteTask(byId id: UUID) {
         do {
-            if let taskDelete = try getTasks(withId: task.id) {
+            if let taskDelete = try getTasks(withId: id) {
                 context.delete(taskDelete)
                 saveContext()
             }

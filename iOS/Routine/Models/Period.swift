@@ -32,7 +32,7 @@ enum Period: Int, CaseIterable {
     private var calendarComponent: Calendar.Component {
         switch self {
         case .day:
-            return .second
+            return .day
         case .week:
             return .weekOfMonth
         case .month:

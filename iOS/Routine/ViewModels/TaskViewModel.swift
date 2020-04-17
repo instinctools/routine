@@ -7,12 +7,11 @@
 //
 
 import UIKit
-import Combine
 
-struct TaskViewModel: Hashable {
+struct TaskViewModel {
     
     let task: Task
-    let color: UIColor
+    var color: UIColor
     
     var title: String {
         return task.title
@@ -47,7 +46,9 @@ struct TaskViewModel: Hashable {
         self.task = task
         self.color = color
     }
-    
+}
+
+extension TaskViewModel: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(task.id)
         hasher.combine(task.period.rawValue)

@@ -30,7 +30,7 @@ struct RepeatPeriodsView: View {
                         .foregroundColor(self.isSelected(period: period) ? Color.white : Color.gray)
                         .padding()
                 }
-                .background(self.isSelected(period: period) ? Color.gray : .init(UIColor.systemGroupedBackground))
+                .background(self.isSelected(period: period) ? Color.gray : .init(UIColor.secondarySystemBackground))
                 .cornerRadius(12)
                 .frame(height: 44)
                 .padding(.vertical, 8)

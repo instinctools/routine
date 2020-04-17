@@ -65,50 +65,44 @@ final class TaskListViewController: UITableViewController {
 }
 
 // MARK: - UITableView
-extension TaskListViewController {
-    enum Section {
-        case futureTasks
-        case expiredTasks
+private extension TaskListViewController {
+    
+    func reloadDataSource(completion: (() -> Void)? = nil, animated: Bool = true) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, TaskViewModel>()
+        snapshot.appendSections([0, 1])
+        snapshot.appendItems(viewModel.expiredTasks, toSection: 0)
+        snapshot.appendItems(viewModel.futureTasks, toSection: 1)
+        dataSource.apply(snapshot, animatingDifferences: animated, completion: completion)
     }
     
-    private func reloadTableView() {
-        dataSource.defaultRowAnimation = .right
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TaskViewModel>()
-        snapshot.appendSections([.expiredTasks, .futureTasks])
-        snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
-        snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
-        dataSource.apply(snapshot, animatingDifferences: true, completion: reloadColors)
+    func reloadTableView() {
+        reloadDataSource(completion: reloadColors)
     }
     
-    private func resetTableViewItem(atIndexPath indexPath: IndexPath) {
+    func reloadColors() {
+        viewModel.reloadColors()
+        reloadDataSource(animated: false)
+    }
+
+    func resetTableViewItem(atIndexPath indexPath: IndexPath) {
         viewModel.resetTask(at: indexPath)
+        viewModel.refreshData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: reloadTableView)
     }
     
-    private func reloadColors() {
-        viewModel.reloadColors()
-        dataSource.defaultRowAnimation = .fade
-        var snapshot = NSDiffableDataSourceSnapshot<Section, TaskViewModel>()
-        snapshot.appendSections([.expiredTasks, .futureTasks])
-        snapshot.appendItems(viewModel.expiredTasks, toSection: .expiredTasks)
-        snapshot.appendItems(viewModel.futureTasks, toSection: .futureTasks)
-        dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-    private func deleteTableViewItem(atIndexPath indexPath: IndexPath) {
+    func deleteTableViewItem(atIndexPath indexPath: IndexPath) {
         guard let task = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
         viewModel.deleteTask(at: indexPath)
         
-        dataSource.defaultRowAnimation = .right
         var snapshot = dataSource.snapshot()
         snapshot.deleteItems([task])
         dataSource.apply(snapshot, animatingDifferences: true, completion: reloadColors)
     }
     
-    private func makeDataSource() -> UITableViewDiffableDataSource<Section, TaskViewModel> {
-        let dataSource: UITableViewDiffableDataSource<Section, TaskViewModel> = TableViewDiffableDataSource(
+    func makeDataSource() -> UITableViewDiffableDataSource<Int, TaskViewModel> {
+        let dataSource: UITableViewDiffableDataSource<Int, TaskViewModel> = TableViewDiffableDataSource(
             tableView: tableView,
             cellProvider: { tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
@@ -120,6 +114,7 @@ extension TaskListViewController {
                 return cell
             }
         )
+        dataSource.defaultRowAnimation = .right
         return dataSource
     }
 }
@@ -127,15 +122,19 @@ extension TaskListViewController {
 // MARK: - UITableViewDelegate
 extension TaskListViewController {
     
+    private func hasHeader(section: Int) -> Bool {
+        return section == 1 && !viewModel.expiredTasks.isEmpty && !viewModel.futureTasks.isEmpty
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1, !viewModel.expiredTasks.isEmpty {
+        if hasHeader(section: section) {
             return VStack { Divider().background(Color.gray) }.padding().uiView
         }
         return nil
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1, !viewModel.expiredTasks.isEmpty, !viewModel.futureTasks.isEmpty {
+        if hasHeader(section: section) {
             return 16
         }
         return 0

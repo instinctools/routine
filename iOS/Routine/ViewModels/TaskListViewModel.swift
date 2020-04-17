@@ -6,14 +6,11 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import Foundation
-import Combine
 import UIKit
 
 final class TaskListViewModel {
     
-    private var allTasks: [Task] = []
-    private var allTasksViewModels: Set<TaskViewModel> = []
+    private var tasks: [Task] = []
     private var tasksSections: [Int: [TaskViewModel]] = [:]
 
     var expiredTasks: [TaskViewModel] {
@@ -33,71 +30,67 @@ final class TaskListViewModel {
         var task = getTask(at: indexPath).task
         task.startDate = .init()
         repository.update(task: task)
-        refreshData()
     }
     
     func deleteTask(at indexPath: IndexPath) {
-        let task = getTask(at: indexPath).task
+        let taskId = getTask(at: indexPath).task.id
+        tasks.removeAll(where: { $0.id == taskId })
         tasksSections[indexPath.section]?.remove(at: indexPath.row)
-        repository.delete(task: task)
+        repository.deleteTask(byId: taskId)
     }
     
     func reloadColors() {
-        let tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
-        
-        var futureTasks: [TaskViewModel] = []
-        var expiredTasks: [TaskViewModel] = []
-        
-        for index in 0..<tasks.count {
-            let task = tasks[index]
-            let interval = min(220 / tasks.count, 30)
-            let color = UIColor(red: 255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
-            let viewModel = TaskViewModel(task: task, color: color)
-            
-            if task.finishDate < Date() {
-                expiredTasks.append(viewModel)
-            } else {
-                futureTasks.append(viewModel)
+        let tasksCount = tasksSections.values.joined().count
+        for (key, _) in tasksSections {
+            for i in 0..<(tasksSections[key]?.count ?? 0) {
+                guard let task = tasksSections[key]?[i].task,
+                    let index = tasks.firstIndex(of: task) else { continue }
+                
+                tasksSections[key]?[i].color = makeColor(tasksCount: tasksCount, index: index)
             }
         }
-        
-        self.tasksSections[0] = expiredTasks
-        self.tasksSections[1] = futureTasks
-        self.allTasks = tasks
-        self.allTasksViewModels = Set(expiredTasks + futureTasks)
     }
     
     func refreshData() {
-        if allTasks.isEmpty {
-            reloadColors()
-            return
-        }
-        let tasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
+        let newTasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
         
-        if allTasks == tasks {
+        if tasks == newTasks {
             return
         }
         
         var futureTasks: [TaskViewModel] = []
         var expiredTasks: [TaskViewModel] = []
         
-        for index in 0..<tasks.count {
-            let task = tasks[index]
+        let tasksCount = newTasks.count
+        let oldViewModels = tasksSections.values.joined()
+        
+        for index in 0..<tasksCount {
+            let task = newTasks[index]
+            var newViewModel: TaskViewModel
             
-            let oldViewModel = allTasksViewModels.first(where: { $0.task.id == task.id })
-            let color = oldViewModel?.color ?? .red
-            let viewModel = TaskViewModel(task: task, color: color)
+            if let oldViewModel = oldViewModels.first(where: { $0.task.id == task.id }) {
+                let color = oldViewModel.color
+                newViewModel = TaskViewModel(task: task, color: color)
+            } else {
+                let color = makeColor(tasksCount: tasksCount, index: index)
+                newViewModel = TaskViewModel(task: task, color: color)
+            }
             
             if task.finishDate < Date() {
-                expiredTasks.append(viewModel)
+                expiredTasks.append(newViewModel)
             } else {
-                futureTasks.append(viewModel)
+                futureTasks.append(newViewModel)
             }
         }
         
+        self.tasks = newTasks
         self.tasksSections[0] = expiredTasks
         self.tasksSections[1] = futureTasks
-        self.allTasks = tasks
-        self.allTasksViewModels = Set(expiredTasks + futureTasks)
+    }
+    
+    private func makeColor(tasksCount: Int, index: Int) -> UIColor {
+        let interval = min(220 / tasksCount, 30)
+        let color = UIColor(red: 255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
+        return color
     }
 }

@@ -7,23 +7,10 @@
 //
 
 import UIKit
-import SwiftUI
 import Combine
 import SnapKit
 
-extension View {
-    var uiView: UIView {
-        return UIHostingController(rootView: self).view
-    }
-}
-
-extension UIBarButtonItem {
-    convenience init(barButtonSystemItem systemItem: UIBarButtonItem.SystemItem) {
-        self.init(barButtonSystemItem: systemItem, target: nil, action: nil)
-    }
-}
-
-class TaskViewController: UIViewController {
+final class TaskViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -55,7 +42,7 @@ class TaskViewController: UIViewController {
         selectedPeriod: viewModel.selectedPeriod, onSelect: viewModel.setPeriod
     ).uiView
         
-    @ObservedObject var viewModel: TaskDetailsViewModel
+    private let viewModel: TaskDetailsViewModel
     private var cancellables: Set<AnyCancellable> = []
     
     init(viewModel: TaskDetailsViewModel) {
@@ -69,9 +56,21 @@ class TaskViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerNotifications()
         setupLayout()
         setupViews()
         bindViewModel()
+    }
+    
+    private func registerNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
     }
     
     private func setupViews() {
@@ -108,26 +107,21 @@ class TaskViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        let output = viewModel.transform(input: .init(
-            doneButtonDidTap: doneButton.tap.eraseToAnyPublisher())
-        )
-        
         cancelButton.tap
             .sink(receiveValue: weakify(self, TaskViewController.dismiss))
             .store(in: &cancellables)
-
-        output.onClose
+        
+        doneButton.tap
+            .map(viewModel.saveTask)
             .sink(receiveValue: weakify(self, TaskViewController.dismiss))
             .store(in: &cancellables)
-
-        output.doneButtonIsEnabled
+        
+        viewModel.$doneButtonIsEnabled
             .assign(to: \.isEnabled, on: doneButton)
             .store(in: &cancellables)
                 
         textView.textPublisher
-            .sink { (value) in
-                self.viewModel.title = value
-            }
+            .sink(receiveValue: viewModel.setTitle)
             .store(in: &cancellables)
         
         viewModel.$title
@@ -135,8 +129,23 @@ class TaskViewController: UIViewController {
             .store(in: &cancellables)
     }
     
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
+        if let keyboardSize = value?.cgRectValue {
+            scrollView.contentInset.bottom = keyboardSize.height - view.safeAreaInsets.bottom
+        }
+    }
+
+    @objc private func keyboardWillHide(notification: NSNotification) {
+        scrollView.contentInset.bottom = 0
+    }
+    
     private func dismiss() {
         dismiss(animated: true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 

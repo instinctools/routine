@@ -1,5 +1,5 @@
 //
-//  UIControlPublisher.swift
+//  UIBarButtonItem+CombineCompatible.swift
 //  Routine
 //
 //  Created by Vadzim Karonchyk on 3/28/20.

@@ -9,19 +9,8 @@
 import UIKit
 import SnapKit
 import Combine
-import Foundation
 
-extension UITextView {
-    var textPublisher: AnyPublisher<String, Never> {
-        NotificationCenter.default
-            .publisher(for: UITextView.textDidChangeNotification, object: self)
-            .compactMap { $0.object as? UITextView }
-            .map { $0.text ?? "" }
-            .eraseToAnyPublisher()
-    }
-}
-
-class PlaceholderTextView: UIView {
+final class PlaceholderTextView: UIView {
     
     private lazy var textView: UITextView = {
         let textView = UITextView()
@@ -51,20 +40,13 @@ class PlaceholderTextView: UIView {
     var text: String {
         set(value) {
             textView.text = value
-            placeholderTextView.isHidden = !value.isEmpty
+            placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
         }
         get {
             return textView.text
         }
     }
-    var placeholder: String {
-        set(value) {
-            placeholderTextView.text = value
-        }
-        get {
-            return placeholderTextView.text ?? ""
-        }
-    }
+    
     var font: UIFont? {
         set(value) {
             placeholderTextView.font = value
@@ -74,7 +56,15 @@ class PlaceholderTextView: UIView {
             return textView.font
         }
     }
+    
     var textLimit: Int?
+    var placeholder: String = "" {
+        didSet {
+            if textView.text.isEmpty {
+                placeholderTextView.text = placeholder
+            }
+        }
+    }
     
     init() {
         super.init(frame: .zero)
@@ -97,17 +87,22 @@ class PlaceholderTextView: UIView {
         }
         
         textView.snp.makeConstraints { (make) in
-            make.leading.equalTo(snp.leading)
-            make.top.equalTo(snp.top)
-            make.bottom.equalTo(snp.bottom)
-            make.trailing.equalTo(snp.trailing)
+            make.leading.equalTo(placeholderTextView.snp.leading)
+            make.bottom.equalTo(placeholderTextView.snp.bottom)
+            make.trailing.equalTo(placeholderTextView.snp.trailing)
+            make.height.equalTo(placeholderTextView.snp.height)
         }
     }
 }
 
 extension PlaceholderTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        placeholderTextView.isHidden = !textView.text.isEmpty
+        placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
+        UIView.animate(withDuration: 0.2) {
+            self.invalidateIntrinsicContentSize()
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
     }
     
     func textView(_ textView: UITextView,
