@@ -18,8 +18,14 @@ class Dimens {
   static const double ITEM_BOX_BORDER_RADIUS = 8.0;
 
   static const double edit_divider_thickness = 2.0;
+  static const double edit_period_button_border_radius = 10.0;
+  static const double edit_period_button_vertical_padding = 32.0;
 }
 
 class ColorsRes {
   static  Color mainBgColor = Colors.grey[200];
+
+  static Color selectedPeriodUnitColor = Colors.grey[800];
+  static Color unselectedPeriodUnitColor = Colors.grey[400];
+
 }

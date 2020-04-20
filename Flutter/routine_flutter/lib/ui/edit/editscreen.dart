@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/ui/edit/PeriodUnitSelector.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
@@ -28,6 +30,7 @@ class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(
@@ -64,7 +67,8 @@ class _EditScreenState extends State<EditScreen> {
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: DividerWithLabel(),
-            )
+            ),
+            PeriodUnitSelector(null)
           ],
         ),
       ),

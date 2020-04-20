@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/utils/consts.dart';
 
 class Styles {
   static const APP_BAR_TEXT = TextStyle(
@@ -27,4 +28,10 @@ class Styles {
 
   static const edit_divider_label_style = TextStyle(
       fontWeight: FontWeight.w500, fontSize: 16.0, color: Colors.black38);
+
+  static TextStyle editSelectedPeriodTextStyle = TextStyle(
+      fontWeight: FontWeight.w500, fontSize: 20.0, color: ColorsRes.selectedPeriodUnitColor);
+
+  static TextStyle  editUnselectedPeriodTextStyle = TextStyle(
+      fontWeight: FontWeight.w500, fontSize: 20.0, color: ColorsRes.unselectedPeriodUnitColor);
 }
