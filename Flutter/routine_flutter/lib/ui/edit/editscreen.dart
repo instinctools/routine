@@ -1,30 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/PeriodUnitSelector.dart';
+import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
 class EditScreen extends StatefulWidget {
-  final String value;
+  final Todo entry;
 
-  EditScreen(this.value);
+  EditScreen({this.entry});
 
   @override
-  _EditScreenState createState() => _EditScreenState(value);
+  _EditScreenState createState() => _EditScreenState();
 }
 
 class _EditScreenState extends State<EditScreen> {
-  String value;
-
-  _EditScreenState(this.value);
-
-  TextEditingController _controller;
-  final _titleFormKey = GlobalKey<FormState>();
+  EditPresenter presenter;
 
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.value);
+    presenter = EditPresenter(widget.entry);
   }
 
   @override
@@ -50,8 +47,8 @@ class _EditScreenState extends State<EditScreen> {
                 Strings.EDIT_DONE_BUTTON_TEXT,
                 style: Styles.edit_appbar_done_text_style,
               ),
-              onPressed: () => _titleFormKey.currentState.validate()
-                  ? print('value = ${_controller.value.text}')
+              onPressed: () => presenter.formKey.currentState.validate()
+                  ? print('value = ${presenter.getResult().toString()}')
                   : print('validation failed'),
             )
           ],
@@ -63,12 +60,12 @@ class _EditScreenState extends State<EditScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            TitleInputForm(_controller, _titleFormKey),
+            TitleInputForm(presenter),
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: DividerWithLabel(),
             ),
-            PeriodUnitSelector()
+            PeriodUnitSelector(presenter)
           ],
         ),
       ),
@@ -77,10 +74,8 @@ class _EditScreenState extends State<EditScreen> {
 }
 
 class TitleInputForm extends StatefulWidget {
-  const TitleInputForm(this._controller, this._formKey, {Key key})
-      : super(key: key);
-  final TextEditingController _controller;
-  final GlobalKey _formKey;
+  const TitleInputForm(this.presenter, {Key key}) : super(key: key);
+  final EditPresenter presenter;
 
   @override
   _TitleInputFormState createState() => _TitleInputFormState();
@@ -90,9 +85,9 @@ class _TitleInputFormState extends State<TitleInputForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: widget._formKey,
+      key: widget.presenter.formKey,
       child: TextFormField(
-        controller: widget._controller,
+        controller: widget.presenter.controller,
         style: Styles.edit_input_text_style,
         keyboardType: TextInputType.text,
         validator: (value) =>
