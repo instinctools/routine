@@ -68,7 +68,7 @@ class _EditScreenState extends State<EditScreen> {
               padding: EdgeInsets.only(top: 16.0),
               child: DividerWithLabel(),
             ),
-            PeriodUnitSelector(null)
+            PeriodUnitSelector()
           ],
         ),
       ),

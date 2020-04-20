@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_picker/Picker.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
-import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
 class PeriodUnitSelector extends StatefulWidget {
-  final Todo todo;
+  final Task task;
 
-  PeriodUnitSelector(this.todo);
+  PeriodUnitSelector({this.task});
 
   @override
   _PeriodUnitSelectorState createState() => _PeriodUnitSelectorState();
@@ -15,11 +17,17 @@ class PeriodUnitSelector extends StatefulWidget {
 
 class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   int _selectedIndex;
+  Task resultValue;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.todo != null ? 1 : -1;
+    Task task = widget.task;
+    if (task == null) {
+      print(task);
+      resultValue = Task(0, Period.DAY);
+    }
+    _selectedIndex = resultValue.periodUnit.id;
   }
 
   @override
@@ -87,9 +95,27 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   void _onPeriodSelected(int id) {
     setState(() {
       print('Selected index = $id period = ${Period.values[id].name}');
+      resultValue.periodUnit = Period.values[id];
+      _showPeriodPicker(context);
       _selectedIndex = id;
     });
   }
+
+  void _showPeriodPicker(BuildContext context) {
+    Picker(
+        adapter: NumberPickerAdapter(data: [
+          NumberPickerColumn(
+              begin: 1, end: 100, initValue: resultValue.periodValue)
+        ]),
+        title: Text('Select period...'),
+        textScaleFactor: 1.2,
+        hideHeader: true,
+        onConfirm: (picker, values) {
+          resultValue.periodValue = picker.getSelectedValues().first;
+        }).showDialog(context);
+  }
+
+  Task getResult() => resultValue;
 }
 
 class Task {
