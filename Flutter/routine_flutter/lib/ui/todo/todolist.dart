@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -13,6 +14,12 @@ class _TodoListState extends State<TodoList> {
   final _biggerSize = const TextStyle(fontSize: 16.0);
   final List<String> tasks =
       List.generate(50, (int index) => 'Test Task $index');
+
+  @override
+  void initState()  {
+    super.initState();
+    print('db from main = ${DatabaseHelper().database}');
+  }
 
   @override
   Widget build(BuildContext context) {
