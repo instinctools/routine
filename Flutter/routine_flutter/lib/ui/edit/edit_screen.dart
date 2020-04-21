@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/ui/edit/PeriodUnitSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
+import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
@@ -47,9 +47,7 @@ class _EditScreenState extends State<EditScreen> {
                 Strings.EDIT_DONE_BUTTON_TEXT,
                 style: Styles.edit_appbar_done_text_style,
               ),
-              onPressed: () => presenter.formKey.currentState.validate()
-                  ? print('value = ${presenter.getResult().toString()}')
-                  : print('validation failed'),
+              onPressed: () => presenter.validateAndPrint(),
             )
           ],
         ),

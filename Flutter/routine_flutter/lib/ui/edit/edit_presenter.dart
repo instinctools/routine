@@ -20,6 +20,14 @@ class EditPresenter {
     }
   }
 
+  void validateAndPrint(){
+    if(formKey.currentState.validate()){
+      print('Edited task = ${getResult().toString()}');
+    }else{
+      print('Validation failed!');
+    }
+  }
+
   Todo getResult() =>
       Todo(id, controller.value.text, periodUnit, periodValue, timestamp);
 }

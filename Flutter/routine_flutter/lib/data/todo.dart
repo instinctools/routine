@@ -20,6 +20,10 @@ class Todo {
 
   @override
   String toString() {
-    return 'Todo{$id, $periodValue, $periodUnit, $title, $timestamp}';
+    return """Todo{id = $id, 
+    periodValue = $periodValue, 
+    periodUnit = $periodUnit, 
+    title = $title, 
+    timestamp = $timestamp}""";
   }
 }

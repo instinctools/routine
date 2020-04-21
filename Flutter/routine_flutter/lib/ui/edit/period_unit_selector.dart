@@ -7,6 +7,9 @@ import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
+const int BEGIN_VALUE = 1;
+const int END_VALUE = 100;
+
 class PeriodUnitSelector extends StatefulWidget {
   final EditPresenter presenter;
 
@@ -48,8 +51,14 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   }
 
   Widget _createPeriodButton(PeriodData data) {
+    var name = data.periodUnit.name;
     var isSelected = data.id == _selectedIndex;
-    var periodText = 'Every ${data.periodUnit.name}';
+    var isPlural = isSelected && presenter.periodValue > 1;
+
+    var periodCount = isPlural ? '${presenter.periodValue} ' : '';
+    var pluralPostfix = isPlural && name != Period.MONTH.name ? 's' : '';
+
+    var periodText = 'Every $periodCount$name$pluralPostfix';
     var bgColor = isSelected
         ? ColorsRes.selectedPeriodUnitColor
         : ColorsRes.unselectedPeriodUnitColor;
@@ -92,26 +101,29 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   }
 
   void _onPeriodSelected(int id) {
-    setState(() {
-      print('Selected index = $id period = ${Period.values[id].name}');
-      presenter.periodUnit = Period.values[id].name;
-      _showPeriodPicker(context);
-      _selectedIndex = id;
-    });
+    print('Selected index = $id period = ${Period.values[id].name}');
+    presenter.periodUnit = Period.values[id].name;
+    _showPeriodPicker(context);
+    _selectedIndex = id;
   }
 
   void _showPeriodPicker(BuildContext context) {
     Picker(
-        adapter: NumberPickerAdapter(data: [
-          NumberPickerColumn(
-              begin: 1, end: 100, initValue: presenter.periodValue)
-        ]),
-        title: Text('Select period...'),
-        textScaleFactor: 1.2,
-        hideHeader: true,
-        onConfirm: (picker, values) {
+      adapter: NumberPickerAdapter(data: [
+        NumberPickerColumn(
+            begin: BEGIN_VALUE,
+            end: END_VALUE,
+            initValue: presenter.periodValue)
+      ]),
+      title: Text(Strings.editPickerDialogTitle),
+      textScaleFactor: Dimens.editPickerScale,
+      hideHeader: true,
+      onConfirm: (picker, values) {
+        setState(() {
           presenter.periodValue = picker.getSelectedValues().first;
-        }).showDialog(context);
+        });
+      },
+    ).showDialog(context);
   }
 }
 
