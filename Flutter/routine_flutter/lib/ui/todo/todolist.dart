@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 
@@ -23,7 +24,10 @@ class _TodoListState extends State<TodoList> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => print('on add clicked'),
+            onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (BuildContext context) => EditScreen())),
           )
         ],
       ),
@@ -31,7 +35,7 @@ class _TodoListState extends State<TodoList> {
           itemCount: tasks.length,
           padding: EdgeInsets.all(Dimens.COMMON_PADDING),
           itemBuilder: (context, i) {
-            return TodoItem(Todo(tasks[i]), i);
+            return TodoItem(TodoTMP(tasks[i]), i);
           }),
     );
   }

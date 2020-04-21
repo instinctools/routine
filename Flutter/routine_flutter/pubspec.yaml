@@ -14,7 +14,7 @@ description: Flutter version of routine application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,9 +24,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  flutter_picker:
+    git: git://github.com/yangyxd/flutter_picker.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
 # For information on the generic Dart part of this file, see the

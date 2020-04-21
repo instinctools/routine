@@ -4,7 +4,7 @@ import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
 class TodoItem extends StatelessWidget {
-  final Todo entry;
+  final TodoTMP entry;
   final int index;
 
   TodoItem(this.entry, this.index);
@@ -61,10 +61,10 @@ class TodoItem extends StatelessWidget {
   }
 }
 
-class Todo {
+class TodoTMP {
   String title;
   String timeLeft;
   String period;
 
-  Todo(this.title, {this.timeLeft = '5 days left', this.period = 'per 2 days'});
+  TodoTMP(this.title, {this.timeLeft = '5 days left', this.period = 'per 2 days'});
 }
