@@ -19,8 +19,17 @@ final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierTyp
 
 final class TaskListViewController: UITableViewController {
     
-    private let viewModel = TaskListViewModel()
+    private let viewModel: TaskListViewModel
     private lazy var dataSource = makeDataSource()
+    
+    init(viewModel: TaskListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,8 +39,18 @@ final class TaskListViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.refreshData()
         reloadTableView()
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onTaskUpdate),
+                                               name: .onTaskUpdate,
+                                               object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func setupView() {
@@ -50,13 +69,21 @@ final class TaskListViewController: UITableViewController {
         navigationItem.setRightBarButton(addButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
     }
+    
+    @objc private func onTaskUpdate() {
+        reloadTableView()
+    }
 
     @objc private func didTapAddButton() {
         showTaskView()
     }
     
     private func showTaskView(task: Task? = nil) {
-        let viewModel = TaskDetailsViewModel(task: task)
+        let viewModel = TaskDetailsViewModel(
+            task: task,
+            repository: self.viewModel.repository,
+            taskNotificationCenter: self.viewModel.taskNotificationCenter
+        )
         let rootViewController = TaskViewController(viewModel: viewModel)
         let viewController = UINavigationController(rootViewController: rootViewController)
         viewController.modalPresentationStyle = .fullScreen
@@ -67,7 +94,7 @@ final class TaskListViewController: UITableViewController {
 // MARK: - UITableView
 private extension TaskListViewController {
     
-    func reloadDataSource(completion: (() -> Void)? = nil, animated: Bool = true) {
+    func reloadDataSource(animated: Bool = true, completion: (() -> Void)? = nil) {
         var snapshot = NSDiffableDataSourceSnapshot<Int, TaskViewModel>()
         snapshot.appendSections([0, 1])
         snapshot.appendItems(viewModel.expiredTasks, toSection: 0)
@@ -76,6 +103,7 @@ private extension TaskListViewController {
     }
     
     func reloadTableView() {
+        viewModel.refreshData()
         reloadDataSource(completion: reloadColors)
     }
     
@@ -86,7 +114,6 @@ private extension TaskListViewController {
 
     func resetTableViewItem(atIndexPath indexPath: IndexPath) {
         viewModel.resetTask(at: indexPath)
-        viewModel.refreshData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: reloadTableView)
     }
     

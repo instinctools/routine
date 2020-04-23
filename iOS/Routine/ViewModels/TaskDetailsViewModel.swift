@@ -14,13 +14,18 @@ final class TaskDetailsViewModel {
     @Published private(set) var selectedPeriod: Period?
     @Published var title: String
         
-    private let task: Task?
-    private let repository = TasksRepository()
     private var cancellables: Set<AnyCancellable> = []
     
-    init(task: Task? = nil) {
-        self.doneButtonIsEnabled = false
+    private let task: Task?
+    private let repository: TasksRepository
+    private let taskNotificationCenter: TasksNotificationCenter
+    
+    init(task: Task? = nil, repository: TasksRepository, taskNotificationCenter: TasksNotificationCenter) {
         self.task = task
+        self.repository = repository
+        self.taskNotificationCenter = taskNotificationCenter
+        
+        self.doneButtonIsEnabled = false
         self.selectedPeriod = task?.period
         self.title = task?.title ?? ""
         
@@ -49,12 +54,14 @@ final class TaskDetailsViewModel {
                 startDate: task.startDate
             )
             self.repository.update(task: task)
+            self.taskNotificationCenter.addNotification(forTask: task)
         } else {
             let task = Task(
                 title: title,
                 period: period
             )
             self.repository.add(task: task)
+            self.taskNotificationCenter.addNotification(forTask: task)
         }
     }
 }

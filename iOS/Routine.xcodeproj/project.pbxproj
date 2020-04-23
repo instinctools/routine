@@ -16,6 +16,7 @@
 		DD10502D242E141F00DE2835 /* TaskDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */; };
 		DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */; };
 		DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */; };
+		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
 		DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */; };
@@ -44,6 +45,7 @@
 		DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewModel.swift; sourceTree = "<group>"; };
 		DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+CombineCompatible.swift"; sourceTree = "<group>"; };
+		DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineNotificationCenter.swift; sourceTree = "<group>"; };
 		DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
 		DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+TextPublisher.swift"; sourceTree = "<group>"; };
@@ -90,10 +92,18 @@
 			isa = PBXGroup;
 			children = (
 				DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */,
-				DD10502A242DF4C500DE2835 /* TaskViewModel.swift */,
 				DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */,
+				DD10502A242DF4C500DE2835 /* TaskViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		DD42C3E7245191E00028FAB5 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		DD9C0D0324322CB100E4AAFE /* Extensions */ = {
@@ -157,6 +167,7 @@
 				DD105027242DF1AB00DE2835 /* ViewModels */,
 				DDF396082428BE55003456DA /* Views */,
 				DDF3960C2428BE9F003456DA /* Models */,
+				DD42C3E7245191E00028FAB5 /* Helpers */,
 				DDF0C623242CE7980031299A /* CoreData */,
 				DD9C0D0324322CB100E4AAFE /* Extensions */,
 				DDF3960A2428BE6D003456DA /* Resource */,
@@ -302,6 +313,7 @@
 				DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
 				DDF0C62E242D1EAC0031299A /* TasksRepository.swift in Sources */,
+				DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */,
 				DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
@@ -456,8 +468,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Routine/Preview Content\"";
 				DEVELOPMENT_TEAM = 27W6695PZZ;
 				ENABLE_PREVIEWS = YES;
@@ -469,7 +482,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.instinctools.Routine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Routine PP 21 April 2020";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -479,8 +492,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Routine/Preview Content\"";
 				DEVELOPMENT_TEAM = 27W6695PZZ;
 				ENABLE_PREVIEWS = YES;
@@ -492,7 +506,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.instinctools.Routine;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Routine PP 21 April 2020";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -20,23 +20,30 @@ final class TaskListViewModel {
         return tasksSections[1] ?? []
     }
     
-    private let repository = TasksRepository()
+    let repository: TasksRepository
+    let taskNotificationCenter: TasksNotificationCenter
+    
+    init(repository: TasksRepository, taskNotificationCenter: TasksNotificationCenter) {
+        self.repository = repository
+        self.taskNotificationCenter = taskNotificationCenter
+    }
     
     func getTask(at indexPath: IndexPath) -> TaskViewModel {
         return (tasksSections[indexPath.section] ?? [])[indexPath.row]
     }
     
     func resetTask(at indexPath: IndexPath) {
-        var task = getTask(at: indexPath).task
-        task.startDate = .init()
-        repository.update(task: task)
+        guard let task = repository.resetTask(id: getTask(at: indexPath).task.id) else { return }
+        taskNotificationCenter.addNotification(forTask: task)
     }
     
     func deleteTask(at indexPath: IndexPath) {
         let taskId = getTask(at: indexPath).task.id
         tasks.removeAll(where: { $0.id == taskId })
         tasksSections[indexPath.section]?.remove(at: indexPath.row)
+        
         repository.deleteTask(byId: taskId)
+        taskNotificationCenter.removeNotification(withId: taskId.uuidString)
     }
     
     func reloadColors() {
@@ -44,7 +51,7 @@ final class TaskListViewModel {
         for (key, _) in tasksSections {
             for i in 0..<(tasksSections[key]?.count ?? 0) {
                 guard let task = tasksSections[key]?[i].task,
-                    let index = tasks.firstIndex(of: task) else { continue }
+                    let index = tasks.firstIndex(where: { $0.id == task.id }) else { continue }
                 
                 tasksSections[key]?[i].color = makeColor(tasksCount: tasksCount, index: index)
             }
@@ -53,10 +60,6 @@ final class TaskListViewModel {
     
     func refreshData() {
         let newTasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
-        
-        if tasks == newTasks {
-            return
-        }
         
         var futureTasks: [TaskViewModel] = []
         var expiredTasks: [TaskViewModel] = []

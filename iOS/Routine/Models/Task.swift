@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Task: Hashable {
+struct Task {
     
     let id: UUID
     let title: String

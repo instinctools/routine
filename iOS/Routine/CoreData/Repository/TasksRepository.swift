@@ -16,7 +16,9 @@ final class TasksRepository {
         return persistentContainer.viewContext
     }()
     
-    init() {
+    static var shared = TasksRepository()
+    
+    private init() {
         self.persistentContainer = {
             let container = NSPersistentContainer(name: "Routine")
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -26,10 +28,6 @@ final class TasksRepository {
             })
             return container
         }()
-    }
-    
-    init(persistentContainer: NSPersistentContainer) {
-        self.persistentContainer = persistentContainer
     }
     
     func getAllTasks() -> [Task] {
@@ -57,6 +55,24 @@ final class TasksRepository {
         taskEntity.period = Int16(task.period.rawValue)
         taskEntity.startDate = task.startDate
         saveContext()
+    }
+    
+    func resetTask(id: UUID) -> Task? {
+        do {
+            if let taskUpdate = try getTasks(withId: id) {
+                taskUpdate.startDate = .init()
+                saveContext()
+                return .init(
+                    id: id,
+                    title: taskUpdate.title ?? "",
+                    period: Period(rawValue: Int(taskUpdate.period)) ?? .day,
+                    startDate: taskUpdate.startDate ?? .init()
+                )
+            }
+        } catch {
+            log(error: error)
+        }
+        return nil
     }
     
     func update(task: Task) {
