@@ -1,8 +1,15 @@
+import 'package:routine_flutter/data/todo.dart';
 import 'package:sqflite/sqflite.dart';
 
 const TABLE_NAME = 'todos';
 const DB_NAME = 'todos_routine';
 const DB_VERSION = 1;
+
+const COLUMN_ID = 'id';
+const COLUMN_TITLE = 'title';
+const COLUMN_UNIT = 'periodUnit';
+const COLUMN_VALUE = 'periodValue';
+const COLUMN_TIMESTAMP = 'timestamp';
 
 class DatabaseHelper {
 //  Singleton
@@ -37,5 +44,11 @@ class DatabaseHelper {
               ")");
         },
         onOpen: (db) async => print("database = ${await db.getVersion()}"));
+  }
+
+  Future<List<Todo>> getTodos() async {
+    var db = await database;
+    var res = await db.query(TABLE_NAME);
+    return res.map((item) => Todo.fromMap(item));
   }
 }

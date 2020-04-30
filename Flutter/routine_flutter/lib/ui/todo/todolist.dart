@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
+import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -11,39 +12,35 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  final _biggerSize = const TextStyle(fontSize: 16.0);
-  final List<String> tasks =
-      List.generate(50, (int index) => 'Test Task $index');
-
-  @override
-  void initState()  {
-    super.initState();
-    print('db from main = ${DatabaseHelper().database}');
-  }
+  DatabaseHelper helper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          Strings.APP_NAME,
+        appBar: AppBar(
+          title: Text(
+            Strings.APP_NAME,
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => EditScreen())),
+            )
+          ],
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => EditScreen())),
-          )
-        ],
-      ),
-      body: ListView.builder(
-          itemCount: tasks.length,
-          padding: EdgeInsets.all(Dimens.COMMON_PADDING),
-          itemBuilder: (context, i) {
-            return TodoItem(TodoTMP(tasks[i]), i);
-          }),
-    );
+        body: FutureBuilder<List<Todo>>(
+          future: helper.getTodos(),
+          builder: (context, snap) {
+            if (snap.hasData) {
+              return ListView.builder(itemBuilder: (context, index) {
+                return TodoItem(snap.data[index], index);
+              });
+            }
+            return Text("TMP");
+          },
+        ));
   }
 }
