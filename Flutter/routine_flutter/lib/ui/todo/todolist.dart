@@ -5,6 +5,7 @@ import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
+import 'package:routine_flutter/utils/styles.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -34,16 +35,25 @@ class _TodoListState extends State<TodoList> {
         body: FutureBuilder<List<Todo>>(
           future: helper.getTodos(),
           builder: (context, snap) {
-            if (snap.hasData) {
-              return ListView.builder(
-                  itemCount: snap.data.length,
-                  itemBuilder: (context, index) {
-                    return TodoItem(snap.data[index], index);
-                  });
+            if (snap.connectionState == ConnectionState.done) {
+              if (snap.data.length > 0) {
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
+                    itemCount: snap.data.length,
+                    itemBuilder: (context, index) {
+                      return TodoItem(snap.data[index], index);
+                    });
+              } else {
+                return Center(
+                    child: Text(
+                  Strings.listEmptyPlaceholderText,
+                  style: Styles.editSelectedPeriodTextStyle,
+                ));
+              }
             }
             return Center(
-              widthFactor: 20.0,
-              heightFactor: 20.0,
+              widthFactor: Dimens.listProgressSize,
+              heightFactor: Dimens.listProgressSize,
               child: CircularProgressIndicator(),
             );
           },
