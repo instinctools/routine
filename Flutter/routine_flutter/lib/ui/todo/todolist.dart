@@ -35,11 +35,17 @@ class _TodoListState extends State<TodoList> {
           future: helper.getTodos(),
           builder: (context, snap) {
             if (snap.hasData) {
-              return ListView.builder(itemBuilder: (context, index) {
-                return TodoItem(snap.data[index], index);
-              });
+              return ListView.builder(
+                  itemCount: snap.data.length,
+                  itemBuilder: (context, index) {
+                    return TodoItem(snap.data[index], index);
+                  });
             }
-            return Text("TMP");
+            return Center(
+              widthFactor: 20.0,
+              heightFactor: 20.0,
+              child: CircularProgressIndicator(),
+            );
           },
         ));
   }

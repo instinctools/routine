@@ -7,8 +7,8 @@ const DB_VERSION = 1;
 
 const COLUMN_ID = 'id';
 const COLUMN_TITLE = 'title';
-const COLUMN_UNIT = 'periodUnit';
-const COLUMN_VALUE = 'periodValue';
+const COLUMN_UNIT = 'period_unit';
+const COLUMN_VALUE = 'period_value';
 const COLUMN_TIMESTAMP = 'timestamp';
 
 class DatabaseHelper {
@@ -48,7 +48,21 @@ class DatabaseHelper {
 
   Future<List<Todo>> getTodos() async {
     var db = await database;
-    var res = await db.query(TABLE_NAME);
-    return res.map((item) => Todo.fromMap(item));
+    var queryMap = await db.query(TABLE_NAME);
+    var todos = queryMap.map((item) => Todo.fromMap(item)).toList();
+    return todos.toList();
+  }
+
+  Future<int> insertNewTodo(Todo todo) async {
+    var db = await database;
+    return await db.rawInsert(
+        "INSERT Into todos (title, period_unit, period_value, timestamp)"
+        " VALUES ( ?, ?, ?, ?)",
+        [
+          todo.title,
+          todo.periodUnit,
+          todo.periodValue,
+          todo.timestamp,
+        ]);
   }
 }

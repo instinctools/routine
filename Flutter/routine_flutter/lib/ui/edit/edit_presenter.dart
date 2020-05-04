@@ -20,11 +20,12 @@ class EditPresenter {
     }
   }
 
-  void validateAndPrint() {
+  bool validateAndPrint() {
     if (formKey.currentState.validate()) {
-      print('Edited task = ${getResult().toString()}');
+      return true;
     } else {
       print('Validation failed!');
+      return false;
     }
   }
 
