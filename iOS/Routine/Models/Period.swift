@@ -14,21 +14,36 @@ enum Period: Int, CaseIterable {
     case month
     case year
     
-    var title: String {
-        let period: String
+    func fullTitle(periodCount: Int?) -> String {
+        let count = periodCount ?? 0
+        let hasPeriod = count > 1
         switch self {
         case .day:
-            period = "day"
+            return hasPeriod ? "\(count) days" : "day"
         case .week:
-            period = "week"
+            return hasPeriod ? "\(count) weeks" : "week"
         case .month:
-            period = "month"
+            return hasPeriod ? "\(count) monthes" : "month"
         case .year:
-            period = "year"
+            return hasPeriod ? "\(count) years" : "year"
         }
-        return "Every \(period)"
     }
     
+    func title(periodCount: Int?) -> String {
+        let count = periodCount ?? 0
+        let hasPeriod = count > 1
+        switch self {
+        case .day:
+            return hasPeriod ? "days" : "day"
+        case .week:
+            return hasPeriod ? "weeks" : "week"
+        case .month:
+            return hasPeriod ? "monthes" : "month"
+        case .year:
+            return hasPeriod ? "years" : "year"
+        }
+    }
+        
     private var calendarComponent: Calendar.Component {
         switch self {
         case .day:
@@ -42,8 +57,8 @@ enum Period: Int, CaseIterable {
         }
     }
         
-    func calculateDate(withStardDate startDate: Date) -> Date {
+    func calculateDate(withStardDate startDate: Date, periodCount: Int?) -> Date {
         let calendar = Calendar.current
-        return calendar.date(byAdding: calendarComponent, value: 1, to: startDate)!
+        return calendar.date(byAdding: calendarComponent, value: periodCount ?? 1, to: startDate)!
     }
 }

@@ -34,10 +34,15 @@ final class TasksRepository {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
         do {
             let tasks: [Task] = try context.fetch(fetchRequest).map { entity in
+                var periodCount: Int?
+                if let count = entity.periodCount {
+                    periodCount = count.intValue
+                }
                 return .init(
                     id: entity.id ?? UUID(),
                     title: entity.title ?? "",
                     period: Period(rawValue: Int(entity.period)) ?? .day,
+                    periodCount: periodCount,
                     startDate: entity.startDate ?? .init()
                 )
             }
@@ -60,12 +65,17 @@ final class TasksRepository {
     func resetTask(id: UUID) -> Task? {
         do {
             if let taskUpdate = try getTasks(withId: id) {
+                var periodCount: Int?
+                if let count = taskUpdate.periodCount {
+                    periodCount = count.intValue
+                }
                 taskUpdate.startDate = .init()
                 saveContext()
                 return .init(
                     id: id,
                     title: taskUpdate.title ?? "",
                     period: Period(rawValue: Int(taskUpdate.period)) ?? .day,
+                    periodCount: periodCount,
                     startDate: taskUpdate.startDate ?? .init()
                 )
             }
@@ -77,9 +87,14 @@ final class TasksRepository {
     
     func update(task: Task) {
         do {
+            var periodCount: NSNumber?
+            if let count = task.periodCount {
+                periodCount = NSNumber(value: count)
+            }
             if let taskUpdate = try getTasks(withId: task.id) {
                 taskUpdate.title = task.title
                 taskUpdate.period = Int16(task.period.rawValue)
+                taskUpdate.periodCount = periodCount
                 taskUpdate.startDate = task.startDate
                 saveContext()
             }

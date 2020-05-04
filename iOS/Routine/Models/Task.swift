@@ -13,16 +13,18 @@ struct Task {
     let id: UUID
     let title: String
     let period: Period
+    let periodCount: Int?
     var startDate: Date
     
     var finishDate: Date {
-        return period.calculateDate(withStardDate: startDate)
+        return period.calculateDate(withStardDate: startDate, periodCount: periodCount)
     }
     
-    init(id: UUID = UUID(), title: String, period: Period, startDate: Date = Date()) {
+    init(id: UUID = UUID(), title: String, period: Period, periodCount: Int?, startDate: Date = Date()) {
         self.id = id
         self.title = title
         self.period = period
+        self.periodCount = periodCount
         self.startDate = startDate
     }
 }
@@ -30,10 +32,12 @@ struct Task {
 extension Task {
     static let mock: Task = .init(
         title: "Attend a pool",
-        period: .day
+        period: .day,
+        periodCount: 2
     )
     static let mock2: Task = .init(
         title: "Attend a Church",
-        period: .week
+        period: .week,
+        periodCount: 0
     )
 }

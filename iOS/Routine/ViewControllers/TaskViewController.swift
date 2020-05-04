@@ -21,7 +21,7 @@ final class TaskViewController: UIViewController {
     
     private lazy var contentView: UIStackView = {
         let view = UIStackView()
-        view.distribution = .fillProportionally
+        view.distribution = .fill
         view.axis = .vertical
         view.spacing = 0
         return view
@@ -38,9 +38,9 @@ final class TaskViewController: UIViewController {
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     
-    private lazy var repeatView = RepeatPeriodsView(
-        selectedPeriod: viewModel.selectedPeriod, onSelect: viewModel.setPeriod
-    ).uiView
+    private lazy var dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
+    
+    private lazy var repeatPeriodsView = PeriodsView()
         
     private let viewModel: TaskDetailsViewModel
     private var cancellables: Set<AnyCancellable> = []
@@ -89,7 +89,8 @@ final class TaskViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
-        contentView.addArrangedSubview(repeatView)
+        contentView.addArrangedSubview(dividerView)
+        contentView.addArrangedSubview(repeatPeriodsView)
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -127,6 +128,16 @@ final class TaskViewController: UIViewController {
         viewModel.$title
             .assign(to: \.text, on: textView)
             .store(in: &cancellables)
+        
+        repeatPeriodsView.didSelect = { (period, count) in
+            self.viewModel.setPeriod(period, count: count)
+        }
+        
+        repeatPeriodsView.setup(
+            with: Period.allCases.map { $0 },
+            selectedPeriod: viewModel.selectedPeriod,
+            count: viewModel.selectedPeriodCount
+        )
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {

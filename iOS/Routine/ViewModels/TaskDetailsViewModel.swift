@@ -12,6 +12,7 @@ final class TaskDetailsViewModel {
     
     @Published private(set) var doneButtonIsEnabled: Bool
     @Published private(set) var selectedPeriod: Period?
+    @Published private(set) var selectedPeriodCount: String
     @Published var title: String
         
     private var cancellables: Set<AnyCancellable> = []
@@ -27,6 +28,7 @@ final class TaskDetailsViewModel {
         
         self.doneButtonIsEnabled = false
         self.selectedPeriod = task?.period
+        self.selectedPeriodCount = String(task?.periodCount ?? 0)
         self.title = task?.title ?? ""
         
         Publishers.CombineLatest($title, $selectedPeriod)
@@ -35,8 +37,9 @@ final class TaskDetailsViewModel {
             .store(in: &cancellables)
     }
     
-    func setPeriod(_ period: Period) {
+    func setPeriod(_ period: Period, count: String) {
         self.selectedPeriod = period
+        self.selectedPeriodCount = count
     }
     
     func setTitle(_ title: String) {
@@ -51,6 +54,7 @@ final class TaskDetailsViewModel {
                 id: task.id,
                 title: title,
                 period: period,
+                periodCount: Int(selectedPeriodCount),
                 startDate: task.startDate
             )
             self.repository.update(task: task)
@@ -58,7 +62,8 @@ final class TaskDetailsViewModel {
         } else {
             let task = Task(
                 title: title,
-                period: period
+                period: period,
+                periodCount: Int(selectedPeriodCount)
             )
             self.repository.add(task: task)
             self.taskNotificationCenter.addNotification(forTask: task)

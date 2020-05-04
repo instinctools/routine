@@ -98,11 +98,11 @@ final class PlaceholderTextView: UIView {
 extension PlaceholderTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
-        UIView.animate(withDuration: 0.2) {
+//        UIView.animate(withDuration: 0.2) {
             self.invalidateIntrinsicContentSize()
             self.setNeedsLayout()
             self.layoutIfNeeded()
-        }
+//        }
     }
     
     func textView(_ textView: UITextView,

@@ -18,7 +18,7 @@ struct TaskViewModel {
     }
     
     var period: String {
-        return task.period.title
+        return "Every " + task.period.fullTitle(periodCount: task.periodCount)
     }
     
     var timeLeft: String {
