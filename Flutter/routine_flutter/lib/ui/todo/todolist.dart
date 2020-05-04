@@ -25,10 +25,7 @@ class _TodoListState extends State<TodoList> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => EditScreen())),
+              onPressed: pushEditScreen,
             )
           ],
         ),
@@ -38,10 +35,14 @@ class _TodoListState extends State<TodoList> {
             if (snap.connectionState == ConnectionState.done) {
               if (snap.data.length > 0) {
                 return ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
                     itemCount: snap.data.length,
                     itemBuilder: (context, index) {
-                      return TodoItem(snap.data[index], index);
+                      var item = snap.data[index];
+                      return GestureDetector(
+                          child: TodoItem(item, index),
+                          onTap: () => pushEditScreen(todo: item));
                     });
               } else {
                 return Center(
@@ -59,4 +60,11 @@ class _TodoListState extends State<TodoList> {
           },
         ));
   }
+
+  void pushEditScreen({Todo todo}) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) => EditScreen(entry: todo)));
+
 }

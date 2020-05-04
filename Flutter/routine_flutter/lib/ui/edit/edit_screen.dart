@@ -77,7 +77,7 @@ class _EditScreenState extends State<EditScreen> {
 
   void doDone() async {
     if (presenter.validateAndPrint()) {
-      await helper.insertNewTodo(presenter.getResult());
+      await helper.changeTodo(presenter.getResult());
       Navigator.pop(context);
     }
   }

@@ -11,6 +11,8 @@ const COLUMN_UNIT = 'period_unit';
 const COLUMN_VALUE = 'period_value';
 const COLUMN_TIMESTAMP = 'timestamp';
 
+const WHERE_ID_CLAUSE = 'id = ?';
+
 class DatabaseHelper {
 //  Singleton
   DatabaseHelper._();
@@ -53,16 +55,14 @@ class DatabaseHelper {
     return todos.toList();
   }
 
-  Future<int> insertNewTodo(Todo todo) async {
+  Future<int> changeTodo(Todo todo) async {
     var db = await database;
-    return await db.rawInsert(
-        "INSERT Into todos (title, period_unit, period_value, timestamp)"
-        " VALUES ( ?, ?, ?, ?)",
-        [
-          todo.title,
-          todo.periodUnit,
-          todo.periodValue,
-          todo.timestamp,
-        ]);
+
+    if (todo.id != null) {
+      return await db.update(TABLE_NAME, todo.toMap(),
+          where: WHERE_ID_CLAUSE, whereArgs: [todo.id]);
+    } else {
+      return await db.insert(TABLE_NAME, todo.toMap());
+    }
   }
 }

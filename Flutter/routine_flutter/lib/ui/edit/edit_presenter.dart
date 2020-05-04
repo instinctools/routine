@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:routine_flutter/data/todo.dart';
 
 class EditPresenter {
-  int id = 0;
+  int id;
   String periodUnit = 'day';
   int periodValue = 1;
   int timestamp = 0;
