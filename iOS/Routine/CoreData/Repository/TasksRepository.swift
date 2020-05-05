@@ -40,8 +40,8 @@ final class TasksRepository {
                     periodCount = count.intValue
                 }
                 return .init(
-                    id: entity.id ?? UUID(),
-                    title: entity.title ?? "",
+                    id: entity.id.orEmpty,
+                    title: entity.title.orEmpty,
                     period: Period(rawValue: Int(entity.period)) ?? .day,
                     periodCount: periodCount,
                     startDate: entity.startDate ?? .init()
@@ -63,7 +63,7 @@ final class TasksRepository {
         saveContext()
     }
     
-    func resetTask(id: UUID) -> Task? {
+    func resetTask(id: String) -> Task? {
         do {
             if let taskUpdate = try getTasks(withId: id) {
                 var periodCount: Int?
@@ -74,7 +74,7 @@ final class TasksRepository {
                 saveContext()
                 return .init(
                     id: id,
-                    title: taskUpdate.title ?? "",
+                    title: taskUpdate.title.orEmpty,
                     period: Period(rawValue: Int(taskUpdate.period)) ?? .day,
                     periodCount: periodCount,
                     startDate: taskUpdate.startDate ?? .init()
@@ -104,7 +104,7 @@ final class TasksRepository {
         }
     }
     
-    func deleteTask(byId id: UUID) {
+    func deleteTask(byId id: String) {
         do {
             if let taskDelete = try getTasks(withId: id) {
                 context.delete(taskDelete)
@@ -115,7 +115,7 @@ final class TasksRepository {
         }
     }
     
-    private func getTasks(withId id: UUID) throws -> TaskEntity? {
+    private func getTasks(withId id: String) throws -> TaskEntity? {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         fetchRequest.fetchLimit = 1

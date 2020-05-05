@@ -22,8 +22,8 @@ final class TaskCloudKitRepository {
     }
     
     func addTask(_ task: Task, completionHandler: @escaping (CKRecord?, Error?) -> Void) {
-        let record = CKRecord(recordType: recordType, recordID: CKRecord.ID(recordName: task.id.uuidString))
-        record.setValue(task.id.uuidString, forKeyPath: "id")
+        let record = CKRecord(recordType: recordType, recordID: CKRecord.ID(recordName: task.id))
+        record.setValue(task.id, forKeyPath: "id")
         record.setValue(task.title, forKey: "title")
         record.setValue(task.startDate, forKey: "startDate")
         record.setValue(task.period.rawValue, forKey: "period")
@@ -33,6 +33,6 @@ final class TaskCloudKitRepository {
     }
     
     func deleteTask(_ task: Task, completionHandler: @escaping (CKRecord.ID?, Error?) -> Void) {
-        database.delete(withRecordID: CKRecord.ID(recordName: task.id.uuidString), completionHandler: completionHandler)
+        database.delete(withRecordID: CKRecord.ID(recordName: task.id), completionHandler: completionHandler)
     }
 }

@@ -39,11 +39,13 @@ final class RoutineNotificationCenter: NSObject {
     
     private func updateScheduledNotificationsBadgeValues() {
         notificationCenter.getPendingNotificationRequests { (requests) in
-            let sortedRequests = requests.sorted {
-                let firstTrigger = ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
-                let secondTrigger = ($1.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
-                return firstTrigger < secondTrigger
-            }
+            let sortedRequests = requests
+                .filter { $0.trigger is UNCalendarNotificationTrigger }
+                .sorted {
+                    let firstTrigger = ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
+                    let secondTrigger = ($1.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
+                    return firstTrigger < secondTrigger
+                }
             
             for i in 0..<sortedRequests.count {
                 let request = sortedRequests[i]
@@ -110,11 +112,7 @@ extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        defer {
-            completionHandler()
-        }
-        
-        guard let requestId = UUID(uuidString: response.notification.request.identifier) else { return }
+        let requestId = response.notification.request.identifier
         let categoryId = response.notification.request.content.categoryIdentifier
         
         if categoryId == UserNotificationCategoryType.task.rawValue,
@@ -128,11 +126,13 @@ extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
                 addNotification(forTask: task)
             case .delete:
                 TasksRepository.shared.deleteTask(byId: requestId)
-                removeNotification(withId: requestId.uuidString)
+                removeNotification(withId: requestId)
             }
         }
         
         NotificationCenter.default.post(name: .onTaskUpdate, object: nil)
+        
+        completionHandler()
     }
 }
 
@@ -143,7 +143,7 @@ extension RoutineNotificationCenter: TasksNotificationCenter {
         content.body = "Your task is expired. Please go to the application to reset or delete your task."
         content.categoryIdentifier = UserNotificationCategoryType.task.rawValue
         content.sound = UNNotificationSound.default
-        addScheduledNotification(content: content, id: task.id.uuidString, nextDate: task.finishDate)
+        addScheduledNotification(content: content, id: task.id, nextDate: task.finishDate)
     }
     
     func registerTaskCategory() {

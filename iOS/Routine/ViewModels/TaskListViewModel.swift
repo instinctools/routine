@@ -43,7 +43,7 @@ final class TaskListViewModel {
         tasksSections[indexPath.section]?.remove(at: indexPath.row)
         
         repository.deleteTask(byId: taskId)
-        taskNotificationCenter.removeNotification(withId: taskId.uuidString)
+        taskNotificationCenter.removeNotification(withId: taskId)
     }
     
     func reloadColors() {

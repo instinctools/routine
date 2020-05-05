@@ -14,7 +14,7 @@ extension UITextView {
         NotificationCenter.default
             .publisher(for: UITextView.textDidChangeNotification, object: self)
             .compactMap { $0.object as? UITextView }
-            .map { $0.text ?? "" }
+            .map { $0.text.orEmpty }
             .eraseToAnyPublisher()
     }
 }

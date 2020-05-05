@@ -156,7 +156,7 @@ final class PeriodView: UIView {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         select()
-        didSelect?(viewModel.period, periodCountTextField.text ?? "")
+        didSelect?(viewModel.period, periodCountTextField.text.orEmpty)
     }
 }
 
@@ -165,7 +165,7 @@ extension PeriodView: UITextFieldDelegate {
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
         
-        let newText = ((textField.text ?? "") as NSString).replacingCharacters(in: range, with: string)
+        let newText = ((textField.text.orEmpty) as NSString).replacingCharacters(in: range, with: string)
         let textLimit = 3
         if newText.count <= textLimit {
             didSelect?(viewModel.period, newText)
@@ -182,45 +182,3 @@ extension PeriodView: UITextFieldDelegate {
         }
     }
 }
-
-//struct PeriodView: View {
-//    
-//    var period: String
-//    var onSelect: EmptyAction
-//    
-//    @State private var selected = false
-//    @State private var periodCount = ""
-//    
-//    var body: some View {
-//        HStack {
-//            Text("Every")
-//                .font(Font.system(size: 24, weight: .medium))
-//            .foregroundColor(selected ? Color.white : Color.gray)
-//            
-//            TextField("", text: $periodCount)
-//                .keyboardType(.numberPad)
-//            
-//            Text(period)
-//                .font(Font.system(size: 24, weight: .medium))
-//                .foregroundColor(selected ? Color.white : Color.gray)
-//
-//            Spacer()
-//
-//            Circle()
-//                .frame(width: 10)
-//                .foregroundColor(selected ? Color.white : Color.gray)
-//        }
-//        .background(selected ? Color.gray : .init(UIColor.secondarySystemBackground))
-//        .cornerRadius(12)
-//        .onTapGesture {
-//            self.selected.toggle()
-//            self.onSelect()
-//        }
-//    }
-//}
-//
-//struct PeriodView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PeriodView(period: "Every year", onSelect: {}).frame(height: 44).padding()
-//    }
-//}

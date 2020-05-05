@@ -7,6 +7,7 @@
 //
 
 import Combine
+import Foundation
 
 final class TaskDetailsViewModel {
     
@@ -61,6 +62,7 @@ final class TaskDetailsViewModel {
             self.taskNotificationCenter.addNotification(forTask: task)
         } else {
             let task = Task(
+                id: UUID().uuidString,
                 title: title,
                 period: period,
                 periodCount: Int(selectedPeriodCount)

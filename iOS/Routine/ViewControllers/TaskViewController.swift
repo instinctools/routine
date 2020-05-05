@@ -129,9 +129,7 @@ final class TaskViewController: UIViewController {
             .assign(to: \.text, on: textView)
             .store(in: &cancellables)
         
-        repeatPeriodsView.didSelect = { (period, count) in
-            self.viewModel.setPeriod(period, count: count)
-        }
+        repeatPeriodsView.didSelect = viewModel.setPeriod
         
         repeatPeriodsView.setup(
             with: Period.allCases.map { $0 },

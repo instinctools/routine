@@ -10,7 +10,7 @@ import UIKit
 
 struct Task {
     
-    let id: UUID
+    let id: String
     let title: String
     let period: Period
     let periodCount: Int?
@@ -20,7 +20,7 @@ struct Task {
         return period.calculateDate(withStardDate: startDate, periodCount: periodCount)
     }
     
-    init(id: UUID = UUID(), title: String, period: Period, periodCount: Int?, startDate: Date = Date()) {
+    init(id: String, title: String, period: Period, periodCount: Int?, startDate: Date = Date()) {
         self.id = id
         self.title = title
         self.period = period
@@ -31,11 +31,13 @@ struct Task {
 
 extension Task {
     static let mock: Task = .init(
+        id: UUID().uuidString,
         title: "Attend a pool",
         period: .day,
         periodCount: 2
     )
     static let mock2: Task = .init(
+        id: UUID().uuidString,
         title: "Attend a Church",
         period: .week,
         periodCount: 0

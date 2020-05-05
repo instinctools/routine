@@ -40,8 +40,8 @@ struct TaskRowView: View {
     }
 }
 
-//struct TaskRowView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TaskRowView(viewModel: TaskViewModel(task: .mock, index: 0))
-//    }
-//}
+struct TaskRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        TaskRowView(viewModel: TaskViewModel(task: .mock, color: .red))
+    }
+}
