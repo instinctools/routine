@@ -1,22 +1,29 @@
+import 'db_helper.dart';
+
 class Todo {
-  final int _id;
-  final String _title;
-  final String _periodUnit;
-  final int _periodValue;
-  final int _timestamp;
+  final int id;
+  final String title;
+  final String periodUnit;
+  final int periodValue;
+  final int timestamp;
 
-  Todo(this._id, this._title, this._periodUnit, this._periodValue,
-      this._timestamp);
+  Todo(
+      {this.id, this.title, this.periodUnit, this.periodValue, this.timestamp});
 
-  int get periodValue => _periodValue;
+  factory Todo.fromMap(Map<String, dynamic> map) => Todo(
+      id: map[COLUMN_ID],
+      title: map[COLUMN_TITLE],
+      periodUnit: map[COLUMN_UNIT],
+      periodValue: map[COLUMN_VALUE],
+      timestamp: map[COLUMN_TIMESTAMP]);
 
-  String get title => _title;
-
-  String get periodUnit => _periodUnit;
-
-  int get id => _id;
-
-  int get timestamp => _timestamp;
+  Map<String, dynamic> toMap() => {
+        COLUMN_ID: id,
+        COLUMN_TITLE: title,
+        COLUMN_UNIT: periodUnit,
+        COLUMN_VALUE: periodValue,
+        COLUMN_TIMESTAMP: timestamp
+      };
 
   @override
   String toString() {

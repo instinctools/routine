@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
@@ -17,11 +18,13 @@ class EditScreen extends StatefulWidget {
 
 class _EditScreenState extends State<EditScreen> {
   EditPresenter presenter;
+  DatabaseHelper helper;
 
   @override
   void initState() {
     super.initState();
     presenter = EditPresenter(widget.entry);
+    helper = DatabaseHelper();
   }
 
   @override
@@ -47,7 +50,9 @@ class _EditScreenState extends State<EditScreen> {
                 Strings.EDIT_DONE_BUTTON_TEXT,
                 style: Styles.edit_appbar_done_text_style,
               ),
-              onPressed: () => presenter.validateAndPrint(),
+              onPressed: () {
+                doDone();
+              },
             )
           ],
         ),
@@ -68,6 +73,13 @@ class _EditScreenState extends State<EditScreen> {
         ),
       ),
     );
+  }
+
+  void doDone() async {
+    if (presenter.validateAndPrint()) {
+      await helper.changeTodo(presenter.getResult());
+      Navigator.pop(context);
+    }
   }
 }
 

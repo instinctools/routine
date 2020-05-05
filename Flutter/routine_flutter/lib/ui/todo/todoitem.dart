@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
 class TodoItem extends StatelessWidget {
-  final TodoTMP entry;
+  final Todo entry;
   final int index;
 
   TodoItem(this.entry, this.index);
@@ -33,8 +34,8 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(entry.period, style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(entry.timeLeft, style: Styles.TODO_ITEM_TIME_TEXT)
+                    Text(entry.periodUnit, style: Styles.TODO_ITEM_TIME_TEXT),
+                    Text(entry.periodValue.toString(), style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
               )

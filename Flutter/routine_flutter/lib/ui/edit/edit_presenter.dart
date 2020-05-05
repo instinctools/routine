@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:routine_flutter/data/todo.dart';
 
 class EditPresenter {
-  int id = 0;
+  int id;
   String periodUnit = 'day';
   int periodValue = 1;
   int timestamp = 0;
@@ -20,14 +20,19 @@ class EditPresenter {
     }
   }
 
-  void validateAndPrint(){
-    if(formKey.currentState.validate()){
-      print('Edited task = ${getResult().toString()}');
-    }else{
+  bool validateAndPrint() {
+    if (formKey.currentState.validate()) {
+      return true;
+    } else {
       print('Validation failed!');
+      return false;
     }
   }
 
-  Todo getResult() =>
-      Todo(id, controller.value.text, periodUnit, periodValue, timestamp);
+  Todo getResult() => Todo(
+      id: id,
+      title: controller.value.text,
+      periodUnit: periodUnit,
+      periodValue: periodValue,
+      timestamp: timestamp);
 }

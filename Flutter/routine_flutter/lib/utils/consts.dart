@@ -9,12 +9,18 @@ class Strings {
   static const String edit_input_error_message = 'Title should be not empty!';
   static const String edit_divider_label = 'Repeat';
   static const String editPickerDialogTitle = 'Select period...';
+
+  static const String listEmptyPlaceholderText = "You don't have any tasks";
+
+
 }
 
 class Dimens {
   static const double COMMON_PADDING_HALF = 4.0;
   static const double COMMON_PADDING = 8.0;
   static const double COMMON_PADDING_DOUBLE = 16.0;
+
+  static const double listProgressSize = 20.0;
 
   static const double ITEM_BOX_BORDER_RADIUS = 8.0;
 
