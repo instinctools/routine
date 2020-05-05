@@ -17,6 +17,7 @@
 		DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */; };
 		DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */; };
 		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
+		DD8E6FE02460634400E51A31 /* TaskCloudKitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
 		DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */; };
@@ -47,6 +48,7 @@
 		DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+CombineCompatible.swift"; sourceTree = "<group>"; };
 		DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineNotificationCenter.swift; sourceTree = "<group>"; };
+		DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCloudKitRepository.swift; sourceTree = "<group>"; };
 		DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
 		DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+TextPublisher.swift"; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
+				DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */,
+				DD8E6FE02460634400E51A31 /* TaskCloudKitRepository.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
 				DDF0C62E242D1EAC0031299A /* TasksRepository.swift in Sources */,
 				DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */,

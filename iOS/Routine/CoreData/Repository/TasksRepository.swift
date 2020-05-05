@@ -10,7 +10,7 @@ import CoreData
 
 final class TasksRepository {
     
-    private let persistentContainer: NSPersistentContainer
+    private let persistentContainer: NSPersistentCloudKitContainer
     
     private lazy var context: NSManagedObjectContext = {
         return persistentContainer.viewContext
@@ -20,12 +20,13 @@ final class TasksRepository {
     
     private init() {
         self.persistentContainer = {
-            let container = NSPersistentContainer(name: "Routine")
+            let container = NSPersistentCloudKitContainer(name: "TasksContainer")
             container.loadPersistentStores(completionHandler: { (storeDescription, error) in
                 if let error = error as NSError? {
                     fatalError("Unresolved error \(error), \(error.userInfo)")
                 }
             })
+            container.viewContext.automaticallyMergesChangesFromParent = true
             return container
         }()
     }
