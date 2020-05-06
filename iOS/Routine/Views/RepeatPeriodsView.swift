@@ -43,7 +43,7 @@ final class PeriodsView: UIView {
         }
     }
     
-    func setup(with periods: [Period], selectedPeriod: Period?, count: String?) {
+    func setup(with periods: [Period], selectedPeriod: Period?, count: String) {
         periodViews.removeAll()
         stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
@@ -51,12 +51,13 @@ final class PeriodsView: UIView {
             let periodView = PeriodView()
             periodView.didSelect = { (period, count) in
                 self.didSelect?(period, count)
+                self.didTapPeriodView(periodView)
             }
+            let count = Int(count) ?? 1
             if period == selectedPeriod {
-                let periodCount = count.orEmpty
-                periodView.setup(with: PeriodViewModel(period: period, periodCount: Int(periodCount) ?? 0), isSelected: true)
+                periodView.setup(with: PeriodViewModel(period: period, periodCount: count), isSelected: true)
             } else {
-                periodView.setup(with: PeriodViewModel(period: period, periodCount: nil), isSelected: false)
+                periodView.setup(with: PeriodViewModel(period: period, periodCount: count), isSelected: false)
             }
             
             periodViews.append(periodView)

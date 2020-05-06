@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreData
 
-final class TaskListViewModel {
+final class TaskListViewModel: NSObject {
     
     private var tasks: [Task] = []
     private var tasksSections: [Int: [TaskViewModel]] = [:]
@@ -20,21 +21,19 @@ final class TaskListViewModel {
         return tasksSections[1] ?? []
     }
     
-    let repository: TasksRepository
-    let taskNotificationCenter: TasksNotificationCenter
-    
-    init(repository: TasksRepository, taskNotificationCenter: TasksNotificationCenter) {
-        self.repository = repository
-        self.taskNotificationCenter = taskNotificationCenter
-    }
-    
+    private lazy var taskProvier: TaskProvider = {
+        let container = CoreDataManager.shared.persistentContainer
+        let provider = TaskProvider(persistentContainer: container)
+        provider.fetchedResultsControllerDelegate = self
+        return provider
+    }()
+            
     func getTask(at indexPath: IndexPath) -> TaskViewModel {
         return (tasksSections[indexPath.section] ?? [])[indexPath.row]
     }
     
     func resetTask(at indexPath: IndexPath) {
-        guard let task = repository.resetTask(id: getTask(at: indexPath).task.id) else { return }
-        taskNotificationCenter.addNotification(forTask: task)
+        taskProvier.resetTask(id: getTask(at: indexPath).task.id)
     }
     
     func deleteTask(at indexPath: IndexPath) {
@@ -42,8 +41,7 @@ final class TaskListViewModel {
         tasks.removeAll(where: { $0.id == taskId })
         tasksSections[indexPath.section]?.remove(at: indexPath.row)
         
-        repository.deleteTask(byId: taskId)
-        taskNotificationCenter.removeNotification(withId: taskId)
+        taskProvier.deleteTask(byId: taskId)
     }
     
     func reloadColors() {
@@ -59,7 +57,7 @@ final class TaskListViewModel {
     }
     
     func refreshData() {
-        let newTasks = repository.getAllTasks().sorted { $0.finishDate < $1.finishDate }
+        let newTasks = taskProvier.getAllTasks().sorted { $0.finishDate < $1.finishDate }
         
         var futureTasks: [TaskViewModel] = []
         var expiredTasks: [TaskViewModel] = []
@@ -93,7 +91,18 @@ final class TaskListViewModel {
     
     private func makeColor(tasksCount: Int, index: Int) -> UIColor {
         let interval = min(220 / tasksCount, 30)
-        let color = UIColor(red: 255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
+        let color = UIColor(red: 255/255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
         return color
+    }
+}
+
+extension TaskListViewModel: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        
     }
 }

@@ -19,17 +19,8 @@ final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierTyp
 
 final class TaskListViewController: UITableViewController {
     
-    private let viewModel: TaskListViewModel
+    private lazy var viewModel = TaskListViewModel()
     private lazy var dataSource = makeDataSource()
-    
-    init(viewModel: TaskListViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,11 +31,6 @@ final class TaskListViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadTableView()
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onTaskUpdate),
-                                               name: .onTaskUpdate,
-                                               object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -79,11 +65,7 @@ final class TaskListViewController: UITableViewController {
     }
     
     private func showTaskView(task: Task? = nil) {
-        let viewModel = TaskDetailsViewModel(
-            task: task,
-            repository: self.viewModel.repository,
-            taskNotificationCenter: self.viewModel.taskNotificationCenter
-        )
+        let viewModel = TaskDetailsViewModel(task: task)
         let rootViewController = TaskViewController(viewModel: viewModel)
         let viewController = UINavigationController(rootViewController: rootViewController)
         viewController.modalPresentationStyle = .fullScreen
@@ -190,8 +172,18 @@ extension TaskListViewController {
                             trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.deleteTableViewItem(atIndexPath: indexPath)
-            completion(true)
+//            let message = "Are you sure you want to delete the task?"
+            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            alert.addAction(.init(title: "Cancel", style: .cancel, handler: { _ in
+                completion(true)
+            }))
+            alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                self.deleteTableViewItem(atIndexPath: indexPath)
+                completion(true)
+            }))
+            
+            self.present(alert, animated: true, completion: nil)
         }
         
         action.backgroundColor = .systemBackground

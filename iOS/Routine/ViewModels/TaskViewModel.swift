@@ -22,12 +22,19 @@ struct TaskViewModel {
     }
     
     var timeLeft: String {
-        if daysLeft < -2 {
-            return "\(daysLeft) days ago"
-        } else if daysLeft < -1 {
+        if daysLeft < -30 {
+            return "Expired"
+        } else if daysLeft < -2 {
+            return "\(abs(daysLeft)) days ago"
+        } else if daysLeft < 0 {
             return "Yesterday"
         } else if daysLeft == 0 {
-            return "Today"
+            if hoursLeft == 0 {
+                return "Now"
+            } else if hoursLeft > 0 {
+                return "Today"
+            }
+            return "\(abs(hoursLeft)) hours ago"
         } else if daysLeft == 1 {
             return "Tomorrow"
         } else if (2..<7).contains(daysLeft) {
@@ -39,7 +46,19 @@ struct TaskViewModel {
     }
     
     private var daysLeft: Int {
-        return Calendar.current.dateComponents([.day], from: task.startDate, to: task.finishDate).day!
+        return interval(component: .day)
+    }
+    
+    private var hoursLeft: Int {
+        return interval(component: .hour)
+    }
+    
+    private func interval(component: Calendar.Component) -> Int {
+        let calendar = Calendar.current
+        guard let start = calendar.ordinality(of: component, in: .era, for: Date()) else { return 0 }
+        guard let end = calendar.ordinality(of: component, in: .era, for: task.finishDate) else { return 0 }
+
+        return end - start
     }
         
     init(task: Task, color: UIColor) {

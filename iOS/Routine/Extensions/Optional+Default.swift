@@ -1,5 +1,5 @@
 //
-//  String+OrEmpty.swift
+//  Optional+Default.swift
 //  Routine
 //
 //  Created by Vadzim Karonchyk on 5/5/20.
@@ -11,5 +11,11 @@ import Foundation
 extension Optional where Wrapped == String {
     var orEmpty: String {
         return self ?? ""
+    }
+}
+
+extension Optional where Wrapped == Date {
+    var orToday: Date {
+        return self ?? .init()
     }
 }

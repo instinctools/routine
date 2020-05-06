@@ -36,7 +36,7 @@ struct TaskRowView: View {
         .background(Color(viewModel.color))
         .cornerRadius(12)
         .padding(.horizontal, 12)
-        .padding(.vertical, 6)
+        .padding(.vertical, 8)
     }
 }
 

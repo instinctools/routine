@@ -7,9 +7,10 @@
 //
 
 import Combine
+import CoreData
 import Foundation
 
-final class TaskDetailsViewModel {
+final class TaskDetailsViewModel: NSObject {
     
     @Published private(set) var doneButtonIsEnabled: Bool
     @Published private(set) var selectedPeriod: Period?
@@ -19,18 +20,20 @@ final class TaskDetailsViewModel {
     private var cancellables: Set<AnyCancellable> = []
     
     private let task: Task?
-    private let repository: TasksRepository
-    private let taskNotificationCenter: TasksNotificationCenter
     
-    init(task: Task? = nil, repository: TasksRepository, taskNotificationCenter: TasksNotificationCenter) {
+    private lazy var taskProvier: TaskProvider = {
+        let container = CoreDataManager.shared.persistentContainer
+        let provider = TaskProvider(persistentContainer: container)
+        return provider
+    }()
+    
+    init(task: Task? = nil) {
         self.task = task
-        self.repository = repository
-        self.taskNotificationCenter = taskNotificationCenter
-        
         self.doneButtonIsEnabled = false
         self.selectedPeriod = task?.period
         self.selectedPeriodCount = String(task?.periodCount ?? 0)
-        self.title = task?.title ?? ""
+        self.title = (task?.title).orEmpty
+        super.init()
         
         Publishers.CombineLatest($title, $selectedPeriod)
             .map { !$0.isEmpty && $1 != nil }
@@ -50,25 +53,24 @@ final class TaskDetailsViewModel {
     func saveTask() {
         guard let period = selectedPeriod else { return }
         
+        let periodCount = Int(selectedPeriodCount) ?? 1
         if let task = self.task {
             let task = Task(
                 id: task.id,
                 title: title,
                 period: period,
-                periodCount: Int(selectedPeriodCount),
+                periodCount: periodCount,
                 startDate: task.startDate
             )
-            self.repository.update(task: task)
-            self.taskNotificationCenter.addNotification(forTask: task)
+            self.taskProvier.update(task: task)
         } else {
             let task = Task(
                 id: UUID().uuidString,
                 title: title,
                 period: period,
-                periodCount: Int(selectedPeriodCount)
+                periodCount: periodCount
             )
-            self.repository.add(task: task)
-            self.taskNotificationCenter.addNotification(forTask: task)
+            self.taskProvier.add(task: task)
         }
     }
 }

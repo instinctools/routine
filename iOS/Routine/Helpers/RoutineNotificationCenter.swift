@@ -7,17 +7,9 @@
 //
 
 import UIKit
+import CoreData
 import Foundation
 import UserNotifications
-
-protocol TasksNotificationCenter {
-    func addNotification(forTask task: Task)
-    func removeNotification(withId id: String)
-}
-
-extension Notification.Name {
-    static let onTaskUpdate = Notification.Name("onTaskUpdate")
-}
 
 enum UserNotificationCategoryType: String {
     case task
@@ -31,10 +23,16 @@ enum TaskCategoryAction: String {
 final class RoutineNotificationCenter: NSObject {
     
     private let notificationCenter = UNUserNotificationCenter.current()
+    private let taskProvider: TaskProvider
+    
+    private var backgroundResponseCompletion: (() -> Void)?
     
     override init() {
+        let container = CoreDataManager.shared.persistentContainer
+        self.taskProvider = TaskProvider(persistentContainer: container)
         super.init()
         notificationCenter.delegate = self
+        taskProvider.fetchedResultsControllerDelegate = self
     }
     
     private func updateScheduledNotificationsBadgeValues() {
@@ -42,9 +40,9 @@ final class RoutineNotificationCenter: NSObject {
             let sortedRequests = requests
                 .filter { $0.trigger is UNCalendarNotificationTrigger }
                 .sorted {
-                    let firstTrigger = ($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
-                    let secondTrigger = ($1.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() ?? .init()
-                    return firstTrigger < secondTrigger
+                    let firstTriggerDate = (($0.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()).orToday
+                    let secondTriggerDate = (($1.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate()).orToday
+                    return firstTriggerDate < secondTriggerDate
                 }
             
             for i in 0..<sortedRequests.count {
@@ -79,9 +77,8 @@ final class RoutineNotificationCenter: NSObject {
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
         notificationCenter.add(request) { (error) in
-            if error == nil {
-                self.updateScheduledNotificationsBadgeValues()
-            }
+            guard error == nil else { return }
+            self.updateScheduledNotificationsBadgeValues()
         }
     }
     
@@ -103,7 +100,6 @@ extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         
-        NotificationCenter.default.post(name: .onTaskUpdate, object: nil)
         
         updateScheduledNotificationsBadgeValues()
     }
@@ -120,23 +116,41 @@ extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
             
             UIApplication.shared.applicationIconBadgeNumber -= 1
             
+            self.backgroundResponseCompletion = completionHandler
+            
             switch action {
             case .reset:
-                guard let task = TasksRepository.shared.resetTask(id: requestId) else { return }
-                addNotification(forTask: task)
+                taskProvider.resetTask(id: requestId)
             case .delete:
-                TasksRepository.shared.deleteTask(byId: requestId)
-                removeNotification(withId: requestId)
+                taskProvider.deleteTask(byId: requestId)
             }
-        }
-        
-        NotificationCenter.default.post(name: .onTaskUpdate, object: nil)
-        
-        completionHandler()
+        }        
     }
 }
 
-extension RoutineNotificationCenter: TasksNotificationCenter {
+extension RoutineNotificationCenter: NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
+                    didChange anObject: Any,
+                    at indexPath: IndexPath?,
+                    for type: NSFetchedResultsChangeType,
+                    newIndexPath: IndexPath?) {
+        
+        guard let entity = anObject as? TaskEntity else { return }
+        
+        let task = Task(entity: entity)
+        switch type {
+        case .delete:
+            self.removeNotification(withId: task.id)
+        default:
+            self.addNotification(forTask: task)
+        }
+        
+        backgroundResponseCompletion?()
+    }
+}
+
+// Task notifications setup
+extension RoutineNotificationCenter {
     func addNotification(forTask task: Task) {
         let content = UNMutableNotificationContent()
         content.title = task.title

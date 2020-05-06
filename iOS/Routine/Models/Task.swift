@@ -13,19 +13,27 @@ struct Task {
     let id: String
     let title: String
     let period: Period
-    let periodCount: Int?
+    let periodCount: Int
     var startDate: Date
     
     var finishDate: Date {
         return period.calculateDate(withStardDate: startDate, periodCount: periodCount)
     }
     
-    init(id: String, title: String, period: Period, periodCount: Int?, startDate: Date = Date()) {
+    init(id: String, title: String, period: Period, periodCount: Int, startDate: Date = Date()) {
         self.id = id
         self.title = title
         self.period = period
         self.periodCount = periodCount
         self.startDate = startDate
+    }
+    
+    init(entity: TaskEntity) {
+        self.id = entity.id.orEmpty
+        self.title = entity.title.orEmpty
+        self.period = Period(rawValue: Int(entity.period)).orDefault
+        self.periodCount = Int(entity.periodCount)
+        self.startDate = entity.startDate.orToday
     }
 }
 

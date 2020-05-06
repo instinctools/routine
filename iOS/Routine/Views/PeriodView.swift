@@ -13,7 +13,7 @@ typealias EmptyAction = () -> Void
 
 struct PeriodViewModel {
     let period: Period
-    var periodCount: Int?
+    var periodCount: Int
     
     var title: String {
         return period.title(periodCount: periodCount)
@@ -109,7 +109,7 @@ final class PeriodView: UIView {
         
         stackView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview().inset(16)
-            make.top.equalToSuperview().inset(12)
+            make.top.equalToSuperview().inset(14)
             make.center.equalToSuperview()
         }
     }
@@ -147,9 +147,8 @@ final class PeriodView: UIView {
     func setup(with viewModel: PeriodViewModel, isSelected: Bool) {
         self.viewModel = viewModel
         titleLabel.text = viewModel.title
-        if let count = viewModel.periodCount {
-            periodCountTextField.text = String(count)
-        }
+        periodCountTextField.text = String(viewModel.periodCount)
+        
         setSelected(isSelected, firstResponder: false)
     }
     
@@ -169,7 +168,7 @@ extension PeriodView: UITextFieldDelegate {
         let textLimit = 3
         if newText.count <= textLimit {
             didSelect?(viewModel.period, newText)
-            viewModel.periodCount = Int(newText)
+            viewModel.periodCount = Int(newText) ?? 1
             titleLabel.text = viewModel.title
             return true
         }

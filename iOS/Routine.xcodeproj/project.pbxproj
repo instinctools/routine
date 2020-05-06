@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04B2462FAA00091C56C /* CoreDataManager.swift */; };
+		D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* TaskProvider.swift */; };
 		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
 		DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1508242B46D100A8ED3C /* PeriodView.swift */; };
 		DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD0B150B242B51A700A8ED3C /* SnapKit */; };
@@ -17,7 +19,6 @@
 		DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */; };
 		DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */; };
 		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
-		DD8E6FE02460634400E51A31 /* TaskCloudKitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
 		DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */; };
@@ -28,7 +29,6 @@
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
 		DDF0C620242CA3810031299A /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61F242CA3810031299A /* Period.swift */; };
 		DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */; };
-		DDF0C62E242D1EAC0031299A /* TasksRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C62D242D1EAC0031299A /* TasksRepository.swift */; };
 		DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F22428BE25003456DA /* AppDelegate.swift */; };
 		DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF395F42428BE25003456DA /* SceneDelegate.swift */; };
 		DDF395F92428BE27003456DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDF395F82428BE27003456DA /* Assets.xcassets */; };
@@ -36,10 +36,12 @@
 		DDF395FF2428BE27003456DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDF395FD2428BE27003456DA /* LaunchScreen.storyboard */; };
 		DDF3960E2428BEAB003456DA /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF3960D2428BEAB003456DA /* Task.swift */; };
 		DDFAD42A24294BC5009584FC /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */; };
-		DDFD13312462062C00D3BDC7 /* String+OrEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD13302462062C00D3BDC7 /* String+OrEmpty.swift */; };
+		DDFD13312462062C00D3BDC7 /* Optional+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD13302462062C00D3BDC7 /* Optional+Default.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D78DE04B2462FAA00091C56C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		D78DE04D2462FABF0091C56C /* TaskProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProvider.swift; sourceTree = "<group>"; };
 		DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		DD0B1508242B46D100A8ED3C /* PeriodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodView.swift; sourceTree = "<group>"; };
 		DD0E14EF2428BFD200AE0C78 /* TaskRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
@@ -49,7 +51,6 @@
 		DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
 		DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+CombineCompatible.swift"; sourceTree = "<group>"; };
 		DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineNotificationCenter.swift; sourceTree = "<group>"; };
-		DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCloudKitRepository.swift; sourceTree = "<group>"; };
 		DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
 		DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+TextPublisher.swift"; sourceTree = "<group>"; };
@@ -61,7 +62,6 @@
 		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
 		DDF0C61F242CA3810031299A /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		DDF0C625242CE7C10031299A /* Task.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task.xcdatamodel; sourceTree = "<group>"; };
-		DDF0C62D242D1EAC0031299A /* TasksRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksRepository.swift; sourceTree = "<group>"; };
 		DDF395EF2428BE25003456DA /* Routine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Routine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF395F22428BE25003456DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDF395F42428BE25003456DA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -71,7 +71,7 @@
 		DDF396002428BE27003456DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF3960D2428BEAB003456DA /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
-		DDFD13302462062C00D3BDC7 /* String+OrEmpty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+OrEmpty.swift"; sourceTree = "<group>"; };
+		DDFD13302462062C00D3BDC7 /* Optional+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Default.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
-				DD8E6FDF2460634400E51A31 /* TaskCloudKitRepository.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -123,7 +122,7 @@
 				DDB6B295244DAF5E00069C5D /* View+UIView.swift */,
 				DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */,
 				DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */,
-				DDFD13302462062C00D3BDC7 /* String+OrEmpty.swift */,
+				DDFD13302462062C00D3BDC7 /* Optional+Default.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -139,7 +138,6 @@
 		DDDF3597242D577300D62C12 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				DDF0C62D242D1EAC0031299A /* TasksRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -157,6 +155,8 @@
 			children = (
 				DDDF3597242D577300D62C12 /* Repository */,
 				DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */,
+				D78DE04B2462FAA00091C56C /* CoreDataManager.swift */,
+				D78DE04D2462FABF0091C56C /* TaskProvider.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -331,16 +331,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */,
-				DD8E6FE02460634400E51A31 /* TaskCloudKitRepository.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
-				DDF0C62E242D1EAC0031299A /* TasksRepository.swift in Sources */,
 				DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */,
 				DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
-				DDFD13312462062C00D3BDC7 /* String+OrEmpty.swift in Sources */,
+				DDFD13312462062C00D3BDC7 /* Optional+Default.swift in Sources */,
 				DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */,
 				DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */,
+				D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */,
 				DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */,
 				DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */,
 				DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */,
@@ -350,6 +349,7 @@
 				DDFAD42A24294BC5009584FC /* TaskTableViewCell.swift in Sources */,
 				DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */,
 				DDF0C620242CA3810031299A /* Period.swift in Sources */,
+				D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */,
 				DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */,
 				DD0E14F02428BFD200AE0C78 /* TaskRowView.swift in Sources */,
 				DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */,
