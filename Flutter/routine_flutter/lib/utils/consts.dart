@@ -11,8 +11,8 @@ class Strings {
   static const String editPickerDialogTitle = 'Select period...';
 
   static const String listEmptyPlaceholderText = "You don't have any tasks";
-
-
+  static const String listResetSlideActionLabel = "Reset";
+  static const String listDeletSlideActionLabel = "Delete";
 }
 
 class Dimens {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
@@ -41,7 +42,22 @@ class _TodoListState extends State<TodoList> {
                     itemBuilder: (context, index) {
                       var item = snap.data[index];
                       return GestureDetector(
-                          child: TodoItem(item, index),
+                          child: Slidable(
+                            actionPane: SlidableScrollActionPane(),
+                            child: TodoItem(item, index),
+                            actions: <Widget>[
+                              getItemSlidableAction(
+                                  Strings.listResetSlideActionLabel,
+                                  Colors.green,
+                                  true)
+                            ],
+                            secondaryActions: <Widget>[
+                              getItemSlidableAction(
+                                  Strings.listDeletSlideActionLabel,
+                                  Colors.grey,
+                                  false)
+                            ],
+                          ),
                           onTap: () => pushEditScreen(todo: item));
                     });
               } else {
@@ -61,10 +77,33 @@ class _TodoListState extends State<TodoList> {
         ));
   }
 
-  void pushEditScreen({Todo todo}) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EditScreen(entry: todo)));
+  Widget getItemSlidableAction(String title, Color color, bool isPrimary) {
+    var dimen = Dimens.COMMON_PADDING_HALF;
+    var insets = EdgeInsets.only(
+        top: dimen,
+        bottom: dimen,
+        left: isPrimary ? 0.0 : dimen,
+        right: isPrimary ? dimen : 0.0);
 
+    return SlideAction(
+      color: ColorsRes.mainBgColor,
+      child: Container(
+        margin: insets,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS),
+            color: color),
+        child: Center(
+          child: Text(
+            title,
+            style: Styles.TODO_ITEM_TITLE_TEXT,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void pushEditScreen({Todo todo}) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => EditScreen(entry: todo)));
 }
