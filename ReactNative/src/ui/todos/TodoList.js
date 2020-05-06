@@ -23,7 +23,7 @@ class TodoList extends React.PureComponent {
                 <TouchableRipple style={toolbarStyle.menuItem}
                                  borderless={true}
                                  onPress={navigation.getParam('navigateToDetails')}>
-                    <Icon name="md-add" size={24}/>
+                    <Icon name="md-add" size={24} color="#000000"/>
                 </TouchableRipple>
             )
         }
