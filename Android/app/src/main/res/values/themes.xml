@@ -7,6 +7,10 @@
         <item name="toolbarStyle">@style/Widget.MyTheme.Toolbar</item>
     </style>
 
+    <style name="Theme.MyApp.Details">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
 
     <!--Toolbar-->
     <style name="Widget.MyTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
@@ -22,4 +26,10 @@
     </style>
 
     <color name="period_tint">#1f000000</color>
+
+    <style name="SlideAnimation">
+        <item name="android:windowEnterAnimation">@anim/enter</item>
+        <item name="android:windowExitAnimation">@anim/exit</item>
+    </style>
+
 </resources>

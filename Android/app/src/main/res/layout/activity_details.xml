@@ -62,6 +62,7 @@
         tools:ignore="RtlCompat" />
 
     <RadioGroup
+        android:id="@+id/radio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -73,35 +74,38 @@
         app:layout_constraintTop_toBottomOf="@+id/separator">
 
         <RadioButton
+            android:id="@+id/every_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/period_selector"
             android:button="@null"
             android:padding="16dp"
-            android:textColor="@color/period_selector"
             android:text="Every day"
+            android:textColor="@color/period_selector"
             android:textSize="20sp" />
 
         <RadioButton
+            android:id="@+id/every_week"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:button="@null"
             android:background="@drawable/period_selector"
-            android:textColor="@color/period_selector"
+            android:button="@null"
             android:padding="16dp"
             android:text="Every week"
+            android:textColor="@color/period_selector"
             android:textSize="20sp" />
 
         <RadioButton
+            android:id="@+id/every_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:button="@null"
             android:background="@drawable/period_selector"
-            android:textColor="@color/period_selector"
+            android:button="@null"
             android:padding="16dp"
             android:text="Every month"
+            android:textColor="@color/period_selector"
             android:textSize="20sp" />
 
     </RadioGroup>

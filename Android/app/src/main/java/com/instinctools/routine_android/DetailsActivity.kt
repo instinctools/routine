@@ -1,11 +1,9 @@
 package com.instinctools.routine_android
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.view.MenuItemCompat
+import androidx.appcompat.app.AppCompatActivity
 import com.instinctools.routine_android.databinding.ActivityDetailsBinding
-import com.instinctools.routine_android.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_details.view.*
 
 class DetailsActivity : AppCompatActivity() {
 
@@ -23,5 +21,12 @@ class DetailsActivity : AppCompatActivity() {
             .actionView.setOnClickListener {
 
             }
+
+
+        binding.radio.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.every_day){
+                WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
+            }
+        }
     }
 }
