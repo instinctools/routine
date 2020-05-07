@@ -40,23 +40,20 @@ class _TodoListState extends State<TodoList> {
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
                     itemCount: snap.data.length,
                     itemBuilder: (context, index) {
+                      ;
                       var item = snap.data[index];
                       return GestureDetector(
-                          child: Slidable(
-                            actionPane: SlidableScrollActionPane(),
+                          child: Dismissible(
+                            key: Key(item.id.toString()),
                             child: TodoItem(item, index),
-                            actions: <Widget>[
-                              getItemSlidableAction(
-                                  Strings.listResetSlideActionLabel,
-                                  Colors.green,
-                                  true)
-                            ],
-                            secondaryActions: <Widget>[
-                              getItemSlidableAction(
-                                  Strings.listDeletSlideActionLabel,
-                                  Colors.grey,
-                                  false)
-                            ],
+                            background: getItemBackground(
+                                Strings.listResetSlideActionLabel,
+                                Colors.green,
+                                true),
+                            secondaryBackground: getItemBackground(
+                                Strings.listDeletSlideActionLabel,
+                                Colors.grey,
+                                false),
                           ),
                           onTap: () => pushEditScreen(todo: item));
                     });
@@ -77,7 +74,7 @@ class _TodoListState extends State<TodoList> {
         ));
   }
 
-  Widget getItemSlidableAction(String title, Color color, bool isPrimary) {
+  Widget getItemBackground(String title, Color color, bool isPrimary) {
     var dimen = Dimens.COMMON_PADDING_HALF;
     var insets = EdgeInsets.only(
         top: dimen,
@@ -85,23 +82,38 @@ class _TodoListState extends State<TodoList> {
         left: isPrimary ? 0.0 : dimen,
         right: isPrimary ? dimen : 0.0);
 
-    return SlideAction(
+    MainAxisAlignment alignment =
+        isPrimary ? MainAxisAlignment.start : MainAxisAlignment.end;
+
+    return Container(
       color: ColorsRes.mainBgColor,
-      child: Container(
-        margin: insets,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS),
-            color: color),
-        child: Center(
-          child: Text(
-            title,
-            style: Styles.TODO_ITEM_TITLE_TEXT,
+      child: Row(
+        mainAxisAlignment: alignment,
+        children: <Widget>[
+          FractionallySizedBox(
+            heightFactor: 1.0,
+            child: Container(
+              margin: insets,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS),
+                  color: color),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32.0),
+                  child: Text(
+                    title,
+                    style: Styles.TODO_ITEM_TITLE_TEXT,
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
-
+  
   void pushEditScreen({Todo todo}) => Navigator.push(
       context,
       MaterialPageRoute(
