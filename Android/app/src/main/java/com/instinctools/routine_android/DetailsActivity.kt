@@ -1,13 +1,29 @@
 package com.instinctools.routine_android
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
+import com.instinctools.routine_android.data.PeriodUnit
+import com.instinctools.routine_android.data.TodoEntity
+import com.instinctools.routine_android.data.db.AppDatabase
+import com.instinctools.routine_android.data.db.database
 import com.instinctools.routine_android.databinding.ActivityDetailsBinding
-import kotlinx.android.synthetic.main.activity_details.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class DetailsActivity : AppCompatActivity() {
+open class DetailsActivity : AppCompatActivity() {
 
     private val binding: ActivityDetailsBinding by viewBinding(ActivityDetailsBinding::inflate)
+
+    var title = ""
+    var period = 1
+    var periodUnit = PeriodUnit.DAY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,14 +35,36 @@ class DetailsActivity : AppCompatActivity() {
 
         binding.toolbar.menu.findItem(R.id.done)
             .actionView.setOnClickListener {
-
+                lifecycleScope.launch {
+                    withContext(Dispatchers.IO) {
+                        val todoEntity = TodoEntity(UUID.randomUUID().toString(), title, period, periodUnit, calculateTimestamp())
+                        database().todos().addTodo(todoEntity)
+                    }
+                    onBackPressed()
+                }
             }
 
+        binding.everyDay.setOnClickListener {
+            WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
+        }
 
         binding.radio.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.every_day){
-                WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
+            val periodUnit = when (checkedId) {
+                R.id.every_day -> PeriodUnit.DAY
+                R.id.every_week -> PeriodUnit.WEEK
+                R.id.every_month -> PeriodUnit.MONTH
+                else -> PeriodUnit.DAY
             }
         }
+    }
+
+    private fun calculateTimestamp(): Date {
+        val calendar = Calendar.getInstance()
+        when (periodUnit) {
+            PeriodUnit.DAY -> calendar.add(Calendar.DAY_OF_WEEK, period)
+            PeriodUnit.WEEK -> calendar.add(Calendar.WEEK_OF_MONTH, period)
+            PeriodUnit.MONTH -> calendar.add(Calendar.MONTH, period)
+        }
+        return calendar.time
     }
 }
