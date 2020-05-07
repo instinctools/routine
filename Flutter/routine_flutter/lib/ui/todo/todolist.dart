@@ -41,7 +41,20 @@ class _TodoListState extends State<TodoList> {
                     itemBuilder: (context, index) {
                       var item = snap.data[index];
                       return GestureDetector(
-                          child: TodoItem(item, index),
+                          child: Dismissible(
+                            key: Key(item.id.toString()),
+                            child: TodoItem(item, index),
+                            confirmDismiss: (direction) =>
+                                _confirmDismiss(direction, item),
+                            background: _getItemBackground(
+                                Strings.listResetSlideActionLabel,
+                                Colors.green,
+                                true),
+                            secondaryBackground: _getItemBackground(
+                                Strings.listDeleteSlideActionLabel,
+                                Colors.grey,
+                                false),
+                          ),
                           onTap: () => pushEditScreen(todo: item));
                     });
               } else {
@@ -61,10 +74,75 @@ class _TodoListState extends State<TodoList> {
         ));
   }
 
-  void pushEditScreen({Todo todo}) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => EditScreen(entry: todo)));
+  Widget _getItemBackground(String title, Color color, bool isPrimary) {
+    var dimen = Dimens.COMMON_PADDING_HALF;
+    var insets = EdgeInsets.only(
+        top: dimen,
+        bottom: dimen,
+        left: isPrimary ? 0.0 : dimen,
+        right: isPrimary ? dimen : 0.0);
 
+    MainAxisAlignment alignment =
+        isPrimary ? MainAxisAlignment.start : MainAxisAlignment.end;
+
+    return Container(
+      color: ColorsRes.mainBgColor,
+      child: Row(
+        mainAxisAlignment: alignment,
+        children: <Widget>[
+          FractionallySizedBox(
+            heightFactor: 1.0,
+            child: Container(
+              margin: insets,
+              decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS),
+                  color: color),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimens.COMMON_PADDING_LARGE),
+                  child: Text(
+                    title,
+                    style: Styles.TODO_ITEM_TITLE_TEXT,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
+    if (direction == DismissDirection.startToEnd) {
+      print('reseted');
+    } else {
+      return await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(Strings.listDialogContentText),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text(Strings.listDialogActionCancel),
+                    onPressed: () => Navigator.pop(context, false)),
+                FlatButton(
+                    child: Text(Strings.listDialogActionDelete),
+                    onPressed: () async {
+                      bool isSuccess = await helper.deleteTodo(item.id) != null;
+                      Navigator.pop(context, isSuccess);
+                    }),
+              ],
+            );
+          });
+    }
+    return false;
+  }
+
+  void pushEditScreen({Todo todo}) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => EditScreen(entry: todo)));
 }
