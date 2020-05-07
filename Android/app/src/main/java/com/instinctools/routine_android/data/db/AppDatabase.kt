@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.instinctools.routine_android.App
-import com.instinctools.routine_android.data.TodoEntity
+import com.instinctools.routine_android.data.db.entity.TodoEntity
 
 @Database(entities = [TodoEntity::class], version = 1)
 @TypeConverters(Converters::class)

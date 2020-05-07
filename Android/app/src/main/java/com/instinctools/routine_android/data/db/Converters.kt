@@ -1,7 +1,7 @@
 package com.instinctools.routine_android.data.db
 
 import androidx.room.TypeConverter
-import com.instinctools.routine_android.data.PeriodUnit
+import com.instinctools.routine_android.data.db.entity.PeriodUnit
 import java.util.*
 
 class Converters {

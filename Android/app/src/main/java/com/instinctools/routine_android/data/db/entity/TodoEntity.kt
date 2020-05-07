@@ -1,4 +1,4 @@
-package com.instinctools.routine_android.data
+package com.instinctools.routine_android.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,27 +1,22 @@
 package com.instinctools.routine_android
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
-import com.instinctools.routine_android.data.PeriodUnit
-import com.instinctools.routine_android.data.TodoEntity
-import com.instinctools.routine_android.data.db.AppDatabase
+import com.instinctools.routine_android.data.db.entity.PeriodUnit
+import com.instinctools.routine_android.data.db.entity.TodoEntity
 import com.instinctools.routine_android.data.db.database
 import com.instinctools.routine_android.databinding.ActivityDetailsBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.coroutines.CoroutineContext
 
 open class DetailsActivity : AppCompatActivity() {
 
     private val binding: ActivityDetailsBinding by viewBinding(ActivityDetailsBinding::inflate)
 
-    var title = ""
+    var title = "TEST123"
     var period = 1
     var periodUnit = PeriodUnit.DAY
 

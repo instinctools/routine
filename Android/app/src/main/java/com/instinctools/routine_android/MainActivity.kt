@@ -8,11 +8,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.map
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.instinctools.routine_android.data.Todo
+import com.instinctools.routine_android.data.db.database
+import com.instinctools.routine_android.data.model.Todo
 import com.instinctools.routine_android.databinding.ActivityMainBinding
 import com.instinctools.routine_android.databinding.ItemTodoBinding
 import kotlin.math.abs
@@ -34,12 +37,12 @@ class MainActivity : AppCompatActivity() {
         binding.content.adapter = adapter
         ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
 
-        val list = mutableListOf<Todo>()
-        for (i in 0..50) {
-            list.add(Todo(i))
-        }
-
-        adapter.submitList(list)
+        database().todos()
+            .getTodos()
+            .map { Todo.from(it) }
+            .observe(this, Observer {
+                adapter.submitList(it)
+            })
     }
 
     private class TodosAdapter : ListAdapter<Todo, TodosViewHolder>(object : DiffUtil.ItemCallback<Todo>() {
@@ -65,10 +68,10 @@ class MainActivity : AppCompatActivity() {
         fun bind(todo: Todo) {
             binding.title.text = todo.title
             binding.periodStr.text = todo.periodStr
-            binding.periodDate.text = todo.periodDate
+            binding.targetDate.text = todo.targetDate
 
             val drawable = binding.root.background.mutate() as GradientDrawable
-            drawable.setColor(Color.GREEN)
+            drawable.setColor(todo.background)
         }
     }
 
@@ -98,7 +101,6 @@ class MainActivity : AppCompatActivity() {
 
         override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
             super.onSelectedChanged(viewHolder, actionState)
-
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
