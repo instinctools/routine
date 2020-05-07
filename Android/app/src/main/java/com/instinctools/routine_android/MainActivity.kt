@@ -6,6 +6,7 @@ import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -39,27 +40,56 @@ class MainActivity : AppCompatActivity() {
 
         database().todos()
             .getTodos()
+            .map { list -> list.sortedBy { it.timestamp } }
             .map { Todo.from(it) }
             .observe(this, Observer {
                 adapter.submitList(it)
             })
     }
 
-    private class TodosAdapter : ListAdapter<Todo, TodosViewHolder>(object : DiffUtil.ItemCallback<Todo>() {
-        override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-            return oldItem.id == newItem.id
+    private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is Todo && newItem is Todo) {
+                return oldItem.id == newItem.id
+            }
+            return true
         }
 
-        override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-            return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            if (oldItem is Todo && newItem is Todo) {
+                return (oldItem as Todo) == (newItem as Todo)
+            }
+            return true
         }
     }) {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodosViewHolder {
-            return TodosViewHolder(ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+        companion object {
+            const val TYPE_TODO = 0
+            const val TYPE_SEPARATOR = 1
         }
 
-        override fun onBindViewHolder(holder: TodosViewHolder, position: Int) {
-            holder.bind(getItem(position))
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return if (viewType == TYPE_TODO) {
+                TodosViewHolder(ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            } else {
+                EmptyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_separator, parent, false))
+            }
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val item = getItem(position)
+            if (item is Todo) {
+                (holder as TodosViewHolder).bind(item)
+            }
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            val item = getItem(position)
+            return if (item is Todo) {
+                TYPE_TODO
+            } else {
+                TYPE_SEPARATOR
+            }
         }
     }
 
@@ -74,6 +104,8 @@ class MainActivity : AppCompatActivity() {
             drawable.setColor(todo.background)
         }
     }
+
+    private class EmptyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
     private class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 

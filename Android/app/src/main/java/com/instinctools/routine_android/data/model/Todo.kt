@@ -17,16 +17,30 @@ data class Todo(
         val background: Int
 ) {
     companion object {
-        fun from(list: List<TodoEntity>): List<Todo> {
-            val uiTodos = mutableListOf<Todo>()
+
+        fun from(list: List<TodoEntity>): List<Any> {
+            val uiTodos = mutableListOf<Any>()
+            val currentDate = DateTime().withTimeAtStartOfDay()
+            var lastExpiredTodoFound = false
+            var lastExpiredTodoIndex = 0
+
             for (i in list.indices) {
+                val todoTime = DateTime(list[i].timestamp)
+                if (!lastExpiredTodoFound && todoTime.isAfter(currentDate)) {
+                    if (uiTodos.size > 0) {
+                        uiTodos.add(Any())
+                        lastExpiredTodoIndex = i - 1;
+                    }
+                    lastExpiredTodoFound = true
+                }
+                val color = if (lastExpiredTodoFound) pickColorBetween(i - lastExpiredTodoIndex + 1) else Color.parseColor("#FF0000")
                 uiTodos.add(
                         Todo(
                                 list[i].id,
                                 list[i].title,
                                 prettyPeriod(list[i].period, list[i].periodUnit),
                                 calculateTargetDate(list[i].timestamp),
-                                pickColorBetween(i)
+                                color
                         )
                 )
             }
