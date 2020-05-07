@@ -65,4 +65,10 @@ class DatabaseHelper {
       return await db.insert(TABLE_NAME, todo.toMap());
     }
   }
+
+  Future<int> deleteTodo(int id) async {
+    var db = await database;
+    return await db
+        .delete(TABLE_NAME, where: WHERE_ID_CLAUSE, whereArgs: [id.toString()]);
+  }
 }

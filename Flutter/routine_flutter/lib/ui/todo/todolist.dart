@@ -46,7 +46,7 @@ class _TodoListState extends State<TodoList> {
                             key: Key(item.id.toString()),
                             child: TodoItem(item, index),
                             confirmDismiss: (direction) =>
-                                _confirmDismiss(direction),
+                                _confirmDismiss(direction, item),
                             background: getItemBackground(
                                 Strings.listResetSlideActionLabel,
                                 Colors.green,
@@ -115,7 +115,7 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
-  Future<bool> _confirmDismiss(DismissDirection direction) async {
+  Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
     if (direction == DismissDirection.startToEnd) {
       print('reseted');
     } else {
@@ -130,7 +130,10 @@ class _TodoListState extends State<TodoList> {
                     onPressed: () => Navigator.pop(context, false)),
                 FlatButton(
                     child: Text(Strings.listDialogActionDelete),
-                    onPressed: () => Navigator.pop(context, true)),
+                    onPressed: () async {
+                      bool isSuccess = await helper.deleteTodo(item.id) != null;
+                      Navigator.pop(context, isSuccess);
+                    }),
               ],
             );
           });
