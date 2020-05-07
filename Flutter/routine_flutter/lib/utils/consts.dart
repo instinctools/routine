@@ -23,6 +23,7 @@ class Dimens {
   static const double COMMON_PADDING_HALF = 4.0;
   static const double COMMON_PADDING = 8.0;
   static const double COMMON_PADDING_DOUBLE = 16.0;
+  static const double COMMON_PADDING_LARGE = 32.0;
 
   static const double listProgressSize = 20.0;
 

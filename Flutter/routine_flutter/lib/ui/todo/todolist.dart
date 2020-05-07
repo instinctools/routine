@@ -39,7 +39,6 @@ class _TodoListState extends State<TodoList> {
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
                     itemCount: snap.data.length,
                     itemBuilder: (context, index) {
-                      ;
                       var item = snap.data[index];
                       return GestureDetector(
                           child: Dismissible(
@@ -47,11 +46,11 @@ class _TodoListState extends State<TodoList> {
                             child: TodoItem(item, index),
                             confirmDismiss: (direction) =>
                                 _confirmDismiss(direction, item),
-                            background: getItemBackground(
+                            background: _getItemBackground(
                                 Strings.listResetSlideActionLabel,
                                 Colors.green,
                                 true),
-                            secondaryBackground: getItemBackground(
+                            secondaryBackground: _getItemBackground(
                                 Strings.listDeleteSlideActionLabel,
                                 Colors.grey,
                                 false),
@@ -75,7 +74,7 @@ class _TodoListState extends State<TodoList> {
         ));
   }
 
-  Widget getItemBackground(String title, Color color, bool isPrimary) {
+  Widget _getItemBackground(String title, Color color, bool isPrimary) {
     var dimen = Dimens.COMMON_PADDING_HALF;
     var insets = EdgeInsets.only(
         top: dimen,
@@ -101,7 +100,8 @@ class _TodoListState extends State<TodoList> {
                   color: color),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimens.COMMON_PADDING_LARGE),
                   child: Text(
                     title,
                     style: Styles.TODO_ITEM_TITLE_TEXT,
