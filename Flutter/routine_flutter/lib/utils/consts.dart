@@ -12,7 +12,11 @@ class Strings {
 
   static const String listEmptyPlaceholderText = "You don't have any tasks";
   static const String listResetSlideActionLabel = "Reset";
-  static const String listDeletSlideActionLabel = "Delete";
+  static const String listDeleteSlideActionLabel = "Delete";
+  static const String listDialogContentText =
+      "Are You sure want to delete this task?";
+  static const String listDialogActionCancel = "Cancel";
+  static const String listDialogActionDelete = "Delete";
 }
 
 class Dimens {
@@ -31,9 +35,8 @@ class Dimens {
 }
 
 class ColorsRes {
-  static  Color mainBgColor = Colors.grey[200];
+  static Color mainBgColor = Colors.grey[200];
 
   static Color selectedPeriodUnitColor = Colors.grey[800];
   static Color unselectedPeriodUnitColor = Colors.grey[400];
-
 }

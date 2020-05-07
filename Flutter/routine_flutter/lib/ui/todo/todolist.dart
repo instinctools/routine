@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
@@ -46,12 +45,14 @@ class _TodoListState extends State<TodoList> {
                           child: Dismissible(
                             key: Key(item.id.toString()),
                             child: TodoItem(item, index),
+                            confirmDismiss: (direction) =>
+                                _confirmDismiss(direction),
                             background: getItemBackground(
                                 Strings.listResetSlideActionLabel,
                                 Colors.green,
                                 true),
                             secondaryBackground: getItemBackground(
-                                Strings.listDeletSlideActionLabel,
+                                Strings.listDeleteSlideActionLabel,
                                 Colors.grey,
                                 false),
                           ),
@@ -113,7 +114,30 @@ class _TodoListState extends State<TodoList> {
       ),
     );
   }
-  
+
+  Future<bool> _confirmDismiss(DismissDirection direction) async {
+    if (direction == DismissDirection.startToEnd) {
+      print('reseted');
+    } else {
+      return await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(Strings.listDialogContentText),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text(Strings.listDialogActionCancel),
+                    onPressed: () => Navigator.pop(context, false)),
+                FlatButton(
+                    child: Text(Strings.listDialogActionDelete),
+                    onPressed: () => Navigator.pop(context, true)),
+              ],
+            );
+          });
+    }
+    return false;
+  }
+
   void pushEditScreen({Todo todo}) => Navigator.push(
       context,
       MaterialPageRoute(
