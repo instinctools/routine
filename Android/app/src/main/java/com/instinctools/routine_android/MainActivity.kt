@@ -8,8 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.map
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,6 +21,8 @@ import com.instinctools.routine_android.data.db.database
 import com.instinctools.routine_android.data.model.Todo
 import com.instinctools.routine_android.databinding.ActivityMainBinding
 import com.instinctools.routine_android.databinding.ItemTodoBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
@@ -93,9 +97,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private class TodosViewHolder(val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        var todo: Todo? = null
 
         fun bind(todo: Todo) {
+            this.todo = todo
             binding.title.text = todo.title
             binding.periodStr.text = todo.periodStr
             binding.targetDate.text = todo.targetDate
@@ -105,9 +112,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private class EmptyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    private class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    private class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+    private inner class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
         val btnPaint = Paint()
         val btnColor = Color.parseColor("#E3E3E3")
@@ -127,12 +134,48 @@ class MainActivity : AppCompatActivity() {
         val activateDistance = context.resources.getDimensionPixelOffset(R.dimen.swipeable_activate_distance)
         val corners = context.resources.getDimension(R.dimen.todo_item_corner)
 
+        var isLeftActivated = false
+        var isRightActivated = false
+
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
         }
 
-        override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-            super.onSelectedChanged(viewHolder, actionState)
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+            if ((isLeftActivated || isRightActivated) && viewHolder is TodosViewHolder) {
+                val todo = viewHolder.todo
+                if (todo != null) {
+                    if (isLeftActivated) {
+                        lifecycle.coroutineScope.launch(Dispatchers.IO) {
+                            val todoEntity = database().todos()
+                                .getTodo(todo.id)
+
+                            database().todos()
+                                .updateTodo(
+                                        todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
+                                )
+                        }
+                    } else if (isRightActivated) {
+                        AlertDialog.Builder(this@MainActivity)
+                            .setTitle("Are you sure want to delete this task?")
+                            .setPositiveButton("DELETE") { dialog, which ->
+                                lifecycle.coroutineScope.launch(Dispatchers.IO) {
+                                    database().todos()
+                                        .deleteTodo(todo.id)
+                                }
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("CANCEL") { dialog, which ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                }
+            }
+            isLeftActivated = false
+            isRightActivated = false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -147,8 +190,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onChildDraw(
-            c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-            dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
         ) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
@@ -166,6 +209,16 @@ class MainActivity : AppCompatActivity() {
                 btnPaint.color = btnColorActivated
             } else {
                 btnPaint.color = btnColor
+            }
+
+            if (isCurrentlyActive) {
+                if (abs(dX) > activateDistance) {
+                    isLeftActivated = dX > 0
+                    isRightActivated = dX < 0
+                } else {
+                    isLeftActivated = false
+                    isRightActivated = false
+                }
             }
 
             c.save()

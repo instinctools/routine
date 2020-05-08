@@ -32,7 +32,7 @@ open class DetailsActivity : AppCompatActivity() {
             .actionView.setOnClickListener {
                 lifecycleScope.launch {
                     withContext(Dispatchers.IO) {
-                        val todoEntity = TodoEntity(UUID.randomUUID().toString(), title, period, periodUnit, calculateTimestamp())
+                        val todoEntity = TodoEntity(UUID.randomUUID().toString(), title, period, periodUnit, calculateTimestamp(period, periodUnit))
                         database().todos().addTodo(todoEntity)
                     }
                     onBackPressed()
@@ -51,15 +51,5 @@ open class DetailsActivity : AppCompatActivity() {
                 else -> PeriodUnit.DAY
             }
         }
-    }
-
-    private fun calculateTimestamp(): Date {
-        val calendar = Calendar.getInstance()
-        when (periodUnit) {
-            PeriodUnit.DAY -> calendar.add(Calendar.DAY_OF_WEEK, period)
-            PeriodUnit.WEEK -> calendar.add(Calendar.WEEK_OF_MONTH, period)
-            PeriodUnit.MONTH -> calendar.add(Calendar.MONTH, period)
-        }
-        return calendar.time
     }
 }
