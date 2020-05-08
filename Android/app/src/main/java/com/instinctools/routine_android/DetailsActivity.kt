@@ -19,9 +19,7 @@ open class DetailsActivity : AppCompatActivity() {
 
     private val binding: ActivityDetailsBinding by viewBinding(ActivityDetailsBinding::inflate)
 
-    var title = "TEST123"
     var period = 1
-    var periodUnit = PeriodUnit.DAY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +41,20 @@ open class DetailsActivity : AppCompatActivity() {
             binding.toolbar.menu.findItem(R.id.done)
                 .actionView.setOnClickListener {
                     lifecycleScope.launch {
+                        val periodUnit = binding.radio.checkedRadioButtonId
+                            .let {
+                                when (it) {
+                                    R.id.every_day -> PeriodUnit.DAY
+                                    R.id.every_week -> PeriodUnit.WEEK
+                                    R.id.every_month -> PeriodUnit.MONTH
+                                    else -> PeriodUnit.DAY
+                                }
+                            }
                         withContext(Dispatchers.IO) {
-                            val todoEntity = TodoEntity(UUID.randomUUID().toString(), title, period, periodUnit, calculateTimestamp(period, periodUnit))
+                            val todoEntity = TodoEntity(UUID.randomUUID().toString(),
+                                    binding.text.text.toString(),
+                                    period, periodUnit,
+                                    calculateTimestamp(period, periodUnit))
                             database().todos().addTodo(todoEntity)
                         }
                         onBackPressed()
@@ -52,15 +62,8 @@ open class DetailsActivity : AppCompatActivity() {
                 }
 
             binding.everyDay.setOnClickListener {
-                WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
-            }
-
-            binding.radio.setOnCheckedChangeListener { _, checkedId ->
-                periodUnit = when (checkedId) {
-                    R.id.every_day -> PeriodUnit.DAY
-                    R.id.every_week -> PeriodUnit.WEEK
-                    R.id.every_month -> PeriodUnit.MONTH
-                    else -> PeriodUnit.DAY
+                if (supportFragmentManager.findFragmentByTag(WheelPickerFragment::class.java.simpleName) == null){
+                    WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
                 }
             }
 
