@@ -1,6 +1,8 @@
 package com.instinctools.routine_android
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
@@ -34,16 +36,6 @@ open class DetailsActivity : AppCompatActivity() {
                 }
             }
 
-            if (todo != null) {
-                binding.text.setText(todo.title)
-                period = todo.period
-                binding.radio.check(when (todo.periodUnit) {
-                    PeriodUnit.DAY -> R.id.every_day
-                    PeriodUnit.WEEK -> R.id.every_week
-                    PeriodUnit.MONTH -> R.id.every_month
-                })
-            }
-
             binding.toolbar.setNavigationOnClickListener {
                 onBackPressed()
             }
@@ -64,12 +56,36 @@ open class DetailsActivity : AppCompatActivity() {
             }
 
             binding.radio.setOnCheckedChangeListener { _, checkedId ->
-                val periodUnit = when (checkedId) {
+                periodUnit = when (checkedId) {
                     R.id.every_day -> PeriodUnit.DAY
                     R.id.every_week -> PeriodUnit.WEEK
                     R.id.every_month -> PeriodUnit.MONTH
                     else -> PeriodUnit.DAY
                 }
+            }
+
+            binding.text.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    binding.toolbar.menu.findItem(R.id.done)
+                        .actionView
+                        .isEnabled = s.isNotEmpty()
+                }
+            })
+
+            if (todo != null) {
+                binding.text.setText(todo.title)
+                period = todo.period
+                binding.radio.check(when (todo.periodUnit) {
+                    PeriodUnit.DAY -> R.id.every_day
+                    PeriodUnit.WEEK -> R.id.every_week
+                    PeriodUnit.MONTH -> R.id.every_month
+                })
             }
         }
     }
