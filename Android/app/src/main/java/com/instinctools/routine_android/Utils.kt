@@ -75,5 +75,5 @@ fun calculateTimestamp(period: Int, periodUnit: PeriodUnit): Date {
         PeriodUnit.WEEK -> dateTime.plusMonths(period)
         PeriodUnit.MONTH -> dateTime.plusYears(period)
     }
-    return timestamp.toDate()
+    return timestamp.withTimeAtStartOfDay().toDate()
 }
