@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.instinctools.routine_android.databinding.FragmentWheelPickerBinding
 
 class WheelPickerFragment : DialogFragment() {
@@ -19,8 +20,25 @@ class WheelPickerFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val period = arguments?.getInt(ARG_PERIOD)
+
         binding.close.setOnClickListener {
             dismiss()
+        }
+
+
+        binding.wheelPicker.data = IntRange(0, 100).toList()
+        period?.let {
+            binding.wheelPicker.post {
+                binding.wheelPicker.setSelectedItemPosition(period, false)
+            }
+        }
+        binding.wheelPicker.setOnItemSelectedListener { _, data, _ ->
+            if(isAdded) {
+                setFragmentResult(ARG_PERIOD, Bundle().apply {
+                    putInt(ARG_PERIOD, data as Int)
+                })
+            }
         }
     }
 

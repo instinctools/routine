@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.instinctools.routine_android.data.db.database
@@ -15,6 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
+const val ARG_PERIOD = "ARG_PERIOD"
+
 open class DetailsActivity : AppCompatActivity() {
 
     private val binding: ActivityDetailsBinding by viewBinding(ActivityDetailsBinding::inflate)
@@ -24,6 +27,9 @@ open class DetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        if (savedInstanceState != null){
+            period = savedInstanceState.getInt(ARG_PERIOD)
+        }
 
         val id: String? = intent.getStringExtra("EXTRA_ID")
         lifecycle.coroutineScope.launch {
@@ -62,8 +68,12 @@ open class DetailsActivity : AppCompatActivity() {
                 }
 
             binding.everyDay.setOnClickListener {
-                if (supportFragmentManager.findFragmentByTag(WheelPickerFragment::class.java.simpleName) == null){
-                    WheelPickerFragment().show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
+                if (supportFragmentManager.findFragmentByTag(WheelPickerFragment::class.java.simpleName) == null) {
+                    WheelPickerFragment().apply {
+                        arguments = Bundle().apply {
+                            putInt(ARG_PERIOD, period)
+                        }
+                    }.show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
                 }
             }
 
@@ -90,6 +100,16 @@ open class DetailsActivity : AppCompatActivity() {
                     PeriodUnit.MONTH -> R.id.every_month
                 })
             }
+            supportFragmentManager.setFragmentResultListener(ARG_PERIOD,
+                    this@DetailsActivity,
+                    FragmentResultListener { requestKey, result ->
+                        period = result.getInt(ARG_PERIOD)
+                    })
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(ARG_PERIOD, period)
     }
 }
