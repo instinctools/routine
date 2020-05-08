@@ -101,6 +101,16 @@ class MainActivity : AppCompatActivity() {
 
         var todo: Todo? = null
 
+        init {
+            binding.root.setOnClickListener {
+                todo?.let {
+                    val intent = Intent(binding.root.context, DetailsActivity::class.java)
+                    intent.putExtra("EXTRA_ID", it.id)
+                    binding.root.context.startActivity(intent)
+                }
+            }
+        }
+
         fun bind(todo: Todo) {
             this.todo = todo
             binding.title.text = todo.title
@@ -142,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return if (viewHolder is EmptyViewHolder){
+            return if (viewHolder is EmptyViewHolder) {
                 makeMovementFlags(0, 0)
             } else {
                 super.getMovementFlags(recyclerView, viewHolder)
