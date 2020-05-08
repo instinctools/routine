@@ -141,6 +141,14 @@ class MainActivity : AppCompatActivity() {
             return false
         }
 
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+            return if (viewHolder is EmptyViewHolder){
+                makeMovementFlags(0, 0)
+            } else {
+                super.getMovementFlags(recyclerView, viewHolder)
+            }
+        }
+
         override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
             if ((isLeftActivated || isRightActivated) && viewHolder is TodosViewHolder) {
@@ -158,7 +166,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     } else if (isRightActivated) {
                         AlertDialog.Builder(this@MainActivity)
-                            .setTitle("Are you sure want to delete this task?")
+                            .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
                                 lifecycle.coroutineScope.launch(Dispatchers.IO) {
                                     database().todos()
