@@ -6,8 +6,28 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import SwiftUI
 import UIKit
+import SwiftUI
+
+extension UITableView {
+    var swipeCells: [TaskTableViewCell] {
+        return visibleCells.compactMap({ $0 as? TaskTableViewCell })
+    }
+
+    func hideSwipeCell() {
+        swipeCells.forEach { $0.hideSwipe() }
+    }
+}
+
+extension UITableViewCell {
+    var tableView: UITableView? {
+        var view = superview
+        while let v = view, v.isKind(of: UITableView.self) == false {
+            view = v.superview
+        }
+        return view as? UITableView
+    }
+}
 
 class HostingTableViewCell<Content: View>: UITableViewCell {
 
@@ -41,6 +61,9 @@ class HostingTableViewCell<Content: View>: UITableViewCell {
 }
 
 final class TaskTableViewCell: HostingTableViewCell<TaskRowView> {
+    
+    private var taskView: TaskRowView?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -48,5 +71,43 @@ final class TaskTableViewCell: HostingTableViewCell<TaskRowView> {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        taskView = nil
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+//        if !editing {
+//            taskView?.hideSwipe()
+//        }
+    }
+    
+    func setup(from parent: UIViewController,
+               viewModel: TaskViewModel,
+               onReset: @escaping EmptyAction,
+               onDelete: @escaping EmptyAction) {
+        
+        let view = TaskRowView(
+            viewModel: viewModel,
+            onLeftAction: onReset,
+            onRightAction: onDelete,
+            onStartAction: {
+                self.tableView?.hideSwipeCell()
+            }
+        )
+        host(view, parent: parent)
+    }
+    
+    override func host(_ view: TaskRowView, parent: UIViewController) {
+        super.host(view, parent: parent)
+        taskView = view
+    }
+    
+    func hideSwipe() {
+        taskView?.hideSwipe()
     }
 }

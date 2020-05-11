@@ -11,12 +11,6 @@ import SwiftUI
 import SnapKit
 import Combine
 
-final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> where SectionIdentifierType : Hashable, ItemIdentifierType : Hashable {
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-}
-
 final class TaskListViewController: UITableViewController {
     
     private lazy var viewModel = TaskListViewModel()
@@ -111,7 +105,7 @@ private extension TaskListViewController {
     }
     
     func makeDataSource() -> UITableViewDiffableDataSource<Int, TaskViewModel> {
-        let dataSource: UITableViewDiffableDataSource<Int, TaskViewModel> = TableViewDiffableDataSource(
+        let dataSource: UITableViewDiffableDataSource<Int, TaskViewModel> = UITableViewDiffableDataSource(
             tableView: tableView,
             cellProvider: { tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
@@ -119,7 +113,19 @@ private extension TaskListViewController {
                     for: indexPath
                 ) as! TaskTableViewCell
                 let rowViewModel = self.viewModel.getTask(at: indexPath)
-                cell.host(TaskRowView(viewModel: rowViewModel), parent: self)
+                
+                cell.setup(from: self, viewModel: rowViewModel, onReset: {
+                    self.resetTableViewItem(atIndexPath: indexPath)
+                }, onDelete: {
+//                    let message = "Are you sure you want to delete the task?"
+                    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                    alert.addAction(.init(title: "Cancel", style: .cancel))
+                    alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                        self.deleteTableViewItem(atIndexPath: indexPath)
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                })
+                
                 return cell
             }
         )
@@ -152,43 +158,5 @@ extension TaskListViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let task = viewModel.getTask(at: indexPath).task
         showTaskView(task: task)
-    }
-    
-    override func tableView(_ tableView: UITableView,
-                            leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.resetTableViewItem(atIndexPath: indexPath)
-            completion(true)
-        }
-        
-        action.backgroundColor = .systemBackground
-        action.image = UIImage(named: "Reset")
-
-        return UISwipeActionsConfiguration(actions: [action])
-    }
-    
-    override func tableView(_ tableView: UITableView,
-                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-//            let message = "Are you sure you want to delete the task?"
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(.init(title: "Cancel", style: .cancel, handler: { _ in
-                completion(true)
-            }))
-            alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
-                self.deleteTableViewItem(atIndexPath: indexPath)
-                completion(true)
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
-        }
-        
-        action.backgroundColor = .systemBackground
-        action.image = UIImage(named: "Delete")
-
-        return UISwipeActionsConfiguration(actions: [action])
     }
 }

@@ -76,7 +76,7 @@ final class CoreDataManager {
     }()
      
     private init() {
-        deleteHistoryIfNeeded()
+//        deleteHistoryIfNeeded()
     }
 
     @objc private func storeRemoteChange(_ notification: Notification) {

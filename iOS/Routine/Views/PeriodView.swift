@@ -15,8 +15,12 @@ struct PeriodViewModel {
     let period: Period
     var periodCount: Int
     
-    var title: String {
+    var fullTitle: String {
         return period.title(periodCount: periodCount)
+    }
+    
+    var title: String {
+        return period.title(periodCount: 0)
     }
 }
 
@@ -142,11 +146,12 @@ final class PeriodView: UIView {
     
     func deselect() {
         setSelected(false)
+        titleLabel.text = viewModel.title
     }
     
     func setup(with viewModel: PeriodViewModel, isSelected: Bool) {
         self.viewModel = viewModel
-        titleLabel.text = viewModel.title
+        titleLabel.text = viewModel.fullTitle
         periodCountTextField.text = String(viewModel.periodCount)
         
         setSelected(isSelected, firstResponder: false)
@@ -169,7 +174,7 @@ extension PeriodView: UITextFieldDelegate {
         if newText.count <= textLimit {
             didSelect?(viewModel.period, newText)
             viewModel.periodCount = Int(newText) ?? 1
-            titleLabel.text = viewModel.title
+            titleLabel.text = viewModel.fullTitle
             return true
         }
         return false
