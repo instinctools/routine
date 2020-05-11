@@ -20,21 +20,19 @@ class WheelPickerFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val period = arguments?.getInt(ARG_PERIOD)
+        val period = arguments?.getInt(ARG_PERIOD, 1)
 
         binding.close.setOnClickListener {
             dismiss()
         }
 
 
-        binding.wheelPicker.data = IntRange(0, 100).toList()
-        period?.let {
-            binding.wheelPicker.post {
-                binding.wheelPicker.setSelectedItemPosition(period, false)
-            }
+        binding.wheelPicker.data = IntRange(1, 100).toList()
+        binding.wheelPicker.post {
+            binding.wheelPicker.setSelectedItemPosition((period ?: 1) - 1, false)
         }
         binding.wheelPicker.setOnItemSelectedListener { _, data, _ ->
-            if(isAdded) {
+            if (isAdded) {
                 setFragmentResult(ARG_PERIOD, Bundle().apply {
                     putInt(ARG_PERIOD, data as Int)
                 })

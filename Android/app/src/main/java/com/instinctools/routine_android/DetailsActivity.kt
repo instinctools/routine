@@ -97,6 +97,12 @@ open class DetailsActivity : AppCompatActivity() {
                 }
             })
 
+            binding.radio.setOnCheckedChangeListener { group, checkedId ->
+                if (checkedId != R.id.every_day){
+                    period = 1
+                }
+            }
+
             if (todo != null) {
                 binding.text.setText(todo.title)
                 period = todo.period
