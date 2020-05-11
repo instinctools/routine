@@ -28,6 +28,7 @@
     </style>
 
     <color name="period_tint">#1f000000</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 
     <style name="SlideAnimation">
         <item name="android:windowEnterAnimation">@anim/enter</item>
