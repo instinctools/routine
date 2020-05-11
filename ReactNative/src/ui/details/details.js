@@ -65,6 +65,7 @@ class DetailsScreen extends React.Component {
                 <View style={todoDetailsStyle.root}>
                     <TextInput
                         style={todoDetailsStyle.title}
+                        selectionColor="#03dac6"
                         multiline={true}
                         placeholder="Type recurring task name..."
                         onChangeText={title => this.props.editTodoTitle(title)}
