@@ -1,8 +1,10 @@
 package com.instinctools.routine_android
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.coroutineScope
@@ -85,9 +87,12 @@ open class DetailsActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    binding.toolbar.menu.findItem(R.id.done)
-                        .actionView
-                        .isEnabled = s.isNotEmpty()
+                    binding.toolbar.menu.findItem(R.id.done).actionView.run {
+                        isEnabled = s.isNotEmpty()
+                        if (this is TextView) {
+                            typeface = if (s.isNotEmpty()) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+                        }
+                    }
                 }
             })
 
