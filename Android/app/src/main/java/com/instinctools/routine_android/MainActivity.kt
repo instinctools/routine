@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        binding.content.adapter = adapter
         ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
         val animator = binding.content.itemAnimator
         if (animator is SimpleItemAnimator) {
@@ -49,6 +48,9 @@ class MainActivity : AppCompatActivity() {
             .map { Todo.from(it) }
             .observe(this, Observer {
                 adapter.submitList(it)
+                if (binding.content.adapter == null) {
+                    binding.content.adapter = adapter
+                }
             })
     }
 
