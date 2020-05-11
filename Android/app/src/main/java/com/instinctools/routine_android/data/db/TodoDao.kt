@@ -1,16 +1,13 @@
 package com.instinctools.routine_android.data.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.instinctools.routine_android.data.db.entity.TodoEntity
 
 @Dao
 interface TodoDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTodo(todoEntity: TodoEntity)
 
     @Update

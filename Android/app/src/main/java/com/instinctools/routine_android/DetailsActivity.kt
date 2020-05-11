@@ -59,10 +59,11 @@ open class DetailsActivity : AppCompatActivity() {
                                 }
                             }
                         withContext(Dispatchers.IO) {
-                            val todoEntity = TodoEntity(UUID.randomUUID().toString(),
+                            val todoEntity = TodoEntity(id ?: UUID.randomUUID().toString(),
                                     binding.text.text.toString(),
                                     period, periodUnit,
                                     calculateTimestamp(period, periodUnit))
+
                             database().todos().addTodo(todoEntity)
                         }
                         onBackPressed()
