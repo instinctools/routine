@@ -13,10 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.map
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.instinctools.routine_android.data.db.database
 import com.instinctools.routine_android.data.model.Todo
 import com.instinctools.routine_android.databinding.ActivityMainBinding
@@ -41,6 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.content.adapter = adapter
         ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
+        val animator = binding.content.itemAnimator
+        if (animator is SimpleItemAnimator) {
+            animator.supportsChangeAnimations = false
+        }
 
         database().todos()
             .getTodos()
@@ -171,7 +172,7 @@ class MainActivity : AppCompatActivity() {
 
                             database().todos()
                                 .updateTodo(
-                                        todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
+                                    todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
                                 )
                         }
                     } else if (isRightActivated) {
@@ -208,8 +209,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onChildDraw(
-                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+            c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+            dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
         ) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
