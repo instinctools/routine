@@ -10,17 +10,17 @@ import UIKit
 import SwiftUI
 import SnapKit
 import Combine
-
-final class TableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType>: UITableViewDiffableDataSource<SectionIdentifierType, ItemIdentifierType> where SectionIdentifierType : Hashable, ItemIdentifierType : Hashable {
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-}
+import SwipeCellKit
 
 final class TaskListViewController: UITableViewController {
     
     private lazy var viewModel = TaskListViewModel()
     private lazy var dataSource = makeDataSource()
+    
+    private let inactiveResetImage = UIImage(named: "reset_inactive")
+    private let activeResetImage = UIImage(named: "reset_active")
+    private let inactiveDeleteImage = UIImage(named: "delete_inactive")
+    private let activeDeleteImage = UIImage(named: "delete_active")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +111,7 @@ private extension TaskListViewController {
     }
     
     func makeDataSource() -> UITableViewDiffableDataSource<Int, TaskViewModel> {
-        let dataSource: UITableViewDiffableDataSource<Int, TaskViewModel> = TableViewDiffableDataSource(
+        let dataSource: UITableViewDiffableDataSource<Int, TaskViewModel> = UITableViewDiffableDataSource(
             tableView: tableView,
             cellProvider: { tableView, indexPath, task in
                 let cell = tableView.dequeueReusableCell(
@@ -120,6 +120,7 @@ private extension TaskListViewController {
                 ) as! TaskTableViewCell
                 let rowViewModel = self.viewModel.getTask(at: indexPath)
                 cell.host(TaskRowView(viewModel: rowViewModel), parent: self)
+                cell.delegate = self
                 return cell
             }
         )
@@ -153,42 +154,75 @@ extension TaskListViewController {
         let task = viewModel.getTask(at: indexPath).task
         showTaskView(task: task)
     }
-    
-    override func tableView(_ tableView: UITableView,
-                            leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-            self.resetTableViewItem(atIndexPath: indexPath)
-            completion(true)
-        }
-        
-        action.backgroundColor = .systemBackground
-        action.image = UIImage(named: "Reset")
+}
 
-        return UISwipeActionsConfiguration(actions: [action])
+extension TaskListViewController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView,
+                   editActionsForRowAt indexPath: IndexPath,
+                   for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        switch orientation {
+        case .left:
+            let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
+            
+            }
+
+            reseteAction.hidesWhenSelected = false
+            reseteAction.backgroundColor = .systemBackground
+            reseteAction.image = inactiveResetImage
+            reseteAction.highlightedBackgroundColor = .systemBackground
+            
+            return [reseteAction]
+        case .right:
+            let deleteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
+//                let message = "Are you sure you want to delete the task?"
+                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+                    
+                alert.addAction(.init(title: "Cancel", style: .cancel))
+                alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                    self.deleteTableViewItem(atIndexPath: indexPath)
+                }))
+                    
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            deleteAction.hidesWhenSelected = false
+            deleteAction.backgroundColor = .systemBackground
+            deleteAction.image = inactiveDeleteImage
+            deleteAction.highlightedBackgroundColor = .systemBackground
+            
+            return [deleteAction]
+        }
     }
     
-    override func tableView(_ tableView: UITableView,
-                            trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let action = UIContextualAction(style: .normal, title: "") {  (_, _, completion) in
-//            let message = "Are you sure you want to delete the task?"
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            
-            alert.addAction(.init(title: "Cancel", style: .cancel, handler: { _ in
-                completion(true)
-            }))
-            alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
-                self.deleteTableViewItem(atIndexPath: indexPath)
-                completion(true)
-            }))
-            
-            self.present(alert, animated: true, completion: nil)
-        }
-        
-        action.backgroundColor = .systemBackground
-        action.image = UIImage(named: "Delete")
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .selection
+        options.transitionStyle = .border
+        options.expansionDelegate = self
+        options.backgroundColor = .systemBackground
+        return options
+    }
+}
 
-        return UISwipeActionsConfiguration(actions: [action])
+extension TaskListViewController: SwipeExpanding {
+    func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
+        return .default
+    }
+    
+    func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
+        if expanding {
+            if button.currentImage == inactiveResetImage {
+                button.setImage(activeResetImage, for: .normal)
+            } else if button.currentImage == inactiveDeleteImage {
+                button.setImage(activeDeleteImage, for: .normal)
+            }
+        } else {
+            if button.currentImage == activeResetImage {
+                button.setImage(inactiveResetImage, for: .normal)
+            } else if button.currentImage == activeDeleteImage {
+                button.setImage(inactiveDeleteImage, for: .normal)
+            }
+        }
     }
 }

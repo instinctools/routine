@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = D7075A31246AB41000B30C20 /* SwipeCellKit */; };
 		D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04B2462FAA00091C56C /* CoreDataManager.swift */; };
 		D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* TaskProvider.swift */; };
 		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
@@ -80,6 +81,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */,
+				D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */,
 				DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +273,7 @@
 			name = Routine;
 			packageProductDependencies = (
 				DD0B150B242B51A700A8ED3C /* SnapKit */,
+				D7075A31246AB41000B30C20 /* SwipeCellKit */,
 			);
 			productName = Routine;
 			productReference = DDF395EF2428BE25003456DA /* Routine.app */;
@@ -302,6 +305,7 @@
 			mainGroup = DDF395E62428BE25003456DA;
 			packageReferences = (
 				DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
 			);
 			productRefGroup = DDF395F02428BE25003456DA /* Products */;
 			projectDirPath = "";
@@ -560,6 +564,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwipeCellKit/SwipeCellKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
 		DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -571,6 +583,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D7075A31246AB41000B30C20 /* SwipeCellKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
+			productName = SwipeCellKit;
+		};
 		DD0B150B242B51A700A8ED3C /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */;

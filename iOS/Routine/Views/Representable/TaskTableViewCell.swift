@@ -6,10 +6,11 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import SwiftUI
 import UIKit
+import SwiftUI
+import SwipeCellKit
 
-class HostingTableViewCell<Content: View>: UITableViewCell {
+class HostingTableViewCell<Content: View>: SwipeTableViewCell {
 
     private weak var controller: UIHostingController<Content>?
     
