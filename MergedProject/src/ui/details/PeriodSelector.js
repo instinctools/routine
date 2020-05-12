@@ -30,11 +30,7 @@ class PeriodSelector extends React.Component {
                         onPress={() => this.props.changePeriodSelector(false)}>
                         <Text>Close</Text>
                     </TouchableRipple>
-                    <Picker
-                        style={todoDetailsStyle.periodSelectorPicker}
-                        selectedValue={this.props.period}
-                        pickerData={pickerData()}
-                        onValueChange={value => this.props.editTodoPeriod(value)}/>
+                   {/*REPLACE https://github.com/kalontech/ReactNativeWheelPicker*/}
                 </View>
             </View>
         </Modal>
