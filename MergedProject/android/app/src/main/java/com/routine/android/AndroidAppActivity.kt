@@ -23,7 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-class MainActivity : AppCompatActivity() {
+class AndroidAppActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
     private var adapter = TodosAdapter()
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                         }
                     } else if (isRightActivated) {
-                        AlertDialog.Builder(this@MainActivity)
+                        AlertDialog.Builder(this@AndroidAppActivity)
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
                                 lifecycle.coroutineScope.launch(Dispatchers.IO) {
