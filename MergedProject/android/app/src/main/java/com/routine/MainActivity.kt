@@ -21,5 +21,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnReactApp.setOnClickListener {
             startActivity(Intent(this, ReactAppActivity::class.java))
         }
+
+        binding.btnFlutterApp.setOnClickListener {
+            startActivity(Intent(this, FlutterAppActivity::class.java))
+        }
     }
 }

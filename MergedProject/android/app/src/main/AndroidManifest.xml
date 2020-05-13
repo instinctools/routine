@@ -32,7 +32,17 @@
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".FlutterAppActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize"/>
+
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
     </application>
 
 </manifest>
