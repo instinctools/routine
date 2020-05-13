@@ -4,11 +4,12 @@ import React from "react";
 import {connect} from "react-redux";
 import ActionEditTodo from "../../action/EditTodoAction";
 import {todoDetailsStyle} from "../../styles/Styles";
+import {WheelPicker} from "react-native-wheel-picker-android";
 
 const pickerData = () => {
     const array = [];
     for (let i = 1; i <= 100; i++) {
-        array.push(i);
+        array.push(i.toString());
     }
     return array;
 };
@@ -19,7 +20,8 @@ class PeriodSelector extends React.Component {
         console.log(`PeriodSelector render props: ${JSON.stringify(this.props)}`);
         return <Modal animationType="slide"
                       visible={this.props.isVisible}
-                      transparent={true}>
+                      transparent={true}
+                      onRequestClose = {() => this.props.changePeriodSelector(false)}>
             <View
                 style={todoDetailsStyle.periodSelectorContainer}>
                 <View style={todoDetailsStyle.periodSelectorCancelWrapper}>
@@ -29,7 +31,15 @@ class PeriodSelector extends React.Component {
                         onPress={() => this.props.changePeriodSelector(false)}>
                         <Text>Close</Text>
                     </TouchableRipple>
-                   {/*REPLACE https://github.com/kalontech/ReactNativeWheelPicker*/}
+                    <WheelPicker style={{width: `auto`, height: 196, marginTop: 24}}
+                                 selectedItem={this.props.period - 1}
+                                 indicatorColor={`#8B8B8B`}
+                                 itemTextSize={24}
+                                 selectedItemTextSize={24}
+                                 selectedItemTextColor={`#8B8B8B`}
+                                 data={pickerData()}
+                                 onItemSelected={value => this.props.editTodoPeriod(value + 1)}
+                    />
                 </View>
             </View>
         </Modal>
