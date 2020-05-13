@@ -1,5 +1,4 @@
 import {Modal, Text, View} from 'react-native';
-import {Picker} from "react-native-wheel-datepicker";
 import {TouchableRipple} from "react-native-paper";
 import React from "react";
 import {connect} from "react-redux";
