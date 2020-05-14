@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.data
 
 import com.instinctools.routine_kmp.TodoDatabase
+import com.instinctools.routine_kmp.model.PeriodType
 import com.instinctools.routine_kmp.model.Todo
 
 class SqlDelightTodoStore(
@@ -8,14 +9,16 @@ class SqlDelightTodoStore(
 ) : TodoStore {
 
     override fun getTodos(): List<Todo> {
-        TODO("Not yet implemented")
+        return database.todoQueries.selectAll { id, title, period_unit, period_value, next_timestamp ->
+            Todo(id, title, PeriodType.DAILY, period_value, next_timestamp)
+        }.executeAsList()
     }
 
     override fun insert(todo: Todo) {
-        TODO("Not yet implemented")
+        database.todoQueries.insertTodo(todo.title, todo.periodType.id, todo.periodValue, todo.nextTimestamp)
     }
 
     override fun update(todo: Todo) {
-        TODO("Not yet implemented")
+        database.todoQueries.updateTodoById(todo.title, todo.periodType.id, todo.periodValue, todo.nextTimestamp, todo.id)
     }
 }
