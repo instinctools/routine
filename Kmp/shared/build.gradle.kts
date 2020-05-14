@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    id("com.squareup.sqldelight")
 }
 
 kotlin {
@@ -28,6 +29,12 @@ kotlin {
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    }
+}
+
+sqldelight {
+    database("TodoDatabase") {
+        packageName = "com.instinctools.routine_kmp"
     }
 }
 
