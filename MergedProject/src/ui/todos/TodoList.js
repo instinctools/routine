@@ -8,6 +8,7 @@ import {TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
 import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../../utils";
 import moment from "moment";
+import analytics from "@react-native-firebase/analytics";
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -31,7 +32,10 @@ class TodoList extends React.PureComponent {
 
     componentDidMount() {
         this.props.navigation.setParams({
-            navigateToDetails: () => (this.props.navigation.navigate(`Details`))
+            navigateToDetails: () => {
+                analytics().logEvent('Action', {action_type: `Add todo (React)`});
+                this.props.navigation.navigate(`Details`)
+            }
         });
     }
 
