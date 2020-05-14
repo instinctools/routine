@@ -2,6 +2,16 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    id("com.squareup.sqldelight")
+    id("com.android.library")
+}
+
+android {
+    compileSdkVersion(29)
+    defaultConfig {
+        minSdkVersion(21)
+        targetSdkVersion(29)
+    }
 }
 
 kotlin {
@@ -20,14 +30,26 @@ kotlin {
         }
     }
 
-    jvm("android")
+    android()
 
     sourceSets["commonMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
+        implementation("com.squareup.sqldelight:runtime:1.3.0")
     }
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
+        implementation("com.squareup.sqldelight:android-driver:1.3.0")
+    }
+
+    sourceSets["iosMain"].dependencies {
+        implementation("com.squareup.sqldelight:native-driver:1.3.0")
+    }
+}
+
+sqldelight {
+    database("TodoDatabase") {
+        packageName = "com.instinctools.routine_kmp"
     }
 }
 
