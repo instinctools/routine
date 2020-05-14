@@ -12,6 +12,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -232,6 +233,8 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.5"
 
     implementation 'joda-time:joda-time:2.10.6'
+
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.4.1'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
