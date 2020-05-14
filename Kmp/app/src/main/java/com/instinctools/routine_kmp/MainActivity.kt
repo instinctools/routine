@@ -1,13 +1,16 @@
 package com.instinctools.routine_kmp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.instinctools.routine_kmp.databinding.MainBinding
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("asd", "hello")
+        val binding = MainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.helloText.text = friendlyMessage()
     }
 }
