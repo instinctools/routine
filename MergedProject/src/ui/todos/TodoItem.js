@@ -33,7 +33,7 @@ class TodoItem extends React.Component {
                 leftContent={createSwipeableContent(`Reset`, `flex-end`, this.props.isMenuActivated)}
                 rightContent={createSwipeableContent(`Delete`, `flex-start`, this.props.isMenuActivated)}
                 onLeftActionRelease={() => {
-                    analytics().logEvent('Action', {action_type: `Reset todo (React)`});
+                    analytics().logEvent('Reset todo (React)', {});
                     this.props.resetTodo(item.id)
                 }}
                 onRightActionRelease={() =>
@@ -48,7 +48,7 @@ class TodoItem extends React.Component {
                             {
                                 text: 'Delete',
                                 onPress: () => {
-                                    analytics().logEvent('Action', {action_type: `Delete todo (React)`});
+                                    analytics().logEvent('Delete todo (React)', {});
                                     this.props.deleteTodo(item.id)
                                 }
                             },
@@ -59,7 +59,7 @@ class TodoItem extends React.Component {
                     style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}
                     borderless={true}
                     onPress={() => {
-                        analytics().logEvent('Action', {action_type: `Edit todo (React)`});
+                        analytics().logEvent('Edit todo (React)', {});
                         this.props.selectTodo(item.id, item.title, item.period, item.periodUnit);
                         this.props.navigation.navigate("Details")
                     }}>

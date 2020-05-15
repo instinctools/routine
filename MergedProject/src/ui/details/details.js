@@ -40,7 +40,7 @@ class DetailsScreen extends React.Component {
     componentDidMount() {
         this.props.navigation.setParams({
             done: () => {
-                analytics().logEvent('Action', {action_type: `Save todo (React)`});
+                analytics().logEvent('Save todo (React)', {});
                 this.props.addTodo();
                 this.props.navigation.pop();
             }

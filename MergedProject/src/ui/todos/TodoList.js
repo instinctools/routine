@@ -33,7 +33,7 @@ class TodoList extends React.PureComponent {
     componentDidMount() {
         this.props.navigation.setParams({
             navigateToDetails: () => {
-                analytics().logEvent('Action', {action_type: `Add todo (React)`});
+                analytics().logEvent('Add todo (React)', {});
                 this.props.navigation.navigate(`Details`)
             }
         });
