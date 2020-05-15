@@ -36,7 +36,7 @@ const createButton = (props, period) => {
         borderless={true}
         onPress={() => {
             if (period === Period.DAY){
-                analytics().logEvent('Period todo (React)', {});
+                analytics().logEvent('period_todo_react', {});
             }
             props.editTodoPeriodUnit(period);
         }}>
