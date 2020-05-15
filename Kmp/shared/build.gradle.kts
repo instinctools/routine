@@ -35,15 +35,19 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
         implementation("com.squareup.sqldelight:runtime:1.3.0")
+        implementation("com.squareup.sqldelight:coroutines-extensions:1.3.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.6")
     }
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("com.squareup.sqldelight:android-driver:1.3.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6")
     }
 
     sourceSets["iosMain"].dependencies {
         implementation("com.squareup.sqldelight:native-driver:1.3.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.6")
     }
 }
 
@@ -72,10 +76,12 @@ val packForXcode by tasks.creating(Sync::class) {
     /// generate a helpful ./gradlew wrapper with embedded Java path
     doLast {
         val gradlew = File(targetDir, "gradlew")
-        gradlew.writeText("#!/bin/bash\n"
-                + "export 'JAVA_HOME=${System.getProperty("java.home")}'\n"
-                + "cd '${rootProject.rootDir}'\n"
-                + "./gradlew \$@\n")
+        gradlew.writeText(
+            "#!/bin/bash\n"
+                    + "export 'JAVA_HOME=${System.getProperty("java.home")}'\n"
+                    + "cd '${rootProject.rootDir}'\n"
+                    + "./gradlew \$@\n"
+        )
         gradlew.setExecutable(true)
     }
 }

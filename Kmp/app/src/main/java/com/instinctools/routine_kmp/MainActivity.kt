@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
 import com.instinctools.routine_kmp.data.SqlDelightTodoStore
 import com.instinctools.routine_kmp.databinding.MainBinding
-import com.instinctools.routine_kmp.model.PeriodType
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.ui.TodoListPresenter
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var presenter: TodoListPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,12 +18,17 @@ class MainActivity : AppCompatActivity() {
 
         val databaseProvider = AndroidDatabaseProvider(applicationContext)
         val todoStore = SqlDelightTodoStore(databaseProvider.database())
+        presenter = TodoListPresenter(
+            uiUpdater = { todos ->
+                binding.helloText.text = "Database have ${todos.count()} items"
+            },
+            todoStore = todoStore
+        )
+        presenter.start()
+    }
 
-        for (i in 0..10) {
-            todoStore.insert(Todo(0, "Todo #$i", PeriodType.DAILY, 1, 0))
-        }
-
-        val todos = todoStore.getTodos()
-        binding.helloText.text = todos.count().toString()
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.stop()
     }
 }
