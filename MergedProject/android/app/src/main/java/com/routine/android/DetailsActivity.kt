@@ -49,7 +49,7 @@ open class DetailsActivity : AppCompatActivity() {
 
             binding.toolbar.menu.findItem(R.id.done)
                 .actionView.setOnClickListener {
-                    Analitics.action("Save todo")
+                    Analytics.action("Save todo (Android)")
                     lifecycleScope.launch {
                         val periodUnit = binding.radio.checkedRadioButtonId
                             .let {
@@ -73,7 +73,7 @@ open class DetailsActivity : AppCompatActivity() {
                 }
 
             binding.everyDay.setOnClickListener {
-                Analitics.action("Period picker")
+                Analytics.action("Period picker (Android)")
                 if (supportFragmentManager.findFragmentByTag(WheelPickerFragment::class.java.simpleName) == null) {
                     WheelPickerFragment().apply {
                         arguments = Bundle().apply {

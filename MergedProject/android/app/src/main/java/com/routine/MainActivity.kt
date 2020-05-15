@@ -3,7 +3,7 @@ package com.routine
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.routine.android.Analitics
+import com.routine.android.Analytics
 import com.routine.android.AndroidAppActivity
 import com.routine.android.viewBinding
 import com.routine.databinding.ActivityHomeBinding
@@ -16,17 +16,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnAndroidApp.setOnClickListener {
-            Analitics.action("Open android app")
+            Analytics.action("Open android app")
             startActivity(Intent(this, AndroidAppActivity::class.java))
         }
 
         binding.btnReactApp.setOnClickListener {
-            Analitics.action("Open react app")
+            Analytics.action("Open react app")
             startActivity(Intent(this, ReactAppActivity::class.java))
         }
 
         binding.btnFlutterApp.setOnClickListener {
-            Analitics.action("Open flutter app")
+            Analytics.action("Open flutter app")
             startActivity(Intent(this, FlutterAppActivity::class.java))
         }
     }
