@@ -1,5 +1,0 @@
-rootProject.name='KMP'
-include ':app'
-include ':shared'
-
-enableFeaturePreview('GRADLE_METADATA')
