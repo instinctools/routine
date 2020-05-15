@@ -3,6 +3,8 @@ import RoutineSharedKmp
 
 class ViewController: UIViewController {
 
+    var presenter: TodoListPresenter!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -14,14 +16,14 @@ class ViewController: UIViewController {
 
         let databaseProvider = IosDatabaseProvider()
         let todoStore = SqlDelightTodoStore(database: databaseProvider.database())
-        
-        for item in 0...10 {
-            todoStore.insert(todo: Todo(id: 0, title: "Todo \(item)", periodType: PeriodType.daily, periodValue: 1, nextTimestamp: 0))
-        }
-        
-        let todos = todoStore.getTodos()
-        
-        label.text = String(todos.count)
+        presenter = TodoListPresenter(uiUpdater: { items in
+            label.text = "Database have \(items.count) items"
+        }, todoStore: todoStore)
+        presenter.start()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        presenter.stop()
     }
 }
 
