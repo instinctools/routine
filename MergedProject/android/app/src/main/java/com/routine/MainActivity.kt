@@ -16,17 +16,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnAndroidApp.setOnClickListener {
-            Analytics.action("Open android app")
+            Analytics.action("open_android_app")
             startActivity(Intent(this, AndroidAppActivity::class.java))
         }
 
         binding.btnReactApp.setOnClickListener {
-            Analytics.action("Open react app")
+            Analytics.action("open_react_app")
             startActivity(Intent(this, ReactAppActivity::class.java))
         }
 
         binding.btnFlutterApp.setOnClickListener {
-            Analytics.action("Open flutter app")
+            Analytics.action("open_flutter_app")
             startActivity(Intent(this, FlutterAppActivity::class.java))
         }
     }

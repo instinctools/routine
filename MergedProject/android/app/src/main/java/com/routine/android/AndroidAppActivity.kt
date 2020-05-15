@@ -33,7 +33,7 @@ class AndroidAppActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.toolbar.setOnMenuItemClickListener {
-            Analytics.action("Add todo (Android)")
+            Analytics.action("add_todo_android")
             startActivity(Intent(this, DetailsActivity::class.java))
             true
         }
@@ -111,7 +111,7 @@ class AndroidAppActivity : AppCompatActivity() {
                 todo?.let {
                     val intent = Intent(binding.root.context, DetailsActivity::class.java)
                     intent.putExtra("EXTRA_ID", it.id)
-                    Analytics.action("Edit todo (Android)")
+                    Analytics.action("edit_todo_android)")
                     binding.root.context.startActivity(intent)
                 }
             }
@@ -171,7 +171,7 @@ class AndroidAppActivity : AppCompatActivity() {
                 val todo = viewHolder.todo
                 if (todo != null) {
                     if (isLeftActivated) {
-                        Analytics.action("Reset todo (Android)")
+                        Analytics.action("reset_todo_android")
                         lifecycle.coroutineScope.launch(Dispatchers.IO) {
                             val todoEntity = database().todos()
                                 .getTodo(todo.id)
@@ -185,7 +185,7 @@ class AndroidAppActivity : AppCompatActivity() {
                         AlertDialog.Builder(this@AndroidAppActivity)
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
-                                Analytics.action("Delete todo (Android)")
+                                Analytics.action("delete_todo_android")
                                 lifecycle.coroutineScope.launch(Dispatchers.IO) {
                                     database().todos()
                                         .deleteTodo(todo.id)
