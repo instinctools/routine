@@ -32,22 +32,23 @@ kotlin {
 
     android()
 
+    val coroutinesVersion = "1.3.5-native-mt"
     sourceSets["commonMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-common")
         implementation("com.squareup.sqldelight:runtime:1.3.0")
         implementation("com.squareup.sqldelight:coroutines-extensions:1.3.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:1.3.6")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion")
     }
 
     sourceSets["androidMain"].dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib")
         implementation("com.squareup.sqldelight:android-driver:1.3.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     }
 
     sourceSets["iosMain"].dependencies {
         implementation("com.squareup.sqldelight:native-driver:1.3.0")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:1.3.6")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion")
     }
 }
 
