@@ -5,8 +5,10 @@ object Versions {
 
     const val kotlin = "1.3.72"
     const val buildToolsVersion = "29.0.0"
+
     const val sqlDelight = "1.3.0"
     const val coroutines = "1.3.5-native-mt"
+    const val stately = "1.0.2"
 }
 
 object Deps {
@@ -25,5 +27,10 @@ object Deps {
         const val driverIos = "com.squareup.sqldelight:native-driver:${Versions.sqlDelight}"
         const val driverAndroid = "com.squareup.sqldelight:android-driver:${Versions.sqlDelight}"
         const val coroutinesKtx = "com.squareup.sqldelight:coroutines-extensions:${Versions.sqlDelight}"
+    }
+
+    object Stately {
+        const val common = "co.touchlab:stately-common:${Versions.stately}"
+        const val concurrency = "co.touchlab:stately-concurrency:${Versions.stately}"
     }
 }

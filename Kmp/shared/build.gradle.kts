@@ -47,6 +47,8 @@ kotlin {
         implementation(Deps.SqlDelight.runtime)
         implementation(Deps.SqlDelight.coroutinesKtx)
         implementation(Deps.Coroutines.common)
+        implementation(Deps.Stately.concurrency)
+        implementation(Deps.Stately.common)
     }
 
     sourceSets["androidMain"].dependencies {
