@@ -7,21 +7,31 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
+import DifferenceKit
 
-struct TaskViewModel {
+final class TaskViewModel {
+    
+    let color: BehaviorRelay<UIColor>
+    let title = BehaviorRelay<String>(value: "")
+    let period = BehaviorRelay<String>(value: "")
+    let timeLeft = BehaviorRelay<String>(value: "")
     
     let task: Task
-    var color: UIColor
     
-    var title: String {
-        return task.title
+    private let disposeBag = DisposeBag()
+
+    init(task: Task, color: UIColor) {
+        self.task = task
+        self.color = BehaviorRelay(value: color)
+        
+        self.title.accept(task.title)
+        self.period.accept("Every " + task.period.fullTitle(periodCount: task.periodCount))
+        self.timeLeft.accept(calculateTimeLeft())
     }
     
-    var period: String {
-        return "Every " + task.period.fullTitle(periodCount: task.periodCount)
-    }
-    
-    var timeLeft: String {
+    private func calculateTimeLeft() -> String {
         if daysLeft < -30 {
             return "Expired"
         } else if daysLeft < -2 {
@@ -44,26 +54,33 @@ struct TaskViewModel {
         }
         return ""
     }
-    
+
     private var daysLeft: Int {
         return interval(component: .day)
     }
-    
+
     private var hoursLeft: Int {
         return interval(component: .hour)
     }
-    
+
     private func interval(component: Calendar.Component) -> Int {
         let calendar = Calendar.current
-        guard let start = calendar.ordinality(of: component, in: .era, for: Date()) else { return 0 }
-        guard let end = calendar.ordinality(of: component, in: .era, for: task.finishDate) else { return 0 }
+        guard let start = calendar.ordinality(of: component, in: .era, for: Date()),
+            let end = calendar.ordinality(of: component, in: .era, for: task.finishDate) else {
+                return 0
+        }
 
         return end - start
     }
-        
-    init(task: Task, color: UIColor) {
-        self.task = task
-        self.color = color
+}
+
+extension TaskViewModel: Differentiable {
+    var differenceIdentifier: String {
+        return task.id
+    }
+    
+    func isContentEqual(to source: TaskViewModel) -> Bool {
+        return self == source
     }
 }
 
@@ -72,13 +89,10 @@ extension TaskViewModel: Hashable {
         hasher.combine(task.id)
         hasher.combine(task.period.rawValue)
         hasher.combine(task.title)
-        hasher.combine(color)
+        hasher.combine(color.value)
     }
 
     static func ==(lhs: TaskViewModel, rhs: TaskViewModel) -> Bool {
-        return lhs.task.id == rhs.task.id &&
-            lhs.task.period.rawValue == rhs.task.period.rawValue &&
-            lhs.task.title == rhs.task.title &&
-            lhs.color == rhs.color
+        return lhs.task == rhs.task && lhs.color.value == rhs.color.value
     }
 }

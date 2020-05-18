@@ -7,12 +7,18 @@
 //
 
 import UIKit
-import SnapKit
-import Combine
+import RxSwift
+import RxCocoa
+
+extension Reactive where Base: PlaceholderTextView {
+    var title: ControlProperty<String?> {
+        return base.textView.rx.text
+    }
+}
 
 final class PlaceholderTextView: UIView {
     
-    private lazy var textView: UITextView = {
+    fileprivate lazy var textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false
@@ -33,19 +39,15 @@ final class PlaceholderTextView: UIView {
         return textView
     }()
     
-    var textPublisher: AnyPublisher<String, Never> {
-        return textView.textPublisher
-    }
-    
-    var text: String {
-        set(value) {
-            textView.text = value
-            placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
-        }
-        get {
-            return textView.text
-        }
-    }
+//    var text: String {
+//        set(value) {
+//            textView.text = value
+//            placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
+//        }
+//        get {
+//            return textView.text
+//        }
+//    }
     
     var font: UIFont? {
         set(value) {
@@ -66,9 +68,17 @@ final class PlaceholderTextView: UIView {
         }
     }
     
+    private let disposeBag = DisposeBag()
+    
     init() {
         super.init(frame: .zero)
         setupLayout()
+        
+        textView.rx.text.orEmpty.map { text in
+            return text.isEmpty ? self.placeholder : ""
+        }
+        .bind(to: placeholderTextView.rx.text)
+        .disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {

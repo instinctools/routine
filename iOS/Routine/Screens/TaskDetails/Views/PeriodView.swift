@@ -8,21 +8,9 @@
 
 import UIKit
 import SwiftUI
-
-typealias EmptyAction = () -> Void
-
-struct PeriodViewModel {
-    let period: Period
-    var periodCount: Int
-    
-    var fullTitle: String {
-        return period.title(periodCount: periodCount)
-    }
-    
-    var title: String {
-        return period.title(periodCount: 0)
-    }
-}
+import RxSwift
+import RxCocoa
+import RxBiBinding
 
 final class PeriodView: UIView {
     
@@ -34,7 +22,7 @@ final class PeriodView: UIView {
         return label
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 24, weight: .medium)
         label.textAlignment = .left
@@ -43,6 +31,10 @@ final class PeriodView: UIView {
     
     private(set) lazy var periodCountTextField: UITextField = {
         let textField = UITextField()
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "1",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+        )
         textField.font = .systemFont(ofSize: 22, weight: .semibold)
         textField.textColor = .white
         textField.textAlignment = .right
@@ -67,18 +59,16 @@ final class PeriodView: UIView {
         return view
     }()
 
+    let selection = PublishSubject<Void>()
     private(set) var isSelected: Bool
     
-    private var viewModel: PeriodViewModel!
-    var didSelect: ((_ period: Period, _ count: String) -> Void)?
+    private let disposeBag = DisposeBag()
     
     init() {
         self.isSelected = false
         super.init(frame: .zero)
-        setSelected(isSelected)
-        
         layer.cornerRadius = 12
-        
+        setSelected(isSelected)
         setupLayout()
     }
     
@@ -91,6 +81,10 @@ final class PeriodView: UIView {
         
         stackView.addArrangedSubview(everyLabel)
         stackView.setCustomSpacing(8.0, after: everyLabel)
+        
+        stackView.addArrangedSubview(periodCountTextField)
+        stackView.setCustomSpacing(4.0, after: periodCountTextField)
+        
         stackView.addArrangedSubview(titleLabel)
         
         let spacerView = UIView()
@@ -118,21 +112,14 @@ final class PeriodView: UIView {
         }
     }
     
-    private func setSelected(_ selected: Bool, firstResponder: Bool = true) {
+    func setSelected(_ selected: Bool) {
         isSelected = selected
         if isSelected {
-            stackView.insertArrangedSubview(periodCountTextField, at: 1)
-            stackView.setCustomSpacing(4.0, after: periodCountTextField)
-            if firstResponder {
-                periodCountTextField.becomeFirstResponder()
-            }
             everyLabel.textColor = .white
             titleLabel.textColor = .white
             circleView.backgroundColor = .white
             backgroundColor = .gray
         } else {
-            periodCountTextField.text = ""
-            periodCountTextField.removeFromSuperview()
             everyLabel.textColor = .gray
             titleLabel.textColor = .gray
             circleView.backgroundColor = .gray
@@ -140,27 +127,33 @@ final class PeriodView: UIView {
         }
     }
     
-    func select() {
-        setSelected(true)
-    }
-    
-    func deselect() {
-        setSelected(false)
-        titleLabel.text = viewModel.title
-    }
-    
-    func setup(with viewModel: PeriodViewModel, isSelected: Bool) {
-        self.viewModel = viewModel
-        titleLabel.text = viewModel.fullTitle
-        periodCountTextField.text = String(viewModel.periodCount)
+    func bind(viewModel: PeriodViewModel) {
+        viewModel.title
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        setSelected(isSelected, firstResponder: false)
+        viewModel.selected
+            .map(setSelected)
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        viewModel.periodCountHidden
+            .bind(to: periodCountTextField.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        periodCountTextField.rx.isFirstResponder
+            .bind(to: viewModel.isFirstResponder)
+            .disposed(by: disposeBag)
+        
+        (periodCountTextField.rx.text <-> viewModel.periodCount)
+            .disposed(by: disposeBag)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        select()
-        didSelect?(viewModel.period, periodCountTextField.text.orEmpty)
+        
+        selection.onNext(())
+        periodCountTextField.becomeFirstResponder()
     }
 }
 
@@ -170,19 +163,16 @@ extension PeriodView: UITextFieldDelegate {
                    replacementString string: String) -> Bool {
         
         let newText = ((textField.text.orEmpty) as NSString).replacingCharacters(in: range, with: string)
+        
+        if newText == "0" {
+            return false
+        }
+        
         let textLimit = 3
         if newText.count <= textLimit {
-            didSelect?(viewModel.period, newText)
-            viewModel.periodCount = Int(newText) ?? 1
-            titleLabel.text = viewModel.fullTitle
             return true
         }
+        
         return false
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text == "" {
-            textField.removeFromSuperview()
-        }
     }
 }

@@ -7,8 +7,10 @@
 //
 
 import UIKit
-import Combine
 import SnapKit
+import RxSwift
+import RxCocoa
+import RxBiBinding
 
 final class TaskViewController: UIViewController {
     
@@ -37,13 +39,10 @@ final class TaskViewController: UIViewController {
     
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
-    
-    private lazy var dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
-    
     private lazy var repeatPeriodsView = PeriodsView()
         
     private let viewModel: TaskDetailsViewModel
-    private var cancellables: Set<AnyCancellable> = []
+    private let disposeBag = DisposeBag()
     
     init(viewModel: TaskDetailsViewModel) {
         self.viewModel = viewModel
@@ -63,14 +62,15 @@ final class TaskViewController: UIViewController {
     }
     
     private func registerNotifications() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillShow),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
+            .map(keyboardWillShow(notification:))
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
+            .map(keyboardWillHide(notification:))
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func setupViews() {
@@ -89,63 +89,61 @@ final class TaskViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
+        
+        let dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
+        
         contentView.addArrangedSubview(repeatPeriodsView)
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(view.snp.bottom)
-            make.leading.equalTo(view.snp.leading).inset(16)
-            make.centerX.equalTo(view.snp.centerX)
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().inset(16)
+            make.centerX.equalToSuperview()
         }
+        
         contentView.snp.makeConstraints { (make) in
             make.top.equalTo(scrollView.snp.top)
-            make.bottom.equalTo(scrollView.snp.bottom)
-            make.leading.equalTo(scrollView.snp.leading)
-            make.trailing.equalTo(scrollView.snp.trailing)
-            make.width.equalTo(scrollView.snp.width)
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.width.equalToSuperview()
         }
     }
     
     private func bindViewModel() {
-        cancelButton.tap
-            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
-            .store(in: &cancellables)
+        cancelButton.rx.tap
+            .subscribe(onNext: dismiss)
+            .disposed(by: disposeBag)
         
-        doneButton.tap
-            .map(viewModel.saveTask)
-            .sink(receiveValue: weakify(self, TaskViewController.dismiss))
-            .store(in: &cancellables)
-        
-        viewModel.$doneButtonIsEnabled
-            .assign(to: \.isEnabled, on: doneButton)
-            .store(in: &cancellables)
-                
-        textView.textPublisher
-            .sink(receiveValue: viewModel.setTitle)
-            .store(in: &cancellables)
-        
-        viewModel.$title
-            .assign(to: \.text, on: textView)
-            .store(in: &cancellables)
-        
-        repeatPeriodsView.didSelect = viewModel.setPeriod
-        
-        repeatPeriodsView.setup(
-            with: Period.allCases.map { $0 },
-            selectedPeriod: viewModel.selectedPeriod,
-            count: viewModel.selectedPeriodCount
+        let input = TaskDetailsViewModel.Input(
+            doneButtonAction: doneButton.rx.tap.asDriver(),
+            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
         )
+        let output = viewModel.transform(input: input)
+        
+        output.doneButtonEnabled
+            .drive(doneButton.rx.isEnabled)
+            .disposed(by: disposeBag)
+        
+        output.dismissAction
+            .drive(onNext: dismiss)
+            .disposed(by: disposeBag)
+        
+        (textView.rx.title <-> viewModel.title)
+            .disposed(by: disposeBag)
+        
+        repeatPeriodsView.bind(items: viewModel.items)
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
+    private func keyboardWillShow(notification: Notification) {
         let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
         if let keyboardSize = value?.cgRectValue {
             scrollView.contentInset.bottom = keyboardSize.height - view.safeAreaInsets.bottom
         }
     }
 
-    @objc private func keyboardWillHide(notification: NSNotification) {
+    private func keyboardWillHide(notification: Notification) {
         scrollView.contentInset.bottom = 0
     }
     

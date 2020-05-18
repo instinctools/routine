@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = D7075A31246AB41000B30C20 /* SwipeCellKit */; };
+		D708CD6E246BF9DC006626C0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D708CD6D246BF9DC006626C0 /* RxSwift */; };
+		D708CD70246BF9DC006626C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = D708CD6F246BF9DC006626C0 /* RxCocoa */; };
+		D709E74C24753127002313BA /* AlphaExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74B24753127002313BA /* AlphaExpansion.swift */; };
+		D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74D2475315D002313BA /* Rx+ViewController.swift */; };
+		D709E75024756013002313BA /* RxDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74F24756013002313BA /* RxDiffableDataSource.swift */; };
+		D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E7522475628A002313BA /* AnimationConfiguration.swift */; };
+		D75B9E9924756EEC000A6AB4 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = D75B9E9824756EEC000A6AB4 /* DifferenceKit */; };
 		D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04B2462FAA00091C56C /* CoreDataManager.swift */; };
 		D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* TaskProvider.swift */; };
 		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
@@ -17,12 +24,11 @@
 		DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502A242DF4C500DE2835 /* TaskViewModel.swift */; };
 		DD10502D242E141F00DE2835 /* TaskDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */; };
 		DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */; };
-		DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */; };
 		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
-		DD86BF4E2469660800D1ACCE /* TaskRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD86BF4D2469660700D1ACCE /* TaskRowView.swift */; };
+		DD630CE9246EA12F00F73C79 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = DD630CE8246EA12F00F73C79 /* RxBiBinding */; };
+		DD74BF0C2472C14E00AD663E /* UIControl+Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
-		DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */; };
 		DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */; };
 		DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */; };
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
@@ -37,10 +43,15 @@
 		DDF395FF2428BE27003456DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDF395FD2428BE27003456DA /* LaunchScreen.storyboard */; };
 		DDF3960E2428BEAB003456DA /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF3960D2428BEAB003456DA /* Task.swift */; };
 		DDFAD42A24294BC5009584FC /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */; };
+		DDFCEBE82471B28400954021 /* PeriodViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFCEBE72471B28400954021 /* PeriodViewModel.swift */; };
 		DDFD13312462062C00D3BDC7 /* Optional+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFD13302462062C00D3BDC7 /* Optional+Default.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D709E74B24753127002313BA /* AlphaExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaExpansion.swift; sourceTree = "<group>"; };
+		D709E74D2475315D002313BA /* Rx+ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+ViewController.swift"; sourceTree = "<group>"; };
+		D709E74F24756013002313BA /* RxDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxDiffableDataSource.swift; sourceTree = "<group>"; };
+		D709E7522475628A002313BA /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		D78DE04B2462FAA00091C56C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		D78DE04D2462FABF0091C56C /* TaskProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProvider.swift; sourceTree = "<group>"; };
 		DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
@@ -49,12 +60,10 @@
 		DD10502A242DF4C500DE2835 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsViewModel.swift; sourceTree = "<group>"; };
 		DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextView.swift; sourceTree = "<group>"; };
-		DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+CombineCompatible.swift"; sourceTree = "<group>"; };
 		DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineNotificationCenter.swift; sourceTree = "<group>"; };
-		DD86BF4D2469660700D1ACCE /* TaskRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskRowView.swift; sourceTree = "<group>"; };
+		DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Responder.swift"; sourceTree = "<group>"; };
 		DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
-		DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextView+TextPublisher.swift"; sourceTree = "<group>"; };
 		DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
 		DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatPeriodsView.swift; sourceTree = "<group>"; };
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
@@ -72,6 +81,7 @@
 		DDF396002428BE27003456DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF3960D2428BEAB003456DA /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		DDFCEBE72471B28400954021 /* PeriodViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodViewModel.swift; sourceTree = "<group>"; };
 		DDFD13302462062C00D3BDC7 /* Optional+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Default.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,6 +92,10 @@
 			files = (
 				DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */,
 				D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */,
+				D708CD70246BF9DC006626C0 /* RxCocoa in Frameworks */,
+				D75B9E9924756EEC000A6AB4 /* DifferenceKit in Frameworks */,
+				DD630CE9246EA12F00F73C79 /* RxBiBinding in Frameworks */,
+				D708CD6E246BF9DC006626C0 /* RxSwift in Frameworks */,
 				DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,52 +103,84 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DD0B1505242B45D100A8ED3C /* ViewControllers */ = {
+		D709E75124756267002313BA /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
-				DDF0C61D242BCDE50031299A /* TaskListViewController.swift */,
-				DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */,
+				D709E74F24756013002313BA /* RxDiffableDataSource.swift */,
+				D709E7522475628A002313BA /* AnimationConfiguration.swift */,
 			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		DD105027242DF1AB00DE2835 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */,
-				DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */,
-				DD10502A242DF4C500DE2835 /* TaskViewModel.swift */,
-			);
-			path = ViewModels;
+			path = DataSource;
 			sourceTree = "<group>";
 		};
 		DD42C3E7245191E00028FAB5 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
 				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
+				D709E74B24753127002313BA /* AlphaExpansion.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		DD630CEA246EB50600F73C79 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				DD630CEB246EB51400F73C79 /* TaskList */,
+				DD630CEC246EB52000F73C79 /* TaskDetails */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		DD630CEB246EB51400F73C79 /* TaskList */ = {
+			isa = PBXGroup;
+			children = (
+				DDF0C61D242BCDE50031299A /* TaskListViewController.swift */,
+				DD630CED246EB54100F73C79 /* Views */,
+				DDFCEBE62471B26200954021 /* ViewModels */,
+				D709E75124756267002313BA /* DataSource */,
+			);
+			path = TaskList;
+			sourceTree = "<group>";
+		};
+		DD630CEC246EB52000F73C79 /* TaskDetails */ = {
+			isa = PBXGroup;
+			children = (
+				DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */,
+				DD630CEE246EB54A00F73C79 /* Views */,
+				DDFCEBE52471B25300954021 /* ViewModels */,
+			);
+			path = TaskDetails;
+			sourceTree = "<group>";
+		};
+		DD630CED246EB54100F73C79 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		DD630CEE246EB54A00F73C79 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */,
+				DD0B1508242B46D100A8ED3C /* PeriodView.swift */,
+				DDDAF313242A55B30027BC74 /* LabelledDivider.swift */,
+				DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		DD9C0D0324322CB100E4AAFE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				DD105030242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift */,
 				DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */,
 				DDB6B295244DAF5E00069C5D /* View+UIView.swift */,
-				DDB6B297244DAFA100069C5D /* UITextView+TextPublisher.swift */,
 				DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */,
 				DDFD13302462062C00D3BDC7 /* Optional+Default.swift */,
+				DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */,
+				D709E74D2475315D002313BA /* Rx+ViewController.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		DDD23121242A529D004194BB /* Representable */ = {
-			isa = PBXGroup;
-			children = (
-				DDFAD42924294BC5009584FC /* TaskTableViewCell.swift */,
-			);
-			path = Representable;
 			sourceTree = "<group>";
 		};
 		DDEA3244245ADC4F00AFD189 /* Frameworks */ = {
@@ -177,9 +223,7 @@
 			children = (
 				DDEA3243245ADC4C00AFD189 /* Routine.entitlements */,
 				DDF396092428BE61003456DA /* Delegate */,
-				DD0B1505242B45D100A8ED3C /* ViewControllers */,
-				DD105027242DF1AB00DE2835 /* ViewModels */,
-				DDF396082428BE55003456DA /* Views */,
+				DD630CEA246EB50600F73C79 /* Screens */,
 				DDF3960C2428BE9F003456DA /* Models */,
 				DD42C3E7245191E00028FAB5 /* Helpers */,
 				DDF0C623242CE7980031299A /* CoreData */,
@@ -197,19 +241,6 @@
 				DDF395FB2428BE27003456DA /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		DDF396082428BE55003456DA /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				DDD23121242A529D004194BB /* Representable */,
-				DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */,
-				DD86BF4D2469660700D1ACCE /* TaskRowView.swift */,
-				DD0B1508242B46D100A8ED3C /* PeriodView.swift */,
-				DDDAF313242A55B30027BC74 /* LabelledDivider.swift */,
-				DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		DDF396092428BE61003456DA /* Delegate */ = {
@@ -247,6 +278,24 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DDFCEBE52471B25300954021 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */,
+				DDFCEBE72471B28400954021 /* PeriodViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		DDFCEBE62471B26200954021 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */,
+				DD10502A242DF4C500DE2835 /* TaskViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -266,6 +315,10 @@
 			packageProductDependencies = (
 				DD0B150B242B51A700A8ED3C /* SnapKit */,
 				D7075A31246AB41000B30C20 /* SwipeCellKit */,
+				D708CD6D246BF9DC006626C0 /* RxSwift */,
+				D708CD6F246BF9DC006626C0 /* RxCocoa */,
+				DD630CE8246EA12F00F73C79 /* RxBiBinding */,
+				D75B9E9824756EEC000A6AB4 /* DifferenceKit */,
 			);
 			productName = Routine;
 			productReference = DDF395EF2428BE25003456DA /* Routine.app */;
@@ -298,6 +351,10 @@
 			packageReferences = (
 				DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */,
 				D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
+				D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				D708CD71246BFF8E006626C0 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */,
+				D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = DDF395F02428BE25003456DA /* Products */;
 			projectDirPath = "";
@@ -326,28 +383,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D709E75024756013002313BA /* RxDiffableDataSource.swift in Sources */,
 				DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
 				DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */,
+				D709E74C24753127002313BA /* AlphaExpansion.swift in Sources */,
 				DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
 				DDFD13312462062C00D3BDC7 /* Optional+Default.swift in Sources */,
 				DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */,
-				DD105031242F43D400DE2835 /* UIBarButtonItem+CombineCompatible.swift in Sources */,
 				D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */,
-				DD86BF4E2469660800D1ACCE /* TaskRowView.swift in Sources */,
-				DDB6B298244DAFA100069C5D /* UITextView+TextPublisher.swift in Sources */,
 				DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */,
 				DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */,
+				D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */,
 				DDF3960E2428BEAB003456DA /* Task.swift in Sources */,
 				DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */,
 				DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */,
+				DDFCEBE82471B28400954021 /* PeriodViewModel.swift in Sources */,
 				DDFAD42A24294BC5009584FC /* TaskTableViewCell.swift in Sources */,
+				D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */,
 				DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */,
 				DDF0C620242CA3810031299A /* Period.swift in Sources */,
 				D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */,
 				DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */,
+				DD74BF0C2472C14E00AD663E /* UIControl+Responder.swift in Sources */,
 				DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */,
 				DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */,
 				DD10502D242E141F00DE2835 /* TaskDetailsViewModel.swift in Sources */,
@@ -564,12 +624,44 @@
 				minimumVersion = 2.7.1;
 			};
 		};
+		D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+		D708CD71246BFF8E006626C0 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+		D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/DifferenceKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.5;
+			};
+		};
 		DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.1;
+			};
+		};
+		DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxBiBinding.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -580,10 +672,30 @@
 			package = D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
 			productName = SwipeCellKit;
 		};
+		D708CD6D246BF9DC006626C0 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		D708CD6F246BF9DC006626C0 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		D75B9E9824756EEC000A6AB4 /* DifferenceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
+			productName = DifferenceKit;
+		};
 		DD0B150B242B51A700A8ED3C /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		DD630CE8246EA12F00F73C79 /* RxBiBinding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */;
+			productName = RxBiBinding;
 		};
 /* End XCSwiftPackageProductDependency section */
 

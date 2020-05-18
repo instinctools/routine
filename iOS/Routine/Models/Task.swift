@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Task {
+struct Task: Equatable {
     
     let id: String
     let title: String
@@ -17,7 +17,11 @@ struct Task {
     var startDate: Date
     
     var finishDate: Date {
-        return period.calculateDate(withStardDate: startDate, periodCount: periodCount)
+        return Calendar.current.date(
+            byAdding: period.calendarComponent,
+            value: periodCount,
+            to: startDate
+        ).orToday
     }
     
     init(id: String, title: String, period: Period, periodCount: Int, startDate: Date = Date()) {

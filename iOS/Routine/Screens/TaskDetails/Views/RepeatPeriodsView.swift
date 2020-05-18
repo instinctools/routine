@@ -6,9 +6,9 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import SwiftUI
 import UIKit
-import SnapKit
+import RxSwift
+import RxCocoa
 
 final class PeriodsView: UIView {
     
@@ -20,9 +20,10 @@ final class PeriodsView: UIView {
         return stackView
     }()
     
-    private var periodViews: [PeriodView] = []
+    let selection = PublishSubject<PeriodViewModel>()
     
-    var didSelect: ((_ period: Period, _ count: String) -> Void)?
+    private var periodViews: [PeriodView] = []
+    private let disposeBag = DisposeBag()
     
     init() {
         super.init(frame: .zero)
@@ -42,32 +43,25 @@ final class PeriodsView: UIView {
             make.bottom.equalToSuperview()
         }
     }
-    
-    func setup(with periods: [Period], selectedPeriod: Period?, count: String) {
-        periodViews.removeAll()
-        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        periods.forEach { (period) in
+
+    func bind(items: [PeriodViewModel]) {
+        items.forEach { (periodViewModel) in
             let periodView = PeriodView()
-            periodView.didSelect = { (period, count) in
-                self.didSelect?(period, count)
-                self.didTapPeriodView(periodView)
-            }
-            let count = Int(count) ?? 1
-            if period == selectedPeriod {
-                periodView.setup(with: PeriodViewModel(period: period, periodCount: count), isSelected: true)
-            } else {
-                periodView.setup(with: PeriodViewModel(period: period, periodCount: count), isSelected: false)
-            }
+            periodView.bind(viewModel: periodViewModel)
+            
+            periodView.selection.map {
+//                self.select(view: periodView)
+                self.selection.onNext(periodViewModel)
+            }.subscribe().disposed(by: disposeBag)
             
             periodViews.append(periodView)
             stackView.addArrangedSubview(periodView)
         }
     }
     
-    private func didTapPeriodView(_ view: PeriodView) {
-        for periodView in periodViews where periodView != view && periodView.isSelected {
-            periodView.deselect()
-        }
-    }
+//    private func select(view: PeriodView) {
+//        for periodView in periodViews {
+//            periodView.setSelected(periodView == view)
+//        }
+//    }
 }

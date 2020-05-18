@@ -19,8 +19,8 @@ enum Period: Int, CaseIterable {
         return prefix + title(periodCount: periodCount)
     }
     
-    func title(periodCount: Int) -> String {
-        let hasPeriod = periodCount > 1
+    func title(periodCount: Int?) -> String {
+        let hasPeriod = (periodCount ?? 0) > 1
         switch self {
         case .day:
             return hasPeriod ? "days" : "day"
@@ -33,7 +33,7 @@ enum Period: Int, CaseIterable {
         }
     }
         
-    private var calendarComponent: Calendar.Component {
+    var calendarComponent: Calendar.Component {
         switch self {
         case .day:
             return .day
@@ -44,11 +44,6 @@ enum Period: Int, CaseIterable {
         case .year:
             return .year
         }
-    }
-        
-    func calculateDate(withStardDate startDate: Date, periodCount: Int) -> Date {
-        let calendar = Calendar.current
-        return calendar.date(byAdding: calendarComponent, value: periodCount, to: startDate).orToday
     }
 }
 

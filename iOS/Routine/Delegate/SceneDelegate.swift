@@ -26,8 +26,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = rootViewController
-            self.window = window
             window.makeKeyAndVisible()
+            self.window = window
             
             taskNotificationCenter.requestNotifications()
             taskNotificationCenter.registerTaskCategory()
