@@ -5,18 +5,15 @@ import com.instinctools.routine_kmp.model.PeriodType
 import com.instinctools.routine_kmp.model.Todo
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
 class TodoListPresenter(
     private val todoStore: TodoStore
 ) : Presenter<TodoListPresenter.State, TodoListPresenter.Event>() {
 
     private val _states = ConflatedBroadcastChannel<State>()
-    override val states: ReceiveChannel<State> get() = _states.openSubscription()
+    override val states: Flow<State> get() = _states.asFlow()
 
     private val _events = Channel<Event>(Channel.RENDEZVOUS)
     override val events: SendChannel<Event> get() = _events

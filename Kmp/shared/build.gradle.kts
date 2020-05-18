@@ -29,6 +29,8 @@ kotlin {
             }
         }
     }
+    targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=
+        listOf("-Xobjc-generics", "-Xg0")
 
     android()
 

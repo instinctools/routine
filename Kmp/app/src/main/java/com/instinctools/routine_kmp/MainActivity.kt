@@ -7,7 +7,11 @@ import com.instinctools.routine_kmp.data.SqlDelightTodoStore
 import com.instinctools.routine_kmp.databinding.MainBinding
 import com.instinctools.routine_kmp.ui.TodoListPresenter
 import com.instinctools.routine_kmp.util.cancelChildren
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,11 +30,10 @@ class MainActivity : AppCompatActivity() {
         presenter = TodoListPresenter(todoStore = todoStore)
         presenter.start()
 
-        scope.launch {
-            for (state in presenter.states) {
-                binding.helloText.text = "Database have ${state.items.count()} items"
-            }
+        presenter.states.onEach { state ->
+            binding.helloText.text = "Database have ${state.items.count()} items"
         }
+            .launchIn(scope)
     }
 
     override fun onDestroy() {

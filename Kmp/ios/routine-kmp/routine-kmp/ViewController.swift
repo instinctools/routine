@@ -4,7 +4,8 @@ import RoutineSharedKmp
 class ViewController: UIViewController {
 
     var presenter: TodoListPresenter!
-
+    let uiBinder = UiBinder<TodoListPresenter.State, TodoListPresenter.Event>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -16,14 +17,19 @@ class ViewController: UIViewController {
 
         let databaseProvider = IosDatabaseProvider()
         let todoStore = SqlDelightTodoStore(database: databaseProvider.database())
-        presenter = TodoListPresenter(uiUpdater: { items in
-            label.text = "Database have \(items.count) items"
-        }, todoStore: todoStore)
+        presenter = TodoListPresenter(todoStore: todoStore)
+        
+        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+            label.text = "Database have \(state.items.count) items"
+        })
+        
         presenter.start()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         presenter.stop()
+        uiBinder.destroy()
     }
+    
 }
 
