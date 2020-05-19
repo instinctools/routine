@@ -46,7 +46,7 @@ class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTo
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         if ((isLeftActivated || isRightActivated) && viewHolder is TodosViewHolder) {
-            val todo = viewHolder.todo
+            val todo = viewHolder.item?.todo
             if (todo != null) {
                 if (isLeftActivated) {
 //                    lifecycle.coroutineScope.launch(Dispatchers.IO) {

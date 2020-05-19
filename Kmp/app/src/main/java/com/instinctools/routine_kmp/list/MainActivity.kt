@@ -2,16 +2,15 @@ package com.instinctools.routine_kmp.list
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.instinctools.routine_kmp.details.DetailsActivity
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
-import com.instinctools.routine_kmp.data.SqlDelightTodoStore
+import com.instinctools.routine_kmp.data.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
-import com.instinctools.routine_kmp.ui.TodoListPresenter
+import com.instinctools.routine_kmp.details.DetailsActivity
+import com.instinctools.routine_kmp.ui.todo.TodoListPresenter
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,14 +46,18 @@ class MainActivity : AppCompatActivity() {
         binding.content.adapter = adapter
 
         val databaseProvider = AndroidDatabaseProvider(applicationContext)
-        val todoStore = SqlDelightTodoStore(databaseProvider.database())
+        val todoStore = SqlTodoStore(databaseProvider.database())
 
         presenter = TodoListPresenter(todoStore = todoStore)
         presenter.start()
 
         presenter.states.onEach { state ->
-            Log.d("asd", "items received ${state.items.count()}")
-            adapter.submitList(state.items)
+            val mergedItems = buildList<Any> {
+                addAll(state.expiredTodos)
+                add(Unit)
+                addAll(state.futureTodos)
+            }
+            adapter.submitList(mergedItems)
         }
             .launchIn(scope)
     }
