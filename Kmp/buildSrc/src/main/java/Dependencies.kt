@@ -9,11 +9,28 @@ object Versions {
     const val sqlDelight = "1.3.0"
     const val coroutines = "1.3.5-native-mt"
     const val stately = "1.0.2"
+
+    const val activityX = "1.2.0-alpha04"
+    const val fragmentX = "1.3.0-alpha04"
 }
 
 object Deps {
-    const val app_compat_x = "androidx.appcompat:appcompat:1.1.0"
-    const val core_ktx = "androidx.core:core-ktx:1.2.0"
+
+    object AndroidX {
+        const val appCompat = "androidx.appcompat:appcompat:1.2.0-rc01"
+        const val coreKtx = "androidx.core:core-ktx:1.3.0-rc01"
+        const val activity = "androidx.activity:activity:${Versions.activityX}}"
+        const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityX}"
+        const val fragment = "androidx.fragment:fragment:${Versions.fragmentX}"
+        const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentX}"
+
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+    }
+
+    object AndroidView {
+        const val material = "com.google.android.material:material:1.2.0-alpha06"
+        const val wheelPicker = "cn.aigestudio.wheelpicker:WheelPicker:1.1.3"
+    }
 
     object Coroutines {
         const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"

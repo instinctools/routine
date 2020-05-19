@@ -38,7 +38,17 @@ dependencies {
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation(project(":shared"))
 
-    implementation(Deps.app_compat_x)
-    implementation(Deps.core_ktx)
+    implementation(Deps.AndroidX.appCompat)
+    implementation(Deps.AndroidX.coreKtx)
+    implementation(Deps.AndroidX.activity)
+    implementation(Deps.AndroidX.activityKtx)
+    implementation(Deps.AndroidX.fragment)
+    implementation(Deps.AndroidX.fragmentKtx)
+
+    implementation(Deps.AndroidX.recyclerView)
+
+    implementation(Deps.AndroidView.material)
+    implementation(Deps.AndroidView.wheelPicker)
+
     implementation(Deps.Coroutines.android)
 }
