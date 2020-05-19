@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.instinctools.routine_kmp.DetailsActivity
+import com.instinctools.routine_kmp.details.DetailsActivity
 import com.instinctools.routine_kmp.databinding.ItemTodoBinding
 import com.instinctools.routine_kmp.model.Todo
 

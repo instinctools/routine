@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.instinctools.routine_kmp.DetailsActivity
+import com.instinctools.routine_kmp.details.DetailsActivity
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
 import com.instinctools.routine_kmp.data.SqlDelightTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding

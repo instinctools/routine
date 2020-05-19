@@ -12,6 +12,7 @@ object Versions {
 
     const val activityX = "1.2.0-alpha04"
     const val fragmentX = "1.3.0-alpha04"
+    const val lifecycle = "2.3.0-alpha02"
 }
 
 object Deps {
@@ -23,6 +24,8 @@ object Deps {
         const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityX}"
         const val fragment = "androidx.fragment:fragment:${Versions.fragmentX}"
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentX}"
+
+        const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
 
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
