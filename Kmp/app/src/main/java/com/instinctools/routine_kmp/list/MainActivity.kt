@@ -1,7 +1,13 @@
-package com.instinctools.routine_kmp
+package com.instinctools.routine_kmp.list
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
+import com.instinctools.routine_kmp.DetailsActivity
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
 import com.instinctools.routine_kmp.data.SqlDelightTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
@@ -24,6 +30,21 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.toolbar.setOnMenuItemClickListener {
+            startActivity(Intent(this, DetailsActivity::class.java))
+            true
+        }
+
+        ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
+        val animator = binding.content.itemAnimator
+        if (animator is SimpleItemAnimator) {
+            animator.supportsChangeAnimations = false
+        }
+
+        val adapter = TodosAdapter()
+        binding.content.layoutManager = LinearLayoutManager(this)
+        binding.content.adapter = adapter
+
         val databaseProvider = AndroidDatabaseProvider(applicationContext)
         val todoStore = SqlDelightTodoStore(databaseProvider.database())
 
@@ -31,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         presenter.start()
 
         presenter.states.onEach { state ->
-            binding.helloText.text = "Database have ${state.items.count()} items"
+            Log.d("asd", "items received ${state.items.count()}")
+            adapter.submitList(state.items)
         }
             .launchIn(scope)
     }

@@ -25,6 +25,7 @@ object Deps {
         const val fragmentKtx = "androidx.fragment:fragment-ktx:${Versions.fragmentX}"
 
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
     }
 
     object AndroidView {

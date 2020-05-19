@@ -30,6 +30,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 
     viewBinding.isEnabled = true
 }
@@ -46,6 +49,7 @@ dependencies {
     implementation(Deps.AndroidX.fragmentKtx)
 
     implementation(Deps.AndroidX.recyclerView)
+    implementation(Deps.AndroidX.constraintLayout)
 
     implementation(Deps.AndroidView.material)
     implementation(Deps.AndroidView.wheelPicker)
