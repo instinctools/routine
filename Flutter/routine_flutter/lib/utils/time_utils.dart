@@ -7,11 +7,11 @@ class TimeUtils {
         .millisecondsSinceEpoch;
   }
 
-  static String getPrettyPeriod(Period periodUnit, int periodValue) {
+  static String getPrettyPeriod(String periodUnit, [int periodValue = 1]) {
     var isPlural = periodValue > 1;
     var periodCount = isPlural ? '$periodValue ' : '';
-    var pluralPostfix = isPlural && periodUnit != Period.MONTH ? 's' : '';
+    var pluralPostfix = isPlural && periodUnit != Period.MONTH.name ? 's' : '';
 
-    return 'Every $periodCount${periodUnit.name}$pluralPostfix';
+    return 'Every $periodCount$periodUnit$pluralPostfix';
   }
 }

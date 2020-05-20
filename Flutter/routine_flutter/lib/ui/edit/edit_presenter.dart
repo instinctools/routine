@@ -35,5 +35,5 @@ class EditPresenter {
       title: controller.value.text,
       periodUnit: periodUnit,
       periodValue: periodValue,
-      timestamp: TimeUtils.getCurrentTime().millisecondsSinceEpoch);
+      timestamp: TimeUtils.getCurrentTime());
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo entry;
@@ -34,7 +35,9 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(entry.periodUnit, style: Styles.TODO_ITEM_TIME_TEXT),
+                    Text(TimeUtils.getPrettyPeriod(
+                        entry.periodUnit, entry.periodValue),
+                        style: Styles.TODO_ITEM_TIME_TEXT),
                     Text(entry.periodValue.toString(), style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
