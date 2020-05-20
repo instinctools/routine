@@ -44,6 +44,8 @@ class _TodoListState extends State<TodoList> {
                           child: Dismissible(
                             key: Key(item.id.toString()),
                             child: TodoItem(item, index),
+                            onDismissed: (direction){setState(() {
+                            });},
                             confirmDismiss: (direction) =>
                                 _confirmDismiss(direction, item),
                             background: _getItemBackground(
@@ -141,8 +143,13 @@ class _TodoListState extends State<TodoList> {
     return false;
   }
 
-  void pushEditScreen({Todo todo}) => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => EditScreen(entry: todo)));
+  void pushEditScreen({Todo todo}) async {
+    var isAdded = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => EditScreen(entry: todo)));
+    if (isAdded != null && isAdded) {
+      setState(() {});
+    }
+  }
 }
