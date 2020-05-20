@@ -1,45 +1,36 @@
 package com.routine
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.routine.android.push
+import com.routine.android.vm.StateViewMode
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class SplashViewModel : ViewModel() {
+class SplashViewModel : StateViewMode() {
 
-    val error = MutableLiveData<String>()
+    val result = MutableLiveData<Boolean>()
 
-    val state = MutableStateFlow(State.EMPTY)
+    companion object {
+        val STATUS_LOGIN = "STATUS_LOGIN"
+    }
+
+    private val action: (suspend () -> Unit) = {
+        delay(500)
+        if (Firebase.auth.currentUser == null) {
+            Firebase.auth.signInAnonymously().await()
+        }
+        result.push(true)
+    }
 
     init {
-        process()
+        process(STATUS_LOGIN, action)
     }
 
-    fun process() {
-        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            error.value = "Oops, something went wrong!"
-            state.value = State.ERROR
-        }) {
-            state.value = State.PROGRESS
-            withContext(Dispatchers.IO) {
-                delay(500)
-                if (Firebase.auth.currentUser == null) {
-                    Firebase.auth.signInAnonymously().await()
-                }
-                state.value = State.SUCCESS
-            }
-        }
-    }
-
-    enum class State {
-        PROGRESS,
-        SUCCESS,
-        ERROR,
-        EMPTY
+    fun onRefreshClicked() {
+        process(STATUS_LOGIN, action)
     }
 }

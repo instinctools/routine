@@ -1,7 +1,10 @@
 package com.routine.android
 
 import android.graphics.Color
+import androidx.lifecycle.MutableLiveData
 import com.routine.android.data.db.entity.PeriodUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Period
@@ -76,4 +79,10 @@ fun calculateTimestamp(period: Int, periodUnit: PeriodUnit): Date {
         PeriodUnit.MONTH -> dateTime.plusYears(period)
     }
     return timestamp.withTimeAtStartOfDay().toDate()
+}
+
+suspend fun <T> MutableLiveData<T>.push(data: T) {
+    withContext(Dispatchers.Main) {
+        value = data
+    }
 }

@@ -1,14 +1,13 @@
 package com.routine
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.asLiveData
 import com.routine.android.viewBinding
-import com.routine.databinding.ActivityHomeBinding
+import com.routine.android.vm.State
 import com.routine.databinding.ActivitySplashBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -22,20 +21,18 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel.error
+        viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
+            .error
             .observe(this, Observer {
-                binding.errorMessage.text = it
+                binding.errorMessage.text = it.message
             })
 
-        viewModel.state
-            .asLiveData()
+        viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
+            .state
             .observe(this, Observer {
                 when (it) {
-                    SplashViewModel.State.SUCCESS -> {
-                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                    }
-                    SplashViewModel.State.PROGRESS -> adjustVisibility(true)
-                    SplashViewModel.State.ERROR -> adjustVisibility(false)
+                    State.PROGRESS -> adjustVisibility(true)
+                    State.ERROR -> adjustVisibility(false)
                     else -> {
                         binding.errorMessage.text = ""
                         adjustVisibility(true)
@@ -43,8 +40,15 @@ class SplashActivity : AppCompatActivity() {
                 }
             })
 
+        viewModel.result
+            .observe(this, Observer {
+                if (it) {
+                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                }
+            })
+
         binding.retry.setOnClickListener {
-            viewModel.process()
+            viewModel.onRefreshClicked()
         }
     }
 
