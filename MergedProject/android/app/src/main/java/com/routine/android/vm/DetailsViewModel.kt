@@ -1,32 +1,30 @@
 package com.routine.android.vm
 
 import androidx.lifecycle.MutableLiveData
-import com.routine.android.calculateTimestamp
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
 import com.routine.android.push
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import java.util.*
 
 @ExperimentalCoroutinesApi
 class DetailsViewModel(val id: String?) : StateViewMode() {
 
-    val todo = MutableLiveData<TodoEntity>()
+    val todo = MutableLiveData(TodoEntity(UUID.randomUUID().toString(), "", 1, PeriodUnit.DAY, Date()))
 
     companion object {
-        const val STATUS_GET_TODO = "ACTION_GET_TODO"
+        const val STATUS_GET_TODO = "STATUS_GET_TODO"
         const val STATUS_ADD_TODO = "STATUS_ADD_TODO"
     }
 
     init {
         process(STATUS_GET_TODO) {
-            val todoEntity = if (id != null) {
-                database().todos().getTodo(id)
-            } else {
-                TodoEntity(UUID.randomUUID().toString(), "", 1, PeriodUnit.DAY, Date())
+            delay(1000)
+            if (id != null) {
+                todo.push(database().todos().getTodo(id))
             }
-            todo.push(todoEntity)
         }
     }
 

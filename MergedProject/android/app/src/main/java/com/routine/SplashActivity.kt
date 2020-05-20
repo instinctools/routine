@@ -24,13 +24,13 @@ class SplashActivity : AppCompatActivity() {
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .error
             .observe(this, Observer {
-                binding.errorMessage.text = it.message
+                binding.errorMessage.text = it.peekContent().message
             })
 
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .state
             .observe(this, Observer {
-                when (it) {
+                when (it.peekContent()) {
                     State.PROGRESS -> adjustVisibility(true)
                     State.ERROR -> adjustVisibility(false)
                     else -> {
