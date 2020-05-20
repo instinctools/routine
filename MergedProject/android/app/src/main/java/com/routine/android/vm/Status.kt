@@ -7,6 +7,8 @@ import kotlinx.coroutines.Job
 
 @ExperimentalCoroutinesApi
 class Status {
+
+    //TODO CHANGE TO FLOW?
     val state = MutableLiveData(Event(State.EMPTY))
     val error = MutableLiveData<Event<Throwable>>()
 

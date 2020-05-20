@@ -112,14 +112,18 @@ open class DetailsActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewModel.onTextChanged(s.toString())
-                binding.toolbar.menu.findItem(R.id.done).actionView.run {
-                    isEnabled = s.isNotEmpty()
-                    if (this is TextView) {
-                        typeface = if (s.isNotEmpty()) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-                    }
-                }
             }
         })
+
+        viewModel.validation
+            .observe(this, Observer {
+                binding.toolbar.menu.findItem(R.id.done).actionView.run {
+                    isEnabled = it
+                    if (this is TextView) {
+                        typeface = if (it) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+                    }
+                }
+            })
 
         binding.radio.setOnCheckedChangeListener { group, checkedId ->
             val periodUnit = when (checkedId) {

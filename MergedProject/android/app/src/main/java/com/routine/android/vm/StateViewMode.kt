@@ -2,6 +2,7 @@ package com.routine.android.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.routine.android.data.model.Event
 import kotlinx.coroutines.*
 
 @ExperimentalCoroutinesApi
@@ -13,15 +14,15 @@ abstract class StateViewMode : ViewModel() {
         val status = getStatus(statusKey)
         status.job?.cancel()
         val newJob = viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            status._error.value = throwable
-            status._state.value = State.ERROR
+            status.error.value = Event(throwable)
+            status.state.value = Event(State.ERROR)
         }) {
             yield()
-            status._state.value = State.PROGRESS
+            status.state.value = Event(State.PROGRESS)
             withContext(Dispatchers.IO) {
                 data.invoke()
             }
-            status._state.value = State.EMPTY
+            status.state.value = Event(State.EMPTY)
         }
         status.job = newJob
     }
