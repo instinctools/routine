@@ -16,6 +16,7 @@ abstract class StateViewMode : ViewModel() {
             status._error.value = throwable
             status._state.value = State.ERROR
         }) {
+            yield()
             status._state.value = State.PROGRESS
             withContext(Dispatchers.IO) {
                 data.invoke()
