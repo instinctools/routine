@@ -4,7 +4,7 @@ import kotlin.math.pow
 
 object ColorEvaluator {
 
-    fun evaluate(fraction: Float, startColor: Color, endColor: Color): Color {
+    fun evaluate(fraction: Float, startColor: TodoColor, endColor: TodoColor): TodoColor {
         var startR = startColor.red / 255.0f
         var startG = startColor.green / 255.0f
         var startB = startColor.blue / 255.0f
@@ -31,6 +31,6 @@ object ColorEvaluator {
         r = r.pow(power) * 255.0f
         g = g.pow(power) * 255.0f
         b = b.pow(power) * 255.0f
-        return Color(r.toInt(), g.toInt(), b.toInt())
+        return TodoColor(r.toInt(), g.toInt(), b.toInt())
     }
 }

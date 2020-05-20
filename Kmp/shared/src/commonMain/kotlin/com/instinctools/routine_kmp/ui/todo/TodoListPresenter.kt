@@ -6,7 +6,7 @@ import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
-import com.instinctools.routine_kmp.model.color.Color
+import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +38,9 @@ class TodoListPresenter(
                 Todo(1, "First", PeriodUnit.WEEK, 2, 0),
                 Todo(2, "Next", PeriodUnit.DAY, 3, 0),
                 Todo(3, "One more", PeriodUnit.MONTH, 1, 0),
-                Todo(4, "Last", PeriodUnit.WEEK, 2, 0)
+                Todo(4, "Last", PeriodUnit.WEEK, 2, 0),
+
+                Todo(5, "Last", PeriodUnit.WEEK, 2, Long.MAX_VALUE)
             )
             emit(todos)
         }
@@ -56,10 +58,10 @@ class TodoListPresenter(
         todos.forEachIndexed { index, todo ->
             val todoDate = dateForTimestamp(todo.nextTimestamp)
             if (todoDate < currentDate) {
-                expiredTodos += TodoUiModel(todo, Color.EXPIRED_TODO)
+                expiredTodos += TodoUiModel(todo, TodoColor.EXPIRED_TODO)
             } else {
                 val fraction = index / todosCount.toFloat()
-                futureTodos += TodoUiModel(todo, ColorEvaluator.evaluate(fraction, Color.TODOS_START, Color.TODOS_END))
+                futureTodos += TodoUiModel(todo, ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END))
             }
         }
 
