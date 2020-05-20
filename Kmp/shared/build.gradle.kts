@@ -29,14 +29,26 @@ kotlin {
             }
         }
     }
+    targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=
+        listOf("-Xobjc-generics", "-Xg0")
 
     android()
+
+    sourceSets {
+        all {
+            languageSettings.apply {
+                useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            }
+        }
+    }
 
     sourceSets["commonMain"].dependencies {
         implementation(kotlin("stdlib-common", Versions.kotlin))
         implementation(Deps.SqlDelight.runtime)
         implementation(Deps.SqlDelight.coroutinesKtx)
         implementation(Deps.Coroutines.common)
+        implementation(Deps.Stately.concurrency)
+        implementation(Deps.Stately.common)
     }
 
     sourceSets["androidMain"].dependencies {

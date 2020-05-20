@@ -3,18 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26654EA32475569800C149B1 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 26654EA22475569800C149B1 /* SwipeCellKit */; };
+		26654EA62475578400C149B1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 26654EA52475578400C149B1 /* SnapKit */; };
 		2670E495246D41640040E4E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2670E494246D41640040E4E4 /* AppDelegate.swift */; };
 		2670E497246D41640040E4E4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2670E496246D41640040E4E4 /* SceneDelegate.swift */; };
-		2670E499246D41640040E4E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2670E498246D41640040E4E4 /* ViewController.swift */; };
-		2670E49C246D41640040E4E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2670E49A246D41640040E4E4 /* Main.storyboard */; };
 		2670E49E246D41660040E4E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2670E49D246D41660040E4E4 /* Assets.xcassets */; };
 		2670E4A1246D41660040E4E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2670E49F246D41660040E4E4 /* LaunchScreen.storyboard */; };
 		2670E4AA246D56270040E4E4 /* RoutineSharedKmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2670E4A9246D56270040E4E4 /* RoutineSharedKmp.framework */; };
 		2670E4AB246D56270040E4E4 /* RoutineSharedKmp.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2670E4A9246D56270040E4E4 /* RoutineSharedKmp.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		268C5F5924755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268C5F5824755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift */; };
+		268C5F5B24755EC0004F3714 /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268C5F5A24755EC0004F3714 /* UIBarButtonItem+Init.swift */; };
+		268C5F5D24755F80004F3714 /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268C5F5C24755F80004F3714 /* View+UIView.swift */; };
+		26B44E3B2475652F009D8276 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 26B44E3A2475652F009D8276 /* Differentiator */; };
+		26B44E3D2475652F009D8276 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 26B44E3C2475652F009D8276 /* RxDataSources */; };
+		26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FDF02C24753251003A3E7E /* TodoListViewController.swift */; };
+		BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */; };
+		BEC1EEB82D4714D2EAF011DD /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -35,12 +43,16 @@
 		2670E491246D41640040E4E4 /* routine-kmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "routine-kmp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2670E494246D41640040E4E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2670E496246D41640040E4E4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2670E498246D41640040E4E4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2670E49B246D41640040E4E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2670E49D246D41660040E4E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2670E4A0246D41660040E4E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2670E4A2246D41660040E4E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2670E4A9246D56270040E4E4 /* RoutineSharedKmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RoutineSharedKmp.framework; path = "../../shared/build/xcode-frameworks/RoutineSharedKmp.framework"; sourceTree = "<group>"; };
+		268C5F5824755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
+		268C5F5A24755EC0004F3714 /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
+		268C5F5C24755F80004F3714 /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
+		26FDF02C24753251003A3E7E /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
+		BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
+		BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +60,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26B44E3B2475652F009D8276 /* Differentiator in Frameworks */,
+				26654EA62475578400C149B1 /* SnapKit in Frameworks */,
+				26654EA32475569800C149B1 /* SwipeCellKit in Frameworks */,
+				26B44E3D2475652F009D8276 /* RxDataSources in Frameworks */,
 				2670E4AA246D56270040E4E4 /* RoutineSharedKmp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +71,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		262F38BA24755CDE00CD914D /* TodoList */ = {
+			isa = PBXGroup;
+			children = (
+				262F38BB24755D6100CD914D /* View */,
+				26FDF02C24753251003A3E7E /* TodoListViewController.swift */,
+			);
+			path = TodoList;
+			sourceTree = "<group>";
+		};
+		262F38BB24755D6100CD914D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */,
+				BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		265C07182475694B0087EE51 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				2670E494246D41640040E4E4 /* AppDelegate.swift */,
+				2670E496246D41640040E4E4 /* SceneDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
 		2670E488246D41640040E4E4 = {
 			isa = PBXGroup;
 			children = (
@@ -75,10 +118,9 @@
 		2670E493246D41640040E4E4 /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
-				2670E494246D41640040E4E4 /* AppDelegate.swift */,
-				2670E496246D41640040E4E4 /* SceneDelegate.swift */,
-				2670E498246D41640040E4E4 /* ViewController.swift */,
-				2670E49A246D41640040E4E4 /* Main.storyboard */,
+				265C07182475694B0087EE51 /* Delegates */,
+				268C5F5724755E1C004F3714 /* Extensions */,
+				26FDF02E2475407B003A3E7E /* Screen */,
 				2670E49D246D41660040E4E4 /* Assets.xcassets */,
 				2670E49F246D41660040E4E4 /* LaunchScreen.storyboard */,
 				2670E4A2246D41660040E4E4 /* Info.plist */,
@@ -92,6 +134,24 @@
 				2670E4A9246D56270040E4E4 /* RoutineSharedKmp.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		268C5F5724755E1C004F3714 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				268C5F5824755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift */,
+				268C5F5A24755EC0004F3714 /* UIBarButtonItem+Init.swift */,
+				268C5F5C24755F80004F3714 /* View+UIView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		26FDF02E2475407B003A3E7E /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				262F38BA24755CDE00CD914D /* TodoList */,
+			);
+			path = Screen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +172,12 @@
 			dependencies = (
 			);
 			name = "routine-kmp";
+			packageProductDependencies = (
+				26654EA22475569800C149B1 /* SwipeCellKit */,
+				26654EA52475578400C149B1 /* SnapKit */,
+				26B44E3A2475652F009D8276 /* Differentiator */,
+				26B44E3C2475652F009D8276 /* RxDataSources */,
+			);
 			productName = "routine-kmp";
 			productReference = 2670E491246D41640040E4E4 /* routine-kmp.app */;
 			productType = "com.apple.product-type.application";
@@ -140,6 +206,11 @@
 				Base,
 			);
 			mainGroup = 2670E488246D41640040E4E4;
+			packageReferences = (
+				26654EA12475569800C149B1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
+				26654EA42475578400C149B1 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+			);
 			productRefGroup = 2670E492246D41640040E4E4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -156,7 +227,6 @@
 			files = (
 				2670E4A1246D41660040E4E4 /* LaunchScreen.storyboard in Resources */,
 				2670E49E246D41660040E4E4 /* Assets.xcassets in Resources */,
-				2670E49C246D41640040E4E4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,23 +257,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2670E499246D41640040E4E4 /* ViewController.swift in Sources */,
+				26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */,
+				268C5F5B24755EC0004F3714 /* UIBarButtonItem+Init.swift in Sources */,
+				268C5F5D24755F80004F3714 /* View+UIView.swift in Sources */,
 				2670E495246D41640040E4E4 /* AppDelegate.swift in Sources */,
 				2670E497246D41640040E4E4 /* SceneDelegate.swift in Sources */,
+				BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */,
+				268C5F5924755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
+				BEC1EEB82D4714D2EAF011DD /* TodoTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		2670E49A246D41640040E4E4 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2670E49B246D41640040E4E4 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2670E49F246D41660040E4E4 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -387,6 +454,56 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		26654EA12475569800C149B1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwipeCellKit/SwipeCellKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.1;
+			};
+		};
+		26654EA42475578400C149B1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
+		26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		26654EA22475569800C149B1 /* SwipeCellKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26654EA12475569800C149B1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
+			productName = SwipeCellKit;
+		};
+		26654EA52475578400C149B1 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26654EA42475578400C149B1 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		26B44E3A2475652F009D8276 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		26B44E3C2475652F009D8276 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2670E489246D41640040E4E4 /* Project object */;
 }
