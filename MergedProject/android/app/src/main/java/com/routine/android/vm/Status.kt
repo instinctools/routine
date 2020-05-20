@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @ExperimentalCoroutinesApi
@@ -13,4 +14,6 @@ class Status {
 
     val error: LiveData<Throwable> = _error
     val state = _state.asLiveData()
+
+    var job: Job? = null
 }

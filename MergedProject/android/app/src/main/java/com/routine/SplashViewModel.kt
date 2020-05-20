@@ -8,6 +8,7 @@ import com.routine.android.vm.StateViewMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.yield
 
 @ExperimentalCoroutinesApi
 class SplashViewModel : StateViewMode() {

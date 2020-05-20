@@ -11,7 +11,8 @@ abstract class StateViewMode : ViewModel() {
 
     fun process(statusKey: String, data: (suspend () -> Unit)) {
         val status = getStatus(statusKey)
-        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+        status.job?.cancel()
+        val newJob = viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
             status._error.value = throwable
             status._state.value = State.ERROR
         }) {
@@ -21,6 +22,7 @@ abstract class StateViewMode : ViewModel() {
             }
             status._state.value = State.EMPTY
         }
+        status.job = newJob
     }
 
     fun getStatus(statusKey: String) = statusMap.getOrPut(statusKey) { Status() }

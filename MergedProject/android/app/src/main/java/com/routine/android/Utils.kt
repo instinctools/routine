@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.routine.android.data.db.entity.PeriodUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Period
@@ -83,6 +84,7 @@ fun calculateTimestamp(period: Int, periodUnit: PeriodUnit): Date {
 
 suspend fun <T> MutableLiveData<T>.push(data: T) {
     withContext(Dispatchers.Main) {
+        yield()
         value = data
     }
 }
