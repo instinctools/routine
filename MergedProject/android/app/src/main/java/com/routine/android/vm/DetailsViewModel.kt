@@ -9,7 +9,7 @@ import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
 import com.routine.android.push
 import com.routine.android.vm.status.State
-import com.routine.android.vm.status.StatusViewMode
+import com.routine.android.vm.status.StatusViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -17,7 +17,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 
 @ExperimentalCoroutinesApi
-class DetailsViewModel(val id: String?) : StatusViewMode() {
+class DetailsViewModel(val id: String?) : StatusViewModel() {
 
     val todo = MutableLiveData(TodoEntity(UUID.randomUUID().toString(), "", 1, PeriodUnit.DAY, Date()))
 
@@ -53,7 +53,6 @@ class DetailsViewModel(val id: String?) : StatusViewMode() {
                     .document(value.id)
                     .set(value)
                     .await()
-
                 addTodoResult.push(true)
             }
         }

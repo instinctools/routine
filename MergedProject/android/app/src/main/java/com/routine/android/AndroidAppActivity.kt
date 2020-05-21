@@ -8,23 +8,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.map
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
+import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
 import com.routine.android.data.db.database
 import com.routine.android.data.model.Todo
+import com.routine.android.vm.AndroidAppViewModel
 import com.routine.databinding.ActivityMainBinding
 import com.routine.databinding.ItemTodoBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
+@ExperimentalStdlibApi
+@FlowPreview
+@ExperimentalCoroutinesApi
 class AndroidAppActivity : AppCompatActivity() {
 
+    private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
     private var adapter = TodosAdapter()
 
@@ -44,16 +54,27 @@ class AndroidAppActivity : AppCompatActivity() {
             animator.supportsChangeAnimations = false
         }
 
-        database().todos()
-            .getTodos()
-            .map { list -> list.sortedBy { it.timestamp } }
-            .map { Todo.from(it) }
-            .observe(this, Observer {
-                adapter.submitList(it)
-                if (binding.content.adapter == null) {
-                    binding.content.adapter = adapter
+        binding.content.adapter = adapter
+
+        viewModel.todos
+            .onEach {
+                when(it){
+                    is StoreResponse.Loading -> adjustVisibility(true)
+                    is StoreResponse.Data -> {
+                        adapter.submitList(it.value)
+                        adjustVisibility(false)
+                    }
+                    is StoreResponse.Error -> {
+                        binding.progress.visibility = View.GONE
+                    }
                 }
-            })
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun adjustVisibility(isProgress: Boolean) {
+        binding.content.visibility = if (isProgress) View.GONE else View.VISIBLE
+        binding.progress.visibility = if (isProgress) View.VISIBLE else View.GONE
     }
 
     private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {

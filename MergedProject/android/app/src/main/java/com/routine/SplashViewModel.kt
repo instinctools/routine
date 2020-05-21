@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.routine.android.push
-import com.routine.android.vm.status.StatusViewMode
+import com.routine.android.vm.status.StatusViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class SplashViewModel : StatusViewMode() {
+class SplashViewModel : StatusViewModel() {
 
     val result = MutableLiveData<Boolean>()
 
