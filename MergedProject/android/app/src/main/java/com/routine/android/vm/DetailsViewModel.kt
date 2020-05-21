@@ -26,6 +26,8 @@ class DetailsViewModel(val id: String?) : StatusViewMode() {
         text && progress.peekContent() != State.PROGRESS
     }
 
+    val addTodoResult = MutableLiveData(false)
+
     companion object {
         const val STATUS_GET_TODO = "STATUS_GET_TODO"
         const val STATUS_ADD_TODO = "STATUS_ADD_TODO"
@@ -44,6 +46,7 @@ class DetailsViewModel(val id: String?) : StatusViewMode() {
         process(STATUS_ADD_TODO) {
             todo.value?.let {
                 database().todos().addTodo(it)
+                addTodoResult.push(true)
             }
         }
     }

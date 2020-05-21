@@ -87,6 +87,13 @@ open class DetailsActivity : AppCompatActivity() {
                 }
             })
 
+        viewModel.getStatus(STATUS_ADD_TODO)
+            .state
+            .asLiveData()
+            .observe(this, Observer {
+                binding.progress.visibility = if (it.peekContent() == State.PROGRESS) View.VISIBLE else View.GONE
+            })
+
         viewModel.validation
             .asLiveData()
             .observe(this, Observer {
@@ -96,6 +103,11 @@ open class DetailsActivity : AppCompatActivity() {
                         typeface = if (it) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
                     }
                 }
+            })
+
+        viewModel.addTodoResult
+            .observe(this, Observer {
+                if (it) onBackPressed()
             })
 
         supportFragmentManager.setFragmentResultListener(ARG_PERIOD,
