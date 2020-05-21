@@ -1,8 +1,6 @@
 package com.routine.android.vm
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.asLiveData
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
@@ -10,7 +8,6 @@ import com.routine.android.push
 import com.routine.android.vm.status.State
 import com.routine.android.vm.status.StatusViewMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import java.util.*
@@ -35,7 +32,6 @@ class DetailsViewModel(val id: String?) : StatusViewMode() {
 
     init {
         process(STATUS_GET_TODO) {
-            delay(1000)
             if (id != null) {
                 todo.push(database().todos().getTodo(id))
             }

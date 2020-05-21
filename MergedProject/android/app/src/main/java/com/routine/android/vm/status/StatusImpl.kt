@@ -8,10 +8,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 @ExperimentalCoroutinesApi
 class StatusImpl : Status {
-    override val state: MutableStateFlow<Event<State>>
-        get() = MutableStateFlow(Event(State.EMPTY))
-    override val error: MutableStateFlow<Event<Throwable?>>
-        get() = MutableStateFlow(Event(null))
+
+    override val state: MutableStateFlow<Event<State>> = MutableStateFlow(Event(State.EMPTY))
+    override val error: MutableStateFlow<Event<Throwable?>> = MutableStateFlow(Event(null))
 
     var job: Job? = null
 }

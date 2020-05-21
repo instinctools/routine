@@ -9,14 +9,12 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentResultListener
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
 import com.routine.R
 import com.routine.android.data.db.entity.PeriodUnit
-import com.routine.android.data.model.Event
 import com.routine.android.vm.DetailsViewModel
 import com.routine.android.vm.DetailsViewModel.Companion.STATUS_ADD_TODO
 import com.routine.android.vm.DetailsViewModel.Companion.STATUS_GET_TODO
