@@ -6,8 +6,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import com.routine.android.viewBinding
-import com.routine.android.vm.State
+import com.routine.android.vm.status.State
 import com.routine.databinding.ActivitySplashBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -23,12 +24,16 @@ class SplashActivity : AppCompatActivity() {
 
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .error
+            .asLiveData()
             .observe(this, Observer {
-                binding.errorMessage.text = it.peekContent().message
+                it.peekContent()?.let { error ->
+                    binding.errorMessage.text = error.message
+                }
             })
 
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .state
+            .asLiveData()
             .observe(this, Observer {
                 when (it.peekContent()) {
                     State.PROGRESS -> adjustVisibility(true)

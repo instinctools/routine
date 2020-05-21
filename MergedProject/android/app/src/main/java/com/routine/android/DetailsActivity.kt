@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.distinctUntilChanged
 import com.google.android.material.snackbar.Snackbar
 import com.routine.R
@@ -20,9 +21,10 @@ import com.routine.android.vm.DetailsViewModel
 import com.routine.android.vm.DetailsViewModel.Companion.STATUS_ADD_TODO
 import com.routine.android.vm.DetailsViewModel.Companion.STATUS_GET_TODO
 import com.routine.android.vm.DetailsViewModelFactory
-import com.routine.android.vm.State
+import com.routine.android.vm.status.State
 import com.routine.databinding.ActivityDetailsBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.merge
 
 const val ARG_PERIOD = "ARG_PERIOD"
 
@@ -57,6 +59,7 @@ open class DetailsActivity : AppCompatActivity() {
 
         viewModel.getStatus(STATUS_GET_TODO)
             .state
+            .asLiveData()
             .observe(this, Observer {
                 when (it.peekContent()) {
                     State.PROGRESS -> {
@@ -74,23 +77,26 @@ open class DetailsActivity : AppCompatActivity() {
                 }
             })
 
-        val liveDataMerger = MediatorLiveData<Event<Throwable>>()
-        liveDataMerger.addSource(
-                viewModel.getStatus(STATUS_GET_TODO).error,
-                liveDataMerger::setValue
-        )
+        merge(viewModel.getStatus(STATUS_GET_TODO).error,
+                viewModel.getStatus(STATUS_ADD_TODO).error)
+            .asLiveData()
+            .observe(this, Observer {
+                val content = it.getContentIfNotHandled()
+                if (content != null) {
+                    Snackbar.make(binding.root, content.message ?: "An error occurred!", Snackbar.LENGTH_SHORT).show()
+                }
+            })
 
-        liveDataMerger.addSource(
-                viewModel.getStatus(STATUS_ADD_TODO).error,
-                liveDataMerger::setValue
-        )
-
-        liveDataMerger.observe(this, Observer {
-            val content = it.getContentIfNotHandled()
-            if (content != null) {
-                Snackbar.make(binding.root, content.message ?: "An error occurred!", Snackbar.LENGTH_SHORT).show()
-            }
-        })
+        viewModel.validation
+            .asLiveData()
+            .observe(this, Observer {
+                binding.toolbar.menu.findItem(R.id.done).actionView.run {
+                    isEnabled = it
+                    if (this is TextView) {
+                        typeface = if (it) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+                    }
+                }
+            })
 
         supportFragmentManager.setFragmentResultListener(ARG_PERIOD,
                 this@DetailsActivity,
@@ -114,16 +120,6 @@ open class DetailsActivity : AppCompatActivity() {
                 viewModel.onTextChanged(s.toString())
             }
         })
-
-        viewModel.validation
-            .observe(this, Observer {
-                binding.toolbar.menu.findItem(R.id.done).actionView.run {
-                    isEnabled = it
-                    if (this is TextView) {
-                        typeface = if (it) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
-                    }
-                }
-            })
 
         binding.radio.setOnCheckedChangeListener { group, checkedId ->
             val periodUnit = when (checkedId) {
@@ -156,5 +152,4 @@ open class DetailsActivity : AppCompatActivity() {
                 viewModel.saveTodo()
             }
     }
-
 }

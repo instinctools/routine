@@ -7,6 +7,8 @@ import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
 import com.routine.android.push
+import com.routine.android.vm.status.State
+import com.routine.android.vm.status.StatusViewMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,15 +16,15 @@ import kotlinx.coroutines.flow.combine
 import java.util.*
 
 @ExperimentalCoroutinesApi
-class DetailsViewModel(val id: String?) : StateViewMode() {
+class DetailsViewModel(val id: String?) : StatusViewMode() {
 
     val todo = MutableLiveData(TodoEntity(UUID.randomUUID().toString(), "", 1, PeriodUnit.DAY, Date()))
 
     private val textValidation = MutableStateFlow(false)
 
-    val validation = combine(textValidation, getStatus(STATUS_ADD_TODO).state.asFlow()) { text, progress ->
+    val validation = combine(textValidation, getStatus(STATUS_ADD_TODO).state) { text, progress ->
         text && progress.peekContent() != State.PROGRESS
-    }.asLiveData()
+    }
 
     companion object {
         const val STATUS_GET_TODO = "STATUS_GET_TODO"
@@ -30,7 +32,6 @@ class DetailsViewModel(val id: String?) : StateViewMode() {
     }
 
     init {
-
         process(STATUS_GET_TODO) {
             delay(1000)
             if (id != null) {
