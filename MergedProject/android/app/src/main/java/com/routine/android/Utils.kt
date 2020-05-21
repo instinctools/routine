@@ -1,7 +1,10 @@
 package com.routine.android
 
 import android.graphics.Color
+import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.routine.android.data.db.entity.PeriodUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -88,3 +91,13 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
         value = data
     }
 }
+
+fun showError(view: View, throwable: Throwable, block: () -> Unit) {
+    val snackbar = Snackbar.make(view, throwable.message ?: "An error occurred!", Snackbar.LENGTH_INDEFINITE)
+    snackbar.setAction("Retry") {
+        block.invoke()
+    }
+    snackbar.show()
+}
+
+fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""

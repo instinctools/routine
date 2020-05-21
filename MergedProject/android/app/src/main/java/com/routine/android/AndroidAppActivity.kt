@@ -58,14 +58,17 @@ class AndroidAppActivity : AppCompatActivity() {
 
         viewModel.todos
             .onEach {
-                when(it){
+                when (it) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> {
                         adapter.submitList(it.value)
                         adjustVisibility(false)
                     }
-                    is StoreResponse.Error -> {
+                    is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
+                        showError(binding.root, it.error) {
+                            viewModel.retry()
+                        }
                     }
                 }
             }
@@ -199,7 +202,7 @@ class AndroidAppActivity : AppCompatActivity() {
 
                             database().todos()
                                 .updateTodo(
-                                    todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
+                                        todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
                                 )
                         }
                     } else if (isRightActivated) {
@@ -237,8 +240,8 @@ class AndroidAppActivity : AppCompatActivity() {
         }
 
         override fun onChildDraw(
-            c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-            dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
         ) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
