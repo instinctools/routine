@@ -1,12 +1,12 @@
-package com.instinctools.routine_kmp.list
+package com.instinctools.routine_kmp.list.adapter
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.databinding.ItemTodoBinding
 import com.instinctools.routine_kmp.details.DetailsActivity
+import com.instinctools.routine_kmp.model.color.toPlatformColor
 import com.instinctools.routine_kmp.ui.todo.TodoUiModel
 
 class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -29,7 +29,7 @@ class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewH
         binding.targetDate.text = item.todo.nextTimestamp.toString()
 
         val drawable = binding.root.background.mutate() as GradientDrawable
-        drawable.setColor(Color.RED)
+        drawable.setColor(item.color.toPlatformColor())
     }
 }
 

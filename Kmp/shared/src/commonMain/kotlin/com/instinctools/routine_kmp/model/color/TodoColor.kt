@@ -18,3 +18,6 @@ class TodoColor(
         val TODOS_END = TodoColor(255, 57, 55)
     }
 }
+
+expect class PlatformColor
+expect fun TodoColor.toPlatformColor(): PlatformColor

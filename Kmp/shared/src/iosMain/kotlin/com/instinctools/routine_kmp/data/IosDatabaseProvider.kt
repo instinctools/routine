@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.data
 
 import com.instinctools.routine_kmp.TodoDatabase
+import com.instinctools.routine_kmp.data.database.DatabaseProvider
 import com.squareup.sqldelight.db.SqlDriver
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 

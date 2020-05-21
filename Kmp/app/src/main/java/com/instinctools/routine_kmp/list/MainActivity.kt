@@ -2,15 +2,19 @@ package com.instinctools.routine_kmp.list
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
-import com.instinctools.routine_kmp.data.SqlTodoStore
+import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
 import com.instinctools.routine_kmp.details.DetailsActivity
+import com.instinctools.routine_kmp.list.adapter.TodosAdapter
 import com.instinctools.routine_kmp.ui.todo.TodoListPresenter
+import com.instinctools.routine_kmp.ui.todo.TodoUiModel
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,38 +25,39 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity() {
 
     private lateinit var presenter: TodoListPresenter
-
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    @ExperimentalStdlibApi
+    private val adapter = TodosAdapter()
+
+    private val swipeActionsCallback = object : SwipeActionsCallback {
+        override fun onLeftActivated(item: TodoUiModel) {
+            onResetTodoSelected(item)
+        }
+
+        override fun onRightActivated(item: TodoUiModel) {
+            onDeleteTodoSelected(item)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.setOnMenuItemClickListener {
-            startActivity(Intent(this, DetailsActivity::class.java))
-            true
-        }
-
-        ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
-        val animator = binding.content.itemAnimator
-        if (animator is SimpleItemAnimator) {
-            animator.supportsChangeAnimations = false
-        }
-
-        val adapter = TodosAdapter()
-        binding.content.layoutManager = LinearLayoutManager(this)
-        binding.content.adapter = adapter
+        setupUi(binding)
 
         val databaseProvider = AndroidDatabaseProvider(applicationContext)
         val todoStore = SqlTodoStore(databaseProvider.database())
 
         presenter = TodoListPresenter(todoStore = todoStore)
         presenter.start()
+    }
 
+    @ExperimentalStdlibApi
+    override fun onStart() {
+        super.onStart()
         presenter.states.onEach { state ->
-            val mergedItems = buildList<Any> {
+            val mergedItems = buildList {
                 addAll(state.expiredTodos)
                 add(Unit)
                 addAll(state.futureTodos)
@@ -62,9 +67,42 @@ class MainActivity : AppCompatActivity() {
             .launchIn(scope)
     }
 
+    override fun onStop() {
+        super.onStop()
+        scope.cancelChildren()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         presenter.stop()
-        scope.cancelChildren()
+    }
+
+    private fun setupUi(binding: ActivityMainBinding) {
+        binding.content.layoutManager = LinearLayoutManager(this)
+        binding.content.adapter = adapter
+
+        val swipeCallback = SwipeCallback(this, swipeActionsCallback)
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.content)
+        val animator = binding.content.itemAnimator as? SimpleItemAnimator
+        animator?.supportsChangeAnimations = false
+
+        binding.toolbar.setOnMenuItemClickListener {
+            startActivity(Intent(this, DetailsActivity::class.java))
+            true
+        }
+    }
+
+    private fun onResetTodoSelected(item: TodoUiModel) {
+        presenter.resetTodo(item.todo.id)
+    }
+
+    private fun onDeleteTodoSelected(item: TodoUiModel) {
+        AlertDialog.Builder(this)
+            .setMessage(R.string.todos_delete_message)
+            .setPositiveButton(R.string.todos_delete_ok) { dialog, _ ->
+                presenter.deleteTodo(item.todo.id)
+            }
+            .setNegativeButton(R.string.todos_delete_cancel, null)
+            .show()
     }
 }

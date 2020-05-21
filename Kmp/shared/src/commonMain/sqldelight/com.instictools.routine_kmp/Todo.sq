@@ -9,13 +9,19 @@ CREATE TABLE todos (
 selectAll:
 SELECT * FROM todos;
 
+selectById:
+SELECT * FROM todos WHERE id = ?;
+
 insertTodo:
 INSERT INTO todos(title, period_unit, period_value, next_timestamp) VALUES (?, ?, ?, ?);
 
-updateTodoById:
+updateById:
 UPDATE todos SET
     title = ?,
     period_unit = ?,
     period_value = ?,
     next_timestamp = ?
 WHERE id = ?;
+
+deleteById:
+DELETE FROM todos WHERE id = ?;

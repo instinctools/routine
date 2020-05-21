@@ -4,16 +4,17 @@ import com.instinctools.routine_kmp.data.TodoStore
 import com.instinctools.routine_kmp.data.date.compareTo
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
-import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
-import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
+import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 class TodoListPresenter(
     private val todoStore: TodoStore
@@ -28,25 +29,24 @@ class TodoListPresenter(
     private val state: State get() = _states.valueOrNull ?: State()
 
     fun start() {
-//        todoStore.getTodos()
-//            .flowOn(Dispatchers.Default)
-//            .onEach { uiUpdater(it) }
-//            .launchIn(scope)
-
-        flow {
-            val todos = listOf(
-                Todo(1, "First", PeriodUnit.WEEK, 2, 0),
-                Todo(2, "Next", PeriodUnit.DAY, 3, 0),
-                Todo(3, "One more", PeriodUnit.MONTH, 1, 0),
-                Todo(4, "Last", PeriodUnit.WEEK, 2, 0),
-
-                Todo(5, "Last", PeriodUnit.WEEK, 2, Long.MAX_VALUE)
-            )
-            emit(todos)
-        }
+        todoStore.getTodos()
             .flowOn(Dispatchers.Default)
             .onEach { updateUiTodos(it) }
             .launchIn(scope)
+    }
+
+    fun resetTodo(id: Long) {
+        scope.launch(Dispatchers.Default) {
+            val todo = todoStore.getTodoById(id) ?: return@launch
+            // TODO reset task
+            todoStore.update(todo)
+        }
+    }
+
+    fun deleteTodo(id: Long) {
+        scope.launch(Dispatchers.Default + NonCancellable) {
+            todoStore.delete(id)
+        }
     }
 
     private fun updateUiTodos(todos: List<Todo>) {

@@ -69,16 +69,16 @@ final class TodoListViewController: UIViewController {
         presenter.start()
     }
 
-    private func showTaskDetailsView(todo: TodoUiModel?) {
-//        let viewModel = TaskDetailsViewModel(task: task)
-//        let rootViewController = TaskViewController(viewModel: viewModel)
-//        let viewController = UINavigationController(rootViewController: rootViewController)
-//        viewController.modalPresentationStyle = .fullScreen
-//        navigationController?.present(viewController, animated: true)
+    private func showTodoDetailsView(todo: TodoUiModel?) {
+        let viewModel = TaskDetailsViewModel(task: task)
+        let rootViewController = TaskViewController(viewModel: viewModel)
+        let viewController = UINavigationController(rootViewController: rootViewController)
+        viewController.modalPresentationStyle = .fullScreen
+        navigationController?.present(viewController, animated: true)
     }
 
     private func showTaskCreationView() {
-        showTaskDetailsView(todo: nil)
+        showTodoDetailsView(todo: nil)
     }
 
     private func makeDataSource() -> RxTableViewSectionedAnimatedDataSource<TodosTableSection> {
@@ -148,6 +148,7 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
         switch orientation {
         case .left:
             let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
+                self.presenter.resetTodo(id: self.model(atIndexPath: indexPath).todo.id)
             }
             setup(swipeAction: reseteAction, image: UIImage(named: "reset"))
 
@@ -159,6 +160,7 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
 
                 alert.addAction(.init(title: "Cancel", style: .cancel))
                 alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                    self.presenter.deleteTodo(id: self.model(atIndexPath: indexPath).todo.id)
                 }))
 
                 self.present(alert, animated: true)

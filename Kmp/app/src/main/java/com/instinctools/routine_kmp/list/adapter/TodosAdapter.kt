@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.list
+package com.instinctools.routine_kmp.list.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -19,11 +19,13 @@ class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return if (viewType == TYPE_TODO) {
-            TodosViewHolder(ItemTodoBinding.inflate(inflater, parent, false))
-        } else {
-            val view = inflater.inflate(R.layout.item_separator, parent, false)
-            EmptyViewHolder(view)
+        return when (viewType) {
+            TYPE_TODO -> TodosViewHolder(ItemTodoBinding.inflate(inflater, parent, false))
+            TYPE_SEPARATOR -> {
+                val view = inflater.inflate(R.layout.item_separator, parent, false)
+                EmptyViewHolder(view)
+            }
+            else -> throw IllegalStateException("Couldn't create view for view type $viewType")
         }
     }
 
@@ -34,13 +36,10 @@ class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        return if (item is TodoUiModel) {
-            TYPE_TODO
-        } else {
-            TYPE_SEPARATOR
-        }
+    override fun getItemViewType(position: Int) = when (val item = getItem(position)) {
+        is TodoUiModel -> TYPE_TODO
+        is Unit -> TYPE_SEPARATOR
+        else -> throw IllegalStateException("Failed to define item view type at $position, item=$item")
     }
 }
 

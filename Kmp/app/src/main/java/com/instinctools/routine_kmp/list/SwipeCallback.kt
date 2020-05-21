@@ -6,27 +6,31 @@ import androidx.core.graphics.withTranslation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
+import com.instinctools.routine_kmp.list.adapter.EmptyViewHolder
+import com.instinctools.routine_kmp.list.adapter.TodosViewHolder
 import kotlin.math.abs
 
-class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+class SwipeCallback(
+    context: Context,
+    private val callback: SwipeActionsCallback
+) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
 
-    val btnPaint = Paint()
-    val btnColor = Color.parseColor("#E3E3E3")
-    val btnColorActivated = Color.parseColor("#b2b2b2")
+    private val btnPaint = Paint()
+    private val btnColor = Color.parseColor("#E3E3E3")
+    private val btnColorActivated = Color.parseColor("#b2b2b2")
 
-    var textRect = Rect()
-    var btnRect = RectF()
+    private var textRect = Rect()
+    private var btnRect = RectF()
 
-    val textPaint = Paint()
-        .apply {
-            isAntiAlias = true
-            color = Color.WHITE
-            textSize = context.resources.getDimension(R.dimen.swipeable_text)
-        }
+    private val textPaint = Paint().apply {
+        isAntiAlias = true
+        color = Color.WHITE
+        textSize = context.resources.getDimension(R.dimen.swipeable_text)
+    }
 
-    val buttonWidth = context.resources.getDimensionPixelOffset(R.dimen.swipeable_btn_width)
-    val activateDistance = context.resources.getDimensionPixelOffset(R.dimen.swipeable_activate_distance)
-    val corners = context.resources.getDimension(R.dimen.todo_item_corner)
+    private val buttonWidth = context.resources.getDimensionPixelOffset(R.dimen.swipeable_btn_width)
+    private val activateDistance = context.resources.getDimensionPixelOffset(R.dimen.swipeable_activate_distance)
+    private val corners = context.resources.getDimension(R.dimen.todo_item_corner)
 
     var isLeftActivated = false
     var isRightActivated = false
@@ -37,7 +41,7 @@ class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTo
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         return if (viewHolder is EmptyViewHolder) {
-            makeMovementFlags(0, 0)
+            makeMovementFlags(0, 0)˚
         } else {
             super.getMovementFlags(recyclerView, viewHolder)
         }
@@ -46,34 +50,11 @@ class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTo
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         if ((isLeftActivated || isRightActivated) && viewHolder is TodosViewHolder) {
-            val todo = viewHolder.item?.todo
-            if (todo != null) {
-                if (isLeftActivated) {
-//                    lifecycle.coroutineScope.launch(Dispatchers.IO) {
-//                        val todoEntity = database().todos()
-//                            .getTodo(todo.id)
-//
-//                        database().todos()
-//                            .updateTodo(
-//                                todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
-//                            )
-//                    }
-                } else if (isRightActivated) {
-//                    AlertDialog.Builder(this)
-//                        .setMessage("Are you sure want to delete this task?")
-//                        .setPositiveButton("DELETE") { dialog, which ->
-//                            lifecycle.coroutineScope.launch(Dispatchers.IO) {
-//                                database().todos()
-//                                    .deleteTodo(todo.id)
-//                            }
-//                            dialog.dismiss()
-//                        }
-//                        .setNegativeButton("CANCEL") { dialog, which ->
-//                            dialog.dismiss()
-//                        }
-//                        .create()
-//                        .show()
-                }
+            val item = viewHolder.item ?: return
+            if (isLeftActivated) {
+                callback.onLeftActivated(item)
+            } else if (isRightActivated) {
+                callback.onRightActivated(item)
             }
         }
         isLeftActivated = false
@@ -112,11 +93,7 @@ class SwipeCallback(context: Context) : ItemTouchHelper.SimpleCallback(0, ItemTo
             text = "Delete"
         }
 
-        if (abs(dX) > activateDistance) {
-            btnPaint.color = btnColorActivated
-        } else {
-            btnPaint.color = btnColor
-        }
+        btnPaint.color = if (abs(dX) > activateDistance) btnColorActivated else btnColor
 
         if (isCurrentlyActive) {
             if (abs(dX) > activateDistance) {
