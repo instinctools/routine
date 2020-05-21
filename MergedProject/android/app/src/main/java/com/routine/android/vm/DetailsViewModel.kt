@@ -1,6 +1,9 @@
 package com.routine.android.vm
 
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
@@ -10,6 +13,7 @@ import com.routine.android.vm.status.StatusViewMode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.tasks.await
 import java.util.*
 
 @ExperimentalCoroutinesApi
@@ -40,8 +44,16 @@ class DetailsViewModel(val id: String?) : StatusViewMode() {
 
     fun saveTodo() {
         process(STATUS_ADD_TODO) {
-            todo.value?.let {
-                database().todos().addTodo(it)
+            val user = Firebase.auth.currentUser
+            val value = todo.value
+            if (user != null && value != null){
+                Firebase.firestore.collection("users")
+                    .document(user.uid)
+                    .collection("todos")
+                    .document(value.id)
+                    .set(value)
+                    .await()
+
                 addTodoResult.push(true)
             }
         }
