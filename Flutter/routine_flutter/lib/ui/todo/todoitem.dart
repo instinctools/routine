@@ -35,10 +35,13 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(TimeUtils.getPrettyPeriod(
-                        entry.periodUnit, entry.periodValue),
+                    Text(
+                        TimeUtils.getPrettyPeriod(
+                            entry.periodUnit, entry.periodValue),
                         style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(entry.periodValue.toString(), style: Styles.TODO_ITEM_TIME_TEXT)
+                    Text(
+                        TimeUtils.calculateTimeLeft(entry.timestamp.toString()),
+                        style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
               )
@@ -70,5 +73,6 @@ class TodoTMP {
   String timeLeft;
   String period;
 
-  TodoTMP(this.title, {this.timeLeft = '5 days left', this.period = 'per 2 days'});
+  TodoTMP(this.title,
+      {this.timeLeft = '5 days left', this.period = 'per 2 days'});
 }
