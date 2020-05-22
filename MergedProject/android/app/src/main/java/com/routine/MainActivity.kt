@@ -11,6 +11,7 @@ import com.routine.databinding.ActivityHomeBinding
 class MainActivity : AppCompatActivity() {
     private val binding: ActivityHomeBinding by viewBinding(ActivityHomeBinding::inflate)
 
+    @ExperimentalStdlibApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

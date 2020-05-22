@@ -23,6 +23,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import kotlin.math.abs
 
 @ExperimentalStdlibApi
@@ -54,6 +55,7 @@ class AndroidAppActivity : AppCompatActivity() {
 
         viewModel.todos
             .onEach { data: StoreResponse<List<Any>> ->
+                Timber.i("Response, ${data::class} from: ${data.origin}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> {
