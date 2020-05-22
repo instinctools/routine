@@ -39,15 +39,15 @@ class _TodoListState extends State<TodoList> {
                 var sortedList = snap.data;
                 sortedList.sort((a, b) =>
                     TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
-                var lastExpiredIndex = findLastExpiredIndex(sortedList);
+                var dividerIndex = findLastExpiredIndex(sortedList)+1;
                 return ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
                     itemCount: sortedList.length,
                     itemBuilder: (context, index) {
                       var item = sortedList[index];
-                      if (lastExpiredIndex != 0 &&
-                          index == lastExpiredIndex + 1) {
+                      if (dividerIndex != 0 &&
+                          index == dividerIndex) {
                         return Divider(
                             color: ColorsRes.selectedPeriodUnitColor);
                       }
@@ -55,6 +55,10 @@ class _TodoListState extends State<TodoList> {
                           child: Dismissible(
                             key: Key(item.id.toString()),
                             child: TodoItem(item, index),
+                            onResize: () {
+                              setState(() {});
+                              print("reseted");
+                            },
                             onDismissed: (direction) {
                               setState(() {});
                             },
@@ -90,7 +94,7 @@ class _TodoListState extends State<TodoList> {
 
   int findLastExpiredIndex(List<Todo> list) {
     int currentTime = TimeUtils.getCurrentTimeMillis();
-    int index = 0;
+    int index = -1;
     for (int i = 0; i <= list.length; i++) {
       var item = list[i];
       if (item.timestamp > currentTime) {
@@ -145,29 +149,45 @@ class _TodoListState extends State<TodoList> {
 
   Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
     if (direction == DismissDirection.startToEnd) {
-      print('reseted');
+      await resetTodo(item);
     } else {
-      return await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(Strings.listDialogContentText),
-              actions: <Widget>[
-                FlatButton(
-                    child: Text(Strings.listDialogActionCancel),
-                    onPressed: () => Navigator.pop(context, false)),
-                FlatButton(
-                    child: Text(Strings.listDialogActionDelete),
-                    onPressed: () async {
-                      bool isSuccess = await helper.deleteTodo(item.id) != null;
-                      Navigator.pop(context, isSuccess);
-                    }),
-              ],
-            );
-          });
+      return showConfirmDialog(item);
     }
     return false;
   }
+
+  Future<void> resetTodo(Todo item) async {
+    Todo reseted = Todo(
+        id: item.id,
+        title: item.title,
+        periodUnit: item.periodUnit,
+        periodValue: item.periodValue,
+        timestamp:
+            TimeUtils.calculateTargetTime(item.periodUnit, item.periodValue)
+                .millisecondsSinceEpoch);
+    if (await helper.changeTodo(reseted) != null) {
+      setState(() {});
+    }
+  }
+
+  Future<bool> showConfirmDialog(Todo item) async => await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(Strings.listDialogContentText),
+          actions: <Widget>[
+            FlatButton(
+                child: Text(Strings.listDialogActionCancel),
+                onPressed: () => Navigator.pop(context, false)),
+            FlatButton(
+                child: Text(Strings.listDialogActionDelete),
+                onPressed: () async {
+                  bool isSuccess = await helper.deleteTodo(item.id) != null;
+                  Navigator.pop(context, isSuccess);
+                }),
+          ],
+        );
+      });
 
   void pushEditScreen({Todo todo}) async {
     var isAdded = await Navigator.push(
