@@ -39,22 +39,23 @@ class _TodoListState extends State<TodoList> {
                 var sortedList = snap.data;
                 sortedList.sort((a, b) =>
                     TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
-                var dividerIndex = findLastExpiredIndex(sortedList)+1;
+                var lastExpiredIndex = findLastExpiredIndex(sortedList);
+                var dividerIndex = lastExpiredIndex + 1;
+
                 return ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
                     itemCount: sortedList.length,
                     itemBuilder: (context, index) {
                       var item = sortedList[index];
-                      if (dividerIndex != 0 &&
-                          index == dividerIndex) {
+                      if (dividerIndex != 0 && index == dividerIndex) {
                         return Divider(
                             color: ColorsRes.selectedPeriodUnitColor);
                       }
                       return GestureDetector(
                           child: Dismissible(
                             key: Key(item.id.toString()),
-                            child: TodoItem(item, index),
+                            child: TodoItem(item, index - dividerIndex),
                             onResize: () {
                               setState(() {});
                               print("reseted");
@@ -162,9 +163,9 @@ class _TodoListState extends State<TodoList> {
         title: item.title,
         periodUnit: item.periodUnit,
         periodValue: item.periodValue,
-        timestamp:
-            TimeUtils.calculateTargetTime(item.periodUnit, item.periodValue)
-                .millisecondsSinceEpoch);
+        timestamp: TimeUtils.calculateTargetTime(
+                item.title, item.periodUnit, item.periodValue, true)
+            .millisecondsSinceEpoch);
     if (await helper.changeTodo(reseted) != null) {
       setState(() {});
     }

@@ -54,6 +54,9 @@ class TodoItem extends StatelessWidget {
       {int maxIndex = 15,
       color1 = const [255, 190, 67],
       color2 = const [255, 57, 55]}) {
+    if (index < 0) {
+      return Colors.green;
+    }
     var w1 = 1.0;
     if (index < maxIndex) {
       w1 = index / maxIndex;

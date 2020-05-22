@@ -16,7 +16,8 @@ class TimeUtils {
     return 'Every $periodCount$periodUnit$pluralPostfix';
   }
 
-  static DateTime calculateTargetTime(String unit, int value) {
+  static DateTime calculateTargetTime(String title, String unit, int value,
+      [bool isReset = false]) {
     DateTime now = getCurrentTime();
     int day = 0, month = 0;
     switch (findPeriod(unit)) {
@@ -29,6 +30,11 @@ class TimeUtils {
       case Period.MONTH:
         month = value;
         break;
+    }
+
+    if (!isReset && title.contains("exp")) {
+      print("expired = $title");
+      return DateTime(now.year, now.month, now.day - 1);
     }
     return DateTime(now.year, now.month + month, now.day + day);
   }
