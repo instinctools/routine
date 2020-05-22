@@ -6,6 +6,7 @@ import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -34,18 +35,29 @@ class _TodoListState extends State<TodoList> {
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
               if (snap.data.length > 0) {
+                print("Todos loaded from db, size = ${snap.data.length}");
+                var sortedList = snap.data;
+                sortedList.sort((a, b) =>
+                    TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
+                var lastExpiredIndex = findLastExpiredIndex(sortedList);
                 return ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
-                    itemCount: snap.data.length,
+                    itemCount: sortedList.length,
                     itemBuilder: (context, index) {
-                      var item = snap.data[index];
+                      var item = sortedList[index];
+                      if (lastExpiredIndex != 0 &&
+                          index == lastExpiredIndex + 1) {
+                        return Divider(
+                            color: ColorsRes.selectedPeriodUnitColor);
+                      }
                       return GestureDetector(
                           child: Dismissible(
                             key: Key(item.id.toString()),
                             child: TodoItem(item, index),
-                            onDismissed: (direction){setState(() {
-                            });},
+                            onDismissed: (direction) {
+                              setState(() {});
+                            },
                             confirmDismiss: (direction) =>
                                 _confirmDismiss(direction, item),
                             background: _getItemBackground(
@@ -74,6 +86,20 @@ class _TodoListState extends State<TodoList> {
             );
           },
         ));
+  }
+
+  int findLastExpiredIndex(List<Todo> list) {
+    int currentTime = TimeUtils.getCurrentTimeMillis();
+    int index = 0;
+    for (int i = 0; i <= list.length; i++) {
+      var item = list[i];
+      if (item.timestamp > currentTime) {
+        break;
+      }
+      index = i;
+    }
+    print("last expired item index $index");
+    return index;
   }
 
   Widget _getItemBackground(String title, Color color, bool isPrimary) {

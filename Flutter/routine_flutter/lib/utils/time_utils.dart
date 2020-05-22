@@ -3,7 +3,7 @@ import 'package:routine_flutter/ui/edit/period.dart';
 class TimeUtils {
   static DateTime getCurrentTime() {
     DateTime current = DateTime.now();
-    return DateTime(current.year, current.month, current.day).toUtc();
+    return DateTime(current.year, current.month, current.day);
   }
 
   static int getCurrentTimeMillis() => getCurrentTime().millisecondsSinceEpoch;
@@ -30,21 +30,16 @@ class TimeUtils {
         month = value;
         break;
     }
-    print("month = $month, days = $day");
-    return DateTime(now.year, now.month + month, now.day + day).toUtc();
+    return DateTime(now.year, now.month + month, now.day + day);
   }
 
   static calculateTimeLeft(String targetDate) {
-    DateTime target =
-        DateTime.fromMillisecondsSinceEpoch(int.parse(targetDate), isUtc: true);
+    DateTime target = DateTime.fromMillisecondsSinceEpoch(int.parse(targetDate),
+        isUtc: false);
     DateTime now = getCurrentTime();
-    var days = target.difference(now).inDays + 1;
-    print("days = $days");
+    var days = target.difference(now).inDays;
     String result = "";
     switch (days) {
-      case -1:
-        result = "Fuckuped";
-        break;
       case 0:
         result = "Today";
         break;
@@ -59,7 +54,12 @@ class TimeUtils {
           result = "$days days left";
         }
     }
-    print("result = $result");
     return result;
+  }
+
+  static int compareTargetDates(int first, int second) {
+    var firstDate = DateTime.fromMillisecondsSinceEpoch(first);
+    var secondDate = DateTime.fromMillisecondsSinceEpoch(second);
+    return firstDate.compareTo(secondDate);
   }
 }
