@@ -11,22 +11,18 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
-import com.routine.android.data.db.database
 import com.routine.android.data.model.Todo
 import com.routine.android.vm.AndroidAppViewModel
 import com.routine.databinding.ActivityMainBinding
 import com.routine.databinding.ItemTodoBinding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @ExperimentalStdlibApi
@@ -57,16 +53,16 @@ class AndroidAppActivity : AppCompatActivity() {
         binding.content.adapter = adapter
 
         viewModel.todos
-            .onEach {
-                when (it) {
+            .onEach { data: StoreResponse<List<Any>> ->
+                when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> {
-                        adapter.submitList(it.value)
+                        adapter.submitList(data.value)
                         adjustVisibility(false)
                     }
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
-                        showError(binding.root, it.error) {
+                        showError(binding.root, data.error) {
                             viewModel.retry()
                         }
                     }
@@ -196,24 +192,13 @@ class AndroidAppActivity : AppCompatActivity() {
                 if (todo != null) {
                     if (isLeftActivated) {
                         Analytics.action("reset_todo_android")
-                        lifecycle.coroutineScope.launch(Dispatchers.IO) {
-                            val todoEntity = database().todos()
-                                .getTodo(todo.id)
-
-                            database().todos()
-                                .updateTodo(
-                                        todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
-                                )
-                        }
+                        viewModel.resetTodo(todo)
                     } else if (isRightActivated) {
                         AlertDialog.Builder(this@AndroidAppActivity)
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
                                 Analytics.action("delete_todo_android")
-                                lifecycle.coroutineScope.launch(Dispatchers.IO) {
-                                    database().todos()
-                                        .deleteTodo(todo.id)
-                                }
+                                viewModel.removeTodo(todo)
                                 dialog.dismiss()
                             }
                             .setNegativeButton("CANCEL") { dialog, which ->
