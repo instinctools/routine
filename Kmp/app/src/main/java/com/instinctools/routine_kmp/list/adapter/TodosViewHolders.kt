@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.databinding.ItemTodoBinding
 import com.instinctools.routine_kmp.details.DetailsActivity
 import com.instinctools.routine_kmp.model.color.toPlatformColor
-import com.instinctools.routine_kmp.ui.todo.TodoUiModel
+import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 
 class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    var item: TodoUiModel? = null
+    var item: TodoListUiModel? = null
 
     init {
         binding.root.setOnClickListener {
@@ -22,7 +22,7 @@ class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewH
         }
     }
 
-    fun bind(item: TodoUiModel) {
+    fun bind(item: TodoListUiModel) {
         this.item = item
         binding.title.text = item.todo.title
         binding.periodStr.text = item.todo.periodUnit.name

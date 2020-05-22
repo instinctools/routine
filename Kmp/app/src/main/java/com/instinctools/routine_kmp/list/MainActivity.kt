@@ -13,8 +13,8 @@ import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
 import com.instinctools.routine_kmp.details.DetailsActivity
 import com.instinctools.routine_kmp.list.adapter.TodosAdapter
-import com.instinctools.routine_kmp.ui.todo.TodoListPresenter
-import com.instinctools.routine_kmp.ui.todo.TodoUiModel
+import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
+import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     private val adapter = TodosAdapter()
 
     private val swipeActionsCallback = object : SwipeActionsCallback {
-        override fun onLeftActivated(item: TodoUiModel) {
+        override fun onLeftActivated(item: TodoListUiModel) {
             onResetTodoSelected(item)
         }
 
-        override fun onRightActivated(item: TodoUiModel) {
+        override fun onRightActivated(item: TodoListUiModel) {
             onDeleteTodoSelected(item)
         }
     }
@@ -92,15 +92,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onResetTodoSelected(item: TodoUiModel) {
-        presenter.resetTodo(item.todo.id)
+    private fun onResetTodoSelected(item: TodoListUiModel) {
+        val event = TodoListPresenter.Event.Reset(item.todo.id)
+        presenter.events.offer(event)
     }
 
-    private fun onDeleteTodoSelected(item: TodoUiModel) {
+    private fun onDeleteTodoSelected(item: TodoListUiModel) {
         AlertDialog.Builder(this)
             .setMessage(R.string.todos_delete_message)
-            .setPositiveButton(R.string.todos_delete_ok) { dialog, _ ->
-                presenter.deleteTodo(item.todo.id)
+            .setPositiveButton(R.string.todos_delete_ok) { _, _ ->
+                val event = TodoListPresenter.Event.Delete(item.todo.id)
+                presenter.events.offer(event)
             }
             .setNegativeButton(R.string.todos_delete_cancel, null)
             .show()

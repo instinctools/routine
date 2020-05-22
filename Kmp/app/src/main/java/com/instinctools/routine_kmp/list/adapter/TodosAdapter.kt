@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ItemTodoBinding
-import com.instinctools.routine_kmp.ui.todo.TodoUiModel
+import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 
 class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
 
@@ -31,13 +31,13 @@ class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        if (item is TodoUiModel) {
+        if (item is TodoListUiModel) {
             (holder as TodosViewHolder).bind(item)
         }
     }
 
     override fun getItemViewType(position: Int) = when (val item = getItem(position)) {
-        is TodoUiModel -> TYPE_TODO
+        is TodoListUiModel -> TYPE_TODO
         is Unit -> TYPE_SEPARATOR
         else -> throw IllegalStateException("Failed to define item view type at $position, item=$item")
     }
@@ -46,7 +46,7 @@ class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
 private object TodoDiff : DiffUtil.ItemCallback<Any>() {
 
     override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-        if (oldItem is TodoUiModel && newItem is TodoUiModel) {
+        if (oldItem is TodoListUiModel && newItem is TodoListUiModel) {
             return oldItem.todo.id == newItem.todo.id
         }
         return true
@@ -54,7 +54,7 @@ private object TodoDiff : DiffUtil.ItemCallback<Any>() {
 
     @SuppressLint("DiffUtilEquals")
     override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-        if (oldItem is TodoUiModel && newItem is TodoUiModel) {
+        if (oldItem is TodoListUiModel && newItem is TodoListUiModel) {
             return oldItem == newItem
         }
         return true
