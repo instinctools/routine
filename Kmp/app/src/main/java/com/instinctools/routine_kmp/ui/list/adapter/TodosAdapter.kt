@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.list.adapter
+package com.instinctools.routine_kmp.ui.list.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -10,7 +10,9 @@ import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ItemTodoBinding
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 
-class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
+class TodosAdapter(
+    private val itemClickListener: (position: Int, item: TodoListUiModel) -> Unit
+) : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
 
     companion object {
         const val TYPE_TODO = 0
@@ -20,7 +22,18 @@ class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(TodoDiff) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            TYPE_TODO -> TodosViewHolder(ItemTodoBinding.inflate(inflater, parent, false))
+            TYPE_TODO -> {
+                val binding = ItemTodoBinding.inflate(inflater, parent, false)
+                TodosViewHolder(binding).also { holder ->
+                    holder.itemView.setOnClickListener {
+                        val adapterPosition = holder.adapterPosition
+                        if (adapterPosition >= 0) {
+                            val item = getItem(adapterPosition) as? TodoListUiModel ?: return@setOnClickListener
+                            itemClickListener(adapterPosition, item)
+                        }
+                    }
+                }
+            }
             TYPE_SEPARATOR -> {
                 val view = inflater.inflate(R.layout.item_separator, parent, false)
                 EmptyViewHolder(view)

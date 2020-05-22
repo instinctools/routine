@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.list
+package com.instinctools.routine_kmp.ui.list
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +11,8 @@ import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
 import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
-import com.instinctools.routine_kmp.details.DetailsActivity
-import com.instinctools.routine_kmp.list.adapter.TodosAdapter
+import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
+import com.instinctools.routine_kmp.ui.list.adapter.TodosAdapter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 import com.instinctools.routine_kmp.util.cancelChildren
@@ -22,12 +22,15 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class MainActivity : AppCompatActivity() {
+class TodoListActivity : AppCompatActivity() {
 
     private lateinit var presenter: TodoListPresenter
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    private val adapter = TodosAdapter()
+    private val adapter = TodosAdapter { _, item ->
+        val intent = TodoDetailsActivity.buildIntent(this, item.todo.id)
+        startActivity(intent)
+    }
 
     private val swipeActionsCallback = object : SwipeActionsCallback {
         override fun onLeftActivated(item: TodoListUiModel) {
@@ -87,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         animator?.supportsChangeAnimations = false
 
         binding.toolbar.setOnMenuItemClickListener {
-            startActivity(Intent(this, DetailsActivity::class.java))
+            startActivity(Intent(this, TodoDetailsActivity::class.java))
             true
         }
     }

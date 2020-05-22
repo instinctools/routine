@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".details.DetailsActivity">
+    tools:context=".ui.details.TodoDetailsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -106,6 +106,18 @@
             android:button="@null"
             android:padding="16dp"
             android:text="Every month"
+            android:textColor="@color/period_selector"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/every_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/period_selector"
+            android:button="@null"
+            android:padding="16dp"
+            android:text="Every year"
             android:textColor="@color/period_selector"
             android:textSize="20sp" />
 

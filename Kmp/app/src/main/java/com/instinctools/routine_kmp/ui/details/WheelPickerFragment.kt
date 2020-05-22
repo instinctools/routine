@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.details
+package com.instinctools.routine_kmp.ui.details
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -23,12 +23,13 @@ class WheelPickerFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val period = arguments?.getInt(ARG_PERIOD) ?: 1
+//        val period = arguments?.getInt(ARG_PERIOD) ?: 1
+        val period = 1
 
         binding.wheelPicker.data = IntRange(1, 100).toList()
         binding.wheelPicker.setOnItemSelectedListener { _, data, _ ->
             if (isAdded) {
-                setFragmentResult(ARG_PERIOD, bundleOf(ARG_PERIOD to data))
+//                setFragmentResult(ARG_PERIOD, bundleOf(ARG_PERIOD to data))
             }
         }
 
@@ -51,7 +52,7 @@ class WheelPickerFragment : DialogFragment() {
         val TAG = WheelPickerFragment::class.simpleName
 
         fun newInstance(period: Int) = WheelPickerFragment().apply {
-            arguments = bundleOf(ARG_PERIOD to period)
+//            arguments = bundleOf(ARG_PERIOD to period)
         }
     }
 }

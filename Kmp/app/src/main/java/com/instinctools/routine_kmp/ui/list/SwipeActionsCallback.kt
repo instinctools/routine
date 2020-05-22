@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.list
+package com.instinctools.routine_kmp.ui.list
 
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 

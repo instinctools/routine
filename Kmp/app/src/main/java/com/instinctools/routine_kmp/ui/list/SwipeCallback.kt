@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.list
+package com.instinctools.routine_kmp.ui.list
 
 import android.content.Context
 import android.graphics.*
@@ -6,8 +6,8 @@ import androidx.core.graphics.withTranslation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.list.adapter.EmptyViewHolder
-import com.instinctools.routine_kmp.list.adapter.TodosViewHolder
+import com.instinctools.routine_kmp.ui.list.adapter.EmptyViewHolder
+import com.instinctools.routine_kmp.ui.list.adapter.TodosViewHolder
 import kotlin.math.abs
 
 class SwipeCallback(
@@ -41,7 +41,7 @@ class SwipeCallback(
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         return if (viewHolder is EmptyViewHolder) {
-            makeMovementFlags(0, 0)˚
+            makeMovementFlags(0, 0)
         } else {
             super.getMovementFlags(recyclerView, viewHolder)
         }
