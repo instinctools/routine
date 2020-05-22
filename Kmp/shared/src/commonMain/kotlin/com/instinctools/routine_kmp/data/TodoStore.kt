@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface TodoStore {
 
     fun getTodos(): Flow<List<Todo>>
-    fun getTodoById(id: Long): Todo?
+    suspend fun getTodoById(id: Long): Todo?
 
     suspend fun insert(todo: Todo)
     suspend fun update(todo: Todo)

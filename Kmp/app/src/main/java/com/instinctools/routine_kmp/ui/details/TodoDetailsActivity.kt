@@ -30,15 +30,15 @@ class TodoDetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
-        if (todoId == NO_ID) {
-            todoId = null
-        }
-
         setupUi()
 
         val databaseProvider = AndroidDatabaseProvider(applicationContext)
         val todoStore = SqlTodoStore(databaseProvider.database())
+
+        var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
+        if (todoId == NO_ID) {
+            todoId = null
+        }
 
         presenter = TodoDetailsPresenter(todoId, todoStore)
         presenter.start()
@@ -47,7 +47,13 @@ class TodoDetailsActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         presenter.states.onEach { state ->
-            binding.text.setText(state.todo.title)
+            if (state.saved) {
+                onBackPressed()
+            }
+
+            if (binding.text.text.toString() != state.todo.title) {
+                binding.text.setText(state.todo.title)
+            }
         }
             .launchIn(scope)
     }
@@ -64,6 +70,10 @@ class TodoDetailsActivity : AppCompatActivity() {
 
     private fun setupUi() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbar.menu.findItem(R.id.done).actionView.setOnClickListener {
+            presenter.events.offer(TodoDetailsPresenter.Event.Save)
+        }
+
         binding.everyDay.setOnClickListener {
             val fragment = supportFragmentManager.findFragmentByTag(WheelPickerFragment.TAG)
             if (fragment == null) {
@@ -76,15 +86,7 @@ class TodoDetailsActivity : AppCompatActivity() {
             val event = TodoDetailsPresenter.Event.ChangeTitle(text?.toString())
             presenter.events.offer(event)
         }
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.done -> {
-                    presenter.events.offer(TodoDetailsPresenter.Event.Save)
-                    true
-                }
-                else -> false
-            }
-        }
+
         binding.radio.setOnCheckedChangeListener { _, checkedId ->
             val periodUnit = when (checkedId) {
                 R.id.every_day -> PeriodUnit.DAY

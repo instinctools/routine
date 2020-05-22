@@ -6,7 +6,9 @@ import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class SqlTodoStore(
     private val database: TodoDatabase
@@ -27,19 +29,19 @@ class SqlTodoStore(
         .asFlow()
         .mapToList()
 
-    override fun getTodoById(id: Long): Todo? = database.todoQueries
-        .selectById(id, mapper)
-        .executeAsOneOrNull()
+    override suspend fun getTodoById(id: Long): Todo? = withContext(Dispatchers.Default) {
+        database.todoQueries.selectById(id, mapper).executeAsOneOrNull()
+    }
 
-    override suspend fun insert(todo: Todo) {
+    override suspend fun insert(todo: Todo) = withContext(Dispatchers.Default) {
         database.todoQueries.insertTodo(todo.title, todo.periodUnit.id, todo.periodValue, todo.nextTimestamp)
     }
 
-    override suspend fun update(todo: Todo) {
+    override suspend fun update(todo: Todo) = withContext(Dispatchers.Default) {
         database.todoQueries.updateById(todo.title, todo.periodUnit.id, todo.periodValue, todo.nextTimestamp, todo.id)
     }
 
-    override suspend fun delete(id: Long) {
+    override suspend fun delete(id: Long) = withContext(Dispatchers.Default) {
         database.todoQueries.deleteById(id)
     }
 }

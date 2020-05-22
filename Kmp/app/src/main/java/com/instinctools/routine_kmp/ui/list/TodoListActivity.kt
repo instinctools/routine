@@ -62,7 +62,9 @@ class TodoListActivity : AppCompatActivity() {
         presenter.states.onEach { state ->
             val mergedItems = buildList {
                 addAll(state.expiredTodos)
-                add(Unit)
+                if (state.expiredTodos.isNotEmpty()) {
+                    add(Unit)
+                }
                 addAll(state.futureTodos)
             }
             adapter.submitList(mergedItems)

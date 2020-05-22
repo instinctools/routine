@@ -3,7 +3,6 @@ package com.instinctools.routine_kmp.ui.todo.details
 import com.instinctools.routine_kmp.data.TodoStore
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -26,7 +25,7 @@ class TodoDetailsPresenter(
 
     override fun start() {
         if (todoId != null) {
-            scope.launch(Dispatchers.Default) {
+            scope.launch {
                 val todo = todoStore.getTodoById(todoId) ?: return@launch
                 sendState(state.copy(todo = todo.toEditModel()))
             }
@@ -37,7 +36,7 @@ class TodoDetailsPresenter(
                 when (event) {
                     is Event.ChangeTitle -> {
                         val todo = state.todo.copy(title = event.title)
-                        sendState(state.copy(todo = todo))
+                        if (todo != state.todo) sendState(state.copy(todo = todo))
                     }
                     is Event.ChangePeriodUnit -> {
                         val todo = state.todo.copy(periodUnit = event.periodUnit)
@@ -47,12 +46,30 @@ class TodoDetailsPresenter(
                         val todo = state.todo.copy(periodValue = event.period)
                         sendState(state.copy(todo = todo))
                     }
-                    Event.Save -> {
-
-                    }
+                    Event.Save -> save()
                 }
             }
         }
+    }
+
+    private suspend fun save() {
+        val todo = state.todo
+        if (todoId == null) {
+            val newTodo = todo.buildNewTodoModel()
+            if (newTodo == null) {
+                // TODO send error state
+            } else {
+                todoStore.insert(newTodo)
+            }
+        } else {
+            val newTodo = todo.buildUpdatedTodoModel()
+            if (newTodo == null) {
+                // TODO send error state
+            } else {
+                todoStore.update(newTodo)
+            }
+        }
+        sendState(state.copy(saved = true))
     }
 
     private fun sendState(newState: State) {
@@ -60,7 +77,8 @@ class TodoDetailsPresenter(
     }
 
     data class State(
-        val todo: EditTodoUiModel = EditTodoUiModel()
+        val todo: EditTodoUiModel = EditTodoUiModel(),
+        val saved: Boolean = false
     )
 
     sealed class Event {
