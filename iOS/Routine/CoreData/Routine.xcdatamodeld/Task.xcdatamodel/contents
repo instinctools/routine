@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="TaskEntity" representedClassName="TaskEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="String" defaultValueString=""/>
+        <attribute name="period" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="periodCount" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="startDate" attributeType="Date" defaultDateTimeInterval="599562000" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+    </entity>
+    <elements>
+        <element name="TaskEntity" positionX="-63" positionY="-18" width="128" height="118"/>
+    </elements>
+</model>
