@@ -19,7 +19,8 @@ class AndroidAppViewModel : StatusViewModel() {
     }
 
     private val refreshTodosStateFlow = MutableStateFlow(Any())
-    private val removeTodosStateFlow = MutableStateFlow("")
+    private val removeTodoStateFlow = MutableStateFlow("")
+    private val resetTodoStateFlow = MutableStateFlow("")
 
     val todos = refreshTodosStateFlow.flatMapLatest {
         TodosRepository.todosStore
@@ -34,26 +35,39 @@ class AndroidAppViewModel : StatusViewModel() {
             }
     }
 
-    val removeTodo = removeTodosStateFlow.filter { it.isNotEmpty() }
+    private val removeTodo = removeTodoStateFlow.filter { it.isNotEmpty() }
         .flatMapLatest {
             TodosRepository.removeTodoStore
                 .stream(StoreRequest.fresh(it))
         }
         .onEach {
             if (it is StoreResponse.Data || it is StoreResponse.Loading) {
-                removeTodosStateFlow.value = ""
+                removeTodoStateFlow.value = ""
             }
         }
+
+    private val resetTodo = resetTodoStateFlow.filter { it.isNotEmpty() }
+        .flatMapLatest {
+            TodosRepository.resetTodoStore
+                .stream(StoreRequest.fresh(it))
+        }
+        .onEach {
+            if (it is StoreResponse.Data || it is StoreResponse.Loading) {
+                resetTodoStateFlow.value = ""
+            }
+        }
+
+    val actionTodo = merge(removeTodo, resetTodo)
 
     fun refresh() {
         refreshTodosStateFlow.value = Any()
     }
 
     fun removeTodo(todo: Todo) {
-        removeTodosStateFlow.value = todo.id
+        removeTodoStateFlow.value = todo.id
     }
 
     fun resetTodo(todo: Todo) {
-
+        resetTodoStateFlow.value = todo.id
     }
 }
