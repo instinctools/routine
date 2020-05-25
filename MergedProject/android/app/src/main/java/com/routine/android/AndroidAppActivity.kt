@@ -34,7 +34,8 @@ class AndroidAppActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
-    private var adapter = TodosAdapter()
+    private val adapter = TodosAdapter()
+    private val swipeCallback by lazy { SwipeCallback(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +47,7 @@ class AndroidAppActivity : AppCompatActivity() {
             true
         }
 
-        ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.content)
         val animator = binding.content.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
@@ -77,16 +78,16 @@ class AndroidAppActivity : AppCompatActivity() {
             viewModel.refresh()
         }
 
-        viewModel.removeTodo
+        viewModel.actionTodo
             .onEach {
                 when (it) {
-                    is StoreResponse.Loading -> binding.progress.visibility = View.VISIBLE
-                    is StoreResponse.Data -> binding.progress.visibility = View.GONE
                     is StoreResponse.Error.Exception -> {
-                        binding.progress.visibility = View.GONE
                         Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
                     }
                 }
+
+                swipeCallback.isEnabled = it !is StoreResponse.Loading
+                binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
             }
             .launchIn(lifecycleScope)
     }
@@ -193,13 +194,14 @@ class AndroidAppActivity : AppCompatActivity() {
 
         var isLeftActivated = false
         var isRightActivated = false
+        var isEnabled = true
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
         }
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return if (viewHolder is EmptyViewHolder) {
+            return if (!isEnabled || viewHolder is EmptyViewHolder) {
                 makeMovementFlags(0, 0)
             } else {
                 super.getMovementFlags(recyclerView, viewHolder)
