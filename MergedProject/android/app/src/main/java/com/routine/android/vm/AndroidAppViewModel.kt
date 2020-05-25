@@ -1,5 +1,7 @@
 package com.routine.android.vm
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.android.data.model.Todo
@@ -22,7 +24,7 @@ class AndroidAppViewModel : StatusViewModel() {
     private val removeTodoStateFlow = MutableStateFlow("")
     private val resetTodoStateFlow = MutableStateFlow("")
 
-    val todos = refreshTodosStateFlow.flatMapLatest {
+    private val todos = refreshTodosStateFlow.flatMapLatest {
         TodosRepository.todosStore
             .stream(StoreRequest.cached("", true))
             .map { list ->
@@ -34,6 +36,11 @@ class AndroidAppViewModel : StatusViewModel() {
                 list
             }
     }
+
+    val todosData = todos.filter { it is StoreResponse.Data }
+        .asLiveData()
+
+    val todosStatus = todos.asLiveData()
 
     private val removeTodo = removeTodoStateFlow.filter { it.isNotEmpty() }
         .flatMapLatest {
@@ -58,6 +65,7 @@ class AndroidAppViewModel : StatusViewModel() {
         }
 
     val actionTodo = merge(removeTodo, resetTodo)
+        .asLiveData()
 
     fun refresh() {
         refreshTodosStateFlow.value = Any()

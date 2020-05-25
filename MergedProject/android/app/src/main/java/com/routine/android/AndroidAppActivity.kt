@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
 import com.google.android.material.snackbar.Snackbar
@@ -22,8 +22,6 @@ import com.routine.databinding.ActivityMainBinding
 import com.routine.databinding.ItemTodoBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -55,15 +53,17 @@ class AndroidAppActivity : AppCompatActivity() {
 
         binding.content.adapter = adapter
 
-        viewModel.todos
-            .onEach { data: StoreResponse<List<Any>> ->
+        viewModel.todosData
+            .observe(this, Observer {
+                adapter.submitList(it.dataOrNull())
+            })
+
+        viewModel.todosStatus
+            .observe(this, Observer { data: StoreResponse<List<Any>> ->
                 Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
-                    is StoreResponse.Data -> {
-                        adapter.submitList(data.value)
-                        adjustVisibility(false)
-                    }
+                    is StoreResponse.Data -> adjustVisibility(false)
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
                         showError(binding.root, data.error) {
@@ -71,31 +71,29 @@ class AndroidAppActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
-            .launchIn(lifecycleScope)
+            })
 
         binding.refresh.setOnRefreshListener {
             viewModel.refresh()
         }
 
         viewModel.actionTodo
-            .onEach {
+            .observe(this, Observer {
                 when (it) {
                     is StoreResponse.Error.Exception -> {
                         Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
                     }
                 }
-
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
-            }
-            .launchIn(lifecycleScope)
+            })
     }
 
     private fun adjustVisibility(isProgress: Boolean) {
         binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
         binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
         binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
+        swipeCallback.isEnabled = !isProgress
     }
 
     private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
