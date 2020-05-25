@@ -1,5 +1,7 @@
 package com.routine.android.vm
 
+import android.util.Log
+import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.google.firebase.auth.ktx.auth
@@ -10,9 +12,7 @@ import com.routine.android.userIdOrEmpty
 import com.routine.android.vm.status.StatusViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -24,6 +24,7 @@ class AndroidAppViewModel : StatusViewModel() {
     }
 
     private val refreshTodosStateFlow = MutableStateFlow(Any())
+    private val removeTodosStateFlow = MutableStateFlow("")
 
     val todos = refreshTodosStateFlow.flatMapLatest {
         TodosRepository.todosStore
@@ -37,14 +38,26 @@ class AndroidAppViewModel : StatusViewModel() {
                 list
             }
     }
+    val removeTodo = removeTodosStateFlow.filter { it.isNotEmpty() }
+        .flatMapLatest {
+            TodosRepository.removeTodoStore
+                .stream(StoreRequest.fresh(Pair(Firebase.auth.userIdOrEmpty(), it)))
+        }
+        .onEach {
+            if (it is StoreResponse.Data || it is StoreResponse.Loading) {
+                removeTodosStateFlow.value = ""
+            }
+        }
 
     fun refresh() {
         refreshTodosStateFlow.value = Any()
     }
 
     fun removeTodo(todo: Todo) {
+        removeTodosStateFlow.value = todo.id
     }
 
     fun resetTodo(todo: Todo) {
+
     }
 }

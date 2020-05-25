@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
+import com.google.android.material.snackbar.Snackbar
 import com.routine.R
 import com.routine.android.data.model.Todo
 import com.routine.android.vm.AndroidAppViewModel
@@ -75,6 +76,19 @@ class AndroidAppActivity : AppCompatActivity() {
         binding.refresh.setOnRefreshListener {
             viewModel.refresh()
         }
+
+        viewModel.removeTodo
+            .onEach {
+                when (it) {
+                    is StoreResponse.Loading -> binding.progress.visibility = View.VISIBLE
+                    is StoreResponse.Data -> binding.progress.visibility = View.GONE
+                    is StoreResponse.Error.Exception -> {
+                        binding.progress.visibility = View.GONE
+                        Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun adjustVisibility(isProgress: Boolean) {

@@ -3,10 +3,12 @@ package com.routine.android.data.repo
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.StoreBuilder
 import com.dropbox.android.external.store4.nonFlowValueFetcher
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.TodoEntity
+import com.routine.android.userIdOrEmpty
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.tasks.await
@@ -48,6 +50,19 @@ object TodosRepository {
                 }
 
         ))
+        .build()
+
+    val removeTodoStore = StoreBuilder.from(nonFlowValueFetcher<Pair<String, String>, Boolean> {
+        Firebase.firestore
+            .collection("users")
+            .document(it.first)
+            .collection("todos")
+            .document(it.second)
+            .delete()
+            .await()
+        true
+    })
+        .disableCache()
         .build()
 }
 

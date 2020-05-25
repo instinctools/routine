@@ -93,7 +93,7 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
 }
 
 fun showError(view: View, throwable: Throwable, block: () -> Unit) {
-    val snackbar = Snackbar.make(view, throwable.message ?: "An error occurred!", Snackbar.LENGTH_INDEFINITE)
+    val snackbar = Snackbar.make(view, throwable.getErrorMessage(), Snackbar.LENGTH_INDEFINITE)
     snackbar.setAction("Retry") {
         block.invoke()
     }
@@ -101,3 +101,6 @@ fun showError(view: View, throwable: Throwable, block: () -> Unit) {
 }
 
 fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""
+
+
+fun Throwable.getErrorMessage() = message ?: "An error occurred!"
