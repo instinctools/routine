@@ -1,30 +1,31 @@
 package com.routine.android.vm
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.android.data.model.Todo
 import com.routine.android.data.repo.TodosRepository
-import com.routine.android.vm.status.StatusViewModel
+import com.routine.android.vm.status.getAction
+import com.routine.android.vm.status.wrapWithAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 @ExperimentalStdlibApi
-class AndroidAppViewModel : StatusViewModel() {
+class AndroidAppViewModel : ViewModel() {
 
     companion object {
-        const val STATUS_GET_TODOS = "STATUS_GET_TODOS"
+        const val GET_TODOS = "GET_TODOS"
+        const val REMOVE_TODO = "DELETE_TODO"
+        const val RESET_TODO = "RESET_TODO"
     }
 
-    private val refreshTodosStateFlow = MutableStateFlow(Any())
-    private val removeTodoStateFlow = MutableStateFlow("")
-    private val resetTodoStateFlow = MutableStateFlow("")
-
-    private val todos = refreshTodosStateFlow.flatMapLatest {
+    private val todos by wrapWithAction(GET_TODOS, Any()) {
         TodosRepository.todosStore
             .stream(StoreRequest.cached("", true))
             .map { list ->
@@ -37,45 +38,33 @@ class AndroidAppViewModel : StatusViewModel() {
             }
     }
 
+    private val removeTodo by wrapWithAction<String, Boolean>(REMOVE_TODO) {
+        TodosRepository.removeTodoStore
+            .stream(StoreRequest.fresh(it))
+    }
+
+    private val resetTodo by wrapWithAction<String, Boolean>(RESET_TODO) {
+        TodosRepository.resetTodoStore
+            .stream(StoreRequest.fresh(it))
+    }
+
     val todosData = todos.filter { it is StoreResponse.Data }
         .asLiveData()
 
     val todosStatus = todos.asLiveData()
 
-    private val removeTodo = removeTodoStateFlow.filter { it.isNotEmpty() }
-        .flatMapLatest {
-            TodosRepository.removeTodoStore
-                .stream(StoreRequest.fresh(it))
-        }
-        .onEach {
-            if (it is StoreResponse.Data || it is StoreResponse.Loading) {
-                removeTodoStateFlow.value = ""
-            }
-        }
-
-    private val resetTodo = resetTodoStateFlow.filter { it.isNotEmpty() }
-        .flatMapLatest {
-            TodosRepository.resetTodoStore
-                .stream(StoreRequest.fresh(it))
-        }
-        .onEach {
-            if (it is StoreResponse.Data || it is StoreResponse.Loading) {
-                resetTodoStateFlow.value = ""
-            }
-        }
-
     val actionTodo = merge(removeTodo, resetTodo)
         .asLiveData()
 
     fun refresh() {
-        refreshTodosStateFlow.value = Any()
+        getAction<Any>(GET_TODOS)?.proceed(Any())
     }
 
     fun removeTodo(todo: Todo) {
-        removeTodoStateFlow.value = todo.id
+        getAction<String>(REMOVE_TODO)?.proceed(todo.id)
     }
 
     fun resetTodo(todo: Todo) {
-        resetTodoStateFlow.value = todo.id
+        getAction<String>(RESET_TODO)?.proceed(todo.id)
     }
 }
