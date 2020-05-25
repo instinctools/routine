@@ -2,7 +2,6 @@ package com.routine.android.data.repo
 
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.StoreBuilder
-import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.nonFlowValueFetcher
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -20,19 +19,25 @@ import kotlinx.coroutines.tasks.await
 object TodosRepository {
 
     val todosStore = StoreBuilder
-        .from<String, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher {
-            val querySnapshot = Firebase.firestore
-                .collection("users")
-                .document(Firebase.auth.userIdOrEmpty())
-                .collection("todos")
-                .get()
-                .await()
+        .from<String, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { todoId ->
+            val result =
+                Firebase.firestore
+                    .collection("users")
+                    .document(Firebase.auth.userIdOrEmpty())
+                    .collection("todos")
+                    .apply {
+                        if (todoId.isNotEmpty()) {
+                            document(todoId)
+                        }
+                    }
+                    .get()
+                    .await()
 
-            val list = mutableListOf<TodoEntity>()
-            for (document in querySnapshot) {
-                list.add(document.toObject(TodoEntity::class.java))
+            buildList {
+                for (document in result) {
+                    add(document.toObject(TodoEntity::class.java))
+                }
             }
-            return@nonFlowValueFetcher list
         }, SourceOfTruth.from(
                 reader = {
                     database().todos()

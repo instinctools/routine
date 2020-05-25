@@ -1,21 +1,26 @@
 package com.routine.android.vm
 
 import androidx.lifecycle.MutableLiveData
+import com.dropbox.android.external.store4.fresh
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
+import com.routine.android.data.repo.TodosRepository
 import com.routine.android.push
 import com.routine.android.vm.status.State
 import com.routine.android.vm.status.StatusViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
+@FlowPreview
+@ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
 class DetailsViewModel(val id: String?) : StatusViewModel() {
 
@@ -53,6 +58,7 @@ class DetailsViewModel(val id: String?) : StatusViewModel() {
                     .document(value.id)
                     .set(value)
                     .await()
+                TodosRepository.todosStore.fresh(value.id)
                 addTodoResult.push(true)
             }
         }

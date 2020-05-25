@@ -1,14 +1,9 @@
 package com.routine.android.vm
 
-import android.util.Log
-import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.routine.android.data.model.Todo
 import com.routine.android.data.repo.TodosRepository
-import com.routine.android.userIdOrEmpty
 import com.routine.android.vm.status.StatusViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -38,7 +33,7 @@ class AndroidAppViewModel : StatusViewModel() {
                 list
             }
     }
-    
+
     val removeTodo = removeTodosStateFlow.filter { it.isNotEmpty() }
         .flatMapLatest {
             TodosRepository.removeTodoStore
