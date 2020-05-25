@@ -28,7 +28,7 @@ class AndroidAppViewModel : StatusViewModel() {
 
     val todos = refreshTodosStateFlow.flatMapLatest {
         TodosRepository.todosStore
-            .stream(StoreRequest.cached(Firebase.auth.userIdOrEmpty(), true))
+            .stream(StoreRequest.cached("", true))
             .map { list ->
                 if (list is StoreResponse.Data) {
                     val newList = Todo.from(list.value
@@ -38,10 +38,11 @@ class AndroidAppViewModel : StatusViewModel() {
                 list
             }
     }
+    
     val removeTodo = removeTodosStateFlow.filter { it.isNotEmpty() }
         .flatMapLatest {
             TodosRepository.removeTodoStore
-                .stream(StoreRequest.fresh(Pair(Firebase.auth.userIdOrEmpty(), it)))
+                .stream(StoreRequest.fresh(it))
         }
         .onEach {
             if (it is StoreResponse.Data || it is StoreResponse.Loading) {

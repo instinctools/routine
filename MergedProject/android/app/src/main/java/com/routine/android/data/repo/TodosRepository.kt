@@ -2,6 +2,7 @@ package com.routine.android.data.repo
 
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.nonFlowValueFetcher
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -19,24 +20,25 @@ import kotlinx.coroutines.tasks.await
 object TodosRepository {
 
     val todosStore = StoreBuilder
-        .from<String, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { userId ->
+        .from<String, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher {
             val querySnapshot = Firebase.firestore
                 .collection("users")
-                .document(userId)
+                .document(Firebase.auth.userIdOrEmpty())
                 .collection("todos")
                 .get()
                 .await()
-            buildList {
-                for (document in querySnapshot) {
-                    add(document.toObject(TodoEntity::class.java))
-                }
+
+            val list = mutableListOf<TodoEntity>()
+            for (document in querySnapshot) {
+                list.add(document.toObject(TodoEntity::class.java))
             }
+            return@nonFlowValueFetcher list
         }, SourceOfTruth.from(
-                reader = { key ->
+                reader = {
                     database().todos()
                         .getTodos()
                 },
-                writer = { key, input ->
+                writer = { _, input ->
                     database().todos()
                         .addTodos(input)
                 },
@@ -52,14 +54,16 @@ object TodosRepository {
         ))
         .build()
 
-    val removeTodoStore = StoreBuilder.from(nonFlowValueFetcher<Pair<String, String>, Boolean> {
+    val removeTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, Boolean> {
         Firebase.firestore
             .collection("users")
-            .document(it.first)
+            .document(Firebase.auth.userIdOrEmpty())
             .collection("todos")
-            .document(it.second)
+            .document(it)
             .delete()
             .await()
+
+        todosStore.clear(it)
         true
     })
         .disableCache()

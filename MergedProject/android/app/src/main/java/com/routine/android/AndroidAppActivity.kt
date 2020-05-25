@@ -56,7 +56,7 @@ class AndroidAppActivity : AppCompatActivity() {
 
         viewModel.todos
             .onEach { data: StoreResponse<List<Any>> ->
-                Timber.i("Response, ${data::class} from: ${data.origin}")
+                Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> {
