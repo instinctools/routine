@@ -65,17 +65,22 @@ class AndroidAppActivity : AppCompatActivity() {
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
                         showError(binding.root, data.error) {
-                            viewModel.retry()
+                            viewModel.refresh()
                         }
                     }
                 }
             }
             .launchIn(lifecycleScope)
+
+        binding.refresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
 
     private fun adjustVisibility(isProgress: Boolean) {
-        binding.content.visibility = if (isProgress) View.GONE else View.VISIBLE
-        binding.progress.visibility = if (isProgress) View.VISIBLE else View.GONE
+        binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
+        binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
+        binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
     }
 
     private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
