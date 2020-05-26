@@ -2,7 +2,6 @@ package com.routine.android.vm.status
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dropbox.android.external.store4.StoreResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -19,7 +18,7 @@ const val DEF_ACTION = "DEF_ACTION"
 @FlowPreview
 fun <T, R> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
                                     initialAction: T? = null,
-                                    function: (T) -> Flow<StoreResponse<R>>): ReadOnlyProperty<ViewModel, Flow<StoreResponse<R>>> {
+                                    function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
     return Delegate(actionKey, initialAction, viewModelScope, function)
 }
 
@@ -40,15 +39,15 @@ private class Delegate<T, R>(
         val actionKey: String,
         val initialAction: T?,
         val scope: CoroutineScope,
-        val function: (T) -> Flow<StoreResponse<R>>) : ReadOnlyProperty<ViewModel, Flow<StoreResponse<R>>>, Action<T> {
+        val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
     private val channel = BroadcastChannel<T>(Channel.CONFLATED)
-    private val cache = MutableStateFlow<StoreResponse<R>?>(null)
+    private val cache = MutableStateFlow<R?>(null)
     private var isInitialized = false
     private val lock = this
 
     override fun getValue(thisRef: ViewModel,
-                          property: KProperty<*>): Flow<StoreResponse<R>> {
+                          property: KProperty<*>): Flow<R> {
         if (!isInitialized) {
             synchronized(lock) {
                 if (!isInitialized) {
