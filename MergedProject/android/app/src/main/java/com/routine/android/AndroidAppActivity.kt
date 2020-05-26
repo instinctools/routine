@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
+import com.google.android.material.snackbar.Snackbar
 import com.routine.R
 import com.routine.android.data.model.Todo
 import com.routine.android.vm.AndroidAppViewModel
@@ -23,6 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -33,7 +36,8 @@ class AndroidAppActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
-    private var adapter = TodosAdapter()
+    private val adapter = TodosAdapter()
+    private val swipeCallback by lazy { SwipeCallback(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +49,7 @@ class AndroidAppActivity : AppCompatActivity() {
             true
         }
 
-        ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.content)
         val animator = binding.content.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
@@ -53,29 +57,50 @@ class AndroidAppActivity : AppCompatActivity() {
 
         binding.content.adapter = adapter
 
-        viewModel.todos
+        viewModel.todosData
+            .onEach {
+                adapter.submitList(it.dataOrNull())
+            }
+            .launchIn(lifecycleScope)
+
+        viewModel.todosStatus
+            .sample(400)
             .onEach { data: StoreResponse<List<Any>> ->
-                Timber.i("Response, ${data::class} from: ${data.origin}")
+                Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
-                    is StoreResponse.Data -> {
-                        adapter.submitList(data.value)
-                        adjustVisibility(false)
-                    }
+                    is StoreResponse.Data -> adjustVisibility(false)
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
                         showError(binding.root, data.error) {
-                            viewModel.retry()
+                            viewModel.refresh()
                         }
                     }
                 }
             }
             .launchIn(lifecycleScope)
+
+        binding.refresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.actionTodo
+            .observe(this, Observer {
+                when (it) {
+                    is StoreResponse.Error.Exception -> {
+                        Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                swipeCallback.isEnabled = it !is StoreResponse.Loading
+                binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
+            })
     }
 
     private fun adjustVisibility(isProgress: Boolean) {
-        binding.content.visibility = if (isProgress) View.GONE else View.VISIBLE
-        binding.progress.visibility = if (isProgress) View.VISIBLE else View.GONE
+        binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
+        binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
+        binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
+        swipeCallback.isEnabled = !isProgress
     }
 
     private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
@@ -174,13 +199,14 @@ class AndroidAppActivity : AppCompatActivity() {
 
         var isLeftActivated = false
         var isRightActivated = false
+        var isEnabled = true
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
         }
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return if (viewHolder is EmptyViewHolder) {
+            return if (!isEnabled || viewHolder is EmptyViewHolder) {
                 makeMovementFlags(0, 0)
             } else {
                 super.getMovementFlags(recyclerView, viewHolder)

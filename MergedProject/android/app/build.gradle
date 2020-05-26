@@ -239,6 +239,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:17.4.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     implementation 'com.google.firebase:firebase-auth-ktx:19.3.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
+
+    implementation "com.dropbox.mobile.store:store4:4.0.0-alpha06"
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
