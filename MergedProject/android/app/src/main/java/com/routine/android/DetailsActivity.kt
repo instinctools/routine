@@ -22,10 +22,13 @@ import com.routine.android.vm.DetailsViewModelFactory
 import com.routine.android.vm.status.State
 import com.routine.databinding.ActivityDetailsBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.merge
 
 const val ARG_PERIOD = "ARG_PERIOD"
 
+@FlowPreview
+@ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
 open class DetailsActivity : AppCompatActivity() {
 

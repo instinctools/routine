@@ -3,7 +3,9 @@ package com.routine.android.vm
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
 class DetailsViewModelFactory(val id: String?) : ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
