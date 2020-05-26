@@ -25,6 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -63,6 +64,7 @@ class AndroidAppActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
 
         viewModel.todosStatus
+            .sample(400)
             .onEach { data: StoreResponse<List<Any>> ->
                 Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
