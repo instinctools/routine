@@ -12,6 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +23,8 @@ import com.routine.databinding.ActivityMainBinding
 import com.routine.databinding.ItemTodoBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import kotlin.math.abs
 
@@ -54,12 +57,13 @@ class AndroidAppActivity : AppCompatActivity() {
         binding.content.adapter = adapter
 
         viewModel.todosData
-            .observe(this, Observer {
+            .onEach {
                 adapter.submitList(it.dataOrNull())
-            })
+            }
+            .launchIn(lifecycleScope)
 
         viewModel.todosStatus
-            .observe(this, Observer { data: StoreResponse<List<Any>> ->
+            .onEach { data: StoreResponse<List<Any>> ->
                 Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
@@ -71,7 +75,8 @@ class AndroidAppActivity : AppCompatActivity() {
                         }
                     }
                 }
-            })
+            }
+            .launchIn(lifecycleScope)
 
         binding.refresh.setOnRefreshListener {
             viewModel.refresh()

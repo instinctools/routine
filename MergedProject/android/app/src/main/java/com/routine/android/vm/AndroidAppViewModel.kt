@@ -38,20 +38,19 @@ class AndroidAppViewModel : ViewModel() {
             }
     }
 
-    private val removeTodo by wrapWithAction<String, Boolean>(REMOVE_TODO) {
+    private val removeTodo by wrapWithAction<String, StoreResponse<Boolean>>(REMOVE_TODO) {
         TodosRepository.removeTodoStore
             .stream(StoreRequest.fresh(it))
     }
 
-    private val resetTodo by wrapWithAction<String, Boolean>(RESET_TODO) {
+    private val resetTodo by wrapWithAction<String, StoreResponse<Boolean>>(RESET_TODO) {
         TodosRepository.resetTodoStore
             .stream(StoreRequest.fresh(it))
     }
 
     val todosData = todos.filter { it is StoreResponse.Data }
-        .asLiveData()
 
-    val todosStatus = todos.asLiveData()
+    val todosStatus = todos
 
     val actionTodo = merge(removeTodo, resetTodo)
         .asLiveData()
