@@ -40,18 +40,3 @@ struct Task: Equatable {
         self.startDate = entity.startDate.orToday
     }
 }
-
-extension Task {
-    static let mock: Task = .init(
-        id: UUID().uuidString,
-        title: "Attend a pool",
-        period: .day,
-        periodCount: 2
-    )
-    static let mock2: Task = .init(
-        id: UUID().uuidString,
-        title: "Attend a Church",
-        period: .week,
-        periodCount: 0
-    )
-}
