@@ -44,7 +44,7 @@ final class TodoTableViewCell: HostingTableViewCell<TodoRowView> {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func bind(to viewModel: TodoUiModel, parent: UIViewController) {
-        host(TodoRowView(viewModel: viewModel), parent: parent)
+    func bind(to uiModel: TodoListUiModel, parent: UIViewController) {
+        host(TodoRowView(uiModel: uiModel), parent: parent)
     }
 }

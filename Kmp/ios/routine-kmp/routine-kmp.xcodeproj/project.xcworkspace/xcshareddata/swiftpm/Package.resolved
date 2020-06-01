@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "RxBiBinding",
+        "repositoryURL": "https://github.com/RxSwiftCommunity/RxBiBinding",
+        "state": {
+          "branch": null,
+          "revision": "30dbade1ae70a350d37c8464c77dabecbb855cd6",
+          "version": "0.2.5"
+        }
+      },
+      {
         "package": "RxDataSources",
         "repositoryURL": "https://github.com/RxSwiftCommunity/RxDataSources.git",
         "state": {

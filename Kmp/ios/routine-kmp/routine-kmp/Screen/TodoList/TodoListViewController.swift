@@ -50,6 +50,11 @@ final class TodoListViewController: UIViewController {
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
+        
+        addButton.rx.tap
+            .do(onNext: showTaskCreationView)
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func bindPresenter() {

@@ -21,7 +21,7 @@ final class TodoDetailsViewController: UIViewController {
         return view
     }()
     
-    private lazy var textView: PlaceholderTextView = {
+    private lazy var titleView: PlaceholderTextView = {
         let textView = PlaceholderTextView()
         textView.textLimit = 40
         textView.placeholder = "Type recurring task name..."
@@ -87,7 +87,7 @@ final class TodoDetailsViewController: UIViewController {
     private func setupLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addArrangedSubview(textView)
+        contentView.addArrangedSubview(titleView)
         
         let dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
@@ -115,24 +115,48 @@ final class TodoDetailsViewController: UIViewController {
             .subscribe(onNext: dismiss)
             .disposed(by: disposeBag)
         
-        let input = TaskDetailsViewModel.Input(
-            doneButtonAction: doneButton.rx.tap.asDriver(),
-            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
-        )
-        let output = viewModel.transform(input: input)
-        
-        output.doneButtonEnabled
-            .drive(doneButton.rx.isEnabled)
+        doneButton.rx.tap
+            .do(onNext: {
+                let event = TodoDetailsPresenter.EventSave()
+                self.presenter.events.offer(element: event)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
         
-        output.dismissAction
-            .drive(onNext: dismiss)
+        repeatPeriodsView.selection
+            .do(onNext: { periodUiModel in
+                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: periodUiModel.unit)
+                self.presenter.events.offer(element: event)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
         
-        (textView.rx.title <-> viewModel.title)
-            .disposed(by: disposeBag)
+//        let input = TaskDetailsViewModel.Input(
+//            doneButtonAction: doneButton.rx.tap.asDriver(),
+//            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
+//        )
+//        let output = viewModel.transform(input: input)
+//        
+//        output.doneButtonEnabled
+//            .drive(doneButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//        
+//
+//        (textView.rx.title <-> viewModel.title)
+//            .disposed(by: disposeBag)
+//
+        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+            if(state.saved) {
+                self.dismiss()
+                return
+            }
+            
+            self.titleView.textView.text = state.todo.title
+            
+            self.repeatPeriodsView.bind(items: state.periods)
+        })
         
-        repeatPeriodsView.bind(items: viewModel.items)
+        presenter.start()
     }
     
     private func keyboardWillShow(notification: Notification) {

@@ -2,6 +2,8 @@ import UIKit
 import SwiftUI
 import RxSwift
 import RxCocoa
+import RxBiBinding
+import RoutineSharedKmp
 
 final class PeriodView: UIView {
     
@@ -118,28 +120,20 @@ final class PeriodView: UIView {
         }
     }
     
-    func bind(viewModel: PeriodViewModel) {
-        viewModel.title
-            .bind(to: titleLabel.rx.text)
-            .disposed(by: disposeBag)
+    func bind(uiModel: PeriodUiModel, selected: Bool, count: Int) {
+        titleLabel.text = uiModel.unit.title(count: Int(uiModel.count))
         
-        viewModel.selected
-            .map(setSelected)
-            .subscribe()
-            .disposed(by: disposeBag)
-        
-        viewModel.periodCountHidden
-            .bind(to: periodCountTextField.rx.isHidden)
-            .disposed(by: disposeBag)
-
-        periodCountTextField.rx.isFirstResponder
-            .bind(to: viewModel.isFirstResponder)
-            .disposed(by: disposeBag)
-        
-        (periodCountTextField.rx.text <-> viewModel.periodCount)
-            .disposed(by: disposeBag)
+        setSelected(uiModel.selected)
+        if selected {
+            periodCountTextField.isHidden = false
+            periodCountTextField.text = String(count)
+        } else {
+            periodCountTextField.isHidden = true
+            periodCountTextField.text = String(uiModel.count)
+        }
     }
     
+        
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         

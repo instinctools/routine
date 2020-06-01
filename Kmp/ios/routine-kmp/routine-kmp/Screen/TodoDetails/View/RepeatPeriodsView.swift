@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RoutineSharedKmp
 
 final class PeriodsView: UIView {
     
@@ -12,7 +13,7 @@ final class PeriodsView: UIView {
         return stackView
     }()
     
-    let selection = PublishSubject<PeriodViewModel>()
+    let selection = PublishSubject<PeriodUiModel>()
     
     private var periodViews: [PeriodView] = []
     private let disposeBag = DisposeBag()
@@ -36,24 +37,17 @@ final class PeriodsView: UIView {
         }
     }
 
-    func bind(items: [PeriodViewModel]) {
-        items.forEach { (periodViewModel) in
+    func bind(items: [PeriodUiModel], selected: PeriodUnit, count: Int) {
+        items.forEach { (periodUiModel) in
             let periodView = PeriodView()
-            periodView.bind(viewModel: periodViewModel)
+            periodView.bind(uiModel: periodUiModel)
             
             periodView.selection.map {
-//                self.select(view: periodView)
-                self.selection.onNext(periodViewModel)
+                self.selection.onNext(periodUiModel)
             }.subscribe().disposed(by: disposeBag)
             
             periodViews.append(periodView)
             stackView.addArrangedSubview(periodView)
         }
     }
-    
-//    private func select(view: PeriodView) {
-//        for periodView in periodViews {
-//            periodView.setSelected(periodView == view)
-//        }
-//    }
 }

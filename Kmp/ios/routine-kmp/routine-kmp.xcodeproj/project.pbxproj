@@ -25,6 +25,10 @@
 		268C5F5D24755F80004F3714 /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268C5F5C24755F80004F3714 /* View+UIView.swift */; };
 		26B44E3B2475652F009D8276 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 26B44E3A2475652F009D8276 /* Differentiator */; };
 		26B44E3D2475652F009D8276 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 26B44E3C2475652F009D8276 /* RxDataSources */; };
+		26D05994248529CD00C34B7D /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = 26D05993248529CD00C34B7D /* RxBiBinding */; };
+		26D059962485368100C34B7D /* Optional+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D059952485368100C34B7D /* Optional+Default.swift */; };
+		26D05998248536F900C34B7D /* UIControl+Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D05997248536F900C34B7D /* UIControl+Responder.swift */; };
+		26D0599A2485478600C34B7D /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D059992485478600C34B7D /* Period.swift */; };
 		26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FDF02C24753251003A3E7E /* TodoListViewController.swift */; };
 		BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */; };
 		BEC1EEB82D4714D2EAF011DD /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */; };
@@ -60,6 +64,9 @@
 		268C5F5824755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
 		268C5F5A24755EC0004F3714 /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		268C5F5C24755F80004F3714 /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
+		26D059952485368100C34B7D /* Optional+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Default.swift"; sourceTree = "<group>"; };
+		26D05997248536F900C34B7D /* UIControl+Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Responder.swift"; sourceTree = "<group>"; };
+		26D059992485478600C34B7D /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		26FDF02C24753251003A3E7E /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
 		BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
@@ -75,6 +82,7 @@
 				26654EA32475569800C149B1 /* SwipeCellKit in Frameworks */,
 				26B44E3D2475652F009D8276 /* RxDataSources in Frameworks */,
 				2670E4AA246D56270040E4E4 /* RoutineSharedKmp.framework in Frameworks */,
+				26D05994248529CD00C34B7D /* RxBiBinding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +180,9 @@
 				268C5F5824755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift */,
 				268C5F5A24755EC0004F3714 /* UIBarButtonItem+Init.swift */,
 				268C5F5C24755F80004F3714 /* View+UIView.swift */,
+				26D059952485368100C34B7D /* Optional+Default.swift */,
+				26D05997248536F900C34B7D /* UIControl+Responder.swift */,
+				26D059992485478600C34B7D /* Period.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -208,6 +219,7 @@
 				26654EA52475578400C149B1 /* SnapKit */,
 				26B44E3A2475652F009D8276 /* Differentiator */,
 				26B44E3C2475652F009D8276 /* RxDataSources */,
+				26D05993248529CD00C34B7D /* RxBiBinding */,
 			);
 			productName = "routine-kmp";
 			productReference = 2670E491246D41640040E4E4 /* routine-kmp.app */;
@@ -241,6 +253,7 @@
 				26654EA12475569800C149B1 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
 				26654EA42475578400C149B1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				26D05992248529CD00C34B7D /* XCRemoteSwiftPackageReference "RxBiBinding" */,
 			);
 			productRefGroup = 2670E492246D41640040E4E4 /* Products */;
 			projectDirPath = "";
@@ -288,14 +301,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26D05998248536F900C34B7D /* UIControl+Responder.swift in Sources */,
 				264971952476E06900B9D7ED /* LabelledDivider.swift in Sources */,
 				26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */,
 				264971932476DF9D00B9D7ED /* PeriodView.swift in Sources */,
+				26D059962485368100C34B7D /* Optional+Default.swift in Sources */,
 				268C5F5B24755EC0004F3714 /* UIBarButtonItem+Init.swift in Sources */,
 				268C5F5D24755F80004F3714 /* View+UIView.swift in Sources */,
 				2670E495246D41640040E4E4 /* AppDelegate.swift in Sources */,
 				2649718F2476DF5500B9D7ED /* RepeatPeriodsView.swift in Sources */,
 				2670E497246D41640040E4E4 /* SceneDelegate.swift in Sources */,
+				26D0599A2485478600C34B7D /* Period.swift in Sources */,
 				BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */,
 				268C5F5924755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
 				2649718C2476DF0800B9D7ED /* TodoDetailsViewController.swift in Sources */,
@@ -516,6 +532,14 @@
 				minimumVersion = 4.0.1;
 			};
 		};
+		26D05992248529CD00C34B7D /* XCRemoteSwiftPackageReference "RxBiBinding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxBiBinding";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -538,6 +562,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26B44E392475652F009D8276 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		26D05993248529CD00C34B7D /* RxBiBinding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26D05992248529CD00C34B7D /* XCRemoteSwiftPackageReference "RxBiBinding" */;
+			productName = RxBiBinding;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

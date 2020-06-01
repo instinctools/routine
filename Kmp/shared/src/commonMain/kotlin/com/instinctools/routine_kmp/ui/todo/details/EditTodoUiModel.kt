@@ -1,6 +1,5 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
-import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
 

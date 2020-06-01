@@ -11,7 +11,7 @@ extension Reactive where Base: PlaceholderTextView {
 
 final class PlaceholderTextView: UIView {
     
-    fileprivate lazy var textView: UITextView = {
+    lazy var textView: UITextView = {
         let textView = UITextView()
         textView.backgroundColor = .clear
         textView.isScrollEnabled = false

@@ -23,6 +23,11 @@ class TodoDetailsPresenter(
 
     private val state: State get() = _states.valueOrNull ?: State()
 
+    init {
+        val periods = PeriodUnit.values().map { PeriodUiModel(it) }
+        sendState(state.copy(periods = periods))
+    }
+
     override fun start() {
         if (todoId != null) {
             scope.launch {
@@ -78,7 +83,8 @@ class TodoDetailsPresenter(
 
     data class State(
         val todo: EditTodoUiModel = EditTodoUiModel(),
-        val saved: Boolean = false
+        val saved: Boolean = false,
+        val periods: List<PeriodUiModel> = emptyList()
     )
 
     sealed class Event {
