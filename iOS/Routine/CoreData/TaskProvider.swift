@@ -6,7 +6,6 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import CoreData
 

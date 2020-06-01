@@ -155,9 +155,3 @@ final class TaskViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
 }
-
-func weakify <T: AnyObject>(_ owner: T, _ f: @escaping (T) -> () -> Void) -> () -> Void {
-    return { [weak owner] in
-        return owner.map { f($0)() }
-    }
-}

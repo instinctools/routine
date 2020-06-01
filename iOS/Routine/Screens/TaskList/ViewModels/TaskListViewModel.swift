@@ -15,7 +15,6 @@ final class TaskListViewModel: NSObject {
     
     struct Input {
         let viewWillAppearDriver: Driver<Void>
-        let didTapAddButtonDriver: Driver<Void>
         let didTapCellDriver: Driver<TaskViewModel>
         let didResetTaskDriver: Observable<TaskViewModel>
         let didDeleteTaskDriver: Observable<TaskViewModel>

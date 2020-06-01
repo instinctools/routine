@@ -39,16 +39,6 @@ final class PlaceholderTextView: UIView {
         return textView
     }()
     
-//    var text: String {
-//        set(value) {
-//            textView.text = value
-//            placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
-//        }
-//        get {
-//            return textView.text
-//        }
-//    }
-    
     var font: UIFont? {
         set(value) {
             placeholderTextView.font = value
@@ -108,11 +98,9 @@ final class PlaceholderTextView: UIView {
 extension PlaceholderTextView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderTextView.text = textView.text.isEmpty ? placeholder : ""
-//        UIView.animate(withDuration: 0.2) {
-            self.invalidateIntrinsicContentSize()
-            self.setNeedsLayout()
-            self.layoutIfNeeded()
-//        }
+        invalidateIntrinsicContentSize()
+        setNeedsLayout()
+        layoutIfNeeded()
     }
     
     func textView(_ textView: UITextView,

@@ -39,21 +39,28 @@ final class TaskDetailsViewModel {
         self.task = task
         self.title = BehaviorRelay(value: task?.title)
         
-        var selectedPeriod = BehaviorRelay<PeriodViewModel?>(value: nil)
+        var selectedPeriod: PeriodViewModel?
         self.items = Period.allCases.map { period in
             if let task = task, task.period == period {
                 let viewModel = PeriodViewModel(task: task)
-                selectedPeriod = BehaviorRelay(value: viewModel)
+                selectedPeriod = viewModel
                 return viewModel
             } else {
                 return PeriodViewModel(period: period)
             }
         }
-        self.selectedPeriod = selectedPeriod
+        self.selectedPeriod = BehaviorRelay(value: selectedPeriod)
     }
     
     func transform(input: Input) -> Output {
-        let dismissAction = input.doneButtonAction.map(saveTask)
+        let dismissAction = input.doneButtonAction.asObservable()
+            .withLatestFrom(Observable.combineLatest(selectedPeriod, title))
+            .map { (period, title) in
+                let periodCount = Int(period?.periodCount.value.nilIfEmpty ?? "1")
+                return (title, period?.period, periodCount)
+            }
+            .map(saveTask)
+            .asDriver(onErrorJustReturn: ())
         
         let doneButtonEnabled = Observable.combineLatest(title, selectedPeriod)
             .map { (title, period) in
@@ -62,25 +69,23 @@ final class TaskDetailsViewModel {
             .asDriver(onErrorJustReturn: false)
         
         input.selection
-            .map { period in
+            .do(onNext: { period in
                 self.selectedPeriod.accept(period)
                 self.items.forEach { (item) in
                     item.selected.accept(item.period == period.period)
                 }
-            }
+            })
             .drive()
             .disposed(by: disposeBag)
 
         return Output(dismissAction: dismissAction, doneButtonEnabled: doneButtonEnabled)
     }
     
-    private func saveTask() {
-        guard let periodViewModel = selectedPeriod.value,
-            let periodCount = Int(periodViewModel.periodCount.value.nilIfEmpty ?? "1"),
-            let title = self.title.value else { return }
-        
-        let period = periodViewModel.period
-                
+    private func saveTask(withTitle title: String?, period: Period?, periodCount: Int?) {
+        guard let periodCount = periodCount, let period = period, let title = title else {
+            return
+        }
+                        
         if let task = self.task {
             let task = Task(
                 id: task.id,

@@ -22,7 +22,6 @@ final class PeriodsView: UIView {
     
     let selection = PublishSubject<PeriodViewModel>()
     
-    private var periodViews: [PeriodView] = []
     private let disposeBag = DisposeBag()
     
     init() {
@@ -50,18 +49,12 @@ final class PeriodsView: UIView {
             periodView.bind(viewModel: periodViewModel)
             
             periodView.selection.map {
-//                self.select(view: periodView)
                 self.selection.onNext(periodViewModel)
-            }.subscribe().disposed(by: disposeBag)
+            }
+            .subscribe()
+            .disposed(by: disposeBag)
             
-            periodViews.append(periodView)
             stackView.addArrangedSubview(periodView)
         }
     }
-    
-//    private func select(view: PeriodView) {
-//        for periodView in periodViews {
-//            periodView.setSelected(periodView == view)
-//        }
-//    }
 }

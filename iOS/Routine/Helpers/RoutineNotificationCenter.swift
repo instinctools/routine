@@ -149,7 +149,6 @@ extension RoutineNotificationCenter: NSFetchedResultsControllerDelegate {
     }
 }
 
-// Task notifications setup
 extension RoutineNotificationCenter {
     func addNotification(forTask task: Task) {
         let content = UNMutableNotificationContent()
