@@ -2,8 +2,9 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RoutineSharedKmp
 
-final class TaskViewController: UIViewController {
+final class TodoDetailsViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -32,11 +33,18 @@ final class TaskViewController: UIViewController {
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var repeatPeriodsView = PeriodsView()
         
-    private let viewModel: TaskDetailsViewModel
+    private let todo: Todo?
+    private lazy var presenter: TodoDetailsPresenter = {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let presenter = TodoDetailsPresenter(todoId: todo?.id as? KotlinLong, todoStore: appDelegate.todoStore)
+        return presenter
+    }()
+    private lazy var uiBinder = UiBinder<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>()
+    
     private let disposeBag = DisposeBag()
     
-    init(viewModel: TaskDetailsViewModel) {
-        self.viewModel = viewModel
+    init(todo: Todo?) {
+        self.todo = todo
         super.init(nibName: nil, bundle: nil)
     }
     

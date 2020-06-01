@@ -69,16 +69,15 @@ final class TodoListViewController: UIViewController {
         presenter.start()
     }
 
-    private func showTodoDetailsView(todo: TodoUiModel?) {
-        let viewModel = TaskDetailsViewModel(task: task)
-        let rootViewController = TaskViewController(viewModel: viewModel)
+    private func showTodoDetailsView(item: TodoListUiModel?) {
+        let rootViewController = TodoDetailsViewController(todo: item?.todo)
         let viewController = UINavigationController(rootViewController: rootViewController)
         viewController.modalPresentationStyle = .fullScreen
         navigationController?.present(viewController, animated: true)
     }
 
     private func showTaskCreationView() {
-        showTodoDetailsView(todo: nil)
+        showTodoDetailsView(item: nil)
     }
 
     private func makeDataSource() -> RxTableViewSectionedAnimatedDataSource<TodosTableSection> {
@@ -137,7 +136,7 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
         swipeAction.highlightedBackgroundColor = .systemBackground
     }
 
-    private func model(atIndexPath indexPath: IndexPath) -> TodoUiModel {
+    private func model(atIndexPath indexPath: IndexPath) -> TodoListUiModel {
         return dataSource.sectionModels[indexPath.section].items[indexPath.row]
     }
 
@@ -148,7 +147,9 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
         switch orientation {
         case .left:
             let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
-                self.presenter.resetTodo(id: self.model(atIndexPath: indexPath).todo.id)
+                let todoId = self.model(atIndexPath: indexPath).todo.id
+                let event = TodoListPresenter.EventReset(id: todoId)
+                self.presenter.events.offer(element: event)
             }
             setup(swipeAction: reseteAction, image: UIImage(named: "reset"))
 
@@ -160,7 +161,9 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
 
                 alert.addAction(.init(title: "Cancel", style: .cancel))
                 alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
-                    self.presenter.deleteTodo(id: self.model(atIndexPath: indexPath).todo.id)
+                    let todoId = self.model(atIndexPath: indexPath).todo.id
+                    let event = TodoListPresenter.EventDelete(id: todoId)
+                    self.presenter.events.offer(element: event)
                 }))
 
                 self.present(alert, animated: true)
@@ -198,7 +201,7 @@ struct AlphaExpansion: SwipeExpanding {
 
 struct TodosTableSection {
     var section: Int
-    var items: [TodoUiModel]
+    var items: [TodoListUiModel]
 }
 
 extension TodosTableSection: AnimatableSectionModelType {
@@ -207,13 +210,13 @@ extension TodosTableSection: AnimatableSectionModelType {
         return section
     }
 
-    init(original: TodosTableSection, items: [TodoUiModel]) {
+    init(original: TodosTableSection, items: [TodoListUiModel]) {
         self = original
         self.items = items
     }
 }
 
-extension TodoUiModel : IdentifiableType {
+extension TodoListUiModel : IdentifiableType {
     public var identity: String {
         return String(todo.id)
     }
