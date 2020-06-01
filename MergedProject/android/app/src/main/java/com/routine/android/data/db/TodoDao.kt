@@ -1,8 +1,8 @@
 package com.routine.android.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.routine.android.data.db.entity.TodoEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
@@ -17,8 +17,14 @@ interface TodoDao {
     suspend fun deleteTodo(id: String)
 
     @Query("SELECT * FROM todo")
-    fun getTodos(): LiveData<List<TodoEntity>>
+    fun getTodos(): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todo WHERE id=:id")
     suspend fun getTodo(id: String): TodoEntity
+
+    @Query("DELETE FROM todo")
+    suspend fun deleteAll()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addTodos(todos: List<TodoEntity>);
 }

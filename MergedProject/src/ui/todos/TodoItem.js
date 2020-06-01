@@ -7,6 +7,7 @@ import Action from "../../action/todos";
 import {connect} from "react-redux";
 import {ITEM_TYPE_SEPARATOR} from "./TodoList";
 import {withNavigation} from 'react-navigation';
+import analytics from '@react-native-firebase/analytics';
 
 class TodoItem extends React.Component {
 
@@ -31,7 +32,10 @@ class TodoItem extends React.Component {
                 onSwipeComplete={() => (this.props.changeScrollState(true))}
                 leftContent={createSwipeableContent(`Reset`, `flex-end`, this.props.isMenuActivated)}
                 rightContent={createSwipeableContent(`Delete`, `flex-start`, this.props.isMenuActivated)}
-                onLeftActionRelease={() => this.props.resetTodo(item.id)}
+                onLeftActionRelease={() => {
+                    analytics().logEvent('reset_todo_react', {});
+                    this.props.resetTodo(item.id)
+                }}
                 onRightActionRelease={() =>
                     Alert.alert(
                         '',
@@ -43,7 +47,10 @@ class TodoItem extends React.Component {
                             },
                             {
                                 text: 'Delete',
-                                onPress: () => this.props.deleteTodo(item.id)
+                                onPress: () => {
+                                    analytics().logEvent('delete_todo_react', {});
+                                    this.props.deleteTodo(item.id)
+                                }
                             },
                         ]
                     )}
@@ -52,6 +59,7 @@ class TodoItem extends React.Component {
                     style={{...todoListStyle.item, backgroundColor: item.backgroundColor}}
                     borderless={true}
                     onPress={() => {
+                        analytics().logEvent('edit_todo_react', {});
                         this.props.selectTodo(item.id, item.title, item.period, item.periodUnit);
                         this.props.navigation.navigate("Details")
                     }}>

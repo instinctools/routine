@@ -17,6 +17,13 @@
         app:menu="@menu/details"
         app:navigationIcon="@drawable/ic_back" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="text, separator, separator_text, radio"/>
+
     <EditText
         android:id="@+id/text"
         android:layout_width="0dp"
@@ -47,6 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text" />
 
     <TextView
+        android:id="@+id/separator_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -110,5 +118,15 @@
             android:textSize="20sp" />
 
     </RadioGroup>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

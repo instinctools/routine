@@ -1,7 +1,14 @@
 package com.routine.android
 
 import android.graphics.Color
+import android.view.View
+import androidx.lifecycle.MutableLiveData
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.routine.android.data.db.entity.PeriodUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.yield
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Period
@@ -77,3 +84,23 @@ fun calculateTimestamp(period: Int, periodUnit: PeriodUnit): Date {
     }
     return timestamp.withTimeAtStartOfDay().toDate()
 }
+
+suspend fun <T> MutableLiveData<T>.push(data: T) {
+    withContext(Dispatchers.Main) {
+        yield()
+        value = data
+    }
+}
+
+fun showError(view: View, throwable: Throwable, block: () -> Unit) {
+    val snackbar = Snackbar.make(view, throwable.getErrorMessage(), Snackbar.LENGTH_INDEFINITE)
+    snackbar.setAction("Retry") {
+        block.invoke()
+    }
+    snackbar.show()
+}
+
+fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""
+
+
+fun Throwable.getErrorMessage() = message ?: "An error occurred!"

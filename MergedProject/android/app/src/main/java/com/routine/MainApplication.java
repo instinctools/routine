@@ -12,6 +12,8 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import timber.log.Timber;
+
 public class MainApplication extends Application implements ReactApplication {
 
     private static Context CONTEXT = null;
@@ -79,5 +81,9 @@ public class MainApplication extends Application implements ReactApplication {
         CONTEXT = this;
         SoLoader.init(this, /* native exopackage */ false);
         initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+
+        if (BuildConfig.DEBUG){
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 }

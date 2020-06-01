@@ -8,51 +8,99 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.map
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.*
+import com.dropbox.android.external.store4.StoreResponse
+import com.google.android.material.snackbar.Snackbar
 import com.routine.R
-import com.routine.android.data.db.database
 import com.routine.android.data.model.Todo
+import com.routine.android.vm.AndroidAppViewModel
 import com.routine.databinding.ActivityMainBinding
 import com.routine.databinding.ItemTodoBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import timber.log.Timber
 import kotlin.math.abs
 
+@ExperimentalStdlibApi
+@FlowPreview
+@ExperimentalCoroutinesApi
 class AndroidAppActivity : AppCompatActivity() {
 
+    private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
-    private var adapter = TodosAdapter()
+    private val adapter = TodosAdapter()
+    private val swipeCallback by lazy { SwipeCallback(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.toolbar.setOnMenuItemClickListener {
+            Analytics.action("add_todo_android")
             startActivity(Intent(this, DetailsActivity::class.java))
             true
         }
 
-        ItemTouchHelper(SwipeCallback(this)).attachToRecyclerView(binding.content)
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.content)
         val animator = binding.content.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
         }
 
-        database().todos()
-            .getTodos()
-            .map { list -> list.sortedBy { it.timestamp } }
-            .map { Todo.from(it) }
-            .observe(this, Observer {
-                adapter.submitList(it)
-                if (binding.content.adapter == null) {
-                    binding.content.adapter = adapter
+        binding.content.adapter = adapter
+
+        viewModel.todosData
+            .onEach {
+                adapter.submitList(it.dataOrNull())
+            }
+            .launchIn(lifecycleScope)
+
+        viewModel.todosStatus
+            .sample(400)
+            .onEach { data: StoreResponse<List<Any>> ->
+                Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
+                when (data) {
+                    is StoreResponse.Loading -> adjustVisibility(true)
+                    is StoreResponse.Data -> adjustVisibility(false)
+                    is StoreResponse.Error.Exception -> {
+                        binding.progress.visibility = View.GONE
+                        showError(binding.root, data.error) {
+                            viewModel.refresh()
+                        }
+                    }
                 }
+            }
+            .launchIn(lifecycleScope)
+
+        binding.refresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+
+        viewModel.actionTodo
+            .observe(this, Observer {
+                when (it) {
+                    is StoreResponse.Error.Exception -> {
+                        Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                swipeCallback.isEnabled = it !is StoreResponse.Loading
+                binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
             })
+    }
+
+    private fun adjustVisibility(isProgress: Boolean) {
+        binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
+        binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
+        binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
+        swipeCallback.isEnabled = !isProgress
     }
 
     private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
@@ -110,6 +158,7 @@ class AndroidAppActivity : AppCompatActivity() {
                 todo?.let {
                     val intent = Intent(binding.root.context, DetailsActivity::class.java)
                     intent.putExtra("EXTRA_ID", it.id)
+                    Analytics.action("edit_todo_android)")
                     binding.root.context.startActivity(intent)
                 }
             }
@@ -150,13 +199,14 @@ class AndroidAppActivity : AppCompatActivity() {
 
         var isLeftActivated = false
         var isRightActivated = false
+        var isEnabled = true
 
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
         }
 
         override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-            return if (viewHolder is EmptyViewHolder) {
+            return if (!isEnabled || viewHolder is EmptyViewHolder) {
                 makeMovementFlags(0, 0)
             } else {
                 super.getMovementFlags(recyclerView, viewHolder)
@@ -169,23 +219,14 @@ class AndroidAppActivity : AppCompatActivity() {
                 val todo = viewHolder.todo
                 if (todo != null) {
                     if (isLeftActivated) {
-                        lifecycle.coroutineScope.launch(Dispatchers.IO) {
-                            val todoEntity = database().todos()
-                                .getTodo(todo.id)
-
-                            database().todos()
-                                .updateTodo(
-                                    todoEntity.copy(timestamp = calculateTimestamp(todoEntity.period, todoEntity.periodUnit))
-                                )
-                        }
+                        Analytics.action("reset_todo_android")
+                        viewModel.resetTodo(todo)
                     } else if (isRightActivated) {
                         AlertDialog.Builder(this@AndroidAppActivity)
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
-                                lifecycle.coroutineScope.launch(Dispatchers.IO) {
-                                    database().todos()
-                                        .deleteTodo(todo.id)
-                                }
+                                Analytics.action("delete_todo_android")
+                                viewModel.removeTodo(todo)
                                 dialog.dismiss()
                             }
                             .setNegativeButton("CANCEL") { dialog, which ->
@@ -212,8 +253,8 @@ class AndroidAppActivity : AppCompatActivity() {
         }
 
         override fun onChildDraw(
-            c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-            dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
         ) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
