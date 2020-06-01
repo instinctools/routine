@@ -2,7 +2,7 @@ package com.instinctools.routine_kmp.data.date
 
 import java.util.*
 
-actual typealias MyDate = Date
+actual typealias TodoDate = Date
 
 actual fun currentDate() = Date()
 actual fun dateForTimestamp(timestamp: Long) = Date(timestamp)

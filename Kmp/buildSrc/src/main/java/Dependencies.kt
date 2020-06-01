@@ -17,6 +17,8 @@ object Versions {
 
 object Deps {
 
+    const val threeTenAbp = "com.jakewharton.threetenabp:threetenabp:1.2.4"
+
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.2.0-rc01"
         const val coreKtx = "androidx.core:core-ktx:1.3.0-rc01"

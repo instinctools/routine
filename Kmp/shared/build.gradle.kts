@@ -55,6 +55,7 @@ kotlin {
         implementation(kotlin("stdlib", Versions.kotlin))
         implementation(Deps.SqlDelight.driverAndroid)
         implementation(Deps.Coroutines.android)
+        implementation(Deps.threeTenAbp)
     }
 
     sourceSets["iosMain"].dependencies {

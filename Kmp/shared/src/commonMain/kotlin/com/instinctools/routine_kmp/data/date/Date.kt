@@ -1,8 +1,8 @@
 package com.instinctools.routine_kmp.data.date
 
-expect class MyDate
+expect class TodoDate
 
-expect fun currentDate(): MyDate
-expect fun dateForTimestamp(timestamp: Long): MyDate
+expect fun currentDate(): TodoDate
+expect fun dateForTimestamp(timestamp: Long): TodoDate
 
-expect operator fun MyDate.compareTo(anotherDate: MyDate): Int
+expect operator fun TodoDate.compareTo(anotherDate: TodoDate): Int

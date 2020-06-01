@@ -3,12 +3,12 @@ import RoutineSharedKmp
 
 struct TodoRowView: View {
 
-    var viewModel: TodoUiModel
+    var uiModel: TodoListUiModel
 
     var body: some View {
         VStack {
             HStack {
-                Text(viewModel.todo.title)
+                Text(uiModel.todo.title)
                         .font(Font.system(size: 19, weight: .semibold))
                         .foregroundColor(Color.white)
                 Spacer()
@@ -28,7 +28,7 @@ struct TodoRowView: View {
             }
         }
                 .padding(.all, 14)
-                .background(SwiftUI.Color(red: viewModel.color.redD, green: viewModel.color.greenD, blue: viewModel.color.blueD))
+                .background(SwiftUI.Color(red: uiModel.color.redD, green: uiModel.color.greenD, blue: uiModel.color.blueD))
                 .cornerRadius(12)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)

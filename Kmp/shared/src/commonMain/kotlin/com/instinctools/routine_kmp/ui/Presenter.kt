@@ -20,6 +20,8 @@ abstract class Presenter<State, Event> {
     abstract val states: Flow<State>
     abstract val events: SendChannel<Event>
 
+    abstract fun start()
+
     fun stop() {
         scope.cancelChildren()
     }
