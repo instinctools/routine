@@ -26,6 +26,7 @@ class AndroidAppViewModel : ViewModel() {
     }
 
     private val todos by wrapWithAction(GET_TODOS, Any()) {
+        //TODO ADD DB INVALIDATION
         TodosRepository.todosStore
             .stream(StoreRequest.cached("", true))
             .map { list ->
