@@ -1,5 +1,6 @@
 import UIKit
 import RxSwift
+import RxBiBinding
 import RoutineSharedKmp
 
 final class PeriodView2: UIView {
@@ -24,11 +25,10 @@ final class PeriodView2: UIView {
     private let countSelectionView: UIButton = {
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "menu-black-18dp.pdf"), for: .normal)
+        button.contentHorizontalAlignment = .fill
+        button.contentVerticalAlignment = .fill
+        button.imageView?.contentMode = .scaleToFill
         return button
-        //let imageView = UIImageView()
-        //imageView.contentMode = .center
-        //imageView.image = #imageLiteral(resourceName: <#T##String#>)
-        //return imageView
     }()
 
     private let circleView: UIView = {
@@ -40,7 +40,10 @@ final class PeriodView2: UIView {
     let period: PeriodUnit
 
     let selection = PublishSubject<Void>()
+    let countChooser = PublishSubject<Int>()
     private(set) var isSelected: Bool
+    
+    private let disposeBag = DisposeBag()
 
     init(period: PeriodUnit) {
         self.period = period
@@ -58,6 +61,10 @@ final class PeriodView2: UIView {
 
     private func setupLayout() {
         addSubview(stackView)
+        
+        countSelectionView.snp.makeConstraints { (make) in
+            make.width.equalTo(40)
+        }
         
         stackView.addArrangedSubview(countSelectionView)
         stackView.setCustomSpacing(8.0, after: titleView)
@@ -78,6 +85,16 @@ final class PeriodView2: UIView {
     
     private func bindPeriod() {
         titleView.text = period.title()
+        
+        countSelectionView.rx.tap
+            .do(onNext: {
+                if !self.isSelected {
+                    self.selection.onNext(())
+                }
+                self.countChooser.onNext(0)
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
     }
 
     private func setSelected(_ selected: Bool) {

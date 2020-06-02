@@ -13,6 +13,7 @@ final class PeriodSelectionView: UIView {
     }()
     
     let selection = PublishSubject<PeriodUnit>()
+    let countChooser = PublishSubject<Int>()
     private let disposeBag = DisposeBag()
 
     init() {
@@ -40,6 +41,10 @@ final class PeriodSelectionView: UIView {
             
             periodView.selection.map {
                 self.selection.onNext(period)
+            }.subscribe().disposed(by: disposeBag)
+            
+            periodView.countChooser.map { count in
+                self.countChooser.onNext(count)
             }.subscribe().disposed(by: disposeBag)
             
             stackView.addArrangedSubview(periodView)

@@ -131,6 +131,13 @@ final class TodoDetailsViewController: UIViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
+        periodSelectionView.countChooser
+            .do(onNext: { count in
+                self.showCountSelectionAlert(initialCount: count)
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
+        
         periodSelectionView.showPeriods(periods: PeriodUnit.Companion().allPeriods())
         
 //        let input = TaskDetailsViewModel.Input(
@@ -159,6 +166,11 @@ final class TodoDetailsViewController: UIViewController {
         })
         
         presenter.start()
+    }
+    
+    private func showCountSelectionAlert(initialCount: Int) {
+        let alert = UIAlertController(title: "Choose period", message: nil, preferredStyle: .actionSheet)
+        present(alert, animated: true, completion: nil)
     }
     
     private func keyboardWillShow(notification: Notification) {
