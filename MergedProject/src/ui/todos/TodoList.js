@@ -1,4 +1,4 @@
-import {FlatList} from 'react-native';
+import {FlatList, RefreshControl, ActivityIndicator, View, Platform} from 'react-native';
 import React from 'react';
 import {todoListStyle, toolbarStyle} from '../../styles/Styles';
 import {connect} from "react-redux";
@@ -31,6 +31,8 @@ class TodoList extends React.PureComponent {
     };
 
     componentDidMount() {
+        this.props.requestTodos();
+
         this.props.navigation.setParams({
             navigateToDetails: () => {
                 analytics().logEvent('add_todo_react', {});
@@ -40,9 +42,16 @@ class TodoList extends React.PureComponent {
     }
 
     render() {
-        const {items, isScrollEnabled} = this.props;
+        const {items, isScrollEnabled, isFetching} = this.props;
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
+
+        if (isFetching && uiItems.length === 0) {
+            return <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>{
+                    (Platform.OS === 'ios') ? <ActivityIndicator size="large"/> : <ActivityIndicator size={48}/>
+                }
+            </View>
+        }
         return (
             <FlatList style={{flex: 1}}
                       contentContainerStyle={todoListStyle.container}
@@ -50,6 +59,11 @@ class TodoList extends React.PureComponent {
                       data={uiItems}
                       keyExtractor={item => item.id}
                       renderItem={({item}) => <TodoItem item={item}/>}
+                      refreshControl={
+                          <RefreshControl refreshing={isFetching} onRefresh={() => {
+                              this.props.requestTodos();
+                          }}/>
+                      }
             />
         );
     }
@@ -57,7 +71,8 @@ class TodoList extends React.PureComponent {
 
 const mapStateToProps = (state) => ({
         items: state.todos.items,
-        isScrollEnabled: state.todos.isScrollEnabled
+        isScrollEnabled: state.todos.isScrollEnabled,
+        isFetching: state.todos.isFetching
     }
 );
 

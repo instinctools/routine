@@ -5,6 +5,7 @@ import {Period} from "../constants";
 import uuid from "react-native-uuid";
 
 export const TODO_INITIAL_STATE = {
+    isFetching: false,
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
@@ -25,6 +26,13 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
     console.log(`reducer action: ${JSON.stringify(action)}`);
     const newState = {...state};
     switch (action.type) {
+        case Action.Type.TODO_FETCH:
+            newState.isFetching = true;
+            break;
+        case Action.Type.TODO_FETCH_RESULT:
+            newState.isFetching = false;
+            newState.items = action.todos;
+            break;
         case Action.Type.TODO_ADD: {
             const newTodo = {...newState.editTodo, timestamp: calculateTimestamp(newState.editTodo.period, newState.editTodo.periodUnit)};
             delete newTodo.isPeriodSelectorVisible;
