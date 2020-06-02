@@ -14,13 +14,15 @@ extension Task {
         id: UUID().uuidString,
         title: "Attend a pool",
         period: .day,
-        periodCount: 2
+        periodCount: 2,
+        finishDate: Date()
     )
     static let mock2: Task = .init(
         id: UUID().uuidString,
         title: "Attend a Church",
         period: .week,
-        periodCount: 1
+        periodCount: 1,
+        finishDate: Date()
     )
 }
 
@@ -30,7 +32,7 @@ private extension TaskEntity {
         title = task.title
         period = Int16(task.period.rawValue)
         periodCount = Int16(task.periodCount)
-        startDate = task.startDate
+        finishDate = task.finishDate
     }
 }
 
@@ -44,7 +46,7 @@ final class TaskProvider {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TaskEntity> = {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(TaskEntity.startDate), ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(TaskEntity.finishDate), ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         let controller = NSFetchedResultsController(
@@ -92,7 +94,43 @@ final class TaskProvider {
     func resetTask(id: String) {
         do {
             if let taskUpdate = try getTasks(withId: id) {
-                taskUpdate.startDate = .init()
+                let period = Period(rawValue: Int(taskUpdate.period)).orDefault
+                let periodCount = Int(taskUpdate.periodCount)
+                let finishDate = taskUpdate.finishDate.orToday
+                let calendar = Calendar.current
+                
+                let startDate = calendar.date(
+                    byAdding: period.calendarComponent,
+                    value: -periodCount,
+                    to: finishDate
+                ).orToday
+                
+                let intervalComponent = Calendar.Component.day
+                let fromStartToFinishDateInterval = calendar.dateComponents(
+                    [intervalComponent],
+                    from: startDate,
+                    to: finishDate
+                ).day ?? 0
+                let fromFinishToTodayDateInterval = calendar.dateComponents(
+                    [intervalComponent],
+                    from: finishDate,
+                    to: Date()
+                ).day ?? 0
+                
+                if fromFinishToTodayDateInterval >= fromStartToFinishDateInterval {
+                    let interval = fromFinishToTodayDateInterval % fromStartToFinishDateInterval
+                    taskUpdate.finishDate = calendar.date(
+                        byAdding: intervalComponent,
+                        value: interval,
+                        to: Date()
+                    ).orToday
+                } else {
+                    taskUpdate.finishDate = calendar.date(
+                        byAdding: period.calendarComponent,
+                        value: periodCount,
+                        to: taskUpdate.finishDate.orToday
+                    ).orToday
+                }
                 saveContext()
             }
         } catch {

@@ -85,22 +85,40 @@ final class TaskDetailsViewModel {
         guard let periodCount = periodCount, let period = period, let title = title else {
             return
         }
-                        
+        
+        let calendar = Calendar.current
+        
         if let task = self.task {
+            let startDate = calendar.date(
+                byAdding: task.period.calendarComponent,
+                value: -task.periodCount,
+                to: task.finishDate
+            ).orToday
+            let finishDate = calendar.date(
+                byAdding: period.calendarComponent,
+                value: periodCount,
+                to: startDate
+            ).orToday
             let task = Task(
                 id: task.id,
                 title: title,
                 period: period,
                 periodCount: periodCount,
-                startDate: task.startDate
+                finishDate: finishDate
             )
             self.taskProvier.update(task: task)
         } else {
+            let finishDate = calendar.date(
+                byAdding: period.calendarComponent,
+                value: periodCount,
+                to: Date()
+            ).orToday
             let task = Task(
                 id: UUID().uuidString,
                 title: title,
                 period: period,
-                periodCount: periodCount
+                periodCount: periodCount,
+                finishDate: finishDate
             )
             self.taskProvier.add(task: task)
         }
