@@ -58,7 +58,7 @@ class DetailsViewModel(val id: String?) : StatusViewModel() {
                     .document(value.id)
                     .set(value)
                     .await()
-                TodosRepository.todosStore.fresh(value.id)
+                TodosRepository.todosStore.fresh(Pair(value.id, false))
                 addTodoResult.push(true)
             }
         }

@@ -28,7 +28,7 @@ class AndroidAppViewModel : ViewModel() {
     private val todos by wrapWithAction(GET_TODOS, Any()) {
         //TODO ADD DB INVALIDATION
         TodosRepository.todosStore
-            .stream(StoreRequest.cached("", true))
+            .stream(StoreRequest.cached(Pair("", true), true))
             .map { list ->
                 if (list is StoreResponse.Data) {
                     val newList = Todo.from(list.value
