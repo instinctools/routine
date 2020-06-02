@@ -52,7 +52,7 @@
         android:background="#ffffff"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="Repeat"
+        android:text="Repeat every"
         android:textColor="#AAA9A9"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/separator"
@@ -60,66 +60,13 @@
         app:layout_constraintTop_toTopOf="@+id/separator"
         tools:ignore="RtlCompat" />
 
-    <RadioGroup
-        android:id="@+id/radio"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/periodsRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:checkedButton="@id/every_day"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator">
-
-        <RadioButton
-            android:id="@+id/every_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every day"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/every_week"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every week"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/every_month"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every month"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/every_year"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every year"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-    </RadioGroup>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/separator" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
