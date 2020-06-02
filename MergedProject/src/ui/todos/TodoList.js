@@ -1,4 +1,4 @@
-import {FlatList, RefreshControl, ActivityIndicator, View, Platform} from 'react-native';
+import {ActivityIndicator, FlatList, Platform, RefreshControl, View} from 'react-native';
 import React from 'react';
 import {todoListStyle, toolbarStyle} from '../../styles/Styles';
 import {connect} from "react-redux";
@@ -42,17 +42,22 @@ class TodoList extends React.PureComponent {
     }
 
     render() {
-        const {items, isScrollEnabled, isFetching} = this.props;
+        const {items, isScrollEnabled, isFetching, isActionProgress} = this.props;
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
-
         if (isFetching && uiItems.length === 0) {
-            return <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>{
-                    (Platform.OS === 'ios') ? <ActivityIndicator size="large"/> : <ActivityIndicator size={48}/>
-                }
+            return <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center'
+                }}>
+                {getProgress()}
             </View>
         }
-        return (
+        return <View style={{
+            flex: 1,
+            justifyContent: 'center'
+        }}>
             <FlatList style={{flex: 1}}
                       contentContainerStyle={todoListStyle.container}
                       scrollEnabled={isScrollEnabled}
@@ -64,15 +69,16 @@ class TodoList extends React.PureComponent {
                               this.props.requestTodos();
                           }}/>
                       }
-            />
-        );
+            />{isActionProgress ? getProgress() : null}
+        </View>
     }
 }
 
 const mapStateToProps = (state) => ({
         items: state.todos.items,
         isScrollEnabled: state.todos.isScrollEnabled,
-        isFetching: state.todos.isFetching
+        isFetching: state.todos.isFetching,
+        isActionProgress: state.todos.isActionProgress
     }
 );
 
@@ -111,4 +117,11 @@ const toUiModels = (todos) => {
         })
     }
     return uiTodos;
+};
+
+const getProgress = () => {
+    return <View style={{flex: 1, justifyContent: "center", alignItems: "center", position: "absolute", alignSelf: "center"}}>{
+        (Platform.OS === 'ios') ? <ActivityIndicator size="large"/> : <ActivityIndicator size={48}/>
+    }
+    </View>
 };

@@ -6,6 +6,7 @@ import uuid from "react-native-uuid";
 
 export const TODO_INITIAL_STATE = {
     isFetching: false,
+    isActionProgress: false,
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
@@ -26,6 +27,9 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
     console.log(`reducer action: ${JSON.stringify(action)}`);
     const newState = {...state};
     switch (action.type) {
+        case Action.Type.TODO_ACTION:
+            newState.isActionProgress = true;
+            break;
         case Action.Type.TODO_FETCH:
             newState.isFetching = true;
             break;
@@ -80,6 +84,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         }
         case Action.Type.TODO_DELETE: {
+            newState.isActionProgress = false;
             newState.items = [...newState.items];
             const index = newState.items.map((item) => {
                 return item.id;

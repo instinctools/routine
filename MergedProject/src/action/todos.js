@@ -5,11 +5,14 @@ const Action = {
     Type: {
         TODO_FETCH: `TODO_FETCH`,
         TODO_FETCH_RESULT: `TODO_FETCH_RESULT`,
+        TODO_DELETE: 'todo-delete',
+        TODO_DELETE_RESULT: 'TODO_DELETE_RESULT',
+        TODO_ACTION: 'TODO_ACTION',
 
         TODO_ADD: 'todo-add',
         TODO_SELECT: 'todo-select',
         TODO_RESET: 'todo-reset',
-        TODO_DELETE: 'todo-delete',
+
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
         CHANGE_SCROLL_STATE: `change-scroll-state`,
         CHANGE_MENU_ACTIVATION_STATE: `change-menu-activation`
@@ -35,12 +38,6 @@ Action.selectTodo = (id, title, period, periodUnit) => {
 Action.resetTodo = id => {
     return {
         type: Action.Type.TODO_RESET,
-        id
-    };
-};
-Action.deleteTodo = id => {
-    return {
-        type: Action.Type.TODO_DELETE,
         id
     };
 };
@@ -98,5 +95,30 @@ Action.requestTodos = () => {
     }
 };
 
+Action.todoAction = () => {
+    return {
+        type: Action.Type.TODO_ACTION
+    }
+};
+
+Action.deleteTodoResult = id => {
+    return {
+        type: Action.Type.TODO_DELETE,
+        id
+    };
+};
+
+Action.deleteTodo = id => {
+    return (dispatch) => {
+        dispatch(Action.todoAction());
+        return firestore()
+            .collection("users")
+            .doc(auth().currentUser.uid)
+            .collection("todos")
+            .doc(id)
+            .delete()
+            .then(dispatch(Action.deleteTodoResult(id)))
+    }
+};
 
 export default Action;
