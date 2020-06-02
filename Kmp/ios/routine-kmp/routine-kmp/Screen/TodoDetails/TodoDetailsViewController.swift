@@ -31,8 +31,8 @@ final class TodoDetailsViewController: UIViewController {
     
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
-    private lazy var repeatPeriodsView = PeriodsView()
-        
+    private lazy var periodSelectionView = PeriodSelectionView()
+    
     private let todo: Todo?
     private lazy var presenter: TodoDetailsPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -89,10 +89,10 @@ final class TodoDetailsViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(titleView)
         
-        let dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
+        let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
         
-        contentView.addArrangedSubview(repeatPeriodsView)
+        contentView.addArrangedSubview(periodSelectionView)
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -123,13 +123,15 @@ final class TodoDetailsViewController: UIViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
-        repeatPeriodsView.selection
-            .do(onNext: { periodUiModel in
-                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: periodUiModel.unit)
+        periodSelectionView.selection
+            .do(onNext: { period in
+                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: period)
                 self.presenter.events.offer(element: event)
             })
             .subscribe()
             .disposed(by: disposeBag)
+        
+        periodSelectionView.showPeriods(periods: PeriodUnit.Companion().allPeriods())
         
 //        let input = TaskDetailsViewModel.Input(
 //            doneButtonAction: doneButton.rx.tap.asDriver(),
@@ -151,9 +153,9 @@ final class TodoDetailsViewController: UIViewController {
                 return
             }
             
-            self.titleView.textView.text = state.todo.title
-            
-            self.repeatPeriodsView.bind(items: state.periods)
+            let todo = state.todo
+            self.titleView.textView.text = todo.title
+            self.periodSelectionView.selectPeriod(unit: todo.periodUnit, count: Int(todo.periodValue))
         })
         
         presenter.start()

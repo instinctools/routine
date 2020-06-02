@@ -8,5 +8,6 @@ enum class PeriodUnit(val id: Int) {
 
     companion object {
         fun find(id: Int) = values().find { it.id == id } ?: DAY
+        fun allPeriods() = values().asList()
     }
 }

@@ -67,11 +67,11 @@ class TodoDetailsPresenter(
                 todoStore.insert(newTodo)
             }
         } else {
-            val newTodo = todo.buildUpdatedTodoModel()
-            if (newTodo == null) {
+            val updatedTodo = todo.buildUpdatedTodoModel()
+            if (updatedTodo == null) {
                 // TODO send error state
             } else {
-                todoStore.update(newTodo)
+                todoStore.update(updatedTodo)
             }
         }
         sendState(state.copy(saved = true))

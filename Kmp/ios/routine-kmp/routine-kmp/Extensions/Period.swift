@@ -11,19 +11,19 @@ import RoutineSharedKmp
 
 extension PeriodUnit {
     
-    func title(count: Int?) -> String {
+    func title(count: Int? = nil) -> String {
         let hasPeriod = (count ?? 0) > 1
         switch self {
             case .day:
-                return hasPeriod ? "days" : "day"
+                return hasPeriod ? "Days" : "Day"
             case .week:
-                return hasPeriod ? "weeks" : "week"
+                return hasPeriod ? "Weeks" : "Week"
             case .month:
-                return hasPeriod ? "monthes" : "month"
+                return hasPeriod ? "Monthes" : "Month"
             case .year:
-                return hasPeriod ? "years" : "year"
+                return hasPeriod ? "Years" : "Year"
             default:
-                return " unknwon"
+                return "Unknwon"
         }
     }
 }
