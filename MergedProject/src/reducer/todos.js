@@ -74,10 +74,8 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         case Action.Type.TODO_RESET: {
             newState.items = newState.items.map((todo, _) => {
-                if (todo.id === action.id) {
-                    return Object.assign({}, todo, {
-                        timestamp: calculateTimestamp(todo.period, todo.periodUnit)
-                    })
+                if (todo.id === action.item.id) {
+                    return action.item
                 }
                 return todo
             });
@@ -141,6 +139,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             }
             break;
         case ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR:
+            newState.isActionProgress = false;
             newState.editTodo = {
                 ...newState.editTodo,
                 isPeriodSelectorVisible: action.isVisible

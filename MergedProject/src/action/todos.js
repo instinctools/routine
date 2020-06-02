@@ -1,17 +1,18 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {calculateTimestamp} from "../utils";
 
 const Action = {
     Type: {
         TODO_FETCH: `TODO_FETCH`,
         TODO_FETCH_RESULT: `TODO_FETCH_RESULT`,
         TODO_DELETE: 'todo-delete',
-        TODO_DELETE_RESULT: 'TODO_DELETE_RESULT',
         TODO_ACTION: 'TODO_ACTION',
+        TODO_RESET: 'todo-reset',
 
         TODO_ADD: 'todo-add',
         TODO_SELECT: 'todo-select',
-        TODO_RESET: 'todo-reset',
+
 
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
         CHANGE_SCROLL_STATE: `change-scroll-state`,
@@ -95,7 +96,7 @@ Action.requestTodos = () => {
     }
 };
 
-Action.todoAction = () => {
+Action.todoAction = () =>{
     return {
         type: Action.Type.TODO_ACTION
     }
@@ -118,6 +119,37 @@ Action.deleteTodo = id => {
             .doc(id)
             .delete()
             .then(dispatch(Action.deleteTodoResult(id)))
+    }
+};
+
+Action.resetTodoResult = item => {
+    return {
+        type: Action.Type.TODO_RESET,
+        item: item
+    };
+};
+
+Action.resetTodo = item => {
+    return (dispatch) => {
+        dispatch(Action.todoAction());
+
+        let newItem = Object.assign({}, item, {
+            timestamp: calculateTimestamp(item.period, item.periodUnit)
+        });
+
+        return firestore()
+            .collection("users")
+            .doc(auth().currentUser.uid)
+            .collection("todos")
+            .doc(item.id)
+            .set({
+                id: newItem.id,
+                period: newItem.period,
+                periodUnit: newItem.periodUnit,
+                timestamp: newItem.timestamp,
+                title: newItem.title
+            })
+            .then(Action.resetTodoResult(newItem))
     }
 };
 

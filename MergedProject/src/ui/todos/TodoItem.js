@@ -38,7 +38,7 @@ class TodoItem extends React.Component {
                     rightContent={createSwipeableContent(`Delete`, `flex-start`, this.props.isMenuActivated)}
                     onLeftActionRelease={() => {
                         analytics().logEvent('reset_todo_react', {});
-                        this.props.resetTodo(item.id)
+                        this.props.resetTodo(item)
                     }}
                     onRightActionRelease={() =>
                         Alert.alert(
