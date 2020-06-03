@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/space_edge"
         android:text="Day"
-        android:textColor="@color/period_selector"
+        android:textColor="@color/period_text_selector"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1"
