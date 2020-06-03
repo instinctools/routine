@@ -3,6 +3,8 @@
     <dimen name="space">8dp</dimen>
     <dimen name="space_edge">16dp</dimen>
 
+    <dimen name="task_details_period_spacing">16dp</dimen>
+
     <dimen name="margin_horizontal">16dp</dimen>
     <dimen name="swipeable_btn_width">96dp</dimen>
     <dimen name="swipeable_activate_distance">125dp</dimen>

@@ -19,7 +19,7 @@ extension PeriodUnit {
             case .week:
                 return hasPeriod ? "Weeks" : "Week"
             case .month:
-                return hasPeriod ? "Monthes" : "Month"
+                return hasPeriod ? "Months" : "Month"
             case .year:
                 return hasPeriod ? "Years" : "Year"
             default:

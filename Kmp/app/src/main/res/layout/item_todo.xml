@@ -8,7 +8,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:padding="8dp"
-    android:background="@drawable/bg_rounded">
+    android:background="@drawable/todo_item_bg">
 
     <TextView
         android:id="@+id/title"

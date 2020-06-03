@@ -3,6 +3,7 @@ package com.instinctools.routine_kmp.ui.details
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -17,7 +18,7 @@ class PeriodPickerFragment : DialogFragment(R.layout.fragment_period_picker) {
     private val binding by viewBinding(FragmentPeriodPickerBinding::bind)
 
     private var _period: Int? = null
-    private val period: Int = _period ?: arguments?.getInt(ARG_SELECTED_PERIOD) ?: 1
+    private val period: Int get() = _period ?: arguments?.getInt(ARG_SELECTED_PERIOD) ?: 1
 
     var pickerListener: ((period: Int) -> Unit)? = null
 

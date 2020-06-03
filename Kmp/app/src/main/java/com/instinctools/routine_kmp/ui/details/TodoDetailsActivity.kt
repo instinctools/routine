@@ -13,6 +13,7 @@ import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter
+import com.instinctools.routine_kmp.ui.widget.VerticalSpacingDecoration
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,11 +62,14 @@ class TodoDetailsActivity : AppCompatActivity() {
         presenter.states.onEach { state ->
             if (state.saved) {
                 onBackPressed()
+                return@onEach
             }
 
-            if (binding.text.text.toString() != state.todo.title) {
-                binding.text.setText(state.todo.title)
+            val todo = state.todo
+            if (binding.text.text.toString() != todo.title) {
+                binding.text.setText(todo.title)
             }
+            adapter.setSelected(todo.periodUnit, todo.periodValue)
         }
             .launchIn(scope)
     }
@@ -84,6 +88,7 @@ class TodoDetailsActivity : AppCompatActivity() {
         binding.periodsRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.periodsRecyclerView.itemAnimator = null
         binding.periodsRecyclerView.adapter = adapter
+        binding.periodsRecyclerView.addItemDecoration(VerticalSpacingDecoration(this, R.dimen.task_details_period_spacing))
         adapter.items = PeriodUnit.allPeriods()
 
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }

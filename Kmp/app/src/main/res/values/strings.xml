@@ -5,6 +5,11 @@
     <string name="todos_delete_ok">Delete</string>
     <string name="todos_delete_cancel">Cancel</string>
 
-    <string name="count_chooser_title">Choose period</string>
-    <string name="count_chooser_btn_done">Done</string>
+    <!-- Task Details -->
+    <string name="task_details_repeat_label">Repeat every</string>
+    <string name="task_details_title_hint">Type recurring task name…</string>
+
+    <string name="period_picker_title">Choose period</string>
+    <string name="period_picker_btn_done">Done</string>
+    <!-- Task Details -->
 </resources>
