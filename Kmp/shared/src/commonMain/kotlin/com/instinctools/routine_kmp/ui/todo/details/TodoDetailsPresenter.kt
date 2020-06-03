@@ -39,8 +39,10 @@ class TodoDetailsPresenter(
                         if (todo != state.todo) sendState(state.copy(todo = todo))
                     }
                     is Event.ChangePeriodUnit -> {
-                        val todo = state.todo.copy(periodUnit = event.periodUnit)
-                        sendState(state.copy(todo = todo))
+                        val todo = state.todo
+                        val count = if (todo.periodUnit != event.periodUnit) 1 else todo.periodValue
+                        val newTodo = todo.copy(periodUnit = event.periodUnit, periodValue = count)
+                        sendState(state.copy(todo = newTodo))
                     }
                     is Event.ChangePeriod -> {
                         val todo = state.todo.copy(periodValue = event.period)
