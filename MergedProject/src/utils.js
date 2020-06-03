@@ -18,7 +18,7 @@ export const calculateTimestamp = (period, periodUnit, from = moment()) => {
             date.add(period, `d`);
             break;
     }
-    return date.format("YYYY-MM-DD");
+    return date.startOf('d').toDate();
 };
 
 export const calculateTargetDate = (date) => {
