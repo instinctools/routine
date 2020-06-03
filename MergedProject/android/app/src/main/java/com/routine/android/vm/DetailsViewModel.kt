@@ -5,6 +5,7 @@ import com.dropbox.android.external.store4.fresh
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.routine.android.calculateTimestamp
 import com.routine.android.data.db.database
 import com.routine.android.data.db.entity.PeriodUnit
 import com.routine.android.data.db.entity.TodoEntity
@@ -56,9 +57,9 @@ class DetailsViewModel(val id: String?) : StatusViewModel() {
                     .document(user.uid)
                     .collection("todos")
                     .document(value.id)
-                    .set(value)
+                    .set(value.copy(timestamp = calculateTimestamp(value.period, value.periodUnit)))
                     .await()
-                TodosRepository.todosStore.fresh(value.id)
+                TodosRepository.todosStore.fresh(Pair(value.id, false))
                 addTodoResult.push(true)
             }
         }

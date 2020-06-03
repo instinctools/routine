@@ -26,5 +26,11 @@ interface TodoDao {
     suspend fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTodos(todos: List<TodoEntity>);
+    suspend fun addTodos(todos: List<TodoEntity>)
+
+    @Transaction
+    suspend fun replaceAll(todos: List<TodoEntity>) {
+        deleteAll()
+        addTodos(todos)
+    }
 }
