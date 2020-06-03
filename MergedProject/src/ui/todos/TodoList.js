@@ -6,7 +6,7 @@ import Action from '../../action/todos';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
-import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../../utils";
+import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod} from "../../utils";
 import moment from "moment";
 import analytics from "@react-native-firebase/analytics";
 
@@ -36,6 +36,7 @@ class TodoList extends React.PureComponent {
         this.props.navigation.setParams({
             navigateToDetails: () => {
                 analytics().logEvent('add_todo_react', {});
+                this.props.selectTodo(this.props.item);
                 this.props.navigation.navigate(`Details`)
             }
         });
@@ -46,13 +47,7 @@ class TodoList extends React.PureComponent {
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
         if (isFetching && uiItems.length === 0) {
-            return <View
-                style={{
-                    flex: 1,
-                    justifyContent: 'center'
-                }}>
-                {getProgress()}
-            </View>
+            return getProgress()
         }
         return <View style={{
             flex: 1,
@@ -117,11 +112,4 @@ const toUiModels = (todos) => {
         })
     }
     return uiTodos;
-};
-
-const getProgress = () => {
-    return <View style={{flex: 1, justifyContent: "center", alignItems: "center", position: "absolute", alignSelf: "center"}}>{
-        (Platform.OS === 'ios') ? <ActivityIndicator size="large"/> : <ActivityIndicator size={48}/>
-    }
-    </View>
 };

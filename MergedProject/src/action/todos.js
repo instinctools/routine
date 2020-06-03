@@ -1,6 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {calculateTimestamp} from "../utils";
+import uuid from "react-native-uuid";
 
 const Action = {
     Type: {
@@ -12,27 +13,11 @@ const Action = {
 
         TODO_ADD: 'todo-add',
         TODO_SELECT: 'todo-select',
-
+        TODO_PROGRESS: 'TODO_PROGRESS',
 
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
         CHANGE_SCROLL_STATE: `change-scroll-state`,
         CHANGE_MENU_ACTIVATION_STATE: `change-menu-activation`
-    }
-};
-
-Action.addTodo = () => {
-    return {
-        type: Action.Type.TODO_ADD
-    };
-};
-
-Action.selectTodo = (id, title, period, periodUnit) => {
-    return {
-        type: Action.Type.TODO_SELECT,
-        id,
-        title,
-        period,
-        periodUnit
     }
 };
 
@@ -96,7 +81,7 @@ Action.requestTodos = () => {
     }
 };
 
-Action.todoAction = () =>{
+Action.todoAction = () => {
     return {
         type: Action.Type.TODO_ACTION
     }
@@ -132,25 +117,64 @@ Action.resetTodoResult = item => {
 Action.resetTodo = item => {
     return (dispatch) => {
         dispatch(Action.todoAction());
-
-        let newItem = Object.assign({}, item, {
-            timestamp: calculateTimestamp(item.period, item.periodUnit)
-        });
-
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
             .doc(item.id)
             .set({
-                id: newItem.id,
-                period: newItem.period,
-                periodUnit: newItem.periodUnit,
-                timestamp: newItem.timestamp,
-                title: newItem.title
+                id: item.id,
+                period: item.period,
+                periodUnit: item.periodUnit,
+                timestamp: calculateTimestamp(item.period, item.periodUnit),
+                title: item.title
             })
             .then(Action.resetTodoResult(newItem))
     }
+};
+
+Action.todoProgress = () => {
+    return {
+        type: Action.Type.TODO_PROGRESS
+    }
+};
+
+Action.selectTodo = (todo) => {
+    return {
+        type: Action.Type.TODO_SELECT,
+        todo: todo
+    }
+};
+
+Action.addTodo = () => {
+    return (dispatch, getState) => {
+        let editTodo = getState().todos.editTodo;
+        let todo = {
+            id: editTodo.id,
+            period: editTodo.period,
+            periodUnit: editTodo.periodUnit,
+            timestamp: calculateTimestamp(editTodo.period, editTodo.periodUnit),
+            title: editTodo.title
+        };
+
+        if (todo.id === undefined) {
+            todo.id = uuid.v1()
+        }
+
+        dispatch(Action.todoProgress());
+        return firestore()
+            .collection("users")
+            .doc(auth().currentUser.uid)
+            .collection("todos")
+            .doc(editTodo.id)
+            .set(todo)
+            .then(() => {
+                dispatch({
+                    type: Action.Type.TODO_ADD,
+                    todo: todo
+                })
+            })
+    };
 };
 
 export default Action;

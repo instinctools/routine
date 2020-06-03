@@ -93,7 +93,7 @@ const createContent = (props) => {
         onPress={() => {
             if (!props.isActionProgress){
                 analytics().logEvent('edit_todo_react', {});
-                props.selectTodo(props.item.id, props.item.title, props.item.period, props.item.periodUnit);
+                props.selectTodo(props.item);
                 props.navigation.navigate("Details")
             }
         }}>

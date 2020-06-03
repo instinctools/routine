@@ -15,11 +15,13 @@ export const TODO_INITIAL_STATE = {
         isMenuActivated: false
     },
     editTodo: {
+        isProgress: false,
         id: undefined,
         title: undefined,
         period: 1,
         periodUnit: Period.DAY,
-        isPeriodSelectorVisible: false
+        isPeriodSelectorVisible: false,
+        success: false
     }
 };
 
@@ -38,39 +40,35 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             newState.items = action.todos;
             break;
         case Action.Type.TODO_ADD: {
-            const newTodo = {...newState.editTodo, timestamp: calculateTimestamp(newState.editTodo.period, newState.editTodo.periodUnit)};
-            delete newTodo.isPeriodSelectorVisible;
-            if (newTodo.id) {
-                newState.items = newState.items.map((todo, _) => {
-                    if (todo.id === newTodo.id) {
-                        return newTodo
-                    }
-                    return todo
-                });
+            newState.items = [...newState.items];
+            let index = newState.items.findIndex(todo => todo.id === action.todo.id);
+            if (index > -1) {
+                newState.items[index] = action.todo
             } else {
-                newState.items = [
-                    ...newState.items, {
-                        ...newTodo,
-                        id: uuid.v1()
-                    }
-                ];
+                newState.items.push(action.todo)
             }
+
+            newState.editTodo = {
+                ...TODO_INITIAL_STATE.editTodo,
+                success: true
+            };
             break;
         }
         case Action.Type.TODO_SELECT:
-            if (action.id) {
-                newState.editTodo = {
-                    ...TODO_INITIAL_STATE.editTodo,
-                    id: action.id,
-                    title: action.title,
-                    period: action.period,
-                    periodUnit: action.periodUnit
-                }
-            } else {
-                newState.editTodo = {
-                    ...TODO_INITIAL_STATE.editTodo
-                }
+            newState.editTodo = {
+                ...TODO_INITIAL_STATE.editTodo,
+            };
+            if (action.todo !== undefined) {
+                newState.editTodo.id = action.todo.id;
+                newState.editTodo.title = action.todo.title;
+                newState.editTodo.period = action.todo.period;
+                newState.editTodo.periodUnit = action.todo.periodUnit;
             }
+            break;
+        case Action.Type.TODO_PROGRESS:
+            newState.editTodo = Object.assign({}, newState.editTodo, {
+                isProgress: true
+            });
             break;
         case Action.Type.TODO_RESET: {
             newState.items = newState.items.map((todo, _) => {

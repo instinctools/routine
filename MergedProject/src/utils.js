@@ -1,5 +1,7 @@
 import moment from "moment";
 import {Period} from "./constants";
+import {View, ActivityIndicator} from "react-native";
+import React from "react";
 
 export const calculateTimestamp = (period, periodUnit, from = moment()) => {
     let date = moment(from);
@@ -65,4 +67,14 @@ export const pickColorBetween = (index, maxIndex = 15, color1 = [255, 190, 67], 
         Math.round(color1[1] * w1 + color2[1] * w2),
         Math.round(color1[2] * w1 + color2[2] * w2)];
     return `rgba(${colorRGB[0]}, ${colorRGB[1]}, ${colorRGB[2]}, 1)`;
+};
+
+export const getProgress = () => {
+    let style = {
+        position: "absolute",
+        width: "100%",
+        height: "100%"
+    };
+    return (Platform.OS === 'ios') ? <ActivityIndicator style = {style} size="large"/> :
+        <ActivityIndicator style = {style} size={48} />
 };
