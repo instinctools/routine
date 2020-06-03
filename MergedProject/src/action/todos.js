@@ -87,13 +87,6 @@ Action.todoAction = () => {
     }
 };
 
-Action.deleteTodoResult = id => {
-    return {
-        type: Action.Type.TODO_DELETE,
-        id
-    };
-};
-
 Action.deleteTodo = id => {
     return (dispatch) => {
         dispatch(Action.todoAction());
@@ -103,33 +96,34 @@ Action.deleteTodo = id => {
             .collection("todos")
             .doc(id)
             .delete()
-            .then(dispatch(Action.deleteTodoResult(id)))
+            .then(dispatch({
+                type: Action.Type.TODO_DELETE,
+                id
+            }))
     }
-};
-
-Action.resetTodoResult = item => {
-    return {
-        type: Action.Type.TODO_RESET,
-        item: item
-    };
 };
 
 Action.resetTodo = item => {
     return (dispatch) => {
         dispatch(Action.todoAction());
+        let todo = {
+            id: item.id,
+            period: item.period,
+            periodUnit: item.periodUnit,
+            timestamp: calculateTimestamp(item.period, item.periodUnit),
+            title: item.title
+        };
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
             .doc(item.id)
-            .set({
-                id: item.id,
-                period: item.period,
-                periodUnit: item.periodUnit,
-                timestamp: calculateTimestamp(item.period, item.periodUnit),
-                title: item.title
-            })
-            .then(Action.resetTodoResult(newItem))
+            .set(todo)
+            .then(dispatch({
+                    type: Action.Type.TODO_RESET,
+                    item: todo
+                }
+            ))
     }
 };
 
@@ -166,7 +160,7 @@ Action.addTodo = () => {
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
-            .doc(editTodo.id)
+            .doc(todo.id)
             .set(todo)
             .then(() => {
                 dispatch({

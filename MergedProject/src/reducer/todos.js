@@ -71,6 +71,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             });
             break;
         case Action.Type.TODO_RESET: {
+            newState.isActionProgress = false;
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.item.id) {
                     return action.item
