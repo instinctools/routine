@@ -3,6 +3,7 @@ package com.instinctools.routine_kmp.ui.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -70,6 +71,10 @@ class TodoDetailsActivity : AppCompatActivity() {
                 binding.text.setText(todo.title)
             }
             adapter.setSelected(todo.periodUnit, todo.periodValue)
+
+            val actionView = binding.toolbar.menu.findItem(R.id.done).actionView
+            Log.d("asd", "action view $actionView")
+            actionView.isEnabled = state.saveEnabled
         }
             .launchIn(scope)
     }

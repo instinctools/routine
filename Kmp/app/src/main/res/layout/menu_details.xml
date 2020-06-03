@@ -5,5 +5,5 @@
     android:background="?attr/actionBarItemBackground"
     android:enabled="true"
     android:gravity="center"
-    android:text="Done"
-    android:textColor="#000000" />
+    android:text="@string/task_details_btn_done"
+    android:textColor="@color/add_todo_done_color" />

@@ -1,6 +1,5 @@
 package com.instinctools.routine_kmp.ui.details.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +18,7 @@ class PeriodsAdapter(
             _items = value
         }
 
-    private val selectionListeners = mutableListOf<(PeriodUnit, Int) -> Unit>()
+    private val selectionListeners = mutableListOf<(PeriodUnit?, Int) -> Unit>()
     private var selectedPeriodUnit: PeriodUnit? = null
     private var selectedCount: Int = 1
 
@@ -39,7 +38,7 @@ class PeriodsAdapter(
                     countChooserListener(adapterPosition, items[adapterPosition])
                 }
             }
-            selectionListeners += { unit: PeriodUnit, count: Int ->
+            selectionListeners += { unit: PeriodUnit?, count: Int ->
                 holder.setSelected(unit, count)
             }
         }
@@ -53,7 +52,7 @@ class PeriodsAdapter(
         holder.setSelected(selectedPeriodUnit, selectedCount)
     }
 
-    fun setSelected(unit: PeriodUnit, count: Int) {
+    fun setSelected(unit: PeriodUnit?, count: Int) {
         selectedPeriodUnit = unit
         selectedCount = count
         selectionListeners.forEach { it(unit, count) }

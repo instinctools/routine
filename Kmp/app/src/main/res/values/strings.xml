@@ -8,6 +8,7 @@
     <!-- Task Details -->
     <string name="task_details_repeat_label">Repeat every</string>
     <string name="task_details_title_hint">Type recurring task name…</string>
+    <string name="task_details_btn_done">Done</string>
 
     <string name="period_picker_title">Choose period</string>
     <string name="period_picker_btn_done">Done</string>
