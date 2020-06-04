@@ -3,30 +3,32 @@ package com.instinctools.routine_kmp.ui.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
-import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter
+import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
 import com.instinctools.routine_kmp.ui.widget.VerticalSpacingDecoration
+import com.instinctools.routine_kmp.util.appComponent
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 class TodoDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+    @Inject lateinit var presenterProvider: TodoDetailsPresenterFactory
     private lateinit var presenter: TodoDetailsPresenter
 
     private val adapter = PeriodsAdapter(
@@ -44,18 +46,17 @@ class TodoDetailsActivity : AppCompatActivity() {
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupUi()
-
-        val databaseProvider = AndroidDatabaseProvider(applicationContext)
-        val todoStore = SqlTodoStore(databaseProvider.database())
+        appComponent.inject(this)
 
         var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
         if (todoId == NO_ID) {
             todoId = null
         }
 
-        presenter = TodoDetailsPresenter(todoId, todoStore)
-        presenter.start()
+        presenter = lastCustomNonConfigurationInstance as? TodoDetailsPresenter
+            ?: presenterProvider.create(todoId).also { it.start() }
+
+        setupUi()
     }
 
     override fun onStart() {
@@ -73,7 +74,6 @@ class TodoDetailsActivity : AppCompatActivity() {
             adapter.setSelected(todo.periodUnit, todo.periodValue)
 
             val actionView = binding.toolbar.menu.findItem(R.id.done).actionView
-            Log.d("asd", "action view $actionView")
             actionView.isEnabled = state.saveEnabled
         }
             .launchIn(scope)
@@ -88,6 +88,8 @@ class TodoDetailsActivity : AppCompatActivity() {
         super.onDestroy()
         presenter.stop()
     }
+
+    override fun onRetainCustomNonConfigurationInstance() = presenter
 
     private fun setupUi() {
         binding.periodsRecyclerView.layoutManager = LinearLayoutManager(this)

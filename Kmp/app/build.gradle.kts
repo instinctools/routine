@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -58,6 +59,11 @@ dependencies {
     implementation(Deps.AndroidView.material)
     implementation(Deps.AndroidView.wheelPicker)
     /* Views */
+
+    /* Dagger */
+    implementation(Deps.Dagger.library)
+    kapt(Deps.Dagger.compiler)
+    /* Dagger */
 
     implementation(Deps.Coroutines.android)
 

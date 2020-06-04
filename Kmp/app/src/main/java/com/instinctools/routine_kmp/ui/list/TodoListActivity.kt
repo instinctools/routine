@@ -8,21 +8,24 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
-import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityMainBinding
 import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
 import com.instinctools.routine_kmp.ui.list.adapter.TodosAdapter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
+import com.instinctools.routine_kmp.util.appComponent
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
+import javax.inject.Provider
 
 class TodoListActivity : AppCompatActivity() {
+
+    @Inject lateinit var presenterProvider: Provider<TodoListPresenter>
 
     private lateinit var presenter: TodoListPresenter
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
@@ -44,16 +47,16 @@ class TodoListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        appComponent.inject(this)
+
+        presenter = lastCustomNonConfigurationInstance as? TodoListPresenter
+            ?: presenterProvider.get().also { it.start() }
+
         setupUi(binding)
-
-        val databaseProvider = AndroidDatabaseProvider(applicationContext)
-        val todoStore = SqlTodoStore(databaseProvider.database())
-
-        presenter = TodoListPresenter(todoStore = todoStore)
-        presenter.start()
     }
 
     @ExperimentalStdlibApi
@@ -81,6 +84,8 @@ class TodoListActivity : AppCompatActivity() {
         super.onDestroy()
         presenter.stop()
     }
+
+    override fun onRetainCustomNonConfigurationInstance() = presenter
 
     private fun setupUi(binding: ActivityMainBinding) {
         binding.content.layoutManager = LinearLayoutManager(this)
