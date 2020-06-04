@@ -10,9 +10,11 @@ object Versions {
     const val coroutines = "1.3.5-native-mt"
     const val stately = "1.0.2"
 
-    const val activityX = "1.2.0-alpha04"
-    const val fragmentX = "1.3.0-alpha04"
-    const val lifecycle = "2.3.0-alpha02"
+    const val activityX = "1.2.0-alpha05"
+    const val fragmentX = "1.3.0-alpha05"
+    const val lifecycle = "2.3.0-alpha03"
+
+    const val dagger = "2.28"
 }
 
 object Deps {
@@ -20,8 +22,8 @@ object Deps {
     const val threeTenAbp = "com.jakewharton.threetenabp:threetenabp:1.2.4"
 
     object AndroidX {
-        const val appCompat = "androidx.appcompat:appcompat:1.2.0-rc01"
-        const val coreKtx = "androidx.core:core-ktx:1.3.0-rc01"
+        const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
+        const val coreKtx = "androidx.core:core-ktx:1.4.0-alpha01"
         const val activity = "androidx.activity:activity:${Versions.activityX}}"
         const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityX}"
         const val fragment = "androidx.fragment:fragment:${Versions.fragmentX}"
@@ -34,7 +36,7 @@ object Deps {
     }
 
     object AndroidView {
-        const val material = "com.google.android.material:material:1.2.0-alpha06"
+        const val material = "com.google.android.material:material:1.3.0-alpha01"
         const val wheelPicker = "cn.aigestudio.wheelpicker:WheelPicker:1.1.3"
     }
 
@@ -42,6 +44,11 @@ object Deps {
         const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"
         const val native = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.coroutines}"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    }
+
+    object Dagger {
+        const val library = "com.google.dagger:dagger:${Versions.dagger}"
+        const val compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     }
 
     object SqlDelight {

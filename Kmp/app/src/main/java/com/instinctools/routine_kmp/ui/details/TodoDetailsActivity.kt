@@ -5,43 +5,58 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
-import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
+import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter
+import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
+import com.instinctools.routine_kmp.ui.widget.VerticalSpacingDecoration
+import com.instinctools.routine_kmp.util.appComponent
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
 class TodoDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailsBinding
 
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+    @Inject lateinit var presenterProvider: TodoDetailsPresenterFactory
     private lateinit var presenter: TodoDetailsPresenter
+
+    private val adapter = PeriodsAdapter(
+        selectionListener = { _, item ->
+            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item))
+        },
+        countChooserListener = { position, item ->
+            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item))
+            showCountChooser()
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupUi()
-
-        val databaseProvider = AndroidDatabaseProvider(applicationContext)
-        val todoStore = SqlTodoStore(databaseProvider.database())
+        appComponent.inject(this)
 
         var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
         if (todoId == NO_ID) {
             todoId = null
         }
 
-        presenter = TodoDetailsPresenter(todoId, todoStore)
-        presenter.start()
+        presenter = lastCustomNonConfigurationInstance as? TodoDetailsPresenter
+            ?: presenterProvider.create(todoId).also { it.start() }
+
+        setupUi()
     }
 
     override fun onStart() {
@@ -49,11 +64,17 @@ class TodoDetailsActivity : AppCompatActivity() {
         presenter.states.onEach { state ->
             if (state.saved) {
                 onBackPressed()
+                return@onEach
             }
 
-            if (binding.text.text.toString() != state.todo.title) {
-                binding.text.setText(state.todo.title)
+            val todo = state.todo
+            if (binding.text.text.toString() != todo.title) {
+                binding.text.setText(todo.title)
             }
+            adapter.setSelected(todo.periodUnit, todo.periodValue)
+
+            val actionView = binding.toolbar.menu.findItem(R.id.done).actionView
+            actionView.isEnabled = state.saveEnabled
         }
             .launchIn(scope)
     }
@@ -65,38 +86,38 @@ class TodoDetailsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.stop()
+        if (!isChangingConfigurations) {
+            presenter.stop()
+        }
     }
 
+    override fun onRetainCustomNonConfigurationInstance() = presenter
+
     private fun setupUi() {
+        binding.periodsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.periodsRecyclerView.itemAnimator = null
+        binding.periodsRecyclerView.adapter = adapter
+        binding.periodsRecyclerView.addItemDecoration(VerticalSpacingDecoration(this, R.dimen.task_details_period_spacing))
+        adapter.items = PeriodUnit.allPeriods()
+
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.toolbar.menu.findItem(R.id.done).actionView.setOnClickListener {
             presenter.events.offer(TodoDetailsPresenter.Event.Save)
         }
 
-        binding.everyDay.setOnClickListener {
-            val fragment = supportFragmentManager.findFragmentByTag(WheelPickerFragment.TAG)
-            if (fragment == null) {
-                // Todo adjust period
-                WheelPickerFragment.newInstance(1)
-                    .show(supportFragmentManager, WheelPickerFragment.TAG)
-            }
-        }
         binding.text.doOnTextChanged { text, _, _, _ ->
             val event = TodoDetailsPresenter.Event.ChangeTitle(text?.toString())
             presenter.events.offer(event)
         }
+    }
 
-        binding.radio.setOnCheckedChangeListener { _, checkedId ->
-            val periodUnit = when (checkedId) {
-                R.id.every_day -> PeriodUnit.DAY
-                R.id.every_week -> PeriodUnit.WEEK
-                R.id.every_month -> PeriodUnit.MONTH
-                R.id.every_year -> PeriodUnit.YEAR
-                else -> PeriodUnit.DAY
-            }
-            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(periodUnit))
+    private fun showCountChooser() {
+        val picker = PeriodPickerFragment.newInstance(1)
+        picker.pickerListener = { count ->
+            val event = TodoDetailsPresenter.Event.ChangePeriod(count)
+            presenter.events.offer(event)
         }
+        picker.show(supportFragmentManager, PeriodPickerFragment.TAG)
     }
 
     companion object {

@@ -1,9 +1,9 @@
 import UIKit
 import RxSwift
-import RxCocoa
+import RoutineSharedKmp
 
-final class PeriodsView: UIView {
-    
+final class PeriodSelectionView: UIView {
+
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -12,20 +12,19 @@ final class PeriodsView: UIView {
         return stackView
     }()
     
-    let selection = PublishSubject<PeriodViewModel>()
-    
-    private var periodViews: [PeriodView] = []
+    let selection = PublishSubject<PeriodUnit>()
+    let countChooser = PublishSubject<Int>()
     private let disposeBag = DisposeBag()
-    
+
     init() {
         super.init(frame: .zero)
         setupLayout()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupLayout() {
         addSubview(stackView)
         stackView.snp.makeConstraints { (make) in
@@ -35,25 +34,27 @@ final class PeriodsView: UIView {
             make.bottom.equalToSuperview()
         }
     }
-
-    func bind(items: [PeriodViewModel]) {
-        items.forEach { (periodViewModel) in
-            let periodView = PeriodView()
-            periodView.bind(viewModel: periodViewModel)
+    
+    func showPeriods(periods: [PeriodUnit]) {
+        for period in periods {
+            let periodView = PeriodView2(period: period)
             
             periodView.selection.map {
-//                self.select(view: periodView)
-                self.selection.onNext(periodViewModel)
+                self.selection.onNext(period)
             }.subscribe().disposed(by: disposeBag)
             
-            periodViews.append(periodView)
+            periodView.countChooser.map { count in
+                self.countChooser.onNext(count)
+            }.subscribe().disposed(by: disposeBag)
+            
             stackView.addArrangedSubview(periodView)
         }
     }
     
-//    private func select(view: PeriodView) {
-//        for periodView in periodViews {
-//            periodView.setSelected(periodView == view)
-//        }
-//    }
+    func selectPeriod(unit: PeriodUnit, count: Int) {
+        for view in stackView.subviews {
+            let periodView = view as? PeriodView2
+            periodView?.adjustSelection(selectedUnit: unit, count: count)
+        }
+    }
 }

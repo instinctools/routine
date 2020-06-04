@@ -21,7 +21,7 @@ final class TodoDetailsViewController: UIViewController {
         return view
     }()
     
-    private lazy var textView: PlaceholderTextView = {
+    private lazy var titleView: PlaceholderTextView = {
         let textView = PlaceholderTextView()
         textView.textLimit = 40
         textView.placeholder = "Type recurring task name..."
@@ -31,8 +31,8 @@ final class TodoDetailsViewController: UIViewController {
     
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
-    private lazy var repeatPeriodsView = PeriodsView()
-        
+    private lazy var periodSelectionView = PeriodSelectionView()
+    
     private let todo: Todo?
     private lazy var presenter: TodoDetailsPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -87,12 +87,12 @@ final class TodoDetailsViewController: UIViewController {
     private func setupLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addArrangedSubview(textView)
+        contentView.addArrangedSubview(titleView)
         
-        let dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
+        let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
         
-        contentView.addArrangedSubview(repeatPeriodsView)
+        contentView.addArrangedSubview(periodSelectionView)
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -115,24 +115,62 @@ final class TodoDetailsViewController: UIViewController {
             .subscribe(onNext: dismiss)
             .disposed(by: disposeBag)
         
-        let input = TaskDetailsViewModel.Input(
-            doneButtonAction: doneButton.rx.tap.asDriver(),
-            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
-        )
-        let output = viewModel.transform(input: input)
-        
-        output.doneButtonEnabled
-            .drive(doneButton.rx.isEnabled)
+        doneButton.rx.tap
+            .do(onNext: {
+                let event = TodoDetailsPresenter.EventSave()
+                self.presenter.events.offer(element: event)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
         
-        output.dismissAction
-            .drive(onNext: dismiss)
+        periodSelectionView.selection
+            .do(onNext: { period in
+                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: period)
+                self.presenter.events.offer(element: event)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
         
-        (textView.rx.title <-> viewModel.title)
+        periodSelectionView.countChooser
+            .do(onNext: { count in
+                self.showCountSelectionAlert(initialCount: count)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
         
-        repeatPeriodsView.bind(items: viewModel.items)
+        periodSelectionView.showPeriods(periods: PeriodUnit.Companion().allPeriods())
+        
+//        let input = TaskDetailsViewModel.Input(
+//            doneButtonAction: doneButton.rx.tap.asDriver(),
+//            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
+//        )
+//        let output = viewModel.transform(input: input)
+//        
+//        output.doneButtonEnabled
+//            .drive(doneButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//        
+//
+//        (textView.rx.title <-> viewModel.title)
+//            .disposed(by: disposeBag)
+//
+        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+            if(state.saved) {
+                self.dismiss()
+                return
+            }
+            
+            let todo = state.todo
+            self.titleView.textView.text = todo.title
+            self.periodSelectionView.selectPeriod(unit: todo.periodUnit, count: Int(todo.periodValue))
+        })
+        
+        presenter.start()
+    }
+    
+    private func showCountSelectionAlert(initialCount: Int) {
+        let alert = UIAlertController(title: "Choose period", message: nil, preferredStyle: .actionSheet)
+        present(alert, animated: true, completion: nil)
     }
     
     private func keyboardWillShow(notification: Notification) {
