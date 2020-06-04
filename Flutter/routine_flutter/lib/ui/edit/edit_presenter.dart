@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class EditPresenter {
   int id;
@@ -34,5 +35,7 @@ class EditPresenter {
       title: controller.value.text,
       periodUnit: periodUnit,
       periodValue: periodValue,
-      timestamp: timestamp);
+      timestamp: TimeUtils.calculateTargetTime(
+              controller.value.text, periodUnit, periodValue)
+          .millisecondsSinceEpoch);
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo entry;
@@ -34,8 +35,13 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(entry.periodUnit, style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(entry.periodValue.toString(), style: Styles.TODO_ITEM_TIME_TEXT)
+                    Text(
+                        TimeUtils.getPrettyPeriod(
+                            entry.periodUnit, entry.periodValue),
+                        style: Styles.TODO_ITEM_TIME_TEXT),
+                    Text(
+                        TimeUtils.calculateTimeLeft(entry.timestamp.toString()),
+                        style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
               )
@@ -48,6 +54,9 @@ class TodoItem extends StatelessWidget {
       {int maxIndex = 15,
       color1 = const [255, 190, 67],
       color2 = const [255, 57, 55]}) {
+    if (index < 0) {
+      return Colors.red.shade900;
+    }
     var w1 = 1.0;
     if (index < maxIndex) {
       w1 = index / maxIndex;
@@ -60,12 +69,4 @@ class TodoItem extends StatelessWidget {
     }
     return Color.fromRGBO(colorRgb[0], colorRgb[1], colorRgb[2], 1);
   }
-}
-
-class TodoTMP {
-  String title;
-  String timeLeft;
-  String period;
-
-  TodoTMP(this.title, {this.timeLeft = '5 days left', this.period = 'per 2 days'});
 }

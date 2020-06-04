@@ -6,6 +6,7 @@ import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoList extends StatefulWidget {
   @override
@@ -25,39 +26,27 @@ class _TodoListState extends State<TodoList> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: pushEditScreen,
+              onPressed: _pushEditScreen,
             )
           ],
         ),
         body: FutureBuilder<List<Todo>>(
           future: helper.getTodos(),
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.done) {
-              if (snap.data.length > 0) {
+          builder: (context, futureResult) {
+            if (futureResult.connectionState == ConnectionState.done) {
+              if (futureResult.data.length > 0) {
+                List<Todo> sortedList = futureResult.data;
+                sortedList.sort((a, b) =>
+                    TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
+
+                List<Widget> widgets = _createItemWidgetsList(sortedList);
                 return ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
-                    itemCount: snap.data.length,
-                    itemBuilder: (context, index) {
-                      var item = snap.data[index];
-                      return GestureDetector(
-                          child: Dismissible(
-                            key: Key(item.id.toString()),
-                            child: TodoItem(item, index),
-                            confirmDismiss: (direction) =>
-                                _confirmDismiss(direction, item),
-                            background: _getItemBackground(
-                                Strings.listResetSlideActionLabel,
-                                Colors.green,
-                                true),
-                            secondaryBackground: _getItemBackground(
-                                Strings.listDeleteSlideActionLabel,
-                                Colors.grey,
-                                false),
-                          ),
-                          onTap: () => pushEditScreen(todo: item));
-                    });
+                    itemCount: widgets.length,
+                    itemBuilder: (context, index) => widgets[index]);
               } else {
+//              placeholder for empty list
                 return Center(
                     child: Text(
                   Strings.listEmptyPlaceholderText,
@@ -65,6 +54,7 @@ class _TodoListState extends State<TodoList> {
                 ));
               }
             }
+//            progress bar
             return Center(
               widthFactor: Dimens.listProgressSize,
               heightFactor: Dimens.listProgressSize,
@@ -74,7 +64,60 @@ class _TodoListState extends State<TodoList> {
         ));
   }
 
-  Widget _getItemBackground(String title, Color color, bool isPrimary) {
+  int findLastExpiredIndex(List<Todo> list) {
+    int currentTime = TimeUtils.getCurrentTimeMillis();
+    int index = -1;
+    for (int i = 0; i <= list.length; i++) {
+      var item = list[i];
+      if (item.timestamp > currentTime) {
+        break;
+      }
+      index = i;
+    }
+    print("last expired item index $index");
+    return index;
+  }
+
+  List<Widget> _createItemWidgetsList(List<Todo> sortedList) {
+    List<Widget> widgets = List();
+    int lastExpiredIndex = findLastExpiredIndex(sortedList);
+
+    for (int i = 0; i < sortedList.length; i++) {
+      Todo todo = sortedList[i];
+      int gradientColorIndex =
+          lastExpiredIndex != -1 ? i - lastExpiredIndex - 1 : i;
+
+      widgets.add(_getItemWidget(todo, gradientColorIndex));
+
+      if (lastExpiredIndex == i) {
+        widgets.add(Divider(color: ColorsRes.selectedPeriodUnitColor));
+      }
+    }
+    return widgets;
+  }
+
+  Widget _getItemWidget(Todo todo, int colorIndex) {
+    return GestureDetector(
+        child: Dismissible(
+          key: Key(todo.id.toString()),
+          child: TodoItem(todo, colorIndex),
+          onResize: () {
+            setState(() {});
+            print("reseted");
+          },
+          onDismissed: (direction) {
+            setState(() {});
+          },
+          confirmDismiss: (direction) => _confirmDismiss(direction, todo),
+          background: _getDismissibleItemBackground(
+              Strings.listResetSlideActionLabel, Colors.green, true),
+          secondaryBackground: _getDismissibleItemBackground(
+              Strings.listDeleteSlideActionLabel, Colors.grey, false),
+        ),
+        onTap: () => _pushEditScreen(todo: todo));
+  }
+
+  Widget _getDismissibleItemBackground(String title, Color color, bool isPrimary) {
     var dimen = Dimens.COMMON_PADDING_HALF;
     var insets = EdgeInsets.only(
         top: dimen,
@@ -117,32 +160,53 @@ class _TodoListState extends State<TodoList> {
 
   Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
     if (direction == DismissDirection.startToEnd) {
-      print('reseted');
+      await _resetTodo(item);
     } else {
-      return await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(Strings.listDialogContentText),
-              actions: <Widget>[
-                FlatButton(
-                    child: Text(Strings.listDialogActionCancel),
-                    onPressed: () => Navigator.pop(context, false)),
-                FlatButton(
-                    child: Text(Strings.listDialogActionDelete),
-                    onPressed: () async {
-                      bool isSuccess = await helper.deleteTodo(item.id) != null;
-                      Navigator.pop(context, isSuccess);
-                    }),
-              ],
-            );
-          });
+      return _showConfirmDialog(item);
     }
     return false;
   }
 
-  void pushEditScreen({Todo todo}) => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => EditScreen(entry: todo)));
+  Future<void> _resetTodo(Todo item) async {
+    Todo reseted = Todo(
+        id: item.id,
+        title: item.title,
+        periodUnit: item.periodUnit,
+        periodValue: item.periodValue,
+        timestamp: TimeUtils.calculateTargetTime(
+                item.title, item.periodUnit, item.periodValue, true)
+            .millisecondsSinceEpoch);
+    if (await helper.changeTodo(reseted) != null) {
+      setState(() {});
+    }
+  }
+
+  Future<bool> _showConfirmDialog(Todo item) async => await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(Strings.listDialogContentText),
+          actions: <Widget>[
+            FlatButton(
+                child: Text(Strings.listDialogActionCancel),
+                onPressed: () => Navigator.pop(context, false)),
+            FlatButton(
+                child: Text(Strings.listDialogActionDelete),
+                onPressed: () async {
+                  bool isSuccess = await helper.deleteTodo(item.id) != null;
+                  Navigator.pop(context, isSuccess);
+                }),
+          ],
+        );
+      });
+
+  void _pushEditScreen({Todo todo}) async {
+    var isAdded = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => EditScreen(entry: todo)));
+    if (isAdded != null && isAdded) {
+      setState(() {});
+    }
+  }
 }

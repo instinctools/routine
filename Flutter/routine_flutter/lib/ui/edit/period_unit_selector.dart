@@ -6,6 +6,7 @@ import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 const int BEGIN_VALUE = 1;
 const int END_VALUE = 100;
@@ -53,12 +54,9 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   Widget _createPeriodButton(PeriodData data) {
     var name = data.periodUnit.name;
     var isSelected = data.id == _selectedIndex;
-    var isPlural = isSelected && presenter.periodValue > 1;
-
-    var periodCount = isPlural ? '${presenter.periodValue} ' : '';
-    var pluralPostfix = isPlural && name != Period.MONTH.name ? 's' : '';
-
-    var periodText = 'Every $periodCount$name$pluralPostfix';
+    var periodText = isSelected
+        ? TimeUtils.getPrettyPeriod(name, presenter.periodValue)
+        : TimeUtils.getPrettyPeriod(name);
     var bgColor = isSelected
         ? ColorsRes.selectedPeriodUnitColor
         : ColorsRes.unselectedPeriodUnitColor;
