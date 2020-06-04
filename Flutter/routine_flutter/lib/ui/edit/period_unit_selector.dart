@@ -85,9 +85,14 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Icon(
-                    Icons.menu,
-                    color: iconColor,
+                  IconButton(
+                    onPressed: () {
+                      _showPeriodPicker(context, data.id);
+                    },
+                    icon: Icon(
+                      Icons.menu,
+                      color: iconColor,
+                    ),
                   ),
                   Text(
                     periodText,
@@ -101,11 +106,12 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   void _onPeriodSelected(int id) {
     print('Selected index = $id period = ${Period.values[id].name}');
     presenter.periodUnit = Period.values[id].name;
-    _showPeriodPicker(context);
-    _selectedIndex = id;
+    setState(() {
+      _selectedIndex = id;
+    });
   }
 
-  void _showPeriodPicker(BuildContext context) {
+  void _showPeriodPicker(BuildContext context, int id) {
     Picker(
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(
@@ -114,14 +120,15 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
             initValue: presenter.periodValue)
       ]),
       title: Text(Strings.editPickerDialogTitle),
+      itemExtent: 40,
       textScaleFactor: Dimens.editPickerScale,
-      hideHeader: true,
       onConfirm: (picker, values) {
         setState(() {
+          _selectedIndex = id;
           presenter.periodValue = picker.getSelectedValues().first;
         });
       },
-    ).showDialog(context);
+    ).showModal(context);
   }
 }
 
