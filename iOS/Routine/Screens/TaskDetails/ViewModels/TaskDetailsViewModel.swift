@@ -23,8 +23,9 @@ final class TaskDetailsViewModel {
     }
 
     let title: BehaviorRelay<String?>
-    let selectedPeriod: BehaviorRelay<PeriodViewModel?>
-    let items: [PeriodViewModel]
+    let selectedPeriodItem: BehaviorRelay<PeriodViewModel?>
+    let periodItems: [PeriodViewModel]
+    let period: PeriodPickerViewModel
     
     private let task: Task?
     private let disposeBag = DisposeBag()
@@ -40,7 +41,7 @@ final class TaskDetailsViewModel {
         self.title = BehaviorRelay(value: task?.title)
         
         var selectedPeriod: PeriodViewModel?
-        self.items = Period.allCases.map { period in
+        self.periodItems = Period.allCases.map { period in
             if let task = task, task.period == period {
                 let viewModel = PeriodViewModel(task: task)
                 selectedPeriod = viewModel
@@ -49,20 +50,22 @@ final class TaskDetailsViewModel {
                 return PeriodViewModel(period: period)
             }
         }
-        self.selectedPeriod = BehaviorRelay(value: selectedPeriod)
+        self.selectedPeriodItem = BehaviorRelay(value: selectedPeriod)
+        self.period = PeriodPickerViewModel(selectedItem: String(task?.periodCount ?? 1))
     }
     
     func transform(input: Input) -> Output {
         let dismissAction = input.doneButtonAction.asObservable()
-            .withLatestFrom(Observable.combineLatest(selectedPeriod, title))
-            .map { (period, title) in
-                let periodCount = Int(period?.periodCount.value.nilIfEmpty ?? "1")
-                return (title, period?.period, periodCount)
+            .withLatestFrom(
+                Observable.combineLatest(selectedPeriodItem, period.selectedItem, title)
+            )
+            .map { (item, period, title) in
+                return (title, item?.period, Int(period))
             }
             .map(saveTask)
             .asDriver(onErrorJustReturn: ())
         
-        let doneButtonEnabled = Observable.combineLatest(title, selectedPeriod)
+        let doneButtonEnabled = Observable.combineLatest(title, selectedPeriodItem)
             .map { (title, period) in
                 title?.isEmpty == false && period != nil
             }
@@ -70,12 +73,20 @@ final class TaskDetailsViewModel {
         
         input.selection
             .do(onNext: { period in
-                self.selectedPeriod.accept(period)
-                self.items.forEach { (item) in
+                self.selectedPeriodItem.accept(period)
+                self.periodItems.forEach { (item) in
                     item.selected.accept(item.period == period.period)
                 }
             })
             .drive()
+            .disposed(by: disposeBag)
+        
+        period.doneButtonTapped
+            .withLatestFrom(period.selectedItem)
+            .do(onNext: { (item) in
+                self.selectedPeriodItem.value?.periodCount.onNext(item)
+            })
+            .subscribe()
             .disposed(by: disposeBag)
 
         return Output(dismissAction: dismissAction, doneButtonEnabled: doneButtonEnabled)

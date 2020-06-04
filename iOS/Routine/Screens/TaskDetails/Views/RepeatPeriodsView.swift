@@ -21,6 +21,7 @@ final class PeriodsView: UIView {
     }()
     
     let selection = PublishSubject<PeriodViewModel>()
+    let menuSelection = PublishSubject<Void>()
     
     private let disposeBag = DisposeBag()
     
@@ -48,11 +49,15 @@ final class PeriodsView: UIView {
             let periodView = PeriodView()
             periodView.bind(viewModel: periodViewModel)
             
-            periodView.selection.map {
-                self.selection.onNext(periodViewModel)
-            }
-            .subscribe()
-            .disposed(by: disposeBag)
+            Observable.of(periodView.selection, periodView.menuSelection)
+                .merge()
+                .do(onNext: { self.selection.onNext(periodViewModel) })
+                .subscribe()
+                .disposed(by: disposeBag)
+            
+            periodView.menuSelection
+                .bind(to: menuSelection)
+                .disposed(by: disposeBag)
             
             stackView.addArrangedSubview(periodView)
         }

@@ -33,6 +33,7 @@
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
 		DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */; };
 		DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */; };
+		DDD6AC072488FAB700D398A0 /* PeriodPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */; };
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
 		DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEA3245245ADC4F00AFD189 /* CloudKit.framework */; };
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
@@ -73,6 +74,7 @@
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
 		DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
 		DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatPeriodsView.swift; sourceTree = "<group>"; };
+		DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickerViewModel.swift; sourceTree = "<group>"; };
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
 		DDEA3243245ADC4C00AFD189 /* Routine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Routine.entitlements; sourceTree = "<group>"; };
 		DDEA3245245ADC4F00AFD189 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -306,6 +308,7 @@
 			children = (
 				DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */,
 				DDFCEBE72471B28400954021 /* PeriodViewModel.swift */,
+				DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */,
 				D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */,
 				DDF3960E2428BEAB003456DA /* Task.swift in Sources */,
+				DDD6AC072488FAB700D398A0 /* PeriodPickerViewModel.swift in Sources */,
 				DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */,
 				DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */,
 				DDFCEBE82471B28400954021 /* PeriodViewModel.swift in Sources */,

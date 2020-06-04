@@ -14,22 +14,17 @@ enum Period: Int, CaseIterable {
     case month
     case year
     
-    func fullTitle(periodCount: Int) -> String {
-        let prefix = periodCount > 1 ? "\(periodCount) " : ""
-        return prefix + title(periodCount: periodCount)
-    }
-    
-    func title(periodCount: Int?) -> String {
-        let hasPeriod = (periodCount ?? 0) > 1
+    func title(periodCount: Int) -> String {
+        let hasPeriod = periodCount > 1
         switch self {
         case .day:
-            return hasPeriod ? "days" : "day"
+            return hasPeriod ? "\(periodCount) days" : "day"
         case .week:
-            return hasPeriod ? "weeks" : "week"
+            return hasPeriod ? "\(periodCount) weeks" : "week"
         case .month:
-            return hasPeriod ? "monthes" : "month"
+            return hasPeriod ? "\(periodCount) monthes" : "month"
         case .year:
-            return hasPeriod ? "years" : "year"
+            return (hasPeriod ? "\(periodCount) years" : "year")
         }
     }
         

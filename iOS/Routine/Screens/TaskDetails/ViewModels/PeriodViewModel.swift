@@ -11,21 +11,17 @@ import RxCocoa
 
 final class PeriodViewModel {
     
-    let title: BehaviorRelay<String>
+    let periodTitle: BehaviorRelay<String>
     let selected: BehaviorRelay<Bool>
-    let periodCount: BehaviorRelay<String?>
-    let periodCountHidden: BehaviorRelay<Bool>
-    let isFirstResponder = PublishSubject<Bool>()
+    let periodCount = PublishSubject<String>()
     
     let period: Period
     private let disposeBag = DisposeBag()
     
     private init(period: Period, periodCount: Int, selected: Bool) {
-        self.title = BehaviorRelay(value: period.title(periodCount: periodCount))
+        self.periodTitle = BehaviorRelay(value: period.title(periodCount: periodCount))
         self.selected = BehaviorRelay(value: selected)
         self.period = period
-        self.periodCount = BehaviorRelay(value: periodCount > 1 ? String(periodCount) : nil)
-        self.periodCountHidden = BehaviorRelay(value: true)
         
         bind()
     }
@@ -40,28 +36,9 @@ final class PeriodViewModel {
     
     private func bind() {
         periodCount
-            .map { Int($0.orEmpty) }
+            .map { Int($0) ?? 0 }
             .map(period.title)
-            .bind(to: title)
-            .disposed(by: disposeBag)
-        
-        isFirstResponder
-            .filter { !$0 }
-            .withLatestFrom(periodCount)
-            .map { periodCount in
-                if let count = Int(periodCount.orEmpty), count > 1 {
-                    return String(count)
-                }
-                return ""
-            }
-            .bind(to: periodCount)
-            .disposed(by: disposeBag)
-        
-        Observable.combineLatest(selected, isFirstResponder, periodCount)
-            .map { (selected, isFirstResponder, periodCount) in
-                return !((selected && isFirstResponder) || periodCount?.isEmpty == false)
-            }
-            .bind(to: periodCountHidden)
+            .bind(to: periodTitle)
             .disposed(by: disposeBag)
         
         selected

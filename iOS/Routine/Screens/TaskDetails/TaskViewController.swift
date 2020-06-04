@@ -40,7 +40,9 @@ final class TaskViewController: UIViewController {
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var repeatPeriodsView = PeriodsView()
-    private let periodPickerViewController = PeriodPickerViewController()
+    private lazy var periodPickerViewController = PeriodPickerViewController(
+        viewModel: viewModel.period
+    )
         
     private let viewModel: TaskDetailsViewModel
     private let disposeBag = DisposeBag()
@@ -60,12 +62,6 @@ final class TaskViewController: UIViewController {
         setupLayout()
         setupViews()
         bindViewModel()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        present(periodPickerViewController, animated: true)
     }
     
     private func registerNotifications() {
@@ -97,7 +93,7 @@ final class TaskViewController: UIViewController {
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
         
-        let dividerView = LabelledDivider(label: "Repeat").padding(.bottom, 8).uiView
+        let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
         
         contentView.addArrangedSubview(repeatPeriodsView)
@@ -140,18 +136,27 @@ final class TaskViewController: UIViewController {
         (textView.rx.title <-> viewModel.title)
             .disposed(by: disposeBag)
         
-        repeatPeriodsView.bind(items: viewModel.items)
+        repeatPeriodsView.bind(items: viewModel.periodItems)
+        
+        repeatPeriodsView.menuSelection
+            .do(onNext: showPeriodPicker)
+            .subscribe()
+            .disposed(by: disposeBag)
     }
     
     private func keyboardWillShow(notification: Notification) {
         let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
         if let keyboardSize = value?.cgRectValue {
-            scrollView.contentInset.bottom = keyboardSize.height - view.safeAreaInsets.bottom
+            scrollView.contentInset.bottom = keyboardSize.height - view.safeAreaInsets.bottom + 8
         }
     }
 
     private func keyboardWillHide(notification: Notification) {
         scrollView.contentInset.bottom = 0
+    }
+    
+    private func showPeriodPicker() {
+        present(periodPickerViewController, animated: true)
     }
     
     private func dismiss() {

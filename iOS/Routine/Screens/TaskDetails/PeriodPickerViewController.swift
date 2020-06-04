@@ -10,6 +10,7 @@ import UIKit
 import SwiftUI
 import RxCocoa
 import RxSwift
+import RxBiBinding
 
 final class PeriodPickerViewController: BottomCardViewController {
     
@@ -61,16 +62,29 @@ final class PeriodPickerViewController: BottomCardViewController {
     }()
     
     private let disposeBag = DisposeBag()
+
+    private let viewModel: PeriodPickerViewModel
+
+    init(viewModel: PeriodPickerViewModel) {
+        self.viewModel = viewModel
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         setupLayout()
+        bindViewModel()
     }
     
     private func setupView() {
         view.backgroundColor = .white
+        
         doneButton.rx.tap
             .do(onNext: hide)
             .subscribe()
@@ -86,25 +100,26 @@ final class PeriodPickerViewController: BottomCardViewController {
             make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        
-        Observable.just((1...60).map{String($0)}).bind(to: pickerView.rx.itemTitles) { (row, element) in
-            return element
-        }
-        
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    private func bindViewModel() {
+        viewModel.items.bind(to: pickerView.rx.itemTitles) { (row, element) in
+            return element
+        }
+        .disposed(by: disposeBag)
+
+        pickerView.rx.modelSelected(String.self)
+            .map { $0.first.orEmpty }
+            .bind(to: viewModel.selectedItem)
+            .disposed(by: disposeBag)
         
-//        let height = contentStackView.frame.height + 10
-//        if view.frame.height != height {
-//            view.frame = .init(
-//                x: 0,
-//                y: view.frame.height - height,
-//                width: view.frame.width,
-//                height: height
-//            )
-//        }
+        doneButton.rx.tap
+            .bind(to: viewModel.doneButtonTapped)
+            .disposed(by: disposeBag)
+        
+        pickerView.selectRow(viewModel.initialSelectedIndex,
+                             inComponent: 0,
+                             animated: false)
     }
 
     private func hide() {
