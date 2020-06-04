@@ -85,13 +85,13 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Icon(
+                    Icons.menu,
+                    color: iconColor,
+                  ),
                   Text(
                     periodText,
                     style: textStyle,
-                  ),
-                  Icon(
-                    Icons.brightness_1,
-                    color: iconColor,
                   )
                 ],
               ),
