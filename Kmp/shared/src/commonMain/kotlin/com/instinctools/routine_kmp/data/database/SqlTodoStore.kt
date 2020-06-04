@@ -29,6 +29,11 @@ class SqlTodoStore(
         .asFlow()
         .mapToList()
 
+    override fun getTodosSortedByDate(): Flow<List<Todo>> = database.todoQueries
+        .selectAllSortedByDate(mapper)
+        .asFlow()
+        .mapToList()
+
     override suspend fun getTodoById(id: Long): Todo? = withContext(Dispatchers.Default) {
         database.todoQueries.selectById(id, mapper).executeAsOneOrNull()
     }

@@ -30,7 +30,7 @@ class TodoListPresenter(
     private val state: State get() = _states.valueOrNull ?: State()
 
     override fun start() {
-        todoStore.getTodos()
+        todoStore.getTodosSortedByDate()
             .flowOn(Dispatchers.Default)
             .onEach { updateUiTodos(it) }
             .launchIn(scope)
@@ -40,8 +40,8 @@ class TodoListPresenter(
                 when (event) {
                     is Event.Reset -> withContext(Dispatchers.Default) {
                         val todo = todoStore.getTodoById(event.id) ?: return@withContext
-                        // TODO reset task
-                        todoStore.update(todo)
+                        val resetTodo = todo.reset()
+                        todoStore.update(resetTodo)
                     }
                     is Event.Delete -> withContext(Dispatchers.Default + NonCancellable) {
                         todoStore.delete(event.id)

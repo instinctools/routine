@@ -9,6 +9,9 @@ CREATE TABLE todos (
 selectAll:
 SELECT * FROM todos;
 
+selectAllSortedByDate:
+SELECT * FROM todos ORDER BY next_timestamp;
+
 selectById:
 SELECT * FROM todos WHERE id = ?;
 

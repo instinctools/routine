@@ -56,22 +56,18 @@ class TodoDetailsPresenter(
 
     private suspend fun save() {
         val todo = state.todo
-        if (todoId == null) {
-            val newTodo = todo.buildNewTodoModel()
-            if (newTodo == null) {
-                // TODO send error state
-            } else {
+        try {
+            if (todoId == null) {
+                val newTodo = todo.buildNewTodoModel()
                 todoStore.insert(newTodo)
-            }
-        } else {
-            val updatedTodo = todo.buildUpdatedTodoModel()
-            if (updatedTodo == null) {
-                // TODO send error state
             } else {
+                val updatedTodo = todo.buildUpdatedTodoModel()
                 todoStore.update(updatedTodo)
             }
+            sendState(state.copy(saved = true))
+        } catch (error: IllegalStateException) {
+            // TODO handle validation issue
         }
-        sendState(state.copy(saved = true))
     }
 
     private fun validState(newState: State): State {

@@ -1,10 +1,32 @@
+@file:SuppressLint("NewApi")
+
 package com.instinctools.routine_kmp.data.date
 
-import java.util.*
+import android.annotation.SuppressLint
+import com.instinctools.routine_kmp.model.PeriodUnit
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 
-actual typealias TodoDate = Date
+actual typealias TodoDate = LocalDate
 
-actual fun currentDate() = Date()
-actual fun dateForTimestamp(timestamp: Long) = Date(timestamp)
+actual fun currentDate(): LocalDate = LocalDate.now()
+actual fun dateForTimestamp(timestamp: Long): LocalDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()).toLocalDate()
 
-actual operator fun Date.compareTo(anotherDate: Date) = compareTo(anotherDate)
+actual operator fun LocalDate.compareTo(anotherDate: LocalDate) = compareTo(anotherDate)
+actual val TodoDate.timestamp: Long
+    get() {
+        val localDateTime = atStartOfDay(ZoneId.systemDefault())
+        return localDateTime.toInstant().toEpochMilli()
+    }
+
+actual fun TodoDate.plus(unit: PeriodUnit, count: Int): TodoDate {
+    val countLong = count.toLong()
+    return when (unit) {
+        PeriodUnit.DAY -> plusDays(countLong)
+        PeriodUnit.WEEK -> plusWeeks(countLong)
+        PeriodUnit.MONTH -> plusMonths(countLong)
+        PeriodUnit.YEAR -> plusYears(countLong)
+    }
+}
