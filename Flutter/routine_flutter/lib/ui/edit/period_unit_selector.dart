@@ -80,18 +80,23 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: Dimens.COMMON_PADDING_DOUBLE,
-                  vertical: Dimens.edit_period_button_vertical_padding),
+                  vertical: Dimens.COMMON_PADDING_DOUBLE),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      _showPeriodPicker(context, data.id);
+                    },
+                    icon: Icon(
+                      Icons.menu,
+                      color: iconColor,
+                    ),
+                  ),
                   Text(
                     periodText,
                     style: textStyle,
-                  ),
-                  Icon(
-                    Icons.brightness_1,
-                    color: iconColor,
                   )
                 ],
               ),
@@ -101,11 +106,12 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   void _onPeriodSelected(int id) {
     print('Selected index = $id period = ${Period.values[id].name}');
     presenter.periodUnit = Period.values[id].name;
-    _showPeriodPicker(context);
-    _selectedIndex = id;
+    setState(() {
+      _selectedIndex = id;
+    });
   }
 
-  void _showPeriodPicker(BuildContext context) {
+  void _showPeriodPicker(BuildContext context, int id) {
     Picker(
       adapter: NumberPickerAdapter(data: [
         NumberPickerColumn(
@@ -113,15 +119,21 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
             end: END_VALUE,
             initValue: presenter.periodValue)
       ]),
-      title: Text(Strings.editPickerDialogTitle),
-      textScaleFactor: Dimens.editPickerScale,
-      hideHeader: true,
+      title: Text(
+        Strings.editPickerDialogTitle,
+        style: Styles.edit_divider_label_style,
+      ),
+      confirmText: Strings.editPickerDialogConfirmButton,
+      confirmTextStyle: Styles.edit_appbar_done_text_style,
+      cancelTextStyle: Styles.edit_appbar_cancel_text_style,
+      itemExtent: Dimens.editPickerItemExtent,
       onConfirm: (picker, values) {
         setState(() {
+          _selectedIndex = id;
           presenter.periodValue = picker.getSelectedValues().first;
         });
       },
-    ).showDialog(context);
+    ).showModal(context);
   }
 }
 
