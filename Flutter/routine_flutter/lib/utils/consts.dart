@@ -8,7 +8,8 @@ class Strings {
   static const String edit_text_input_hint = 'Type recurring task name...';
   static const String edit_input_error_message = 'Title should be not empty!';
   static const String edit_divider_label = 'Repeat';
-  static const String editPickerDialogTitle = 'Select period...';
+  static const String editPickerDialogTitle = 'Choose period';
+  static const String editPickerDialogConfirmButton = 'Done';
 
   static const String listEmptyPlaceholderText = "You don't have any tasks";
   static const String listResetSlideActionLabel = "Reset";
@@ -31,8 +32,7 @@ class Dimens {
 
   static const double edit_divider_thickness = 2.0;
   static const double edit_period_button_border_radius = 10.0;
-  static const double edit_period_button_vertical_padding = 32.0;
-  static const double editPickerScale = 1.2;
+  static const double editPickerItemExtent = 40;
 }
 
 class ColorsRes {

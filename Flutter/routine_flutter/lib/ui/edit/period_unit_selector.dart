@@ -80,7 +80,7 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
             child: Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: Dimens.COMMON_PADDING_DOUBLE,
-                  vertical: Dimens.edit_period_button_vertical_padding),
+                  vertical: Dimens.COMMON_PADDING_DOUBLE),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,9 +119,14 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
             end: END_VALUE,
             initValue: presenter.periodValue)
       ]),
-      title: Text(Strings.editPickerDialogTitle),
-      itemExtent: 40,
-      textScaleFactor: Dimens.editPickerScale,
+      title: Text(
+        Strings.editPickerDialogTitle,
+        style: Styles.edit_divider_label_style,
+      ),
+      confirmText: Strings.editPickerDialogConfirmButton,
+      confirmTextStyle: Styles.edit_appbar_done_text_style,
+      cancelTextStyle: Styles.edit_appbar_cancel_text_style,
+      itemExtent: Dimens.editPickerItemExtent,
       onConfirm: (picker, values) {
         setState(() {
           _selectedIndex = id;
