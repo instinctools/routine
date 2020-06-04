@@ -55,7 +55,7 @@ class TodoItem extends StatelessWidget {
       color1 = const [255, 190, 67],
       color2 = const [255, 57, 55]}) {
     if (index < 0) {
-      return Colors.green;
+      return Colors.red.shade900;
     }
     var w1 = 1.0;
     if (index < maxIndex) {
@@ -69,13 +69,4 @@ class TodoItem extends StatelessWidget {
     }
     return Color.fromRGBO(colorRgb[0], colorRgb[1], colorRgb[2], 1);
   }
-}
-
-class TodoTMP {
-  String title;
-  String timeLeft;
-  String period;
-
-  TodoTMP(this.title,
-      {this.timeLeft = '5 days left', this.period = 'per 2 days'});
 }

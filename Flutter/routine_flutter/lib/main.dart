@@ -13,7 +13,7 @@ class RoutineApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
             elevation: 0,
             textTheme: TextTheme(
-              title: Styles.APP_BAR_TEXT,
+              headline6: Styles.APP_BAR_TEXT,
             )),
         primaryIconTheme: IconThemeData(color: Colors.black87),
         primaryColor: ColorsRes.mainBgColor,

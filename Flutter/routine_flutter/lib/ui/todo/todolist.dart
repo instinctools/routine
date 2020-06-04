@@ -26,57 +26,27 @@ class _TodoListState extends State<TodoList> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: pushEditScreen,
+              onPressed: _pushEditScreen,
             )
           ],
         ),
         body: FutureBuilder<List<Todo>>(
           future: helper.getTodos(),
-          builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.done) {
-              if (snap.data.length > 0) {
-                print("Todos loaded from db, size = ${snap.data.length}");
-                var sortedList = snap.data;
+          builder: (context, futureResult) {
+            if (futureResult.connectionState == ConnectionState.done) {
+              if (futureResult.data.length > 0) {
+                List<Todo> sortedList = futureResult.data;
                 sortedList.sort((a, b) =>
                     TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
-                var lastExpiredIndex = findLastExpiredIndex(sortedList);
-                var dividerIndex = lastExpiredIndex + 1;
 
+                List<Widget> widgets = _createItemWidgetsList(sortedList);
                 return ListView.builder(
                     padding:
                         EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
-                    itemCount: sortedList.length,
-                    itemBuilder: (context, index) {
-                      var item = sortedList[index];
-                      if (dividerIndex != 0 && index == dividerIndex) {
-                        return Divider(
-                            color: ColorsRes.selectedPeriodUnitColor);
-                      }
-                      return GestureDetector(
-                          child: Dismissible(
-                            key: Key(item.id.toString()),
-                            child: TodoItem(item, index - dividerIndex),
-                            onResize: () {
-                              setState(() {});
-                              print("reseted");
-                            },
-                            onDismissed: (direction) {
-                              setState(() {});
-                            },
-                            confirmDismiss: (direction) =>
-                                _confirmDismiss(direction, item),
-                            background: _getItemBackground(
-                                Strings.listResetSlideActionLabel,
-                                Colors.green,
-                                true),
-                            secondaryBackground: _getItemBackground(
-                                Strings.listDeleteSlideActionLabel,
-                                Colors.grey,
-                                false),
-                          ),
-                          onTap: () => pushEditScreen(todo: item));
-                    });
+                    itemCount: widgets.length,
+                    itemBuilder: (context, index) => widgets[index]);
               } else {
+//              placeholder for empty list
                 return Center(
                     child: Text(
                   Strings.listEmptyPlaceholderText,
@@ -84,6 +54,7 @@ class _TodoListState extends State<TodoList> {
                 ));
               }
             }
+//            progress bar
             return Center(
               widthFactor: Dimens.listProgressSize,
               heightFactor: Dimens.listProgressSize,
@@ -107,7 +78,46 @@ class _TodoListState extends State<TodoList> {
     return index;
   }
 
-  Widget _getItemBackground(String title, Color color, bool isPrimary) {
+  List<Widget> _createItemWidgetsList(List<Todo> sortedList) {
+    List<Widget> widgets = List();
+    int lastExpiredIndex = findLastExpiredIndex(sortedList);
+
+    for (int i = 0; i < sortedList.length; i++) {
+      Todo todo = sortedList[i];
+      int gradientColorIndex =
+          lastExpiredIndex != -1 ? i - lastExpiredIndex - 1 : i;
+
+      widgets.add(_getItemWidget(todo, gradientColorIndex));
+
+      if (lastExpiredIndex == i) {
+        widgets.add(Divider(color: ColorsRes.selectedPeriodUnitColor));
+      }
+    }
+    return widgets;
+  }
+
+  Widget _getItemWidget(Todo todo, int colorIndex) {
+    return GestureDetector(
+        child: Dismissible(
+          key: Key(todo.id.toString()),
+          child: TodoItem(todo, colorIndex),
+          onResize: () {
+            setState(() {});
+            print("reseted");
+          },
+          onDismissed: (direction) {
+            setState(() {});
+          },
+          confirmDismiss: (direction) => _confirmDismiss(direction, todo),
+          background: _getDismissibleItemBackground(
+              Strings.listResetSlideActionLabel, Colors.green, true),
+          secondaryBackground: _getDismissibleItemBackground(
+              Strings.listDeleteSlideActionLabel, Colors.grey, false),
+        ),
+        onTap: () => _pushEditScreen(todo: todo));
+  }
+
+  Widget _getDismissibleItemBackground(String title, Color color, bool isPrimary) {
     var dimen = Dimens.COMMON_PADDING_HALF;
     var insets = EdgeInsets.only(
         top: dimen,
@@ -150,14 +160,14 @@ class _TodoListState extends State<TodoList> {
 
   Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
     if (direction == DismissDirection.startToEnd) {
-      await resetTodo(item);
+      await _resetTodo(item);
     } else {
-      return showConfirmDialog(item);
+      return _showConfirmDialog(item);
     }
     return false;
   }
 
-  Future<void> resetTodo(Todo item) async {
+  Future<void> _resetTodo(Todo item) async {
     Todo reseted = Todo(
         id: item.id,
         title: item.title,
@@ -171,7 +181,7 @@ class _TodoListState extends State<TodoList> {
     }
   }
 
-  Future<bool> showConfirmDialog(Todo item) async => await showDialog(
+  Future<bool> _showConfirmDialog(Todo item) async => await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -190,7 +200,7 @@ class _TodoListState extends State<TodoList> {
         );
       });
 
-  void pushEditScreen({Todo todo}) async {
+  void _pushEditScreen({Todo todo}) async {
     var isAdded = await Navigator.push(
         context,
         MaterialPageRoute(
