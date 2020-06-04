@@ -40,6 +40,7 @@ final class TaskViewController: UIViewController {
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var repeatPeriodsView = PeriodsView()
+    private let periodPickerViewController = PeriodPickerViewController()
         
     private let viewModel: TaskDetailsViewModel
     private let disposeBag = DisposeBag()
@@ -59,6 +60,12 @@ final class TaskViewController: UIViewController {
         setupLayout()
         setupViews()
         bindViewModel()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        present(periodPickerViewController, animated: true)
     }
     
     private func registerNotifications() {
