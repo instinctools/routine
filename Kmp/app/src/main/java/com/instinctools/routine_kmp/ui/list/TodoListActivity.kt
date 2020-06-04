@@ -82,7 +82,9 @@ class TodoListActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        presenter.stop()
+        if (!isChangingConfigurations) {
+            presenter.stop()
+        }
     }
 
     override fun onRetainCustomNonConfigurationInstance() = presenter
