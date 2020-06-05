@@ -20,3 +20,7 @@ actual val TodoDate.timestamp: Long
 actual fun TodoDate.plus(unit: PeriodUnit, count: Int): TodoDate {
     TODO("Not yet implemented")
 }
+
+actual fun daysBetween(date1: TodoDate, date2: TodoDate): Int {
+    TODO("Not yet implemented")
+}

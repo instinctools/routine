@@ -4,10 +4,8 @@ package com.instinctools.routine_kmp.data.date
 
 import android.annotation.SuppressLint
 import com.instinctools.routine_kmp.model.PeriodUnit
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
+import java.util.concurrent.TimeUnit
 
 actual typealias TodoDate = LocalDate
 
@@ -29,4 +27,8 @@ actual fun TodoDate.plus(unit: PeriodUnit, count: Int): TodoDate {
         PeriodUnit.MONTH -> plusMonths(countLong)
         PeriodUnit.YEAR -> plusYears(countLong)
     }
+}
+
+actual fun daysBetween(date1: TodoDate, date2: TodoDate): Int {
+    return Duration.between(date1.atStartOfDay(), date2.atStartOfDay()).toDays().toInt()
 }

@@ -5,5 +5,6 @@ import com.instinctools.routine_kmp.model.color.TodoColor
 
 data class TodoListUiModel(
     val todo: Todo,
-    val color: TodoColor
+    val color: TodoColor,
+    val daysLeft: Int
 )

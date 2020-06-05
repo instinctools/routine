@@ -11,3 +11,4 @@ expect operator fun TodoDate.compareTo(anotherDate: TodoDate): Int
 expect val TodoDate.timestamp: Long
 
 expect fun TodoDate.plus(unit: PeriodUnit, count: Int): TodoDate
+expect fun daysBetween(date1: TodoDate, date2: TodoDate): Int

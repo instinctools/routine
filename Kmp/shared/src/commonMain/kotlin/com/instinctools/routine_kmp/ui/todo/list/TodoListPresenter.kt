@@ -4,6 +4,7 @@ import com.instinctools.routine_kmp.data.TodoStore
 import com.instinctools.routine_kmp.data.date.compareTo
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
+import com.instinctools.routine_kmp.data.date.daysBetween
 import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
@@ -62,10 +63,13 @@ class TodoListPresenter(
         todos.forEachIndexed { index, todo ->
             val todoDate = dateForTimestamp(todo.nextTimestamp)
             if (todoDate < currentDate) {
-                expiredTodos += TodoListUiModel(todo, TodoColor.EXPIRED_TODO)
+                val daysLeft = daysBetween(todoDate, currentDate)
+                expiredTodos += TodoListUiModel(todo, TodoColor.EXPIRED_TODO, daysLeft)
             } else {
+                val daysLeft = daysBetween(currentDate, todoDate)
                 val fraction = index / todosCount.toFloat()
-                futureTodos += TodoListUiModel(todo, ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END))
+                val color = ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END)
+                futureTodos += TodoListUiModel(todo, color, daysLeft)
             }
         }
 
