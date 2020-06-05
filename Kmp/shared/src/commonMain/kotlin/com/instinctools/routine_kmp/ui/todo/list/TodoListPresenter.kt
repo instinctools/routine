@@ -7,6 +7,7 @@ import com.instinctools.routine_kmp.data.date.dateForTimestamp
 import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
+import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -38,12 +39,13 @@ class TodoListPresenter(
         scope.launch {
             for (event in _events) {
                 when (event) {
-                    is Event.Reset -> withContext(Dispatchers.Default) {
-                        val todo = todoStore.getTodoById(event.id) ?: return@withContext
-                        val resetTodo = todo.reset()
+                    is Event.Reset -> {
+                        val todo = requireNotNull(todoStore.getTodoById(event.id)) { "Failed to load todo with id=${event.id}" }
+                        val resetter = TodoResetterFactory.get(todo.periodStrategy)
+                        val resetTodo = resetter.reset(todo)
                         todoStore.update(resetTodo)
                     }
-                    is Event.Delete -> withContext(Dispatchers.Default + NonCancellable) {
+                    is Event.Delete -> withContext(NonCancellable) {
                         todoStore.delete(event.id)
                     }
                 }

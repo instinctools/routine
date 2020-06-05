@@ -33,4 +33,12 @@
         <item name="android:windowExitAnimation">@anim/exit</item>
     </style>
 
+    <style name="ToggleWidgetItem">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingVertical">@dimen/space_edge</item>
+        <item name="android:textColor">@color/toggle_widget_item_text_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

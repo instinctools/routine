@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
 import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.channels.Channel
@@ -46,6 +47,10 @@ class TodoDetailsPresenter(
                     }
                     is Event.ChangePeriod -> {
                         val todo = state.todo.copy(periodValue = event.period)
+                        sendState(state.copy(todo = todo))
+                    }
+                    is Event.ChangePeriodStrategy -> {
+                        val todo = state.todo.copy(periodStrategy = event.periodStrategy)
                         sendState(state.copy(todo = todo))
                     }
                     Event.Save -> save()
@@ -100,5 +105,6 @@ class TodoDetailsPresenter(
         class ChangeTitle(val title: String?) : Event()
         class ChangePeriodUnit(val periodUnit: PeriodUnit) : Event()
         class ChangePeriod(val period: Int) : Event()
+        class ChangePeriodStrategy(val periodStrategy: PeriodResetStrategy) : Event()
     }
 }

@@ -8,10 +8,12 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
+import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
+import com.instinctools.routine_kmp.ui.widget.IosLikeToggle
 import com.instinctools.routine_kmp.ui.widget.VerticalSpacingDecoration
 import com.instinctools.routine_kmp.util.appComponent
 import com.instinctools.routine_kmp.util.cancelChildren
@@ -107,6 +109,15 @@ class TodoDetailsActivity : AppCompatActivity() {
 
         binding.text.doOnTextChanged { text, _, _, _ ->
             val event = TodoDetailsPresenter.Event.ChangeTitle(text?.toString())
+            presenter.events.offer(event)
+        }
+
+        binding.periodStrategyToggle.settings = IosLikeToggle.Settings(
+            PeriodResetStrategy.IntervalBased,
+            PeriodResetStrategy.FromNow
+        ) { item ->
+            val strategy = item as? PeriodResetStrategy ?: return@Settings
+            val event = TodoDetailsPresenter.Event.ChangePeriodStrategy(strategy)
             presenter.events.offer(event)
         }
     }
