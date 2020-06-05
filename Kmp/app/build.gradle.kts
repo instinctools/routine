@@ -8,7 +8,6 @@ plugins {
 
 android {
     compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion = Versions.buildToolsVersion
     defaultConfig {
         applicationId = "com.instinctools.routine_kmp"
         minSdkVersion(Versions.minSdk)

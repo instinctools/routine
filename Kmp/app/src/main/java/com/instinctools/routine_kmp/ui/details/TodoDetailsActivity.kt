@@ -70,13 +70,15 @@ class TodoDetailsActivity : AppCompatActivity() {
             }
 
             val todo = state.todo
-            if (binding.text.text.toString() != todo.title) {
-                binding.text.setText(todo.title)
+            if (binding.titleInput.text.toString() != todo.title) {
+                binding.titleInput.setText(todo.title)
             }
             adapter.setSelected(todo.periodUnit, todo.periodValue)
 
             val actionView = binding.toolbar.menu.findItem(R.id.done).actionView
             actionView.isEnabled = state.saveEnabled
+
+            binding.periodStrategyToggle.setSelected(todo.periodStrategy)
         }
             .launchIn(scope)
     }
@@ -107,14 +109,14 @@ class TodoDetailsActivity : AppCompatActivity() {
             presenter.events.offer(TodoDetailsPresenter.Event.Save)
         }
 
-        binding.text.doOnTextChanged { text, _, _, _ ->
+        binding.titleInput.doOnTextChanged { text, _, _, _ ->
             val event = TodoDetailsPresenter.Event.ChangeTitle(text?.toString())
             presenter.events.offer(event)
         }
 
         binding.periodStrategyToggle.settings = IosLikeToggle.Settings(
-            PeriodResetStrategy.IntervalBased,
-            PeriodResetStrategy.FromNow
+            IosLikeToggle.Item(PeriodResetStrategy.IntervalBased, resources.getString(R.string.reset_period_strategy_interval_based)),
+            IosLikeToggle.Item(PeriodResetStrategy.FromNow, resources.getString(R.string.reset_period_strategy_from_now))
         ) { item ->
             val strategy = item as? PeriodResetStrategy ?: return@Settings
             val event = TodoDetailsPresenter.Event.ChangePeriodStrategy(strategy)

@@ -4,7 +4,6 @@ object Versions {
     const val compileSdk = 29
 
     const val kotlin = "1.3.72"
-    const val buildToolsVersion = "29.0.0"
 
     const val sqlDelight = "1.3.0"
     const val coroutines = "1.3.5-native-mt"

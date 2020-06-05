@@ -14,34 +14,45 @@ class IosLikeToggle @JvmOverloads constructor(
 
     var settings: Settings<out Any>? = null
         set(value) {
-            binding.leftItemView.text = value?.leftItem.toString()
-            binding.rightItemView.text = value?.rightItem.toString()
+            binding.leftItemView.text = value?.leftItem?.title
+            binding.rightItemView.text = value?.rightItem?.title
             field = value
         }
 
     init {
         orientation = HORIZONTAL
 
-        val leftItemView = binding.leftItemView
-        val rightItemView = binding.rightItemView
-
         binding.leftItemView.setOnClickListener {
-            leftItemView.isSelected = true
-            rightItemView.isSelected = false
+            if (isSelected) return@setOnClickListener
             val settings = settings ?: return@setOnClickListener
-            settings.selectionListener(settings.leftItem)
+            settings.selectionListener(settings.leftItem.data)
         }
         binding.rightItemView.setOnClickListener {
-            leftItemView.isSelected = false
-            rightItemView.isSelected = true
+            if (isSelected) return@setOnClickListener
             val settings = settings ?: return@setOnClickListener
-            settings.selectionListener(settings.rightItem)
+            settings.selectionListener(settings.rightItem.data)
         }
     }
 
-    class Settings<out T>(
-        val leftItem: T,
-        val rightItem: T,
+    fun <T> setSelected(data: T) {
+        val settings = settings ?: return
+        if (settings.leftItem.data == data) {
+            binding.leftItemView.isSelected = true
+            binding.rightItemView.isSelected = false
+        } else if (settings.rightItem.data == data) {
+            binding.leftItemView.isSelected = false
+            binding.rightItemView.isSelected = true
+        }
+    }
+
+    class Settings<T>(
+        val leftItem: Item<T>,
+        val rightItem: Item<T>,
         val selectionListener: (Any) -> Unit
+    )
+
+    data class Item<T>(
+        val data: T,
+        val title: String
     )
 }
