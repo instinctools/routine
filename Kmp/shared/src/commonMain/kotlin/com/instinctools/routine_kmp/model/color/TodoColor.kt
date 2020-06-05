@@ -14,8 +14,8 @@ class TodoColor(
         private const val VARIANTS = 255.0
 
         val EXPIRED_TODO = TodoColor(0xFF, 0x00, 0x00)
-        val TODOS_START = TodoColor(255, 190, 67)
-        val TODOS_END = TodoColor(255, 57, 55)
+        val TODOS_START = TodoColor(255, 57, 55)
+        val TODOS_END = TodoColor(255, 190, 67)
     }
 }
 

@@ -20,8 +20,10 @@ import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TodoDetailsActivity : AppCompatActivity() {
@@ -125,12 +127,15 @@ class TodoDetailsActivity : AppCompatActivity() {
     }
 
     private fun showCountChooser() {
-        val picker = PeriodPickerFragment.newInstance(1)
-        picker.pickerListener = { count ->
-            val event = TodoDetailsPresenter.Event.ChangePeriod(count)
-            presenter.events.offer(event)
+        scope.launch {
+            val state = presenter.states.first()
+            val picker = PeriodPickerFragment.newInstance(state.todo.periodValue)
+            picker.pickerListener = { count ->
+                val event = TodoDetailsPresenter.Event.ChangePeriod(count)
+                presenter.events.offer(event)
+            }
+            picker.show(supportFragmentManager, PeriodPickerFragment.TAG)
         }
-        picker.show(supportFragmentManager, PeriodPickerFragment.TAG)
     }
 
     companion object {

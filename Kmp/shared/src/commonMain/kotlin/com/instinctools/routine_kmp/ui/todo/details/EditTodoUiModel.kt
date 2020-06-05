@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
 import com.instinctools.routine_kmp.data.date.currentDate
+import com.instinctools.routine_kmp.data.date.plus
 import com.instinctools.routine_kmp.data.date.timestamp
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
@@ -19,8 +20,8 @@ fun Todo.toEditModel() = EditTodoUiModel(id, title, periodUnit, periodValue, per
 
 fun EditTodoUiModel.buildNewTodoModel(): Todo {
     val title = checkNotNull(title) { "Title should not be empty" }
-    val nextTimestamp = nextTimestamp ?: currentDate().timestamp
     val periodUnit = checkNotNull(periodUnit) { "Period unit should be selected" }
+    val nextTimestamp = nextTimestamp ?: currentDate().plus(periodUnit, periodValue).timestamp
     return Todo(title, periodUnit, periodValue, periodStrategy, nextTimestamp)
 }
 
