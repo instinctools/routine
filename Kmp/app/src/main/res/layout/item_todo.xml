@@ -7,6 +7,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
     android:background="@drawable/todo_item_bg"
+    android:elevation="@dimen/elevation_card_resting"
     android:padding="12sp">
 
     <TextView
