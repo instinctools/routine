@@ -10,6 +10,9 @@
     <string name="task_details_title_hint">Type recurring task name…</string>
     <string name="task_details_btn_done">Done</string>
 
+    <string name="reset_period_strategy_interval_based">Reset to period</string>
+    <string name="reset_period_strategy_from_now">Reset to date</string>
+
     <string name="period_picker_title">Choose period</string>
     <string name="period_picker_btn_done">Done</string>
     <!-- Task Details -->

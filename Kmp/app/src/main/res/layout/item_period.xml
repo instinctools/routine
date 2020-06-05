@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/period_selector"
+    android:elevation="@dimen/elevation_card_resting"
     android:minHeight="64dp">
 
     <ImageView

@@ -3,23 +3,28 @@ CREATE TABLE todos (
     title TEXT NOT NULL,
     period_unit INTEGER AS Int NOT NULL,
     period_value INTEGER AS Int NOT NULL,
+    period_strategy INTEGER AS Int NOT NULL,
     next_timestamp INTEGER NOT NULL
 );
 
 selectAll:
 SELECT * FROM todos;
 
+selectAllSortedByDate:
+SELECT * FROM todos ORDER BY next_timestamp;
+
 selectById:
 SELECT * FROM todos WHERE id = ?;
 
 insertTodo:
-INSERT INTO todos(title, period_unit, period_value, next_timestamp) VALUES (?, ?, ?, ?);
+INSERT INTO todos(title, period_unit, period_value, period_strategy, next_timestamp) VALUES (?, ?, ?, ?, ?);
 
 updateById:
 UPDATE todos SET
     title = ?,
     period_unit = ?,
     period_value = ?,
+    period_strategy = ?,
     next_timestamp = ?
 WHERE id = ?;
 

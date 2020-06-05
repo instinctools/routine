@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
 import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.channels.Channel
@@ -48,6 +49,10 @@ class TodoDetailsPresenter(
                         val todo = state.todo.copy(periodValue = event.period)
                         sendState(state.copy(todo = todo))
                     }
+                    is Event.ChangePeriodStrategy -> {
+                        val todo = state.todo.copy(periodStrategy = event.periodStrategy)
+                        sendState(state.copy(todo = todo))
+                    }
                     Event.Save -> save()
                 }
             }
@@ -56,22 +61,18 @@ class TodoDetailsPresenter(
 
     private suspend fun save() {
         val todo = state.todo
-        if (todoId == null) {
-            val newTodo = todo.buildNewTodoModel()
-            if (newTodo == null) {
-                // TODO send error state
-            } else {
+        try {
+            if (todoId == null) {
+                val newTodo = todo.buildNewTodoModel()
                 todoStore.insert(newTodo)
-            }
-        } else {
-            val updatedTodo = todo.buildUpdatedTodoModel()
-            if (updatedTodo == null) {
-                // TODO send error state
             } else {
+                val updatedTodo = todo.buildUpdatedTodoModel()
                 todoStore.update(updatedTodo)
             }
+            sendState(state.copy(saved = true))
+        } catch (error: IllegalStateException) {
+            // TODO handle validation issue
         }
-        sendState(state.copy(saved = true))
     }
 
     private fun validState(newState: State): State {
@@ -104,5 +105,6 @@ class TodoDetailsPresenter(
         class ChangeTitle(val title: String?) : Event()
         class ChangePeriodUnit(val periodUnit: PeriodUnit) : Event()
         class ChangePeriod(val period: Int) : Event()
+        class ChangePeriodStrategy(val periodStrategy: PeriodResetStrategy) : Event()
     }
 }

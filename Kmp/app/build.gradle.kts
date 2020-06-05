@@ -8,7 +8,6 @@ plugins {
 
 android {
     compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion = Versions.buildToolsVersion
     defaultConfig {
         applicationId = "com.instinctools.routine_kmp"
         minSdkVersion(Versions.minSdk)
@@ -28,6 +27,9 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -35,12 +37,16 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
-    viewBinding.isEnabled = true
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation(project(":shared"))
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.5")
 
     /* Android X */
     implementation(Deps.AndroidX.appCompat)
@@ -66,6 +72,4 @@ dependencies {
     /* Dagger */
 
     implementation(Deps.Coroutines.android)
-
-    implementation(Deps.threeTenAbp)
 }

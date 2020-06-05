@@ -4,9 +4,11 @@ import com.instinctools.routine_kmp.data.TodoStore
 import com.instinctools.routine_kmp.data.date.compareTo
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
+import com.instinctools.routine_kmp.data.date.daysBetween
 import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
+import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
 import com.instinctools.routine_kmp.ui.Presenter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -30,7 +32,7 @@ class TodoListPresenter(
     private val state: State get() = _states.valueOrNull ?: State()
 
     override fun start() {
-        todoStore.getTodos()
+        todoStore.getTodosSortedByDate()
             .flowOn(Dispatchers.Default)
             .onEach { updateUiTodos(it) }
             .launchIn(scope)
@@ -38,12 +40,13 @@ class TodoListPresenter(
         scope.launch {
             for (event in _events) {
                 when (event) {
-                    is Event.Reset -> withContext(Dispatchers.Default) {
-                        val todo = todoStore.getTodoById(event.id) ?: return@withContext
-                        // TODO reset task
-                        todoStore.update(todo)
+                    is Event.Reset -> {
+                        val todo = requireNotNull(todoStore.getTodoById(event.id)) { "Failed to load todo with id=${event.id}" }
+                        val resetter = TodoResetterFactory.get(todo.periodStrategy)
+                        val resetTodo = resetter.reset(todo)
+                        todoStore.update(resetTodo)
                     }
-                    is Event.Delete -> withContext(Dispatchers.Default + NonCancellable) {
+                    is Event.Delete -> withContext(NonCancellable) {
                         todoStore.delete(event.id)
                     }
                 }
@@ -60,10 +63,13 @@ class TodoListPresenter(
         todos.forEachIndexed { index, todo ->
             val todoDate = dateForTimestamp(todo.nextTimestamp)
             if (todoDate < currentDate) {
-                expiredTodos += TodoListUiModel(todo, TodoColor.EXPIRED_TODO)
+                val daysLeft = daysBetween(todoDate, currentDate)
+                expiredTodos += TodoListUiModel(todo, TodoColor.EXPIRED_TODO, daysLeft)
             } else {
+                val daysLeft = daysBetween(currentDate, todoDate)
                 val fraction = index / todosCount.toFloat()
-                futureTodos += TodoListUiModel(todo, ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END))
+                val color = ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END)
+                futureTodos += TodoListUiModel(todo, color, daysLeft)
             }
         }
 
