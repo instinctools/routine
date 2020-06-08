@@ -1,4 +1,4 @@
-import {FlatList} from 'react-native';
+import {ActivityIndicator, FlatList, Platform, RefreshControl, View} from 'react-native';
 import React from 'react';
 import {todoListStyle, toolbarStyle} from '../../styles/Styles';
 import {connect} from "react-redux";
@@ -6,8 +6,9 @@ import Action from '../../action/todos';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
-import {calculateTargetDate, pickColorBetween, prettyPeriod} from "../../utils";
+import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod} from "../../utils";
 import moment from "moment";
+import analytics from "@react-native-firebase/analytics";
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -30,30 +31,49 @@ class TodoList extends React.PureComponent {
     };
 
     componentDidMount() {
+        this.props.requestTodos();
+
         this.props.navigation.setParams({
-            navigateToDetails: () => (this.props.navigation.navigate(`Details`))
+            navigateToDetails: () => {
+                analytics().logEvent('add_todo_react', {});
+                this.props.selectTodo(this.props.item);
+                this.props.navigation.navigate(`Details`)
+            }
         });
     }
 
     render() {
-        const {items, isScrollEnabled} = this.props;
+        const {items, isScrollEnabled, isFetching, isActionProgress} = this.props;
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
-        return (
+        if (isFetching && uiItems.length === 0) {
+            return getProgress()
+        }
+        return <View style={{
+            flex: 1,
+            justifyContent: 'center'
+        }}>
             <FlatList style={{flex: 1}}
                       contentContainerStyle={todoListStyle.container}
                       scrollEnabled={isScrollEnabled}
                       data={uiItems}
                       keyExtractor={item => item.id}
                       renderItem={({item}) => <TodoItem item={item}/>}
-            />
-        );
+                      refreshControl={
+                          <RefreshControl refreshing={isFetching} onRefresh={() => {
+                              this.props.requestTodos();
+                          }}/>
+                      }
+            />{isActionProgress ? getProgress() : null}
+        </View>
     }
 }
 
 const mapStateToProps = (state) => ({
         items: state.todos.items,
-        isScrollEnabled: state.todos.isScrollEnabled
+        isScrollEnabled: state.todos.isScrollEnabled,
+        isFetching: state.todos.isFetching,
+        isActionProgress: state.todos.isActionProgress
     }
 );
 

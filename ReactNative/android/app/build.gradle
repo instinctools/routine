@@ -134,6 +134,7 @@ android {
         versionCode 1
         versionName "0.1"
         setProperty("archivesBaseName", "Routine-v.${versionName}")
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -184,6 +185,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha02'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
@@ -241,3 +244,5 @@ if (signPropsFile.exists()) {
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'

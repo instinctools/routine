@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import ActionEditTodo from "../../action/EditTodoAction";
 import {Period, PeriodsList} from "../../constants";
 import PeriodSelector from "./PeriodSelector";
+import analytics from "@react-native-firebase/analytics";
 
 const bgSelected = `#878787`;
 const bgUnSelected = `#F1F1F1`;
@@ -34,6 +35,9 @@ const createButton = (props, period) => {
         style={{...todoDetailsStyle.periodUnitSelectorContainer, backgroundColor: bgColor}}
         borderless={true}
         onPress={() => {
+            if (period === Period.DAY){
+                analytics().logEvent('period_todo_react', {});
+            }
             props.editTodoPeriodUnit(period);
         }}>
         <View style={todoDetailsStyle.periodUnitSelectorContainerWrapper}>
