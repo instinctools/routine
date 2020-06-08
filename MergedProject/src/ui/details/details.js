@@ -7,6 +7,7 @@ import PeriodSelector from "./PeriodUnitSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
 import analytics from "@react-native-firebase/analytics";
+import {getProgress} from "../../utils";
 
 class DetailsScreen extends React.Component {
 
@@ -42,7 +43,6 @@ class DetailsScreen extends React.Component {
             done: () => {
                 analytics().logEvent('save_todo_react', {});
                 this.props.addTodo();
-                this.props.navigation.pop();
             }
         });
     }
@@ -56,37 +56,44 @@ class DetailsScreen extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        this.props.selectTodo()
-    }
-
     render() {
         console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
+        const {isProgress, success} = this.props;
+        if (success) {
+            this.props.navigation.pop();
+        }
         return (
-            <ScrollView>
-                <View style={todoDetailsStyle.root}>
-                    <TextInput
-                        style={todoDetailsStyle.title}
-                        selectionColor="#03dac6"
-                        multiline={true}
-                        placeholder="Type recurring task name..."
-                        onChangeText={title => this.props.editTodoTitle(title)}
-                        value={this.props.title}
-                    />
-                    <View style={todoDetailsStyle.separatorContainer}>
-                        <View style={todoDetailsStyle.separatorLine}/>
-                        <Text style={todoDetailsStyle.separatorText}>Repeat</Text>
+            <View style={{
+                flex: 1
+            }}>
+                <ScrollView>
+                    <View style={todoDetailsStyle.root}>
+                        <TextInput
+                            style={todoDetailsStyle.title}
+                            selectionColor="#03dac6"
+                            multiline={true}
+                            placeholder="Type recurring task name..."
+                            onChangeText={title => this.props.editTodoTitle(title)}
+                            value={this.props.title}
+                        />
+                        <View style={todoDetailsStyle.separatorContainer}>
+                            <View style={todoDetailsStyle.separatorLine}/>
+                            <Text style={todoDetailsStyle.separatorText}>Repeat</Text>
+                        </View>
+                        <PeriodSelector/>
                     </View>
-                    <PeriodSelector/>
-                </View>
-            </ScrollView>
+                </ScrollView>
+                {isProgress ? getProgress() : null}
+            </View>
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit),
+        success: state.todos.editTodo.success,
+        isProgress: state.todos.editTodo.isProgress,
+        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit || state.todos.editTodo.isProgress),
         title: state.todos.editTodo.title
     }
 };

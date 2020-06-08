@@ -68,7 +68,6 @@ final class TaskListViewController: UIViewController {
     private func bindViewModel() {
         let input = TaskListViewModel.Input(
             viewWillAppearDriver: rx.viewWillAppear.asDriver(),
-            didTapAddButtonDriver: addButton.rx.tap.asDriver(),
             didTapCellDriver: tableView.rx.modelSelected(TaskViewModel.self).asDriver(),
             didResetTaskDriver: resetTaskSubject.asObservable(),
             didDeleteTaskDriver: deleteTaskSubject.asObservable()

@@ -21,15 +21,15 @@ import kotlinx.coroutines.tasks.await
 object TodosRepository {
 
     val todosStore = StoreBuilder
-        .from<String, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { todoId ->
+        .from<Pair<String, Boolean>, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { pair ->
             val result =
                 Firebase.firestore
                     .collection("users")
                     .document(Firebase.auth.userIdOrEmpty())
                     .collection("todos")
                     .apply {
-                        if (todoId.isNotEmpty()) {
-                            document(todoId)
+                        if (pair.first.isNotEmpty()) {
+                            document(pair.first)
                         }
                     }
                     .get()
@@ -45,13 +45,18 @@ object TodosRepository {
                     database().todos()
                         .getTodos()
                 },
-                writer = { _, input ->
-                    database().todos()
-                        .addTodos(input)
+                writer = { pair, input ->
+                    if (pair.second){
+                        database().todos()
+                            .replaceAll(input)
+                    } else {
+                        database().todos()
+                            .addTodos(input)
+                    }
                 },
-                delete = { key ->
+                delete = { pair ->
                     database().todos()
-                        .deleteTodo(key)
+                        .deleteTodo(pair.first)
                 },
                 deleteAll = {
                     database().todos()
@@ -70,7 +75,7 @@ object TodosRepository {
             .delete()
             .await()
 
-        todosStore.clear(it)
+        todosStore.clear(Pair(it, false))
         true
     })
         .disableCache()
@@ -90,7 +95,7 @@ object TodosRepository {
             .set(todoEntity)
             .await()
 
-        todosStore.fresh(it)
+        todosStore.fresh(Pair(it, false))
         true
     })
         .disableCache()

@@ -27,7 +27,7 @@ final class TaskViewModel {
         self.color = BehaviorRelay(value: color)
         
         self.title.accept(task.title)
-        self.period.accept("Every " + task.period.fullTitle(periodCount: task.periodCount))
+        self.period.accept("Every " + task.period.title(periodCount: task.periodCount))
         self.timeLeft.accept(calculateTimeLeft())
     }
     

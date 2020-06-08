@@ -14,52 +14,32 @@ import RxBiBinding
 
 final class PeriodView: UIView {
     
-    private let everyLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 24, weight: .medium)
-        label.textAlignment = .left
-        label.text = "Every"
-        return label
+    private let menuButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "menu2"), for: [.selected, .highlighted])
+        return button
     }()
     
-    private let titleLabel: UILabel = {
+    private let periodLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 24, weight: .medium)
+        label.font = .systemFont(ofSize: 20, weight: .medium)
         label.textAlignment = .left
         return label
     }()
     
-    private(set) lazy var periodCountTextField: UITextField = {
-        let textField = UITextField()
-        textField.attributedPlaceholder = NSAttributedString(
-            string: "1",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(
+            arrangedSubviews: [menuButton, UIView(), periodLabel]
         )
-        textField.font = .systemFont(ofSize: 22, weight: .semibold)
-        textField.textColor = .white
-        textField.textAlignment = .right
-        textField.keyboardType = .numberPad
-        textField.delegate = self
-        textField.tintColor = .white
-        return textField
-    }()
-    
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 0.0
         stackView.distribution = .fill
         stackView.backgroundColor = .clear
         return stackView
     }()
-    
-    private let circleView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 5
-        return view
-    }()
 
     let selection = PublishSubject<Void>()
+    let menuSelection = PublishSubject<Void>()
     private(set) var isSelected: Bool
     
     private let disposeBag = DisposeBag()
@@ -79,35 +59,9 @@ final class PeriodView: UIView {
     private func setupLayout() {
         addSubview(stackView)
         
-        stackView.addArrangedSubview(everyLabel)
-        stackView.setCustomSpacing(8.0, after: everyLabel)
-        
-        stackView.addArrangedSubview(periodCountTextField)
-        stackView.setCustomSpacing(4.0, after: periodCountTextField)
-        
-        stackView.addArrangedSubview(titleLabel)
-        
-        let spacerView = UIView()
-        spacerView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        stackView.addArrangedSubview(spacerView)
-        
-        let circleSuperview = UIView()
-        circleSuperview.addSubview(circleView)
-        circleView.snp.makeConstraints { (make) in
-            make.width.equalTo(10)
-            make.height.equalTo(circleView.snp.width)
-            make.top.greaterThanOrEqualToSuperview()
-            make.leading.greaterThanOrEqualToSuperview()
-            make.center.equalToSuperview()
-        }
-        circleSuperview.snp.makeConstraints { (make) in
-            make.width.equalTo(20)
-        }
-        stackView.addArrangedSubview(circleSuperview)
-        
         stackView.snp.makeConstraints { (make) in
             make.leading.equalToSuperview().inset(16)
-            make.top.equalToSuperview().inset(14)
+            make.top.equalToSuperview().inset(16)
             make.center.equalToSuperview()
         }
     }
@@ -115,21 +69,19 @@ final class PeriodView: UIView {
     func setSelected(_ selected: Bool) {
         isSelected = selected
         if isSelected {
-            everyLabel.textColor = .white
-            titleLabel.textColor = .white
-            circleView.backgroundColor = .white
+            menuButton.setImage(UIImage(named: "menu"), for: .normal)
+            periodLabel.textColor = .white
             backgroundColor = .gray
         } else {
-            everyLabel.textColor = .gray
-            titleLabel.textColor = .gray
-            circleView.backgroundColor = .gray
+            menuButton.setImage(UIImage(named: "menu3"), for: .normal)
+            periodLabel.textColor = .gray
             backgroundColor = .secondarySystemBackground
         }
     }
     
     func bind(viewModel: PeriodViewModel) {
-        viewModel.title
-            .bind(to: titleLabel.rx.text)
+        viewModel.periodTitle
+            .bind(to: periodLabel.rx.text)
             .disposed(by: disposeBag)
         
         viewModel.selected
@@ -137,15 +89,7 @@ final class PeriodView: UIView {
             .subscribe()
             .disposed(by: disposeBag)
         
-        viewModel.periodCountHidden
-            .bind(to: periodCountTextField.rx.isHidden)
-            .disposed(by: disposeBag)
-
-        periodCountTextField.rx.isFirstResponder
-            .bind(to: viewModel.isFirstResponder)
-            .disposed(by: disposeBag)
-        
-        (periodCountTextField.rx.text <-> viewModel.periodCount)
+        menuButton.rx.tap.bind(to: menuSelection)
             .disposed(by: disposeBag)
     }
     
@@ -153,7 +97,6 @@ final class PeriodView: UIView {
         super.touchesEnded(touches, with: event)
         
         selection.onNext(())
-        periodCountTextField.becomeFirstResponder()
     }
 }
 

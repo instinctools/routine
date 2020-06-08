@@ -14,22 +14,14 @@ struct Task: Equatable {
     let title: String
     let period: Period
     let periodCount: Int
-    var startDate: Date
+    let finishDate: Date
     
-    var finishDate: Date {
-        return Calendar.current.date(
-            byAdding: period.calendarComponent,
-            value: periodCount,
-            to: startDate
-        ).orToday
-    }
-    
-    init(id: String, title: String, period: Period, periodCount: Int, startDate: Date = Date()) {
+    init(id: String, title: String, period: Period, periodCount: Int, finishDate: Date) {
         self.id = id
         self.title = title
         self.period = period
         self.periodCount = periodCount
-        self.startDate = startDate
+        self.finishDate = finishDate
     }
     
     init(entity: TaskEntity) {
@@ -37,21 +29,6 @@ struct Task: Equatable {
         self.title = entity.title.orEmpty
         self.period = Period(rawValue: Int(entity.period)).orDefault
         self.periodCount = Int(entity.periodCount)
-        self.startDate = entity.startDate.orToday
+        self.finishDate = entity.finishDate.orToday
     }
-}
-
-extension Task {
-    static let mock: Task = .init(
-        id: UUID().uuidString,
-        title: "Attend a pool",
-        period: .day,
-        periodCount: 2
-    )
-    static let mock2: Task = .init(
-        id: UUID().uuidString,
-        title: "Attend a Church",
-        period: .week,
-        periodCount: 0
-    )
 }
