@@ -11,11 +11,17 @@ data class TodoEntity(
         val title: String = "",
         val period: Int = 1,
         val periodUnit: PeriodUnit = PeriodUnit.DAY,
-        val timestamp: Date = Date()
+        val timestamp: Date = Date(),
+        val resetType: ResetType = ResetType.BY_PERIOD
 )
 
 enum class PeriodUnit {
     DAY,
     WEEK,
     MONTH
+}
+
+enum class ResetType{
+    BY_PERIOD,
+    BY_DATE
 }

@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 import com.routine.App
 import com.routine.data.db.entity.TodoEntity
 
-@Database(entities = [TodoEntity::class], version = 1)
+@Database(entities = [TodoEntity::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun todos(): TodoDao
