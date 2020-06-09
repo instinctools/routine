@@ -16,16 +16,37 @@
         app:layout_constraintTop_toTopOf="@+id/close" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose period"
+        android:textSize="18sp"
+        android:textColor="#9E9DA8"
+        android:layout_marginStart="16dp"
+        app:layout_constraintTop_toTopOf="@+id/close"
+        app:layout_constraintBottom_toBottomOf="@+id/close"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:padding="16dp"
+        android:padding="18sp"
         android:textColor="#000000"
+        android:textSize="16sp"
         android:background="@drawable/bg_selectable_rounded"
-        android:text="Close"
+        android:text="Done"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/wheel_picker"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#AAA9A9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/close"/>
 
     <com.aigestudio.wheelpicker.WheelPicker
         android:id="@+id/wheel_picker"
@@ -38,6 +59,7 @@
         app:wheel_atmospheric="true"
         app:wheel_curved="true"
         app:wheel_indicator="true"
-        app:wheel_indicator_color="@color/period_tint" />
+        app:wheel_indicator_color="@color/period_tint"
+        app:wheel_selected_item_text_color="#000000"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

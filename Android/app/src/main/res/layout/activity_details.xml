@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailsActivity">
+    tools:context=".ui.DetailsActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -21,8 +20,8 @@
         android:id="@+id/group_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="text, separator, separator_text, radio"/>
+        android:visibility="visible"
+        app:constraint_referenced_ids="text, separator, separator_text, day_period_selector, week_period_selector, month_period_selector" />
 
     <EditText
         android:id="@+id/text"
@@ -41,17 +40,54 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
+    <RadioGroup
+        android:id="@+id/reset"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:checkedButton="@id/reset_period"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text">
+
+        <RadioButton
+            android:id="@+id/reset_period"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/reset_period_left_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Reset to period"
+            android:textColor="@color/period_selector" />
+
+        <RadioButton
+            android:id="@+id/reset_date"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/reset_period_right_selector"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Reset to date"
+            android:textColor="@color/period_selector" />
+
+    </RadioGroup>
+
     <View
         android:id="@+id/separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="#AAA9A9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintTop_toBottomOf="@+id/reset" />
 
     <TextView
         android:id="@+id/separator_text"
@@ -69,64 +105,44 @@
         app:layout_constraintTop_toTopOf="@+id/separator"
         tools:ignore="RtlCompat" />
 
-    <RadioGroup
-        android:id="@+id/radio"
-        android:layout_width="0dp"
+    <include
+        android:id="@+id/day_period_selector"
+        layout="@layout/item_period_selector"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:checkedButton="@id/every_day"
-        android:background="?attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separator">
+        app:layout_constraintTop_toBottomOf="@+id/separator_text"
+        app:srcCompat="@drawable/ic_menu" />
 
-        <RadioButton
-            android:id="@+id/every_day"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every day"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
+    <include
+        android:id="@+id/week_period_selector"
+        layout="@layout/item_period_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_period_selector"
+        app:srcCompat="@drawable/ic_menu" />
 
-        <RadioButton
-            android:id="@+id/every_week"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every week"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-        <RadioButton
-            android:id="@+id/every_month"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/period_selector"
-            android:button="@null"
-            android:padding="16dp"
-            android:text="Every month"
-            android:textColor="@color/period_selector"
-            android:textSize="20sp" />
-
-    </RadioGroup>
+    <include
+        android:id="@+id/month_period_selector"
+        layout="@layout/item_period_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/week_period_selector"
+        app:srcCompat="@drawable/ic_menu" />
 
     <ProgressBar
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
