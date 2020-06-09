@@ -92,10 +92,13 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
     }
 }
 
-fun showError(view: View, throwable: Throwable, block: () -> Unit) {
-    val snackbar = Snackbar.make(view, throwable.getErrorMessage(), Snackbar.LENGTH_INDEFINITE)
-    snackbar.setAction("Retry") {
-        block.invoke()
+fun showError(view: View, throwable: Throwable, block: (() -> Unit)? = null) {
+    val length = if (block != null) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
+    val snackbar = Snackbar.make(view, throwable.getErrorMessage(), length)
+    if (block != null) {
+        snackbar.setAction("Retry") {
+            block.invoke()
+        }
     }
     snackbar.show()
 }

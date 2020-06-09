@@ -37,6 +37,7 @@ class WheelPickerFragment : DialogFragment() {
             if (isAdded) {
                 setFragmentResult(ARG_PERIOD, Bundle().apply {
                     putInt(ARG_PERIOD, data as Int)
+                    putSerializable(ARG_PERIOD_UNIT, arguments?.getSerializable(ARG_PERIOD_UNIT))
                 })
             }
         }

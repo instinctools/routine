@@ -1,9 +1,6 @@
 package com.routine.data.repo
 
-import com.dropbox.android.external.store4.SourceOfTruth
-import com.dropbox.android.external.store4.StoreBuilder
-import com.dropbox.android.external.store4.fresh
-import com.dropbox.android.external.store4.nonFlowValueFetcher
+import com.dropbox.android.external.store4.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,6 +10,7 @@ import com.routine.data.db.database
 import com.routine.data.db.entity.TodoEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
@@ -100,6 +98,29 @@ object TodosRepository {
             .await()
 
         todosStore.fresh(Pair(it, false))
+        true
+    })
+        .disableCache()
+        .build()
+
+    val getTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, TodoEntity> {
+        if (it.isNotEmpty()) {
+            database().todos().getTodo(it)
+        } else {
+            TodoEntity()
+        }
+    })
+        .disableCache()
+        .build()
+
+    val addTodoStore = StoreBuilder.from(nonFlowValueFetcher<TodoEntity, Boolean> {
+        Firebase.firestore.collection("users")
+            .document(Firebase.auth.userIdOrEmpty())
+            .collection("todos")
+            .document(it.id)
+            .set(it)
+            .await()
+        todosStore.fresh(Pair(it.id, false))
         true
     })
         .disableCache()
