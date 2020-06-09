@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/ui/edit/ResetSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -64,6 +65,7 @@ class _EditScreenState extends State<EditScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             TitleInputForm(presenter),
+            ResetSelector(presenter),
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: DividerWithLabel(),

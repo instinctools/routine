@@ -10,6 +10,7 @@ const COLUMN_TITLE = 'title';
 const COLUMN_UNIT = 'period_unit';
 const COLUMN_VALUE = 'period_value';
 const COLUMN_TIMESTAMP = 'timestamp';
+const COLUMN_RESET_TYPE = 'reset_type';
 
 const WHERE_ID_CLAUSE = 'id = ?';
 
@@ -42,7 +43,8 @@ class DatabaseHelper {
               "title TEXT,"
               "period_unit TEXT,"
               "period_value INTEGER,"
-              "timestamp INTEGER"
+              "timestamp INTEGER,"
+              "reset_type TEXT"
               ")");
         },
         onOpen: (db) async => print("database = ${await db.getVersion()}"));
@@ -51,6 +53,7 @@ class DatabaseHelper {
   Future<List<Todo>> getTodos() async {
     var db = await database;
     var queryMap = await db.query(TABLE_NAME);
+    print("aaaaa $queryMap");
     var todos = queryMap.map((item) => Todo.fromMap(item)).toList();
     return todos.toList();
   }
@@ -59,8 +62,7 @@ class DatabaseHelper {
     var db = await database;
 
     if (todo.id != null) {
-      return await db.update(TABLE_NAME, todo.toMap(),
-          where: WHERE_ID_CLAUSE, whereArgs: [todo.id]);
+      return await db.update(TABLE_NAME, todo.toMap(), where: WHERE_ID_CLAUSE, whereArgs: [todo.id]);
     } else {
       return await db.insert(TABLE_NAME, todo.toMap());
     }
@@ -68,7 +70,6 @@ class DatabaseHelper {
 
   Future<int> deleteTodo(int id) async {
     var db = await database;
-    return await db
-        .delete(TABLE_NAME, where: WHERE_ID_CLAUSE, whereArgs: [id.toString()]);
+    return await db.delete(TABLE_NAME, where: WHERE_ID_CLAUSE, whereArgs: [id.toString()]);
   }
 }

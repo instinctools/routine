@@ -10,6 +10,8 @@ class Strings {
   static const String edit_divider_label = 'Repeat';
   static const String editPickerDialogTitle = 'Choose period';
   static const String editPickerDialogConfirmButton = 'Done';
+  static const String edit_reset_selector_to_period = 'Reset to period';
+  static const String edit_reset_selector_to_date = 'Reset to date';
 
   static const String listEmptyPlaceholderText = "You don't have any tasks";
   static const String listResetSlideActionLabel = "Reset";
@@ -33,11 +35,21 @@ class Dimens {
   static const double edit_divider_thickness = 2.0;
   static const double edit_period_button_border_radius = 10.0;
   static const double editPickerItemExtent = 40;
+  static const double EDIT_RESET_SELECTOR_BORDER_RADIUS = 4.0;
+  static const double EDIT_RESET_SELECTOR_TEXT_SIZE = 13;
 }
 
 class ColorsRes {
   static Color mainBgColor = Colors.grey[200];
+  static Color darkGrayColor = Colors.grey[800];
+  static Color lightGrayColor = Colors.grey[400];
 
   static Color selectedPeriodUnitColor = Colors.grey[800];
   static Color unselectedPeriodUnitColor = Colors.grey[400];
+
+  static Color selectedResetTypeTextColor = Color(0xFFFFFFFF);
+  static Color unselectedResetTypeTextColor = darkGrayColor;
+
+  static Color selectedResetTypeBackgroundColor = darkGrayColor;
+  static Color unselectedResetTypeBackgroundColor = lightGrayColor;
 }

@@ -34,4 +34,9 @@ class Styles {
 
   static TextStyle  editUnselectedPeriodTextStyle = TextStyle(
       fontWeight: FontWeight.w500, fontSize: 20.0, color: ColorsRes.unselectedPeriodUnitColor);
+
+  static TextStyle editResetTypeTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.EDIT_RESET_SELECTOR_TEXT_SIZE,
+  );
 }
