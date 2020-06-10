@@ -31,12 +31,12 @@ class Todo {
         COLUMN_RESET_TYPE: resetType.value,
       };
 
-  Todo shiftTargetTime() => Todo(
+  Todo resetTargetDate() => Todo(
         id: this.id,
         title: this.title,
         periodUnit: this.periodUnit,
         periodValue: this.periodValue,
-        targetDate: TimeUtils.calculateTargetDate(title, periodUnit, periodValue, true).millisecondsSinceEpoch,
+        targetDate: TimeUtils.updateTargetDate(title, periodUnit, periodValue, resetType, targetDate).millisecondsSinceEpoch,
         resetType: this.resetType,
       );
 
