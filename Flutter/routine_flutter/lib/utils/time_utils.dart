@@ -13,7 +13,7 @@ class TimeUtils {
     var periodCount = isPlural ? '$periodValue ' : '';
     var pluralPostfix = isPlural && periodUnit != Period.MONTH.name ? 's' : '';
 
-    return 'Every $periodCount$periodUnit$pluralPostfix';
+    return '$periodCount$periodUnit$pluralPostfix';
   }
 
   static DateTime calculateTargetDate(String title, String periodUnit, int periodValue, [bool isReset = false]) {
