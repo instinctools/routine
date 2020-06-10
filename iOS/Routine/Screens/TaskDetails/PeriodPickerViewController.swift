@@ -117,9 +117,15 @@ final class PeriodPickerViewController: BottomCardViewController {
             .bind(to: viewModel.doneButtonTapped)
             .disposed(by: disposeBag)
         
-        pickerView.selectRow(viewModel.initialSelectedIndex,
-                             inComponent: 0,
-                             animated: false)
+        viewModel.selectedItem.do(onNext: { (value) in
+            let row = (Int(value) ?? 1) - 1
+            let component = 0
+            if self.pickerView.selectedRow(inComponent: component) != row {
+                self.pickerView.selectRow(row, inComponent: 0, animated: false)
+            }
+        })
+        .subscribe()
+        .disposed(by: disposeBag)
     }
 
     private func hide() {

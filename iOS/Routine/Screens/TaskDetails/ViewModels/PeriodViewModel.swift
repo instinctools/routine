@@ -13,7 +13,7 @@ final class PeriodViewModel {
     
     let periodTitle = BehaviorRelay<String>(value: "")
     let selected: BehaviorRelay<Bool>
-    let periodCount = PublishSubject<String>()
+    let periodCount = BehaviorRelay<Int>(value: 1)
     
     let period: Period
     private let disposeBag = DisposeBag()
@@ -21,9 +21,13 @@ final class PeriodViewModel {
     private init(period: Period, periodCount: Int, selected: Bool) {
         self.selected = BehaviorRelay(value: selected)
         self.period = period
-        self.periodTitle.accept(title(periodCount: periodCount))
         
-        bind()
+        self.periodCount.accept(periodCount)
+        
+        self.periodCount
+            .map(title(periodCount:))
+            .bind(to: periodTitle)
+            .disposed(by: disposeBag)
     }
     
     convenience init(period: Period) {
@@ -46,19 +50,5 @@ final class PeriodViewModel {
         case .year:
             return hasPeriodCount ? "\(periodCount) Years" : "Year"
         }
-    }
-    
-    private func bind() {
-        periodCount
-            .map { Int($0) ?? 0 }
-            .map(title(periodCount:))
-            .bind(to: periodTitle)
-            .disposed(by: disposeBag)
-        
-        selected
-            .filter { !$0 }
-            .map { _ in "" }
-            .bind(to: periodCount)
-            .disposed(by: disposeBag)
     }
 }

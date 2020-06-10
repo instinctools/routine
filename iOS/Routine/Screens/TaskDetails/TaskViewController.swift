@@ -121,7 +121,8 @@ final class TaskViewController: UIViewController {
         
         let input = TaskDetailsViewModel.Input(
             doneButtonAction: doneButton.rx.tap.asDriver(),
-            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
+            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never()),
+            menuSelection: repeatPeriodsView.menuSelection.asDriver(onErrorJustReturn: ())
         )
         let output = viewModel.transform(input: input)
         
@@ -133,15 +134,15 @@ final class TaskViewController: UIViewController {
             .drive(onNext: dismiss)
             .disposed(by: disposeBag)
         
+        output.showPickerAction
+            .do(onNext: showPeriodPicker)
+            .drive()
+            .disposed(by: disposeBag)
+
         (textView.rx.title <-> viewModel.title)
             .disposed(by: disposeBag)
         
-        repeatPeriodsView.bind(items: viewModel.periodItems)
-        
-        repeatPeriodsView.menuSelection
-            .do(onNext: showPeriodPicker)
-            .subscribe()
-            .disposed(by: disposeBag)
+        repeatPeriodsView.bind(items: viewModel.periodItems)        
     }
     
     private func keyboardWillShow(notification: Notification) {

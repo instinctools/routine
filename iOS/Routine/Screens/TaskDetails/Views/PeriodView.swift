@@ -66,7 +66,7 @@ final class PeriodView: UIView {
         }
     }
     
-    func setSelected(_ selected: Bool) {
+    private func setSelected(_ selected: Bool) {
         isSelected = selected
         if isSelected {
             menuButton.setImage(UIImage(named: "menu"), for: .normal)

@@ -12,7 +12,6 @@ import Foundation
 
 final class PeriodPickerViewModel {
     
-    let initialSelectedIndex: Int
     let items: Observable<[String]>
     let selectedItem: BehaviorRelay<String>
     let doneButtonTapped = PublishSubject<Void>()
@@ -20,7 +19,6 @@ final class PeriodPickerViewModel {
     init(selectedItem: String) {
         let value = (1...60).map(String.init)
         self.items = .just(value)
-        self.initialSelectedIndex = (Int(selectedItem) ?? 1) - 1
         self.selectedItem = BehaviorRelay(value: selectedItem)
     }
 }
