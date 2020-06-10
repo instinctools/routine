@@ -37,7 +37,7 @@ class _TodoListState extends State<TodoList> {
               if (futureResult.data.length > 0) {
                 List<Todo> sortedList = futureResult.data;
                 sortedList.sort((a, b) =>
-                    TimeUtils.compareTargetDates(a.timestamp, b.timestamp));
+                    TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
 
                 List<Widget> widgets = _createItemWidgetsList(sortedList);
                 return ListView.builder(
@@ -69,7 +69,7 @@ class _TodoListState extends State<TodoList> {
     int index = -1;
     for (int i = 0; i <= list.length; i++) {
       var item = list[i];
-      if (item.timestamp > currentTime) {
+      if (item.targetDate > currentTime) {
         break;
       }
       index = i;
@@ -168,14 +168,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   Future<void> _resetTodo(Todo item) async {
-    Todo reseted = Todo(
-        id: item.id,
-        title: item.title,
-        periodUnit: item.periodUnit,
-        periodValue: item.periodValue,
-        timestamp: TimeUtils.calculateTargetTime(
-                item.title, item.periodUnit, item.periodValue, true)
-            .millisecondsSinceEpoch);
+    var reseted = item.resetTargetDate();
     if (await helper.changeTodo(reseted) != null) {
       setState(() {});
     }
