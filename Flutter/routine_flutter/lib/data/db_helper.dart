@@ -53,7 +53,7 @@ class DatabaseHelper {
   Future<List<Todo>> getTodos() async {
     var db = await database;
     var queryMap = await db.query(TABLE_NAME);
-    print("aaaaa $queryMap");
+    print("all items:  $queryMap");
     var todos = queryMap.map((item) => Todo.fromMap(item)).toList();
     return todos.toList();
   }

@@ -1,4 +1,4 @@
-import 'package:routine_flutter/ui/edit/edit_presenter.dart';
+import 'package:routine_flutter/ui/edit/ResetType.dart';
 
 import 'db_helper.dart';
 
@@ -18,7 +18,7 @@ class Todo {
       periodUnit: map[COLUMN_UNIT],
       periodValue: map[COLUMN_VALUE],
       timestamp: map[COLUMN_TIMESTAMP],
-      resetType: ResetTypeExtension.find(map[COLUMN_RESET_TYPE]));
+      resetType: findResetType(map[COLUMN_RESET_TYPE]));
 
   Map<String, dynamic> toMap() => {
         COLUMN_ID: id,
