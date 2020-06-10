@@ -18,7 +18,6 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.max
 
 class TodoListPresenter(
     private val todoRepository: TodoRepository
@@ -53,6 +52,11 @@ class TodoListPresenter(
                     }
                     is Event.Delete -> withContext(NonCancellable) {
                         todoRepository.delete(event.id)
+                    }
+                    Event.Refresh -> {
+                        sendState(state.copy(refreshing = true))
+                        todoRepository.refresh()
+                        sendState(state.copy(refreshing = false))
                     }
                 }
             }
@@ -92,10 +96,12 @@ class TodoListPresenter(
     sealed class Event {
         class Reset(val id: String) : Event()
         class Delete(val id: String) : Event()
+        object Refresh : Event()
     }
 
     data class State(
         val expiredTodos: List<TodoListUiModel> = emptyList(),
-        val futureTodos: List<TodoListUiModel> = emptyList()
+        val futureTodos: List<TodoListUiModel> = emptyList(),
+        val refreshing: Boolean = false
     )
 }

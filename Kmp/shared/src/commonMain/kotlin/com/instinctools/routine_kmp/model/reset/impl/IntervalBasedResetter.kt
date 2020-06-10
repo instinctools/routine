@@ -9,6 +9,12 @@ class IntervalBasedResetter : TodoResetter {
     override fun reset(todo: Todo): Todo {
         val currentDate = currentDate()
         var nextDate = dateForTimestamp(todo.nextTimestamp)
+
+        // do not allow increase next event date more then one interval
+        if (nextDate > currentDate && currentDate.plus(todo.periodUnit, todo.periodValue) < nextDate) {
+            return todo
+        }
+
         do {
             nextDate = nextDate.plus(todo.periodUnit, todo.periodValue)
         } while (nextDate < currentDate)

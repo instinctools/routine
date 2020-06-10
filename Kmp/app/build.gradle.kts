@@ -60,6 +60,7 @@ dependencies {
 
     implementation(Deps.AndroidX.recyclerView)
     implementation(Deps.AndroidX.constraintLayout)
+    implementation(Deps.AndroidX.swipeRefresh)
     /* Android X */
 
     /* Views */
