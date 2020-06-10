@@ -25,6 +25,7 @@ final class TaskDetailsViewModel {
     }
 
     let title: BehaviorRelay<String?>
+    let resetTypeIndex: BehaviorRelay<Int>
     let selectedPeriodItem: BehaviorRelay<PeriodViewModel?>
     let periodItems: [PeriodViewModel]
     let period: PeriodPickerViewModel
@@ -41,6 +42,7 @@ final class TaskDetailsViewModel {
     init(task: Task? = nil) {
         self.task = task
         self.title = BehaviorRelay(value: task?.title)
+        self.resetTypeIndex = BehaviorRelay(value: Int(task?.resetType.rawValue ?? 0))
         
         var selectedPeriod: PeriodViewModel?
         self.periodItems = Period.allCases.map { period in
@@ -59,10 +61,11 @@ final class TaskDetailsViewModel {
     func transform(input: Input) -> Output {
         let dismissAction = input.doneButtonAction.asObservable()
             .withLatestFrom(
-                Observable.combineLatest(selectedPeriodItem, title)
+                Observable.combineLatest(selectedPeriodItem, title, resetTypeIndex)
             )
-            .map { (item, title) in
-                return (title, item?.period, item?.periodCount.value)
+            .map { (item, title, resetTypeIndex) in
+                let resetType = Task.ResetType(rawValue: Int16(resetTypeIndex))
+                return (title, item?.period, item?.periodCount.value, resetType)
             }
             .map(saveTask)
             .asDriver(onErrorJustReturn: ())
@@ -106,44 +109,33 @@ final class TaskDetailsViewModel {
         return Output(dismissAction: dismissAction, doneButtonEnabled: doneButtonEnabled, showPickerAction: showPickerAction)
     }
     
-    private func saveTask(withTitle title: String?, period: Period?, periodCount: Int?) {
-        guard let periodCount = periodCount, let period = period, let title = title else {
-            return
+    private func saveTask(withTitle title: String?, period: Period?, periodCount: Int?, resetType: Task.ResetType?) {
+
+        guard let periodCount = periodCount,
+            let period = period,
+            let title = title,
+            let resetType = resetType else {
+                return
         }
-        
-        let calendar = Calendar.current
-        
+                
         if let task = self.task {
-            let startDate = calendar.date(
-                byAdding: task.period.calendarComponent,
-                value: -task.periodCount,
-                to: task.finishDate
-            ).orToday
-            let finishDate = calendar.date(
-                byAdding: period.calendarComponent,
-                value: periodCount,
-                to: startDate
-            ).orToday
             let task = Task(
                 id: task.id,
                 title: title,
                 period: period,
                 periodCount: periodCount,
-                finishDate: finishDate
+                startDate: task.startDate,
+                resetType: resetType
             )
             self.taskProvier.update(task: task)
         } else {
-            let finishDate = calendar.date(
-                byAdding: period.calendarComponent,
-                value: periodCount,
-                to: Date()
-            ).orToday
             let task = Task(
                 id: UUID().uuidString,
                 title: title,
                 period: period,
                 periodCount: periodCount,
-                finishDate: finishDate
+                startDate: Date(),
+                resetType: resetType
             )
             self.taskProvier.add(task: task)
         }

@@ -37,6 +37,10 @@ final class TaskViewController: UIViewController {
         return textView
     }()
     
+    private lazy var resetTypeSegmentControl = UISegmentedControl(
+        items: ["Reset to period", "Reset to date"]
+    )
+    
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var repeatPeriodsView = PeriodsView()
@@ -92,6 +96,7 @@ final class TaskViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
+        contentView.addArrangedSubview(resetTypeSegmentControl)
         
         let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
@@ -137,6 +142,10 @@ final class TaskViewController: UIViewController {
         output.showPickerAction
             .do(onNext: showPeriodPicker)
             .drive()
+            .disposed(by: disposeBag)
+        
+        
+        (resetTypeSegmentControl.rx.selectedSegmentIndex <-> viewModel.resetTypeIndex)
             .disposed(by: disposeBag)
 
         (textView.rx.title <-> viewModel.title)

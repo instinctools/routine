@@ -8,27 +8,49 @@
 
 import UIKit
 
+extension Optional where Wrapped == Task.ResetType {
+    var orDefault: Task.ResetType {
+        return self ?? .toPeriod
+    }
+}
+
 struct Task: Equatable {
+    
+    enum ResetType: Int16 {
+        case toPeriod
+        case toDate
+    }
     
     let id: String
     let title: String
     let period: Period
     let periodCount: Int
-    let finishDate: Date
+    let startDate: Date
+    let resetType: ResetType
     
-    init(id: String, title: String, period: Period, periodCount: Int, finishDate: Date) {
+    var finishDate: Date {
+        return Calendar.current.date(
+            byAdding: period.calendarComponent,
+            value: periodCount,
+            to: startDate
+        ).orToday
+    }
+    
+    init(id: String, title: String, period: Period, periodCount: Int, startDate: Date, resetType: ResetType) {
         self.id = id
         self.title = title
         self.period = period
         self.periodCount = periodCount
-        self.finishDate = finishDate
+        self.startDate = startDate
+        self.resetType = resetType
     }
     
     init(entity: TaskEntity) {
         self.id = entity.id.orEmpty
         self.title = entity.title.orEmpty
-        self.period = Period(rawValue: Int(entity.period)).orDefault
+        self.period = Period(rawValue: entity.period).orDefault
         self.periodCount = Int(entity.periodCount)
-        self.finishDate = entity.finishDate.orToday
+        self.startDate = entity.startDate.orToday
+        self.resetType = ResetType(rawValue: entity.resetType).orDefault
     }
 }

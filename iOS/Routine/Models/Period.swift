@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Period: Int, CaseIterable {
+enum Period: Int16, CaseIterable {
     case day
     case week
     case month
