@@ -52,8 +52,8 @@ class TodoDetailsActivity : AppCompatActivity() {
 
         appComponent.inject(this)
 
-        var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
-        if (todoId == NO_ID) {
+        var todoId: String? = intent.getStringExtra(ARG_TODO_ID)
+        if (todoId.isNullOrEmpty()) {
             todoId = null
         }
 
@@ -140,9 +140,9 @@ class TodoDetailsActivity : AppCompatActivity() {
 
     companion object {
         private const val ARG_TODO_ID = "todo_id"
-        private const val NO_ID = -1L
+        private const val NO_ID = ""
 
-        fun buildIntent(context: Context, todoId: Long?) = Intent(context, TodoDetailsActivity::class.java).apply {
+        fun buildIntent(context: Context, todoId: String?) = Intent(context, TodoDetailsActivity::class.java).apply {
             putExtra(ARG_TODO_ID, todoId ?: NO_ID)
         }
     }

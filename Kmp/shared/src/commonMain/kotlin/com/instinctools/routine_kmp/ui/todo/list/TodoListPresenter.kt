@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.ui.todo.list
 
-import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.data.date.compareTo
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
@@ -18,9 +18,10 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 
 class TodoListPresenter(
-    private val todoStore: TodoStore
+    private val todoRepository: TodoRepository
 ) : Presenter<TodoListPresenter.State, TodoListPresenter.Event>() {
 
     private val _states = ConflatedBroadcastChannel<State>()
@@ -32,7 +33,11 @@ class TodoListPresenter(
     private val state: State get() = _states.valueOrNull ?: State()
 
     override fun start() {
-        todoStore.getTodosSortedByDate()
+        scope.launch {
+            todoRepository.refresh()
+        }
+
+        todoRepository.getTodosSortedByDate()
             .flowOn(Dispatchers.Default)
             .onEach { updateUiTodos(it) }
             .launchIn(scope)
@@ -41,13 +46,13 @@ class TodoListPresenter(
             for (event in _events) {
                 when (event) {
                     is Event.Reset -> {
-                        val todo = requireNotNull(todoStore.getTodoById(event.id)) { "Failed to load todo with id=${event.id}" }
+                        val todo = requireNotNull(todoRepository.getTodoById(event.id)) { "Failed to load todo with id=${event.id}" }
                         val resetter = TodoResetterFactory.get(todo.periodStrategy)
                         val resetTodo = resetter.reset(todo)
-                        todoStore.update(resetTodo)
+                        todoRepository.update(resetTodo)
                     }
                     is Event.Delete -> withContext(NonCancellable) {
-                        todoStore.delete(event.id)
+                        todoRepository.delete(event.id)
                     }
                 }
             }
@@ -85,8 +90,8 @@ class TodoListPresenter(
     }
 
     sealed class Event {
-        class Reset(val id: Long) : Event()
-        class Delete(val id: Long) : Event()
+        class Reset(val id: String) : Event()
+        class Delete(val id: String) : Event()
     }
 
     data class State(

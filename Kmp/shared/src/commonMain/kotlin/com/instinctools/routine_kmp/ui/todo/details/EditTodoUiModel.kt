@@ -8,7 +8,7 @@ import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
 
 data class EditTodoUiModel(
-    val id: Long? = null,
+    val id: String? = null,
     val title: String? = null,
     val periodUnit: PeriodUnit? = null,
     val periodValue: Int = 1,

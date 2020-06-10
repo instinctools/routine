@@ -1,5 +1,5 @@
 CREATE TABLE todos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
     period_unit INTEGER AS Int NOT NULL,
     period_value INTEGER AS Int NOT NULL,
@@ -17,7 +17,7 @@ selectById:
 SELECT * FROM todos WHERE id = ?;
 
 insertTodo:
-INSERT INTO todos(title, period_unit, period_value, period_strategy, next_timestamp) VALUES (?, ?, ?, ?, ?);
+INSERT INTO todos(id, title, period_unit, period_value, period_strategy, next_timestamp) VALUES (?, ?, ?, ?, ?, ?);
 
 updateById:
 UPDATE todos SET
@@ -30,3 +30,6 @@ WHERE id = ?;
 
 deleteById:
 DELETE FROM todos WHERE id = ?;
+
+deleteAll:
+DELETE FROM todos;

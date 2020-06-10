@@ -5,6 +5,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
 }
+apply(plugin = "com.google.gms.google-services")
 
 android {
     compileSdkVersion(Versions.compileSdk)

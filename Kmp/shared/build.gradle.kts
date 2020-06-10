@@ -55,6 +55,9 @@ kotlin {
         implementation(kotlin("stdlib", Versions.kotlin))
         implementation(Deps.SqlDelight.driverAndroid)
         implementation(Deps.Coroutines.android)
+        implementation(Deps.Coroutines.playServices)
+        implementation(Deps.Firebase.auth)
+        implementation(Deps.Firebase.firestore)
     }
 
     sourceSets["iosMain"].dependencies {

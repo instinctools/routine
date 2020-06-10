@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
-import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 class TodoDetailsPresenter(
-    private val todoId: Long?,
-    private val todoStore: TodoStore
+    private val todoId: String?,
+    private val todoRepository: TodoRepository
 ) : Presenter<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>() {
 
     private val _states = ConflatedBroadcastChannel(State())
@@ -27,7 +27,7 @@ class TodoDetailsPresenter(
     override fun start() {
         if (todoId != null) {
             scope.launch {
-                val todo = todoStore.getTodoById(todoId) ?: return@launch
+                val todo = todoRepository.getTodoById(todoId) ?: return@launch
                 sendState(state.copy(todo = todo.toEditModel()))
             }
         }
@@ -64,10 +64,10 @@ class TodoDetailsPresenter(
         try {
             if (todoId == null) {
                 val newTodo = todo.buildNewTodoModel()
-                todoStore.insert(newTodo)
+                todoRepository.add(newTodo)
             } else {
                 val updatedTodo = todo.buildUpdatedTodoModel()
-                todoStore.update(updatedTodo)
+                todoRepository.update(updatedTodo)
             }
             sendState(state.copy(saved = true))
         } catch (error: IllegalStateException) {
