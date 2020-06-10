@@ -37,7 +37,7 @@ class _TodoListState extends State<TodoList> {
               if (futureResult.data.length > 0) {
                 List<Todo> sortedList = futureResult.data;
                 sortedList.sort((a, b) =>
-                    TimeUtils.compareTargetDates(a.targetTime, b.targetTime));
+                    TimeUtils.compareTargetDates(a.targetDate, b.targetDate));
 
                 List<Widget> widgets = _createItemWidgetsList(sortedList);
                 return ListView.builder(
@@ -69,7 +69,7 @@ class _TodoListState extends State<TodoList> {
     int index = -1;
     for (int i = 0; i <= list.length; i++) {
       var item = list[i];
-      if (item.targetTime > currentTime) {
+      if (item.targetDate > currentTime) {
         break;
       }
       index = i;

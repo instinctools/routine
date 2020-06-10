@@ -16,19 +16,18 @@ class TimeUtils {
     return 'Every $periodCount$periodUnit$pluralPostfix';
   }
 
-  static DateTime calculateTargetTime(String title, String unit, int value,
-      [bool isReset = false]) {
+  static DateTime calculateTargetDate(String title, String periodUnit, int periodValue, [bool isReset = false]) {
     DateTime now = getCurrentTime();
     int day = 0, month = 0;
-    switch (findPeriod(unit)) {
+    switch (findPeriod(periodUnit)) {
       case Period.DAY:
-        day = value;
+        day = periodValue;
         break;
       case Period.WEEK:
-        day = value * 7;
+        day = periodValue * 7;
         break;
       case Period.MONTH:
-        month = value;
+        month = periodValue;
         break;
     }
 
@@ -39,9 +38,8 @@ class TimeUtils {
     return DateTime(now.year, now.month + month, now.day + day);
   }
 
-  static calculateTimeLeft(String targetDate) {
-    DateTime target = DateTime.fromMillisecondsSinceEpoch(int.parse(targetDate),
-        isUtc: false);
+  static calculateTimeLeft(int targetDate) {
+    DateTime target = DateTime.fromMillisecondsSinceEpoch(targetDate, isUtc: false);
     DateTime now = getCurrentTime();
     var days = target.difference(now).inDays;
     String result = "";

@@ -9,7 +9,7 @@ const COLUMN_ID = 'id';
 const COLUMN_TITLE = 'title';
 const COLUMN_UNIT = 'period_unit';
 const COLUMN_VALUE = 'period_value';
-const COLUMN_TARGET_TIME = 'target_time';
+const COLUMN_TARGET_DATE = 'target_time';
 const COLUMN_RESET_TYPE = 'reset_type';
 
 const WHERE_ID_CLAUSE = 'id = ?';
@@ -43,7 +43,7 @@ class DatabaseHelper {
               "$COLUMN_TITLE TEXT,"
               "$COLUMN_UNIT TEXT,"
               "$COLUMN_VALUE INTEGER,"
-              "$COLUMN_TARGET_TIME INTEGER,"
+              "$COLUMN_TARGET_DATE INTEGER,"
               "$COLUMN_RESET_TYPE TEXT"
               ")");
         },

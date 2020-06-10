@@ -8,17 +8,17 @@ class Todo {
   final String title;
   final String periodUnit;
   final int periodValue;
-  final int targetTime;
+  final int targetDate;
   final ResetType resetType;
 
-  Todo({this.id, this.title, this.periodUnit, this.periodValue, this.targetTime, this.resetType});
+  Todo({this.id, this.title, this.periodUnit, this.periodValue, this.targetDate, this.resetType});
 
   factory Todo.fromMap(Map<String, dynamic> map) => Todo(
         id: map[COLUMN_ID],
         title: map[COLUMN_TITLE],
         periodUnit: map[COLUMN_UNIT],
         periodValue: map[COLUMN_VALUE],
-        targetTime: map[COLUMN_TARGET_TIME],
+        targetDate: map[COLUMN_TARGET_DATE],
         resetType: findResetType(map[COLUMN_RESET_TYPE]),
       );
 
@@ -27,7 +27,7 @@ class Todo {
         COLUMN_TITLE: title,
         COLUMN_UNIT: periodUnit,
         COLUMN_VALUE: periodValue,
-        COLUMN_TARGET_TIME: targetTime,
+        COLUMN_TARGET_DATE: targetDate,
         COLUMN_RESET_TYPE: resetType.value,
       };
 
@@ -36,7 +36,7 @@ class Todo {
         title: this.title,
         periodUnit: this.periodUnit,
         periodValue: this.periodValue,
-        targetTime: TimeUtils.calculateTargetTime(this.title, this.periodUnit, this.periodValue, true).millisecondsSinceEpoch,
+        targetDate: TimeUtils.calculateTargetDate(title, periodUnit, periodValue, true).millisecondsSinceEpoch,
         resetType: this.resetType,
       );
 
@@ -46,7 +46,7 @@ class Todo {
     periodValue = $periodValue, 
     periodUnit = $periodUnit, 
     title = $title, 
-    targetTime = $targetTime,
+    targetDate = $targetDate,
     resetType = $resetType}""";
   }
 }
