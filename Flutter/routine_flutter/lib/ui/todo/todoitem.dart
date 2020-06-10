@@ -40,7 +40,7 @@ class TodoItem extends StatelessWidget {
                             entry.periodUnit, entry.periodValue),
                         style: Styles.TODO_ITEM_TIME_TEXT),
                     Text(
-                        TimeUtils.calculateTimeLeft(entry.timestamp.toString()),
+                        TimeUtils.calculateTimeLeft(entry.targetTime.toString()),
                         style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
