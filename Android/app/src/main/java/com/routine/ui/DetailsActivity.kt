@@ -55,8 +55,8 @@ open class DetailsActivity : AppCompatActivity() {
 
         viewModel.titleFlow
             .onEach {
-                if (binding.text.text.toString() != title) {
-                    binding.text.setText(title)
+                if (binding.text.text.toString() != it) {
+                    binding.text.setText(it)
                 }
             }
             .launchIn(lifecycleScope)
@@ -104,7 +104,9 @@ open class DetailsActivity : AppCompatActivity() {
 
         viewModel.errorFlow
             .onEach {
-                showError(binding.root, it.error)
+                it.getContentIfNotHandled()?.let {
+                    showError(binding.root, it.error)
+                }
             }
             .launchIn(lifecycleScope)
 

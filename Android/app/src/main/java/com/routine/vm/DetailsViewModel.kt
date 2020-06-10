@@ -1,5 +1,6 @@
 package com.routine.vm
 
+import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.common.calculateTimestamp
@@ -14,12 +15,13 @@ import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import java.lang.Exception
 import java.util.*
 
 @FlowPreview
 @ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
-class DetailsViewModel(val id: String?) : StatusViewModel() {
+class  DetailsViewModel(val id: String?) : StatusViewModel() {
 
     companion object {
         const val GET_TODO = "GET_TODO"
@@ -38,7 +40,7 @@ class DetailsViewModel(val id: String?) : StatusViewModel() {
 
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
-    val todo by wrapWithAction<String, StoreResponse<TodoEntity>>(GET_TODO) {
+    val todo by wrapWithAction(GET_TODO, id ?: "") {
         TodosRepository.getTodoStore
             .stream(StoreRequest.fresh(it))
             .onEach {
@@ -84,17 +86,23 @@ class DetailsViewModel(val id: String?) : StatusViewModel() {
             }
     }
 
-    val isSaveButtonEnabledFlow = combine(titleFlow, todo, addTodo) { text, todo, addTodo ->
+    val isSaveButtonEnabledFlow = combine(titleFlow, todo,
+        addTodo.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { text, todo, addTodo ->
         text.isNotEmpty() && todo !is StoreResponse.Loading && addTodo !is StoreResponse.Loading
     }
 
-    val progressFlow = combine(todo, addTodo) { todo, addTodo ->
+    val progressFlow = combine(todo,
+        addTodo.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { todo, addTodo ->
         todo is StoreResponse.Loading || addTodo is StoreResponse.Loading
     }
 
-    val errorFlow = merge(todo, addTodo)
-        .filter { it is StoreResponse.Error.Exception }
-        .map { it as  StoreResponse.Error.Exception}
+    val errorFlow by wrapWithAction(initialAction = Any()) {
+        merge(todo, addTodo)
+            .filter { it is StoreResponse.Error.Exception }
+            .map {
+                Event(it as StoreResponse.Error.Exception)
+            }
+    }
 
     fun saveTodo() {
         getAction<Any>(ADD_TODO)?.proceed(Any())
