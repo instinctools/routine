@@ -23,6 +23,7 @@ final class TaskListViewModel: NSObject {
     struct Output {
         let tasks: PublishSubject<[TasksTableSection]>
         let taskSelected: Driver<Task>
+        let placeholder: Driver<UIImage?>
     }
     
     private lazy var taskProvier: TaskProvider = {
@@ -56,7 +57,15 @@ final class TaskListViewModel: NSObject {
         
         let taskSelected: Driver<Task> = input.didTapCellDriver.map { $0.task }
         
-        return Output(tasks: tasks, taskSelected: taskSelected)
+        let placeholder = tasks.map { $0.flatMap({ $0.elements }).isEmpty }
+            .distinctUntilChanged()
+            .map { isEmpty in
+                
+                isEmpty ? UIImage(named: "placeholder") : nil
+            }
+            .asDriver(onErrorJustReturn: nil)
+        
+        return Output(tasks: tasks, taskSelected: taskSelected, placeholder: placeholder)
     }
     
     private func resetTask(viewModel: TaskViewModel) {

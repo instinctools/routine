@@ -85,6 +85,10 @@ final class TaskListViewController: UIViewController {
             .drive()
             .disposed(by: disposeBag)
         
+        output.placeholder
+            .drive(tableView.rx.placeholderView)
+            .disposed(by: disposeBag)
+        
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
     
