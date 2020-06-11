@@ -39,4 +39,14 @@ class Styles {
     fontWeight: FontWeight.w600,
     fontSize: Dimens.EDIT_RESET_SELECTOR_TEXT_SIZE,
   );
+
+  static TextStyle drawerHeaderTitleTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+  );
+
+  static TextStyle drawerHeaderSubtitleTextStyle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
 }
