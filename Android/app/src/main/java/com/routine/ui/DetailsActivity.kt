@@ -79,16 +79,18 @@ open class DetailsActivity : AppCompatActivity() {
                     when (data.periodUnit) {
                         PeriodUnit.DAY -> {
                             period = binding.dayPeriodSelector
+                            period.text.text = resources.getQuantityString(R.plurals.day, data.period, data.period)
                         }
                         PeriodUnit.WEEK -> {
                             period = binding.weekPeriodSelector
+                            period.text.text = resources.getQuantityString(R.plurals.week, data.period, data.period)
                         }
                         PeriodUnit.MONTH -> {
                             period = binding.monthPeriodSelector
+                            period.text.text = resources.getQuantityString(R.plurals.month, data.period, data.period)
                         }
                     }
 
-                    period.text.text = data.period.toString()
                     period.text.isSelected = data.isSelected
                     period.periodMenu.isSelected = data.isSelected
                 }

@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Routine</string>
+
+    <plurals name="day">
+        <item quantity="one">Day</item>
+        <item quantity="other">%1$d Days</item>
+    </plurals>
+
+    <plurals name="week">
+        <item quantity="one">Week</item>
+        <item quantity="other">%1$d Weeks</item>
+    </plurals>
+
+    <plurals name="month">
+        <item quantity="one">Month</item>
+        <item quantity="other">%1$d Months</item>
+    </plurals>
 </resources>
