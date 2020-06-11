@@ -11,19 +11,23 @@ import RxCocoa
 
 final class PeriodViewModel {
     
-    let periodTitle: BehaviorRelay<String>
+    let periodTitle = BehaviorRelay<String>(value: "")
     let selected: BehaviorRelay<Bool>
-    let periodCount = PublishSubject<String>()
+    let periodCount = BehaviorRelay<Int>(value: 1)
     
     let period: Period
     private let disposeBag = DisposeBag()
     
     private init(period: Period, periodCount: Int, selected: Bool) {
-        self.periodTitle = BehaviorRelay(value: period.title(periodCount: periodCount))
         self.selected = BehaviorRelay(value: selected)
         self.period = period
         
-        bind()
+        self.periodCount.accept(periodCount)
+        
+        self.periodCount
+            .map(title(periodCount:))
+            .bind(to: periodTitle)
+            .disposed(by: disposeBag)
     }
     
     convenience init(period: Period) {
@@ -34,17 +38,17 @@ final class PeriodViewModel {
         self.init(period: task.period, periodCount: task.periodCount, selected: true)
     }
     
-    private func bind() {
-        periodCount
-            .map { Int($0) ?? 0 }
-            .map(period.title)
-            .bind(to: periodTitle)
-            .disposed(by: disposeBag)
-        
-        selected
-            .filter { !$0 }
-            .map { _ in "" }
-            .bind(to: periodCount)
-            .disposed(by: disposeBag)
+    private func title(periodCount: Int) -> String {
+        let hasPeriodCount = periodCount > 1
+        switch period {
+        case .day:
+            return hasPeriodCount ? "\(periodCount) Days" : "Day"
+        case .week:
+            return hasPeriodCount ? "\(periodCount) Weeks" : "Week"
+        case .month:
+            return hasPeriodCount ? "\(periodCount) Monthes" : "Month"
+        case .year:
+            return hasPeriodCount ? "\(periodCount) Years" : "Year"
+        }
     }
 }

@@ -27,8 +27,31 @@ final class TaskViewModel {
         self.color = BehaviorRelay(value: color)
         
         self.title.accept(task.title)
-        self.period.accept("Every " + task.period.title(periodCount: task.periodCount))
+        self.period.accept(periodTitle())
         self.timeLeft.accept(calculateTimeLeft())
+    }
+    
+    private func periodTitle() -> String {
+        func periodWithCountPrefix() -> String {
+            if task.periodCount > 6 {
+                return "Every \(task.periodCount)"
+            }
+            let formatter = NumberFormatter()
+            formatter.numberStyle = NumberFormatter.Style.spellOut
+            return "Every " + formatter.string(from: task.periodCount as NSNumber).orEmpty
+        }
+
+        let hasPeriodCount = task.periodCount > 1
+        switch task.period {
+        case .day:
+            return hasPeriodCount ? "\(periodWithCountPrefix()) days" : "Every day"
+        case .week:
+            return hasPeriodCount ? "\(periodWithCountPrefix()) weeks" : "Once a week"
+        case .month:
+            return hasPeriodCount ? "\(periodWithCountPrefix()) monthes" : "Once a month"
+        case .year:
+            return (hasPeriodCount ? "\(periodWithCountPrefix()) years" : "Once a year")
+        }
     }
     
     private func calculateTimeLeft() -> String {

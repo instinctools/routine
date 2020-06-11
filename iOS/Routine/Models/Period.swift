@@ -8,25 +8,11 @@
 
 import Foundation
 
-enum Period: Int, CaseIterable {
+enum Period: Int16, CaseIterable {
     case day
     case week
     case month
     case year
-    
-    func title(periodCount: Int) -> String {
-        let hasPeriod = periodCount > 1
-        switch self {
-        case .day:
-            return hasPeriod ? "\(periodCount) days" : "day"
-        case .week:
-            return hasPeriod ? "\(periodCount) weeks" : "week"
-        case .month:
-            return hasPeriod ? "\(periodCount) monthes" : "month"
-        case .year:
-            return (hasPeriod ? "\(periodCount) years" : "year")
-        }
-    }
         
     var calendarComponent: Calendar.Component {
         switch self {

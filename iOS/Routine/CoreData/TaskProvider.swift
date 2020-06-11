@@ -15,14 +15,16 @@ extension Task {
         title: "Attend a pool",
         period: .day,
         periodCount: 2,
-        finishDate: Date()
+        startDate: Date(),
+        resetType: .toPeriod
     )
     static let mock2: Task = .init(
         id: UUID().uuidString,
         title: "Attend a Church",
         period: .week,
         periodCount: 1,
-        finishDate: Date()
+        startDate: Date(),
+        resetType: .toDate
     )
 }
 
@@ -32,7 +34,8 @@ private extension TaskEntity {
         title = task.title
         period = Int16(task.period.rawValue)
         periodCount = Int16(task.periodCount)
-        finishDate = task.finishDate
+        startDate = task.startDate
+        resetType = task.resetType.rawValue
     }
 }
 
@@ -46,7 +49,7 @@ final class TaskProvider {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TaskEntity> = {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: #keyPath(TaskEntity.finishDate), ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: #keyPath(TaskEntity.startDate), ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         let controller = NSFetchedResultsController(
@@ -94,44 +97,44 @@ final class TaskProvider {
     func resetTask(id: String) {
         do {
             if let taskUpdate = try getTasks(withId: id) {
-                let period = Period(rawValue: Int(taskUpdate.period)).orDefault
-                let periodCount = Int(taskUpdate.periodCount)
-                let finishDate = taskUpdate.finishDate.orToday
-                let calendar = Calendar.current
+                let resetType = Task.ResetType(rawValue: taskUpdate.resetType).orDefault
                 
-                let startDate = calendar.date(
-                    byAdding: period.calendarComponent,
-                    value: -periodCount,
-                    to: finishDate
-                ).orToday
-                
-                let intervalComponent = Calendar.Component.day
-                let fromStartToFinishDateInterval = calendar.dateComponents(
-                    [intervalComponent],
-                    from: startDate,
-                    to: finishDate
-                ).day ?? 0
-                let fromFinishToTodayDateInterval = calendar.dateComponents(
-                    [intervalComponent],
-                    from: finishDate,
-                    to: Date()
-                ).day ?? 0
-                
-                if fromFinishToTodayDateInterval >= fromStartToFinishDateInterval {
-                    let interval = fromFinishToTodayDateInterval % fromStartToFinishDateInterval
-                    taskUpdate.finishDate = calendar.date(
-                        byAdding: intervalComponent,
-                        value: interval,
+                switch resetType {
+                case .toPeriod:
+                    taskUpdate.startDate = Date()
+                    saveContext()
+                case .toDate:
+                    let calendar = Calendar.current
+                    let task = Task(entity: taskUpdate)
+                    
+                    let maxPossibleStartDate = calendar.date(
+                        byAdding: task.period.calendarComponent,
+                        value: task.periodCount / 2,
                         to: Date()
                     ).orToday
-                } else {
-                    taskUpdate.finishDate = calendar.date(
-                        byAdding: period.calendarComponent,
-                        value: periodCount,
-                        to: taskUpdate.finishDate.orToday
+                    
+                    guard task.startDate < maxPossibleStartDate else {
+                        return
+                    }
+                    
+                    var newStartDate = task.startDate
+                    let minPossibleStartDate = calendar.date(
+                        byAdding: task.period.calendarComponent,
+                        value: -task.periodCount,
+                        to: Date()
                     ).orToday
+                    
+                    repeat {
+                        newStartDate = calendar.date(
+                            byAdding: task.period.calendarComponent,
+                            value: task.periodCount,
+                            to: newStartDate
+                        ).orToday
+                    } while newStartDate < minPossibleStartDate
+                    
+                    taskUpdate.startDate = newStartDate
+                    saveContext()
                 }
-                saveContext()
             }
         } catch {
             log(error: error)

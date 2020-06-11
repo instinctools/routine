@@ -37,6 +37,10 @@ final class TaskViewController: UIViewController {
         return textView
     }()
     
+    private lazy var resetTypeSegmentControl = UISegmentedControl(
+        items: ["Reset to period", "Reset to date"]
+    )
+    
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var repeatPeriodsView = PeriodsView()
@@ -92,6 +96,7 @@ final class TaskViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(textView)
+        contentView.addArrangedSubview(resetTypeSegmentControl)
         
         let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
@@ -121,7 +126,8 @@ final class TaskViewController: UIViewController {
         
         let input = TaskDetailsViewModel.Input(
             doneButtonAction: doneButton.rx.tap.asDriver(),
-            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
+            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never()),
+            menuSelection: repeatPeriodsView.menuSelection.asDriver(onErrorJustReturn: ())
         )
         let output = viewModel.transform(input: input)
         
@@ -133,15 +139,19 @@ final class TaskViewController: UIViewController {
             .drive(onNext: dismiss)
             .disposed(by: disposeBag)
         
+        output.showPickerAction
+            .do(onNext: showPeriodPicker)
+            .drive()
+            .disposed(by: disposeBag)
+        
+        
+        (resetTypeSegmentControl.rx.selectedSegmentIndex <-> viewModel.resetTypeIndex)
+            .disposed(by: disposeBag)
+
         (textView.rx.title <-> viewModel.title)
             .disposed(by: disposeBag)
         
-        repeatPeriodsView.bind(items: viewModel.periodItems)
-        
-        repeatPeriodsView.menuSelection
-            .do(onNext: showPeriodPicker)
-            .subscribe()
-            .disposed(by: disposeBag)
+        repeatPeriodsView.bind(items: viewModel.periodItems)        
     }
     
     private func keyboardWillShow(notification: Notification) {

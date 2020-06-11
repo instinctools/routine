@@ -36,6 +36,7 @@
 		DDD6AC072488FAB700D398A0 /* PeriodPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */; };
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
 		DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEA3245245ADC4F00AFD189 /* CloudKit.framework */; };
+		DDEE3AFB24924563006E291D /* UITableView+PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEE3AFA24924563006E291D /* UITableView+PlaceholderView.swift */; };
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
 		DDF0C620242CA3810031299A /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61F242CA3810031299A /* Period.swift */; };
 		DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */; };
@@ -78,6 +79,7 @@
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
 		DDEA3243245ADC4C00AFD189 /* Routine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Routine.entitlements; sourceTree = "<group>"; };
 		DDEA3245245ADC4F00AFD189 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		DDEE3AFA24924563006E291D /* UITableView+PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PlaceholderView.swift"; sourceTree = "<group>"; };
 		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
 		DDF0C61F242CA3810031299A /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
 		DDF0C625242CE7C10031299A /* Task.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task.xcdatamodel; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				DDFD13302462062C00D3BDC7 /* Optional+Default.swift */,
 				DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */,
 				D709E74D2475315D002313BA /* Rx+ViewController.swift */,
+				DDEE3AFA24924563006E291D /* UITableView+PlaceholderView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				DDFA7CE62487D11B002CDC3F /* PresentDismissAnimation.swift in Sources */,
 				D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */,
 				DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */,
+				DDEE3AFB24924563006E291D /* UITableView+PlaceholderView.swift in Sources */,
 				DDF0C620242CA3810031299A /* Period.swift in Sources */,
 				DDFA7CE12487C903002CDC3F /* BottomCardViewController.swift in Sources */,
 				D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */,
