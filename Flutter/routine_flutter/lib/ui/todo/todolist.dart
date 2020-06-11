@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
@@ -30,21 +31,50 @@ class _TodoListState extends State<TodoList> {
             )
           ],
         ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: ListTile(
+                  title: Text(
+                    "Routine",
+                    style: Styles.drawerHeaderTitleTextStyle,
+                  ),
+                  subtitle: Text(
+                    "by Instinctools",
+                    style: Styles.drawerHeaderSubtitleTextStyle,
+                  ),
+                ),
+              ),
+              ListTile(
+                title: Text("Settings"),
+                onTap: () {
+                  print("on item 1 clicked");
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text("Technology"),
+                onTap: () {
+                  print("on item 2 clicked");
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
         body: FutureBuilder<List<Todo>>(
           future: helper.getTodos(),
           builder: (context, futureResult) {
             if (futureResult.connectionState == ConnectionState.done) {
               if (futureResult.data.length > 0) {
                 List<Todo> sortedList = futureResult.data;
-                sortedList.sort((a, b) =>
-                    TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
+                sortedList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
 
                 List<Widget> widgets = _createItemWidgetsList(sortedList);
                 return ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
-                    itemCount: widgets.length,
-                    itemBuilder: (context, index) => widgets[index]);
+                    padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING), itemCount: widgets.length, itemBuilder: (context, index) => widgets[index]);
               } else {
 //              placeholder for empty list
                 return Center(
@@ -84,8 +114,7 @@ class _TodoListState extends State<TodoList> {
 
     for (int i = 0; i < sortedList.length; i++) {
       Todo todo = sortedList[i];
-      int gradientColorIndex =
-          lastExpiredIndex != -1 ? i - lastExpiredIndex - 1 : i;
+      int gradientColorIndex = lastExpiredIndex != -1 ? i - lastExpiredIndex - 1 : i;
 
       widgets.add(_getItemWidget(todo, gradientColorIndex));
 
@@ -109,24 +138,17 @@ class _TodoListState extends State<TodoList> {
             setState(() {});
           },
           confirmDismiss: (direction) => _confirmDismiss(direction, todo),
-          background: _getDismissibleItemBackground(
-              Strings.listResetSlideActionLabel, Colors.green, true),
-          secondaryBackground: _getDismissibleItemBackground(
-              Strings.listDeleteSlideActionLabel, Colors.grey, false),
+          background: _getDismissibleItemBackground(Strings.listResetSlideActionLabel, Colors.green, true),
+          secondaryBackground: _getDismissibleItemBackground(Strings.listDeleteSlideActionLabel, Colors.grey, false),
         ),
         onTap: () => _pushEditScreen(todo: todo));
   }
 
   Widget _getDismissibleItemBackground(String title, Color color, bool isPrimary) {
     var dimen = Dimens.COMMON_PADDING_HALF;
-    var insets = EdgeInsets.only(
-        top: dimen,
-        bottom: dimen,
-        left: isPrimary ? 0.0 : dimen,
-        right: isPrimary ? dimen : 0.0);
+    var insets = EdgeInsets.only(top: dimen, bottom: dimen, left: isPrimary ? 0.0 : dimen, right: isPrimary ? dimen : 0.0);
 
-    MainAxisAlignment alignment =
-        isPrimary ? MainAxisAlignment.start : MainAxisAlignment.end;
+    MainAxisAlignment alignment = isPrimary ? MainAxisAlignment.start : MainAxisAlignment.end;
 
     return Container(
       color: ColorsRes.mainBgColor,
@@ -137,14 +159,10 @@ class _TodoListState extends State<TodoList> {
             heightFactor: 1.0,
             child: Container(
               margin: insets,
-              decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS),
-                  color: color),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS), color: color),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: Dimens.COMMON_PADDING_LARGE),
+                  padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING_LARGE),
                   child: Text(
                     title,
                     style: Styles.TODO_ITEM_TITLE_TEXT,
@@ -180,9 +198,7 @@ class _TodoListState extends State<TodoList> {
         return AlertDialog(
           content: Text(Strings.listDialogContentText),
           actions: <Widget>[
-            FlatButton(
-                child: Text(Strings.listDialogActionCancel),
-                onPressed: () => Navigator.pop(context, false)),
+            FlatButton(child: Text(Strings.listDialogActionCancel), onPressed: () => Navigator.pop(context, false)),
             FlatButton(
                 child: Text(Strings.listDialogActionDelete),
                 onPressed: () async {
@@ -194,10 +210,7 @@ class _TodoListState extends State<TodoList> {
       });
 
   void _pushEditScreen({Todo todo}) async {
-    var isAdded = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => EditScreen(entry: todo)));
+    var isAdded = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo)));
     if (isAdded != null && isAdded) {
       setState(() {});
     }
