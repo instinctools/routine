@@ -41,6 +41,7 @@ private class Delegate<T, R>(
         val scope: CoroutineScope,
         val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
+    // TODO: 11.06.2020 StateFlow?
     private val channel = BroadcastChannel<T>(Channel.CONFLATED)
     private val cache = MutableStateFlow<R?>(null)
     private var isInitialized = false

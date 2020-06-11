@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.routine.data.db.entity.PeriodUnit
+import com.routine.data.db.entity.ResetType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
@@ -75,8 +76,17 @@ fun pickColorBetween(index: Int, maxIndex: Int = 15, color1: IntArray = intArray
     return Color.argb(255, colorRGB[0], colorRGB[1], colorRGB[2])
 }
 
-fun calculateTimestamp(period: Int, periodUnit: PeriodUnit): Date {
-    val dateTime = DateTime().withTimeAtStartOfDay()
+fun calculateTimestamp(
+    period: Int,
+    periodUnit: PeriodUnit,
+    resetType: ResetType = ResetType.BY_PERIOD,
+    currentTimestamp: Date? = null
+): Date {
+    val dateTime = if (resetType == ResetType.BY_PERIOD || currentTimestamp == null) {
+        DateTime().withTimeAtStartOfDay()
+    } else {
+        DateTime(currentTimestamp)
+    }
     val timestamp = when (periodUnit) {
         PeriodUnit.DAY -> dateTime.plusDays(period)
         PeriodUnit.WEEK -> dateTime.plusMonths(period)

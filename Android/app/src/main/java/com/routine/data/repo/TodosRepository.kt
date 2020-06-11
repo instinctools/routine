@@ -1,17 +1,22 @@
 package com.routine.data.repo
 
-import com.dropbox.android.external.store4.*
+import com.dropbox.android.external.store4.SourceOfTruth
+import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.android.external.store4.fresh
+import com.dropbox.android.external.store4.nonFlowValueFetcher
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.routine.common.calculateTimestamp
 import com.routine.common.userIdOrEmpty
 import com.routine.data.db.database
+import com.routine.data.db.entity.PeriodUnit
+import com.routine.data.db.entity.ResetType
 import com.routine.data.db.entity.TodoEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import org.joda.time.DateTime
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -80,21 +85,29 @@ object TodosRepository {
         .build()
 
     val resetTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, Boolean> {
-        val todoEntity = database().todos()
-            .getTodo(it).apply {
-                copy(timestamp = calculateTimestamp(
-                    period,
-                    periodUnit
-                )
-                )
+        val todoEntity = database().todos().getTodo(it)
+
+        if (todoEntity.resetType == ResetType.BY_DATE){
+            val timestamp = DateTime(todoEntity.timestamp)
+            val checkDate = when (todoEntity.periodUnit) {
+                PeriodUnit.DAY -> timestamp.minusDays(todoEntity.period)
+                PeriodUnit.WEEK -> timestamp.minusMonths(todoEntity.period)
+                PeriodUnit.MONTH -> timestamp.minusYears(todoEntity.period)
             }
+
+            if (checkDate.isAfter(DateTime())){
+                return@nonFlowValueFetcher true
+            }
+        }
+
+        val newtodoEntity = todoEntity.run { copy(timestamp = calculateTimestamp(period, periodUnit, resetType, timestamp)) }
 
         Firebase.firestore
             .collection("users")
             .document(Firebase.auth.userIdOrEmpty())
             .collection("todos")
             .document(it)
-            .set(todoEntity)
+            .set(newtodoEntity)
             .await()
 
         todosStore.fresh(Pair(it, false))
