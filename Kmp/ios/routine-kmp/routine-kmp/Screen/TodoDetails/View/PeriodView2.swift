@@ -37,7 +37,7 @@ final class PeriodView2: UIView {
         return view
     }()
     
-    let period: PeriodUnit
+    var period: PeriodUnitUiModel
 
     let selection = PublishSubject<Void>()
     let countChooser = PublishSubject<Int>()
@@ -45,14 +45,23 @@ final class PeriodView2: UIView {
     
     private let disposeBag = DisposeBag()
 
-    init(period: PeriodUnit) {
+    init(period: PeriodUnitUiModel) {
         self.period = period
         self.isSelected = false
         super.init(frame: .zero)
         layer.cornerRadius = 12
         setSelected(isSelected)
         setupLayout()
-        bindPeriod()
+        
+        countSelectionView.rx.tap
+            .do(onNext: {
+                if !self.isSelected {
+                    self.selection.onNext(())
+                }
+                self.countChooser.onNext(Int(self.period.count))
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
     }
 
     required init?(coder: NSCoder) {
@@ -83,18 +92,9 @@ final class PeriodView2: UIView {
         }
     }
     
-    private func bindPeriod() {
-        titleView.text = period.title()
-        
-        countSelectionView.rx.tap
-            .do(onNext: {
-                if !self.isSelected {
-                    self.selection.onNext(())
-                }
-                self.countChooser.onNext(0)
-            })
-            .subscribe()
-            .disposed(by: disposeBag)
+    func bindPeriod(period: PeriodUnitUiModel) {
+        self.period = period
+        titleView.text = period.unit.title(count: Int(period.count))
     }
 
     private func setSelected(_ selected: Bool) {
@@ -110,14 +110,8 @@ final class PeriodView2: UIView {
         }
     }
     
-    func adjustSelection(selectedUnit: PeriodUnit, count: Int) {
-        if selectedUnit == period {
-            setSelected(true)
-            titleView.text = period.title(count: count)
-        } else {
-            setSelected(false)
-            titleView.text = period.title()
-        }
+    func adjustSelection(selectedUnit: PeriodUnit?) {
+        setSelected(selectedUnit == period)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

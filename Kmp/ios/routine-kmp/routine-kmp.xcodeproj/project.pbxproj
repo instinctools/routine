@@ -29,6 +29,11 @@
 		26D059962485368100C34B7D /* Optional+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D059952485368100C34B7D /* Optional+Default.swift */; };
 		26D05998248536F900C34B7D /* UIControl+Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D05997248536F900C34B7D /* UIControl+Responder.swift */; };
 		26D0599A2485478600C34B7D /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D059992485478600C34B7D /* Period.swift */; };
+		26D519842493A3F000833D83 /* BottomCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D519832493A3F000833D83 /* BottomCardViewController.swift */; };
+		26D519872493A41200833D83 /* BottomCardTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D519862493A41200833D83 /* BottomCardTransition.swift */; };
+		26D519892493A42700833D83 /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D519882493A42700833D83 /* PresentationController.swift */; };
+		26D5198B2493A43D00833D83 /* PresentDismissAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D5198A2493A43D00833D83 /* PresentDismissAnimation.swift */; };
+		26D5198D2493A47000833D83 /* PeriodPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D5198C2493A47000833D83 /* PeriodPickerViewController.swift */; };
 		26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26FDF02C24753251003A3E7E /* TodoListViewController.swift */; };
 		BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */; };
 		BEC1EEB82D4714D2EAF011DD /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */; };
@@ -67,6 +72,11 @@
 		26D059952485368100C34B7D /* Optional+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Default.swift"; sourceTree = "<group>"; };
 		26D05997248536F900C34B7D /* UIControl+Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Responder.swift"; sourceTree = "<group>"; };
 		26D059992485478600C34B7D /* Period.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Period.swift; sourceTree = "<group>"; };
+		26D519832493A3F000833D83 /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
+		26D519862493A41200833D83 /* BottomCardTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardTransition.swift; sourceTree = "<group>"; };
+		26D519882493A42700833D83 /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
+		26D5198A2493A43D00833D83 /* PresentDismissAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentDismissAnimation.swift; sourceTree = "<group>"; };
+		26D5198C2493A47000833D83 /* PeriodPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickerViewController.swift; sourceTree = "<group>"; };
 		26FDF02C24753251003A3E7E /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		BEC1E4255EBA836DCA2A0760 /* TodoTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
 		BEC1EC6309CDE64B3590B194 /* TodoRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
@@ -112,6 +122,7 @@
 			children = (
 				2649718D2476DF3200B9D7ED /* View */,
 				2649718B2476DF0800B9D7ED /* TodoDetailsViewController.swift */,
+				26D5198C2493A47000833D83 /* PeriodPickerViewController.swift */,
 			);
 			path = TodoDetails;
 			sourceTree = "<group>";
@@ -187,9 +198,21 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		26D519822493A3D200833D83 /* BottomCard */ = {
+			isa = PBXGroup;
+			children = (
+				26D519832493A3F000833D83 /* BottomCardViewController.swift */,
+				26D519862493A41200833D83 /* BottomCardTransition.swift */,
+				26D519882493A42700833D83 /* PresentationController.swift */,
+				26D5198A2493A43D00833D83 /* PresentDismissAnimation.swift */,
+			);
+			path = BottomCard;
+			sourceTree = "<group>";
+		};
 		26FDF02E2475407B003A3E7E /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				26D519822493A3D200833D83 /* BottomCard */,
 				2649718A2476DEF100B9D7ED /* TodoDetails */,
 				262F38BA24755CDE00CD914D /* TodoList */,
 			);
@@ -302,10 +325,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				26D05998248536F900C34B7D /* UIControl+Responder.swift in Sources */,
+				26D5198D2493A47000833D83 /* PeriodPickerViewController.swift in Sources */,
 				264971952476E06900B9D7ED /* LabelledDivider.swift in Sources */,
 				26FDF02D24753251003A3E7E /* TodoListViewController.swift in Sources */,
 				26D059962485368100C34B7D /* Optional+Default.swift in Sources */,
+				26D519892493A42700833D83 /* PresentationController.swift in Sources */,
+				26D5198B2493A43D00833D83 /* PresentDismissAnimation.swift in Sources */,
 				268C5F5B24755EC0004F3714 /* UIBarButtonItem+Init.swift in Sources */,
+				26D519842493A3F000833D83 /* BottomCardViewController.swift in Sources */,
 				26C44BC124865D6B0041A35B /* PeriodView2.swift in Sources */,
 				268C5F5D24755F80004F3714 /* View+UIView.swift in Sources */,
 				2670E495246D41640040E4E4 /* AppDelegate.swift in Sources */,
@@ -313,6 +340,7 @@
 				26D0599A2485478600C34B7D /* Period.swift in Sources */,
 				BEC1EAD36B334E3609F362A4 /* TodoRowView.swift in Sources */,
 				268C5F5924755E5F004F3714 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
+				26D519872493A41200833D83 /* BottomCardTransition.swift in Sources */,
 				26C44BC324865D8F0041A35B /* PeriodSelectionView.swift in Sources */,
 				2649718C2476DF0800B9D7ED /* TodoDetailsViewController.swift in Sources */,
 				264971912476DF8900B9D7ED /* PlaceholderTextView.swift in Sources */,

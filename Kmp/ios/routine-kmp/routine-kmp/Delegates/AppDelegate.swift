@@ -6,6 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var database = IosDatabaseProvider().database()
     lazy var todoStore = SqlTodoStore(database: database)
+    lazy var todoRepository = TodoRepository(firebaseTodoStore: nil, localTodoStore: todoStore)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
