@@ -4,6 +4,8 @@ import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
+import com.instinctools.routine_kmp.ui.todo.details.model.*
+import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel.Companion.adjustCount
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -28,7 +30,8 @@ class TodoDetailsPresenter(
         if (todoId != null) {
             scope.launch {
                 val todo = todoRepository.getTodoById(todoId) ?: return@launch
-                sendState(state.copy(todo = todo.toEditModel()))
+                val periods = state.periods.adjustCount(todo.periodUnit, todo.periodValue)
+                sendState(state.copy(todo = todo.toEditModel(), periods = periods))
             }
         }
 
@@ -47,7 +50,9 @@ class TodoDetailsPresenter(
                     }
                     is Event.ChangePeriod -> {
                         val todo = state.todo.copy(periodValue = event.period)
-                        sendState(state.copy(todo = todo))
+                        val selectedUnit = todo.periodUnit ?: PeriodUnit.DAY
+                        val newPeriods = state.periods.adjustCount(selectedUnit, event.period)
+                        sendState(state.copy(todo = todo, periods = newPeriods))
                     }
                     is Event.ChangePeriodStrategy -> {
                         val todo = state.todo.copy(periodStrategy = event.periodStrategy)
@@ -95,6 +100,7 @@ class TodoDetailsPresenter(
 
     data class State(
         val todo: EditTodoUiModel = EditTodoUiModel(),
+        val periods: List<PeriodUnitUiModel> = PeriodUnitUiModel.allModels(),
         val saved: Boolean = false,
         val saveEnabled: Boolean = false,
         val validationErrors: Set<ValidationError> = emptySet()

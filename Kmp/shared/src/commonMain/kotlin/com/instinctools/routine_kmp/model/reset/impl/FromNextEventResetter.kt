@@ -4,7 +4,7 @@ import com.instinctools.routine_kmp.data.date.*
 import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.reset.TodoResetter
 
-class IntervalBasedResetter : TodoResetter {
+class FromNextEventResetter : TodoResetter {
 
     override fun reset(todo: Todo): Todo {
         val currentDate = currentDate()

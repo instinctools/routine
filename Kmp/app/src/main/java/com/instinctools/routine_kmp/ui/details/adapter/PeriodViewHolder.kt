@@ -5,29 +5,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ItemPeriodBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
+import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel
 import com.instinctools.routine_kmp.util.title
 
 class PeriodViewHolder(
     private val binding: ItemPeriodBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private lateinit var unit: PeriodUnit
+    private lateinit var item: PeriodUnitUiModel
     private val colorIconSelected = ContextCompat.getColor(itemView.context, R.color.selected_text)
     private val colorIconNormal = ContextCompat.getColor(itemView.context, R.color.unselected_text)
 
-    fun bind(periodUnit: PeriodUnit) {
-        this.unit = periodUnit
-        binding.periodTitle.text = periodUnit.name
+    fun bind(item: PeriodUnitUiModel) {
+        this.item = item
+        binding.periodTitle.text = item.unit.name
+        binding.periodTitle.text = item.unit.title(item.count)
     }
 
-    fun setSelected(selectedPeriodUnit: PeriodUnit?, selectedCount: Int) {
-        if (selectedPeriodUnit == unit) {
+    fun setSelected(selectedPeriodUnit: PeriodUnit?) {
+        if (selectedPeriodUnit == item.unit) {
             itemView.isSelected = true
-            binding.periodTitle.text = unit.title(selectedCount)
             setIconColor(colorIconSelected)
         } else {
             itemView.isSelected = false
-            binding.periodTitle.text = unit.title()
             setIconColor(colorIconNormal)
         }
     }

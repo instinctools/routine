@@ -19,12 +19,12 @@ actual class FirebaseTodoStore {
         val id = document.id
         val title = document.get(FirebaseConst.Todo.title) as String
 
-        val periodUnitId = document.get(FirebaseConst.Todo.periodInit) as Long
-        val periodUnit = PeriodUnit.find(periodUnitId.toInt())
+        val periodUnitId = document.get(FirebaseConst.Todo.periodInit) as String
+        val periodUnit = PeriodUnit.find(periodUnitId)
         val periodValue = document.get(FirebaseConst.Todo.periodValue) as Long
 
-        val resetStrategyId = document.get(FirebaseConst.Todo.periodStrategy) as Long
-        val resetStrategy = PeriodResetStrategy.find(resetStrategyId.toInt())
+        val resetStrategyId = document.get(FirebaseConst.Todo.periodStrategy) as String
+        val resetStrategy = PeriodResetStrategy.find(resetStrategyId)
         val nextTimestamp = document.get(FirebaseConst.Todo.nextTimestamp) as Long
 
         Todo(id, title, periodUnit, periodValue.toInt(), resetStrategy, nextTimestamp)

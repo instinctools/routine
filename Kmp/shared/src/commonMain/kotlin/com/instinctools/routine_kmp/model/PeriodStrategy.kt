@@ -1,11 +1,11 @@
 package com.instinctools.routine_kmp.model
 
-enum class PeriodResetStrategy(val id: Int) {
-    IntervalBased(0),
-    FromNow(1),
+enum class PeriodResetStrategy(val id: String) {
+    FromNextEvent("from_event"),
+    FromNow("from_now"),
     ;
 
     companion object {
-        fun find(id: Int) = values().find { it.id == id } ?: IntervalBased
+        fun find(id: String) = values().find { it.id == id } ?: FromNextEvent
     }
 }

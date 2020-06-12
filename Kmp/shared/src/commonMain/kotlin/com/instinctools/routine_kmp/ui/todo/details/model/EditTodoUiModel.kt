@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.ui.todo.details
+package com.instinctools.routine_kmp.ui.todo.details.model
 
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.plus
@@ -12,7 +12,7 @@ data class EditTodoUiModel(
     val title: String? = null,
     val periodUnit: PeriodUnit? = null,
     val periodValue: Int = 1,
-    val periodStrategy: PeriodResetStrategy = PeriodResetStrategy.IntervalBased,
+    val periodStrategy: PeriodResetStrategy = PeriodResetStrategy.FromNow,
     val nextTimestamp: Long? = null
 )
 

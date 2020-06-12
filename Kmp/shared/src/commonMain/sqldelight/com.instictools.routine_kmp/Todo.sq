@@ -1,9 +1,9 @@
 CREATE TABLE todos (
     id TEXT PRIMARY KEY NOT NULL,
     title TEXT NOT NULL,
-    period_unit INTEGER AS Int NOT NULL,
+    period_unit TEXT NOT NULL,
     period_value INTEGER AS Int NOT NULL,
-    period_strategy INTEGER AS Int NOT NULL,
+    period_strategy TEXT NOT NULL,
     next_timestamp INTEGER NOT NULL
 );
 

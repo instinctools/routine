@@ -18,9 +18,9 @@ class SqlTodoStore(
     private val mapper: (
         id: String,
         title: String,
-        period_unit: Int,
+        period_unit: String,
         period_value: Int,
-        period_strategy: Int,
+        period_strategy: String,
         next_timestamp: Long
     ) -> Todo = { id, title, period_unit, period_value, period_strategy, next_timestamp ->
         Todo(id, title, PeriodUnit.find(period_unit), period_value, PeriodResetStrategy.find(period_strategy), next_timestamp)
