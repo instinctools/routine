@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
+import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
@@ -77,11 +78,7 @@ class _TodoListState extends State<TodoList> {
                     padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING), itemCount: widgets.length, itemBuilder: (context, index) => widgets[index]);
               } else {
 //              placeholder for empty list
-                return Center(
-                    child: Text(
-                  Strings.listEmptyPlaceholderText,
-                  style: Styles.editSelectedPeriodTextStyle,
-                ));
+                return EmptyTodoPlaceholder();
               }
             }
 //            progress bar

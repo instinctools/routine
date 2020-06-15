@@ -13,7 +13,9 @@ class Strings {
   static const String edit_reset_selector_to_period = 'Reset to period';
   static const String edit_reset_selector_to_date = 'Reset to date';
 
-  static const String listEmptyPlaceholderText = "You don't have any tasks";
+  static const String emptyTodosPlaceholderTitle = "Oh! It's still empty";
+  static const String emptyTodosPlaceholderSubtitle = "There are no routine tasks";
+
   static const String listResetSlideActionLabel = "Reset";
   static const String listDeleteSlideActionLabel = "Delete";
   static const String listDialogContentText =
