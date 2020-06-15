@@ -3,7 +3,7 @@ import RxSwift
 import RxBiBinding
 import RoutineSharedKmp
 
-final class PeriodView2: UIView {
+final class PeriodView: UIView {
 
     private let stackView: UIStackView = {
         let stackView = UIStackView()

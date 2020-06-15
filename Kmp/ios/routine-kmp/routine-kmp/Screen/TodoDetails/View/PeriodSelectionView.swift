@@ -37,9 +37,9 @@ final class PeriodSelectionView: UIView {
     
     func showPeriods(periods: [PeriodUnitUiModel]) {
         for period in periods {
-            var periodView: PeriodView2? = nil
+            var periodView: PeriodView? = nil
             for child in stackView.subviews {
-                if let castedChild = child as? PeriodView2 {
+                if let castedChild = child as? PeriodView {
                     if(castedChild.period.unit == period.unit) {
                         periodView = castedChild
                     }
@@ -47,7 +47,7 @@ final class PeriodSelectionView: UIView {
             }
             
             if periodView == nil {
-                periodView = PeriodView2(period: period)
+                periodView = PeriodView(period: period)
                 
                 periodView!.selection.map {
                     self.selection.onNext(periodView!.period)
@@ -66,7 +66,7 @@ final class PeriodSelectionView: UIView {
     
     func selectPeriod(unit: PeriodUnit?) {
         for view in stackView.subviews {
-            let periodView = view as? PeriodView2
+            let periodView = view as? PeriodView
             periodView?.adjustSelection(selectedUnit: unit)
         }
     }

@@ -19,7 +19,7 @@ final class TodoListViewController: UIViewController {
 
     private lazy var presenter: TodoListPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let presenter = TodoListPresenter(todoStore: appDelegate.todoRepository)
+        let presenter = TodoListPresenter(todoRepository: appDelegate.todoRepository)
         return presenter
     }()
     private lazy var uiBinder = UiBinder<TodoListPresenter.State, TodoListPresenter.Event>()

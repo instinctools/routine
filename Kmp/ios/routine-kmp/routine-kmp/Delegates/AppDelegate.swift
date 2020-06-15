@@ -1,4 +1,5 @@
 import UIKit
+import Firebase
 import RoutineSharedKmp
 
 @UIApplicationMain
@@ -6,10 +7,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     lazy var database = IosDatabaseProvider().database()
     lazy var todoStore = SqlTodoStore(database: database)
-    lazy var todoRepository = TodoRepository(firebaseTodoStore: nil, localTodoStore: todoStore)
+    lazy var firebaseTodoStore = FirebaseTodoStore(interactor: FirebaseInteractor())
+    lazy var todoRepository = TodoRepository(firebaseTodoStore: firebaseTodoStore, localTodoStore: todoStore)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
         return true
     }
 

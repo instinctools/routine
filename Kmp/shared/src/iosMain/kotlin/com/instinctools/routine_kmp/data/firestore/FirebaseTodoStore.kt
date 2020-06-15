@@ -2,7 +2,9 @@ package com.instinctools.routine_kmp.data.firestore
 
 import com.instinctools.routine_kmp.model.Todo
 
-actual class FirebaseTodoStore {
+actual class FirebaseTodoStore(
+    val interactor: IosFirestoreInteractor
+) {
 
     actual suspend fun fetchTodos(): List<Todo> {
         TODO("Not yet implemented")
