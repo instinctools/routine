@@ -20,4 +20,11 @@ class MainRepository {
       await transaction.update(todo.reference, todo.toMap());
     });
   }
+
+  void deleteTodo(Todo todo) {
+    print("delete Todo ");
+    Firestore.instance.runTransaction((transaction) async {
+      await transaction.delete(todo.reference);
+    });
+  }
 }

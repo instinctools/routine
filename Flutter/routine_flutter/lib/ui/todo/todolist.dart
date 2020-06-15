@@ -198,7 +198,7 @@ class _TodoListState extends State<TodoList> {
     }*/
   }
 
-  Future<bool> _showConfirmDialog(Todo item) async => await showDialog(
+  Future<bool> _showConfirmDialog(Todo todo) async => await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -207,10 +207,9 @@ class _TodoListState extends State<TodoList> {
             FlatButton(child: Text(Strings.listDialogActionCancel), onPressed: () => Navigator.pop(context, false)),
             FlatButton(
                 child: Text(Strings.listDialogActionDelete),
-                onPressed: () async {
-//                  bool isSuccess = await helper.deleteTodo(item.id) != null;
-                  bool isSuccess = true; //todo work with it
-                  Navigator.pop(context, isSuccess);
+                onPressed: () {
+                  mainRepository.deleteTodo(todo);
+                  Navigator.pop(context);
                 }),
           ],
         );
