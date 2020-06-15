@@ -49,4 +49,11 @@ class Styles {
     fontWeight: FontWeight.w500,
     fontSize: 18,
   );
+
+  static const TextStyle emptyTodosPlaceholderTitle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+
+  static const TextStyle emptyTodosPlaceholderSubtitle = TextStyle(fontSize: 14, color: Colors.black38);
 }
