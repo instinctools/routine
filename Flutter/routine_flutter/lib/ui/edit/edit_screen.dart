@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/repository/MainRepository.dart';
 import 'package:routine_flutter/ui/edit/ResetSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
@@ -10,16 +11,20 @@ import 'package:routine_flutter/utils/styles.dart';
 
 class EditScreen extends StatefulWidget {
   final Todo entry;
+  final MainRepository mainRepository;
 
-  EditScreen({this.entry});
+  EditScreen({this.entry, this.mainRepository});
 
   @override
-  _EditScreenState createState() => _EditScreenState();
+  _EditScreenState createState() => _EditScreenState(mainRepository);
 }
 
 class _EditScreenState extends State<EditScreen> {
   EditPresenter presenter;
+  final MainRepository _mainRepository;
   DatabaseHelper helper;
+
+  _EditScreenState(this._mainRepository);
 
   @override
   void initState() {
@@ -79,7 +84,9 @@ class _EditScreenState extends State<EditScreen> {
 
   void doDone() async {
     if (presenter.validateAndPrint()) {
-      await helper.changeTodo(presenter.getResult());
+      await _mainRepository.addTodo();
+//      await mainPresenter.
+//      await helper.changeTodo(presenter.getResult());
       Navigator.pop(context, true);
     }
   }
@@ -102,13 +109,9 @@ class _TitleInputFormState extends State<TitleInputForm> {
         controller: widget.presenter.controller,
         style: Styles.edit_input_text_style,
         keyboardType: TextInputType.text,
-        validator: (value) =>
-            value.isNotEmpty ? null : Strings.edit_input_error_message,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: Styles.edit_input_text_style,
-            hintText: Strings.edit_text_input_hint,
-            errorStyle: Styles.edit_input_error_style),
+        validator: (value) => value.isNotEmpty ? null : Strings.edit_input_error_message,
+        decoration:
+            InputDecoration(border: InputBorder.none, hintStyle: Styles.edit_input_text_style, hintText: Strings.edit_text_input_hint, errorStyle: Styles.edit_input_error_style),
       ),
     );
   }
@@ -125,9 +128,7 @@ class DividerWithLabel extends StatelessWidget {
           flex: 1,
           child: Container(
             margin: EdgeInsets.only(right: Dimens.COMMON_PADDING),
-            child: Divider(
-                thickness: Dimens.edit_divider_thickness,
-                color: Colors.black26),
+            child: Divider(thickness: Dimens.edit_divider_thickness, color: Colors.black26),
           ),
         ),
         Text(

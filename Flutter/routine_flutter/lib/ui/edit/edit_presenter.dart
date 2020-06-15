@@ -6,7 +6,7 @@ import 'package:routine_flutter/utils/time_utils.dart';
 import 'ResetType.dart';
 
 class EditPresenter {
-  int id;
+  String id;
   String periodUnit = 'day';
   int periodValue = 1;
   ResetType resetType = ResetType.RESET_TO_PERIOD;
@@ -33,11 +33,12 @@ class EditPresenter {
     }
   }
 
-  Todo getResult() => Todo(
-      id: id,
-      title: controller.value.text,
-      periodUnit: periodUnit,
-      periodValue: periodValue,
-      targetDate: TimeUtils.addPeriodToCurrentMoment(controller.value.text, periodUnit, periodValue).millisecondsSinceEpoch,
-      resetType: resetType);
+  NewTodo getResult() => NewTodo(
+        id,
+        controller.value.text,
+        periodUnit,
+        periodValue,
+        TimeUtils.addPeriodToCurrentMoment(controller.value.text, periodUnit, periodValue).millisecondsSinceEpoch,
+        resetType,
+      );
 }
