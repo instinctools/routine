@@ -1,4 +1,4 @@
-import 'package:routine_flutter/ui/edit/ResetType.dart';
+import 'package:routine_flutter/ui/edit/resetType.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 
 class TimeUtils {

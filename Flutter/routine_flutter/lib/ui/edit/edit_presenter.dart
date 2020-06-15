@@ -1,20 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/repository/MainRepository.dart';
+import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
-import 'ResetType.dart';
+import 'resetType.dart';
 
 class EditPresenter {
   String id;
-  String periodUnit = 'day';
+  String periodUnit = Period.DAY.name;
   int periodValue = 1;
   ResetType resetType = ResetType.RESET_TO_PERIOD;
 
   final TextEditingController controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  EditPresenter(Todo todo) {
+  MainRepository mainRepository;
+
+  EditPresenter(MainRepository mainRepository, Todo todo) {
+    this.mainRepository = mainRepository;
     if (todo != null) {
       this.id = todo.id;
       this.periodUnit = todo.periodUnit;
@@ -33,12 +38,20 @@ class EditPresenter {
     }
   }
 
-  NewTodo getResult() => NewTodo(
-        id,
-        controller.value.text,
-        periodUnit,
-        periodValue,
-        TimeUtils.addPeriodToCurrentMoment(controller.value.text, periodUnit, periodValue).millisecondsSinceEpoch,
-        resetType,
+  void onDoneClicked() {
+    if (id == null) {
+      mainRepository.addTodo(
+        Todo(
+          controller.value.text + DateTime.now().millisecondsSinceEpoch.toString(), // id = title + now.inMillisecondsSinceEpoch
+          controller.value.text,
+          periodUnit,
+          periodValue,
+          TimeUtils.addPeriodToCurrentMoment(controller.value.text, periodUnit, periodValue).millisecondsSinceEpoch,
+          resetType,
+        ),
       );
+    } else {
+      mainRepository.updateTodo();
+    }
+  }
 }

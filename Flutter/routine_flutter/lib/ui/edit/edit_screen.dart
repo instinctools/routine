@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/repository/MainRepository.dart';
-import 'package:routine_flutter/ui/edit/ResetSelector.dart';
+import 'package:routine_flutter/ui/edit/resetSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -29,7 +29,7 @@ class _EditScreenState extends State<EditScreen> {
   @override
   void initState() {
     super.initState();
-    presenter = EditPresenter(widget.entry);
+    presenter = EditPresenter(_mainRepository, widget.entry);
     helper = DatabaseHelper();
   }
 
@@ -84,9 +84,7 @@ class _EditScreenState extends State<EditScreen> {
 
   void doDone() async {
     if (presenter.validateAndPrint()) {
-      await _mainRepository.addTodo();
-//      await mainPresenter.
-//      await helper.changeTodo(presenter.getResult());
+      presenter.onDoneClicked();
       Navigator.pop(context, true);
     }
   }

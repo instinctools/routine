@@ -4,7 +4,7 @@ import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
-import 'ResetType.dart';
+import 'resetType.dart';
 
 class ResetSelector extends StatefulWidget {
   final EditPresenter _presenter;

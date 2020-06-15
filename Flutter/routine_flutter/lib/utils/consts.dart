@@ -20,6 +20,14 @@ class Strings {
       "Are You sure want to delete this task?";
   static const String listDialogActionCancel = "Cancel";
   static const String listDialogActionDelete = "Delete";
+
+  static const String todoKeyId = "id";
+  static const String todoKeyPeriod = "period";
+  static const String todoKeyPeriodUnit = "periodUnit";
+  static const String todoKeyResetType = "resetType";
+  static const String todoKeyTitle = "title";
+  static const String todoKeyTargetDate = "targetDate";
+  static const String todoKeyTimestamp = "timestamp";
 }
 
 class Dimens {
