@@ -9,12 +9,15 @@ class MainRepository {
     return collection.snapshots();
   }
 
-  void addTodo(Todo todo) async{
+  void addTodo(Todo todo) async {
     print("add Todo ");
     collection.add(todo.toMap());
   }
 
-  void updateTodo() {
+  void updateTodo(Todo todo) {
     print("update Todo ");
+    Firestore.instance.runTransaction((transaction) async {
+      await transaction.update(todo.reference, todo.toMap());
+    });
   }
 }

@@ -32,6 +32,7 @@ class Todo {
     periodUnit = $periodUnit, 
     title = $title, 
     targetDate = $targetDate,
+    reference = $reference,
     resetType = $resetType}""";
   }
 
