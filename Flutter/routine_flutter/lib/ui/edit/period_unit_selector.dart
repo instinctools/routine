@@ -72,15 +72,15 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
           _onPeriodSelected(data.id);
         },
         child: Container(
-            margin: EdgeInsets.only(top: Dimens.COMMON_PADDING_DOUBLE),
+            margin: EdgeInsets.only(top: Dimens.commonPaddingDouble),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(
-                    Dimens.edit_period_button_border_radius),
+                    Dimens.editPeriodButtonBorderRadius),
                 color: bgColor),
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: Dimens.COMMON_PADDING_DOUBLE,
-                  vertical: Dimens.COMMON_PADDING_DOUBLE),
+                  horizontal: Dimens.commonPaddingDouble,
+                  vertical: Dimens.commonPaddingDouble),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

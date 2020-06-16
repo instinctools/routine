@@ -1,52 +1,63 @@
-import 'package:routine_flutter/ui/edit/ResetType.dart';
-import 'package:routine_flutter/utils/time_utils.dart';
-
-import 'db_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:routine_flutter/ui/edit/resetType.dart';
+import 'package:routine_flutter/utils/consts.dart';
 
 class Todo {
-  final int id;
+  final String id;
   final String title;
   final String periodUnit;
   final int periodValue;
-  final int targetDate;
+  final int targetDate; //MillisecondsSinceEpoch
   final ResetType resetType;
+  final DocumentReference reference;
 
-  Todo({this.id, this.title, this.periodUnit, this.periodValue, this.targetDate, this.resetType});
+  Todo(this.id, this.title, this.periodUnit, this.periodValue, this.targetDate, this.resetType, [this.reference]);
 
-  factory Todo.fromMap(Map<String, dynamic> map) => Todo(
-        id: map[COLUMN_ID],
-        title: map[COLUMN_TITLE],
-        periodUnit: map[COLUMN_UNIT],
-        periodValue: map[COLUMN_VALUE],
-        targetDate: map[COLUMN_TARGET_DATE],
-        resetType: findResetType(map[COLUMN_RESET_TYPE]),
-      );
-
-  Map<String, dynamic> toMap() => {
-        COLUMN_ID: id,
-        COLUMN_TITLE: title,
-        COLUMN_UNIT: periodUnit,
-        COLUMN_VALUE: periodValue,
-        COLUMN_TARGET_DATE: targetDate,
-        COLUMN_RESET_TYPE: resetType.value,
-      };
-
-  Todo resetTargetDate() => Todo(
-        id: this.id,
-        title: this.title,
-        periodUnit: this.periodUnit,
-        periodValue: this.periodValue,
-        targetDate: TimeUtils.updateTargetDate(title, periodUnit, periodValue, resetType, targetDate).millisecondsSinceEpoch,
-        resetType: this.resetType,
-      );
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> values = {
+      Strings.todoKeyId: id,
+      Strings.todoKeyPeriod: periodValue,
+      Strings.todoKeyPeriodUnit: periodUnit,
+      Strings.todoKeyResetType: resetType.value,
+      Strings.todoKeyTimestamp: Timestamp.fromMillisecondsSinceEpoch(targetDate),
+      Strings.todoKeyTitle: title,
+    };
+    return values;
+  }
 
   @override
   String toString() {
-    return """Todo{id = $id, 
-    periodValue = $periodValue, 
-    periodUnit = $periodUnit, 
-    title = $title, 
-    targetDate = $targetDate,
-    resetType = $resetType}""";
+    return """Todo{${Strings.todoKeyId} = $id, 
+    ${Strings.todoKeyPeriod} = $periodValue, 
+    ${Strings.todoKeyPeriodUnit} = $periodUnit, 
+    ${Strings.todoKeyResetType} = $resetType},
+    ${Strings.todoKeyTargetDate} = $targetDate,
+    ${Strings.todoKeyTitle} = $title, 
+    ${Strings.todoKeyReference} = $reference""";
   }
+
+  Todo.updateTargetDate(Todo todo, int newTargetDate)
+      : id = todo.id,
+        periodValue = todo.periodValue,
+        periodUnit = todo.periodUnit,
+        resetType = todo.resetType,
+        targetDate = newTargetDate,
+        title = todo.title,
+        reference = todo.reference;
+
+  Todo.fromDocumentSnapshotMap(Map<String, dynamic> map, {this.reference})
+      : assert(map[Strings.todoKeyId] != null),
+        assert(map[Strings.todoKeyPeriod] != null),
+        assert(map[Strings.todoKeyPeriodUnit] != null),
+        assert(map[Strings.todoKeyResetType] != null),
+        assert(map[Strings.todoKeyTimestamp] != null),
+        assert(map[Strings.todoKeyTitle] != null),
+        id = map[Strings.todoKeyId],
+        periodValue = map[Strings.todoKeyPeriod],
+        periodUnit = map[Strings.todoKeyPeriodUnit],
+        resetType = findResetType(map[Strings.todoKeyResetType]),
+        targetDate = ((map[Strings.todoKeyTimestamp]) as Timestamp).millisecondsSinceEpoch,
+        title = map[Strings.todoKeyTitle];
+
+  Todo.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) : this.fromDocumentSnapshotMap(documentSnapshot.data, reference: documentSnapshot.reference);
 }

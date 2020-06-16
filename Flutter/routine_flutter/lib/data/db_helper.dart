@@ -54,10 +54,11 @@ class DatabaseHelper {
     var db = await database;
     var queryMap = await db.query(TABLE_NAME);
     print("all items:  $queryMap");
-    var todos = queryMap.map((item) => Todo.fromMap(item)).toList();
+    var todos = Iterable.empty();
+//    queryMap.map((item) => Todo.fromMap(item)).toList();
     return todos.toList();
   }
-
+/*
   Future<int> changeTodo(Todo todo) async {
     var db = await database;
 
@@ -66,7 +67,7 @@ class DatabaseHelper {
     } else {
       return await db.insert(TABLE_NAME, todo.toMap());
     }
-  }
+  }*/
 
   Future<int> deleteTodo(int id) async {
     var db = await database;

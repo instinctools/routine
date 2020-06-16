@@ -20,6 +20,6 @@ class EmptyTodoPlaceholder extends StatelessWidget {
       );
 
   Widget _getTextField(String text, TextStyle style) {
-    return Padding(padding: EdgeInsets.only(top: Dimens.COMMON_PADDING), child: Text(text, style: style));
+    return Padding(padding: EdgeInsets.only(top: Dimens.commonPadding), child: Text(text, style: style));
   }
 }

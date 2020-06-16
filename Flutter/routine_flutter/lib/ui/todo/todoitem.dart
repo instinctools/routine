@@ -15,12 +15,12 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        margin: EdgeInsets.symmetric(vertical: Dimens.COMMON_PADDING_HALF),
+        margin: EdgeInsets.symmetric(vertical: Dimens.commonPaddingHalf),
         decoration: BoxDecoration(
             color: _pickItemColor(index),
-            borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS)),
+            borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius)),
         child: Padding(
-          padding: EdgeInsets.all(Dimens.COMMON_PADDING),
+          padding: EdgeInsets.all(Dimens.commonPadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class TodoItem extends StatelessWidget {
                 style: Styles.TODO_ITEM_TITLE_TEXT,
               ),
               Padding(
-                padding: EdgeInsets.only(top: Dimens.COMMON_PADDING_DOUBLE),
+                padding: EdgeInsets.only(top: Dimens.commonPaddingDouble),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

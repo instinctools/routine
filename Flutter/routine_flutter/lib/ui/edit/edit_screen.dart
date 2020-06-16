@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/ui/edit/ResetSelector.dart';
+import 'package:routine_flutter/repository/mainRepository.dart';
+import 'package:routine_flutter/ui/edit/resetSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -10,21 +11,25 @@ import 'package:routine_flutter/utils/styles.dart';
 
 class EditScreen extends StatefulWidget {
   final Todo entry;
+  final MainRepository mainRepository;
 
-  EditScreen({this.entry});
+  EditScreen({this.entry, this.mainRepository});
 
   @override
-  _EditScreenState createState() => _EditScreenState();
+  _EditScreenState createState() => _EditScreenState(mainRepository);
 }
 
 class _EditScreenState extends State<EditScreen> {
   EditPresenter presenter;
+  final MainRepository _mainRepository;
   DatabaseHelper helper;
+
+  _EditScreenState(this._mainRepository);
 
   @override
   void initState() {
     super.initState();
-    presenter = EditPresenter(widget.entry);
+    presenter = EditPresenter(_mainRepository, widget.entry);
     helper = DatabaseHelper();
   }
 
@@ -41,14 +46,14 @@ class _EditScreenState extends State<EditScreen> {
           children: <Widget>[
             FlatButton(
               child: Text(
-                Strings.EDIT_CANCEL_BUTTON_TEXT,
+                Strings.editCancelButtonText,
                 style: Styles.edit_appbar_cancel_text_style,
               ),
               onPressed: () => Navigator.pop(context),
             ),
             FlatButton(
               child: Text(
-                Strings.EDIT_DONE_BUTTON_TEXT,
+                Strings.editDoneButtonText,
                 style: Styles.edit_appbar_done_text_style,
               ),
               onPressed: () {
@@ -79,7 +84,7 @@ class _EditScreenState extends State<EditScreen> {
 
   void doDone() async {
     if (presenter.validateAndPrint()) {
-      await helper.changeTodo(presenter.getResult());
+      presenter.onDoneClicked();
       Navigator.pop(context, true);
     }
   }
@@ -102,13 +107,9 @@ class _TitleInputFormState extends State<TitleInputForm> {
         controller: widget.presenter.controller,
         style: Styles.edit_input_text_style,
         keyboardType: TextInputType.text,
-        validator: (value) =>
-            value.isNotEmpty ? null : Strings.edit_input_error_message,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: Styles.edit_input_text_style,
-            hintText: Strings.edit_text_input_hint,
-            errorStyle: Styles.edit_input_error_style),
+        validator: (value) => value.isNotEmpty ? null : Strings.editInputErrorMessage,
+        decoration:
+            InputDecoration(border: InputBorder.none, hintStyle: Styles.edit_input_text_style, hintText: Strings.editTextInputHint, errorStyle: Styles.edit_input_error_style),
       ),
     );
   }
@@ -124,22 +125,20 @@ class DividerWithLabel extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.only(right: Dimens.COMMON_PADDING),
-            child: Divider(
-                thickness: Dimens.edit_divider_thickness,
-                color: Colors.black26),
+            margin: EdgeInsets.only(right: Dimens.commonPadding),
+            child: Divider(thickness: Dimens.editDividerThickness, color: Colors.black26),
           ),
         ),
         Text(
-          Strings.edit_divider_label,
+          Strings.editDividerLabel,
           style: Styles.edit_divider_label_style,
         ),
         Expanded(
           flex: 4,
           child: Container(
-            margin: EdgeInsets.only(left: Dimens.COMMON_PADDING),
+            margin: EdgeInsets.only(left: Dimens.commonPadding),
             child: Divider(
-              thickness: Dimens.edit_divider_thickness,
+              thickness: Dimens.editDividerThickness,
               color: Colors.black26,
             ),
           ),

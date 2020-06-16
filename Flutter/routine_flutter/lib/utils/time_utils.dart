@@ -1,4 +1,5 @@
-import 'package:routine_flutter/ui/edit/ResetType.dart';
+import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/ui/edit/resetType.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 
 class TimeUtils {
@@ -17,41 +18,44 @@ class TimeUtils {
     return '$periodCount$periodUnit$pluralPostfix';
   }
 
-  static DateTime updateTargetDate(String title, String periodUnit, int periodValue, ResetType resetType, int targetDate) {
-    switch (resetType) {
+  static Todo updateTargetDate(Todo todo) {
+    DateTime newTargetDate;
+    switch (todo.resetType) {
       case ResetType.RESET_TO_PERIOD:
-        return addPeriodToCurrentMoment(title, periodUnit, periodValue);
+        newTargetDate = addPeriodToCurrentMoment(todo.title, todo.periodUnit, todo.periodValue);
+        break;
       case ResetType.RESET_TO_DATE:
         DateTime now = getCurrentTime();
-        if (compareDateTimes(targetDate, now.millisecondsSinceEpoch) < 0) {
+        if (compareDateTimes(todo.targetDate, now.millisecondsSinceEpoch) < 0) {
           // targetDate is gone. set now + period
-          return addPeriodToCurrentMoment(title, periodUnit, periodValue);
+          newTargetDate = addPeriodToCurrentMoment(todo.title, todo.periodUnit, todo.periodValue);
+          break;
         } else {
-          DateTime targetDateTime = DateTime.fromMillisecondsSinceEpoch(targetDate, isUtc: false);
+          DateTime targetDateTime = DateTime.fromMillisecondsSinceEpoch(todo.targetDate, isUtc: false);
           var daysLeft = targetDateTime.difference(now).inDays;
           int day = 0;
           int month = 0;
-          switch (findPeriod(periodUnit)) {
+          switch (findPeriod(todo.periodUnit)) {
             case Period.DAY:
-              day = periodValue;
+              day = todo.periodValue;
               break;
             case Period.WEEK:
-              day = periodValue * 7;
+              day = todo.periodValue * 7;
               break;
             case Period.MONTH:
-              month = periodValue;
+              month = todo.periodValue;
               break;
           }
           int periodInDays = day + month * 30;
           if (daysLeft <= periodInDays) {
-            return DateTime(now.year, now.month + month, now.day + day + daysLeft);
+            newTargetDate = DateTime(now.year, now.month + month, now.day + day + daysLeft);
           } else {
             //do nothing return the same targetDateTime
-            return targetDateTime;
+            newTargetDate = targetDateTime;
           }
         }
     }
-    return getCurrentTime();
+    return Todo.updateTargetDate(todo, newTargetDate.millisecondsSinceEpoch);
   }
 
   static DateTime addPeriodToCurrentMoment(String title, String periodUnit, int periodValue) {
