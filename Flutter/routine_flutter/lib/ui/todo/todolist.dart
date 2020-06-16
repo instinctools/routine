@@ -25,7 +25,7 @@ class _TodoListState extends State<TodoList> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          Strings.APP_NAME,
+          Strings.appName,
         ),
         actions: <Widget>[
           IconButton(
@@ -99,7 +99,7 @@ class _TodoListState extends State<TodoList> {
     todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
     List<Widget> widgets = _createItemWidgetsList(todoList);
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING),
+      padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
       itemCount: widgets.length,
       itemBuilder: (context, index) => widgets[index],
     );
@@ -151,7 +151,7 @@ class _TodoListState extends State<TodoList> {
   }
 
   Widget _getDismissibleItemBackground(String title, Color color, bool isPrimary) {
-    var dimen = Dimens.COMMON_PADDING_HALF;
+    var dimen = Dimens.commonPaddingHalf;
     var insets = EdgeInsets.only(top: dimen, bottom: dimen, left: isPrimary ? 0.0 : dimen, right: isPrimary ? dimen : 0.0);
 
     MainAxisAlignment alignment = isPrimary ? MainAxisAlignment.start : MainAxisAlignment.end;
@@ -165,10 +165,10 @@ class _TodoListState extends State<TodoList> {
             heightFactor: 1.0,
             child: Container(
               margin: insets,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS), color: color),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius), color: color),
               child: Center(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Dimens.COMMON_PADDING_LARGE),
+                  padding: EdgeInsets.symmetric(horizontal: Dimens.commonPaddingLarge),
                   child: Text(
                     title,
                     style: Styles.TODO_ITEM_TITLE_TEXT,

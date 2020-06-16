@@ -46,14 +46,14 @@ class _EditScreenState extends State<EditScreen> {
           children: <Widget>[
             FlatButton(
               child: Text(
-                Strings.EDIT_CANCEL_BUTTON_TEXT,
+                Strings.editCancelButtonText,
                 style: Styles.edit_appbar_cancel_text_style,
               ),
               onPressed: () => Navigator.pop(context),
             ),
             FlatButton(
               child: Text(
-                Strings.EDIT_DONE_BUTTON_TEXT,
+                Strings.editDoneButtonText,
                 style: Styles.edit_appbar_done_text_style,
               ),
               onPressed: () {
@@ -107,9 +107,9 @@ class _TitleInputFormState extends State<TitleInputForm> {
         controller: widget.presenter.controller,
         style: Styles.edit_input_text_style,
         keyboardType: TextInputType.text,
-        validator: (value) => value.isNotEmpty ? null : Strings.edit_input_error_message,
+        validator: (value) => value.isNotEmpty ? null : Strings.editInputErrorMessage,
         decoration:
-            InputDecoration(border: InputBorder.none, hintStyle: Styles.edit_input_text_style, hintText: Strings.edit_text_input_hint, errorStyle: Styles.edit_input_error_style),
+            InputDecoration(border: InputBorder.none, hintStyle: Styles.edit_input_text_style, hintText: Strings.editTextInputHint, errorStyle: Styles.edit_input_error_style),
       ),
     );
   }
@@ -125,20 +125,20 @@ class DividerWithLabel extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            margin: EdgeInsets.only(right: Dimens.COMMON_PADDING),
-            child: Divider(thickness: Dimens.edit_divider_thickness, color: Colors.black26),
+            margin: EdgeInsets.only(right: Dimens.commonPadding),
+            child: Divider(thickness: Dimens.editDividerThickness, color: Colors.black26),
           ),
         ),
         Text(
-          Strings.edit_divider_label,
+          Strings.editDividerLabel,
           style: Styles.edit_divider_label_style,
         ),
         Expanded(
           flex: 4,
           child: Container(
-            margin: EdgeInsets.only(left: Dimens.COMMON_PADDING),
+            margin: EdgeInsets.only(left: Dimens.commonPadding),
             child: Divider(
-              thickness: Dimens.edit_divider_thickness,
+              thickness: Dimens.editDividerThickness,
               color: Colors.black26,
             ),
           ),

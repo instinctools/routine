@@ -37,7 +37,7 @@ class Styles {
 
   static TextStyle editResetTypeTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
-    fontSize: Dimens.EDIT_RESET_SELECTOR_TEXT_SIZE,
+    fontSize: Dimens.editResetSelectorTextSize,
   );
 
   static TextStyle drawerHeaderTitleTextStyle = TextStyle(

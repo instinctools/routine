@@ -27,13 +27,13 @@ class Todo {
 
   @override
   String toString() {
-    return """Todo{id = $id, 
-    periodValue = $periodValue, 
-    periodUnit = $periodUnit, 
-    title = $title, 
-    targetDate = $targetDate,
-    reference = $reference,
-    resetType = $resetType}""";
+    return """Todo{${Strings.todoKeyId} = $id, 
+    ${Strings.todoKeyPeriod} = $periodValue, 
+    ${Strings.todoKeyPeriodUnit} = $periodUnit, 
+    ${Strings.todoKeyResetType} = $resetType},
+    ${Strings.todoKeyTargetDate} = $targetDate,
+    ${Strings.todoKeyTitle} = $title, 
+    ${Strings.todoKeyReference} = $reference""";
   }
 
   Todo.updateTargetDate(Todo todo, int newTargetDate)

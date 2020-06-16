@@ -32,12 +32,12 @@ class _ResetSelectorState extends State<ResetSelector> {
               textColor: _setTextColor(ResetType.RESET_TO_PERIOD, _presenter.resetType),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(Dimens.EDIT_RESET_SELECTOR_BORDER_RADIUS),
-                  bottomLeft: Radius.circular(Dimens.EDIT_RESET_SELECTOR_BORDER_RADIUS),
+                  topLeft: Radius.circular(Dimens.editResetSelectorBorderRadius),
+                  bottomLeft: Radius.circular(Dimens.editResetSelectorBorderRadius),
                 ),
               ),
               child: Text(
-                Strings.edit_reset_selector_to_period,
+                Strings.editResetSelectorToPeriod,
                 style: Styles.editResetTypeTextStyle,
               ),
             ),
@@ -49,12 +49,12 @@ class _ResetSelectorState extends State<ResetSelector> {
               textColor: _setTextColor(ResetType.RESET_TO_DATE, _presenter.resetType),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(Dimens.EDIT_RESET_SELECTOR_BORDER_RADIUS),
-                  bottomRight: Radius.circular(Dimens.EDIT_RESET_SELECTOR_BORDER_RADIUS),
+                  topRight: Radius.circular(Dimens.editResetSelectorBorderRadius),
+                  bottomRight: Radius.circular(Dimens.editResetSelectorBorderRadius),
                 ),
               ),
               child: Text(
-                Strings.edit_reset_selector_to_date,
+                Strings.editResetSelectorToDate,
                 style: Styles.editResetTypeTextStyle,
               ),
             ),
