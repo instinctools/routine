@@ -1,9 +1,14 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/ui/todo/todolist.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
-void main() => runApp(RoutineApp());
+void main() {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  runApp(RoutineApp());
+}
 
 class RoutineApp extends StatelessWidget {
   @override
