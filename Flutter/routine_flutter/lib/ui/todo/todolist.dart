@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/repository/MainRepository.dart';
+import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
@@ -191,11 +191,8 @@ class _TodoListState extends State<TodoList> {
     return false;
   }
 
-  Future<void> _resetTodo(Todo item) async {
-    var reseted = item; //todo work with it
-    /*if (await helper.changeTodo(reseted) != null) {
-      setState(() {});
-    }*/
+  Future<void> _resetTodo(Todo todo) async {
+    mainRepository.updateTodo(TimeUtils.updateTargetDate(todo));
   }
 
   Future<bool> _showConfirmDialog(Todo todo) async => await showDialog(

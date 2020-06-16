@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/repository/MainRepository.dart';
+import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 

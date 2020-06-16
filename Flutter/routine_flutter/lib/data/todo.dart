@@ -36,6 +36,15 @@ class Todo {
     resetType = $resetType}""";
   }
 
+  Todo.updateTargetDate(Todo todo, int newTargetDate)
+      : id = todo.id,
+        periodValue = todo.periodValue,
+        periodUnit = todo.periodUnit,
+        resetType = todo.resetType,
+        targetDate = newTargetDate,
+        title = todo.title,
+        reference = todo.reference;
+
   Todo.fromDocumentSnapshotMap(Map<String, dynamic> map, {this.reference})
       : assert(map[Strings.todoKeyId] != null),
         assert(map[Strings.todoKeyPeriod] != null),

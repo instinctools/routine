@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/repository/MainRepository.dart';
+import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/resetSelector.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
 import 'package:routine_flutter/ui/edit/period_unit_selector.dart';
