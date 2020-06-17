@@ -5,14 +5,11 @@ import com.instinctools.routine_kmp.model.PeriodUnit
 data class PeriodUnitUiModel(
     val unit: PeriodUnit,
     val count: Int = 1
-) {
-    companion object {
+)
 
-        fun allModels() = PeriodUnit.values().map { PeriodUnitUiModel(it) }
-        fun List<PeriodUnitUiModel>.adjustCount(unit: PeriodUnit, count: Int) = map {
-            if (it.unit == unit) {
-                PeriodUnitUiModel(unit, count)
-            } else it
-        }
-    }
+fun allPeriodUiModels() = PeriodUnit.values().map { PeriodUnitUiModel(it) }
+fun List<PeriodUnitUiModel>.adjustCount(unit: PeriodUnit, count: Int) = map {
+    if (it.unit == unit) {
+        PeriodUnitUiModel(unit, count)
+    } else it
 }

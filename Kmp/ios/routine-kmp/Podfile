@@ -1,6 +1,8 @@
 platform :ios, '13.4'
 use_frameworks!
 
+install! 'cocoapods', :deterministic_uuids => false
+
 target 'routine-kmp' do
   
   pod 'shared', :path => '../../shared/'

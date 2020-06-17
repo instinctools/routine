@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */; };
 		263036A3249919DD009B237D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A2249919DD009B237D /* Assets.xcassets */; };
 		263036A6249919DD009B237D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A5249919DD009B237D /* Preview Assets.xcassets */; };
 		263036A9249919DD009B237D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263036A7249919DD009B237D /* LaunchScreen.storyboard */; };
@@ -39,10 +40,13 @@
 		2656FCE3249A1FA6009718C4 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE2249A1FA6009718C4 /* Differentiator */; };
 		2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE4249A1FA6009718C4 /* RxDataSources */; };
 		2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE7249A1FB9009718C4 /* RxBiBinding */; };
-		4E0D500DE05049D2718A621C /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33C9474CBD043FB58836906A /* Pods_routine_kmp.framework */; };
+		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
+		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
+		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routine_kmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26303699249919DC009B237D /* routine-kmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "routine-kmp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263036A2249919DD009B237D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		263036A5249919DD009B237D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -70,9 +74,11 @@
 		2656FCD0249A1E59009718C4 /* FirebaseInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseInteractor.swift; sourceTree = "<group>"; };
 		2656FCD2249A1EAE009718C4 /* BottomCardTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardTransition.swift; sourceTree = "<group>"; };
 		2656FCD4249A1EC4009718C4 /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
-		33C9474CBD043FB58836906A /* Pods_routine_kmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routine_kmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8A3FC6D2DCA1502FD09BA637 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
-		9F656BE07E56D763D1019501 /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
+		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
+		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,14 +86,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E0D500DE05049D2718A621C /* Pods_routine_kmp.framework in Frameworks */,
+				266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */,
 				2656FCDB249A1F3E009718C4 /* SwipeCellKit in Frameworks */,
 				2656FCE0249A1F7B009718C4 /* RxCocoa in Frameworks */,
+				266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */,
 				2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */,
 				2656FCDE249A1F7B009718C4 /* RxSwift in Frameworks */,
 				2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */,
 				2656FCE3249A1FA6009718C4 /* Differentiator in Frameworks */,
 				2656FCD8249A1F25009718C4 /* SnapKit in Frameworks */,
+				266171C8249A3AE600A54842 /* libz.tbd in Frameworks */,
+				1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,8 +237,8 @@
 		805364D11829E24165E7EA45 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				9F656BE07E56D763D1019501 /* Pods-routine-kmp.debug.xcconfig */,
-				8A3FC6D2DCA1502FD09BA637 /* Pods-routine-kmp.release.xcconfig */,
+				F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */,
+				F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -237,7 +246,10 @@
 		BD6CA28CF92E41A292F4F0EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				33C9474CBD043FB58836906A /* Pods_routine_kmp.framework */,
+				266171C9249A3AF100A54842 /* libc++.tbd */,
+				266171C7249A3ADB00A54842 /* libz.tbd */,
+				266171C5249A3AB900A54842 /* libsqlite3.tbd */,
+				0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -249,11 +261,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 263036AD249919DD009B237D /* Build configuration list for PBXNativeTarget "routine-kmp" */;
 			buildPhases = (
-				C992EC50BD11DFDCBAA14EE5 /* [CP] Check Pods Manifest.lock */,
+				18C29CDCE46F671507AAC320 /* [CP] Check Pods Manifest.lock */,
 				26303695249919DC009B237D /* Sources */,
 				26303696249919DC009B237D /* Frameworks */,
 				26303697249919DC009B237D /* Resources */,
-				1E298D29F8D5BEAAB0EE79B7 /* [CP] Embed Pods Frameworks */,
+				80F9967C6A2F42C2B802934A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -327,24 +339,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1E298D29F8D5BEAAB0EE79B7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C992EC50BD11DFDCBAA14EE5 /* [CP] Check Pods Manifest.lock */ = {
+		18C29CDCE46F671507AAC320 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -364,6 +359,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		80F9967C6A2F42C2B802934A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-routine-kmp/Pods-routine-kmp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -446,6 +458,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = VPJ84LBX86;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -506,6 +519,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = VPJ84LBX86;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -528,11 +542,12 @@
 		};
 		263036AE249919DD009B237D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F656BE07E56D763D1019501 /* Pods-routine-kmp.debug.xcconfig */;
+			baseConfigurationReference = F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"routine-kmp/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "routine-kmp/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,11 +563,12 @@
 		};
 		263036AF249919DD009B237D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8A3FC6D2DCA1502FD09BA637 /* Pods-routine-kmp.release.xcconfig */;
+			baseConfigurationReference = F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"routine-kmp/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "routine-kmp/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (

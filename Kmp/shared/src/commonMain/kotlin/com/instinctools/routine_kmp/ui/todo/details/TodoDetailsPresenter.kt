@@ -5,7 +5,6 @@ import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
 import com.instinctools.routine_kmp.ui.todo.details.model.*
-import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel.Companion.adjustCount
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -100,7 +99,7 @@ class TodoDetailsPresenter(
 
     data class State(
         val todo: EditTodoUiModel = EditTodoUiModel(),
-        val periods: List<PeriodUnitUiModel> = PeriodUnitUiModel.allModels(),
+        val periods: List<PeriodUnitUiModel> = allPeriodUiModels(),
         val saved: Boolean = false,
         val saveEnabled: Boolean = false,
         val validationErrors: Set<ValidationError> = emptySet()
