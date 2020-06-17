@@ -1,7 +1,7 @@
 import UIKit
 import RxSwift
 import RxBiBinding
-import RoutineSharedKmp
+import RoutineShared
 
 final class PeriodView: UIView {
 

@@ -1,6 +1,6 @@
 import UIKit
 import RxSwift
-import RoutineSharedKmp
+import RoutineShared
 
 final class PeriodSelectionView: UIView {
 

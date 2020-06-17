@@ -3,7 +3,7 @@ import SwiftUI
 import RxCocoa
 import RxSwift
 import RxBiBinding
-import RoutineSharedKmp
+import RoutineShared
 
 final class PeriodPickerViewController: BottomCardViewController {
     

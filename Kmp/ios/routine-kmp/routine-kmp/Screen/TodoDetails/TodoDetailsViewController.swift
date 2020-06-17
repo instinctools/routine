@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import RoutineSharedKmp
+import RoutineShared
 
 final class TodoDetailsViewController: UIViewController {
     
@@ -150,11 +150,11 @@ final class TodoDetailsViewController: UIViewController {
 //            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
 //        )
 //        let output = viewModel.transform(input: input)
-//        
+//
 //        output.doneButtonEnabled
 //            .drive(doneButton.rx.isEnabled)
 //            .disposed(by: disposeBag)
-//        
+//
 //
 //        (textView.rx.title <-> viewModel.title)
 //            .disposed(by: disposeBag)

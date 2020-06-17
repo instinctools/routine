@@ -1,6 +1,6 @@
 import UIKit
 import Firebase
-import RoutineSharedKmp
+import RoutineShared
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -1,6 +1,6 @@
 import Foundation
 import Firebase
-import RoutineSharedKmp
+import RoutineShared
 
 class FirebaseInteractor : IosFirestoreInteractor {
 

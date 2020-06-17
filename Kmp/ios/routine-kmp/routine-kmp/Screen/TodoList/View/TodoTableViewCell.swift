@@ -1,6 +1,6 @@
 import SwiftUI
 import SwipeCellKit
-import RoutineSharedKmp
+import RoutineShared
 import SnapKit
 
 class HostingTableViewCell<Content: View>: SwipeTableViewCell {

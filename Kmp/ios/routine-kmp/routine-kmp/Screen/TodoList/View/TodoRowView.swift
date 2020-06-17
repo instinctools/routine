@@ -1,5 +1,5 @@
 import SwiftUI
-import RoutineSharedKmp
+import RoutineShared
 
 struct TodoRowView: View {
 
