@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/todo/todolist.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:routine_flutter/utils/consts.dart';
+import 'package:routine_flutter/utils/styles.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -24,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (_mainRepository.isLoggedIn()) {
       return TodoList(_mainRepository);
     } else {
-      return _scaffoldProgress();
+      return _splashScreenScreen();
     }
   }
 
@@ -34,10 +36,25 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  Widget _scaffoldProgress() {
+  Widget _splashScreenScreen() {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/images/loading_logo.png'),
+            SizedBox(height: 50),
+            Text(
+              Strings.splashScreenText,
+              style: Styles.splashScreenTextStyle,
+            ),
+            SizedBox(height: 40),
+            CircularProgressIndicator(
+              backgroundColor: ColorsRes.splashScreenTextColor,
+              valueColor: new AlwaysStoppedAnimation<Color>(ColorsRes.splashScreenProgressAnimationColor),
+            ),
+          ],
+        ),
       ),
     );
   }

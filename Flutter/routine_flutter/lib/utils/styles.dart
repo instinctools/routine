@@ -40,6 +40,12 @@ class Styles {
     fontSize: Dimens.editResetSelectorTextSize,
   );
 
+  static TextStyle splashScreenTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenTextSize,
+    color: ColorsRes.splashScreenTextColor,
+  );
+
   static TextStyle drawerHeaderTitleTextStyle = TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 24,

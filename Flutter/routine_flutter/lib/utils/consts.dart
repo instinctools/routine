@@ -31,6 +31,8 @@ class Strings {
   static const String todoKeyTargetDate = "targetDate";
   static const String todoKeyTimestamp = "timestamp";
   static const String todoKeyReference = "reference";
+
+  static const String splashScreenText = "Setting up account";
 }
 
 class Dimens {
@@ -48,6 +50,7 @@ class Dimens {
   static const double editPickerItemExtent = 40;
   static const double editResetSelectorBorderRadius = 4.0;
   static const double editResetSelectorTextSize = 13;
+  static const double splashScreenTextSize = 24;
 }
 
 class ColorsRes {
@@ -63,4 +66,8 @@ class ColorsRes {
 
   static Color selectedResetTypeBackgroundColor = darkGrayColor;
   static Color unselectedResetTypeBackgroundColor = lightGrayColor;
+
+  static Color splashScreenTextColor = Color(0xff835D51);
+  static Color splashScreenProgressBackgroundColor = Color(0xff835D51);
+  static Color splashScreenProgressAnimationColor = Color(0xffBCA89A);
 }
