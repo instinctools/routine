@@ -1,9 +1,9 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
-import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.data.TodoRepository
 
 class TodoDetailsPresenterFactory(
-    private val todoStore: TodoStore
+    private val todoRepository: TodoRepository
 ) {
-    fun create(todoId: Long?) = TodoDetailsPresenter(todoId, todoStore)
+    fun create(todoId: String?) = TodoDetailsPresenter(todoId, todoRepository)
 }

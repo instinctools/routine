@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
-import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
@@ -20,10 +19,8 @@ import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class TodoDetailsActivity : AppCompatActivity() {
@@ -37,11 +34,11 @@ class TodoDetailsActivity : AppCompatActivity() {
 
     private val adapter = PeriodsAdapter(
         selectionListener = { _, item ->
-            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item))
+            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item.unit))
         },
         countChooserListener = { position, item ->
-            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item))
-            showCountChooser()
+            presenter.events.offer(TodoDetailsPresenter.Event.ChangePeriodUnit(item.unit))
+            showCountChooser(item.count)
         }
     )
 
@@ -52,8 +49,8 @@ class TodoDetailsActivity : AppCompatActivity() {
 
         appComponent.inject(this)
 
-        var todoId: Long? = intent.getLongExtra(ARG_TODO_ID, NO_ID)
-        if (todoId == NO_ID) {
+        var todoId: String? = intent.getStringExtra(ARG_TODO_ID)
+        if (todoId.isNullOrEmpty()) {
             todoId = null
         }
 
@@ -75,7 +72,9 @@ class TodoDetailsActivity : AppCompatActivity() {
             if (binding.titleInput.text.toString() != todo.title) {
                 binding.titleInput.setText(todo.title)
             }
-            adapter.setSelected(todo.periodUnit, todo.periodValue)
+
+            adapter.submitList(state.periods)
+            adapter.setSelected(todo.periodUnit)
 
             val actionView = binding.toolbar.menu.findItem(R.id.done).actionView
             actionView.isEnabled = state.saveEnabled
@@ -104,7 +103,6 @@ class TodoDetailsActivity : AppCompatActivity() {
         binding.periodsRecyclerView.itemAnimator = null
         binding.periodsRecyclerView.adapter = adapter
         binding.periodsRecyclerView.addItemDecoration(VerticalSpacingDecoration(this, R.dimen.task_details_period_spacing))
-        adapter.items = PeriodUnit.allPeriods()
 
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         binding.toolbar.menu.findItem(R.id.done).actionView.setOnClickListener {
@@ -117,8 +115,8 @@ class TodoDetailsActivity : AppCompatActivity() {
         }
 
         binding.periodStrategyToggle.settings = IosLikeToggle.Settings(
-            IosLikeToggle.Item(PeriodResetStrategy.IntervalBased, resources.getString(R.string.reset_period_strategy_interval_based)),
-            IosLikeToggle.Item(PeriodResetStrategy.FromNow, resources.getString(R.string.reset_period_strategy_from_now))
+            IosLikeToggle.Item(PeriodResetStrategy.FromNow, resources.getString(R.string.reset_period_strategy_from_now)),
+            IosLikeToggle.Item(PeriodResetStrategy.FromNextEvent, resources.getString(R.string.reset_period_strategy_from_next_event))
         ) { item ->
             val strategy = item as? PeriodResetStrategy ?: return@Settings
             val event = TodoDetailsPresenter.Event.ChangePeriodStrategy(strategy)
@@ -126,23 +124,20 @@ class TodoDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showCountChooser() {
-        scope.launch {
-            val state = presenter.states.first()
-            val picker = PeriodPickerFragment.newInstance(state.todo.periodValue)
-            picker.pickerListener = { count ->
-                val event = TodoDetailsPresenter.Event.ChangePeriod(count)
-                presenter.events.offer(event)
-            }
-            picker.show(supportFragmentManager, PeriodPickerFragment.TAG)
+    private fun showCountChooser(initialCount: Int) {
+        val picker = PeriodPickerFragment.newInstance(initialCount)
+        picker.pickerListener = { count ->
+            val event = TodoDetailsPresenter.Event.ChangePeriod(count)
+            presenter.events.offer(event)
         }
+        picker.show(supportFragmentManager, PeriodPickerFragment.TAG)
     }
 
     companion object {
         private const val ARG_TODO_ID = "todo_id"
-        private const val NO_ID = -1L
+        private const val NO_ID = ""
 
-        fun buildIntent(context: Context, todoId: Long?) = Intent(context, TodoDetailsActivity::class.java).apply {
+        fun buildIntent(context: Context, todoId: String?) = Intent(context, TodoDetailsActivity::class.java).apply {
             putExtra(ARG_TODO_ID, todoId ?: NO_ID)
         }
     }

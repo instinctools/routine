@@ -1,6 +1,6 @@
 import SwiftUI
 import SwipeCellKit
-import RoutineSharedKmp
+import RoutineShared
 import RxDataSources
 import RxSwift
 
@@ -19,7 +19,7 @@ final class TodoListViewController: UIViewController {
 
     private lazy var presenter: TodoListPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let presenter = TodoListPresenter(todoStore: appDelegate.todoStore)
+        let presenter = TodoListPresenter(todoRepository: appDelegate.todoRepository)
         return presenter
     }()
     private lazy var uiBinder = UiBinder<TodoListPresenter.State, TodoListPresenter.Event>()

@@ -1,7 +1,7 @@
 package com.instinctools.routine_kmp.model
 
 data class Todo(
-    val id: Long,
+    val id: String,
     val title: String,
     val periodUnit: PeriodUnit,
     val periodValue: Int,
@@ -18,6 +18,6 @@ data class Todo(
     ) : this(NO_ID, title, periodUnit, periodValue, periodStrategy, nextTimestamp)
 
     companion object {
-        const val NO_ID = -1L
+        const val NO_ID = ""
     }
 }

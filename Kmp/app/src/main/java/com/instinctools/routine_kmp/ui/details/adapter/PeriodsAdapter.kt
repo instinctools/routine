@@ -2,25 +2,19 @@ package com.instinctools.routine_kmp.ui.details.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.instinctools.routine_kmp.databinding.ItemPeriodBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
+import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel
 
 class PeriodsAdapter(
-    private val selectionListener: (position: Int, item: PeriodUnit) -> Unit,
-    private val countChooserListener: (position: Int, item: PeriodUnit) -> Unit
-) : RecyclerView.Adapter<PeriodViewHolder>() {
+    private val selectionListener: (position: Int, item: PeriodUnitUiModel) -> Unit,
+    private val countChooserListener: (position: Int, item: PeriodUnitUiModel) -> Unit
+) : ListAdapter<PeriodUnitUiModel, PeriodViewHolder>(PeriodDiff) {
 
-    private var _items: List<PeriodUnit>? = null
-    var items: List<PeriodUnit>
-        get() = _items!!
-        set(value) {
-            _items = value
-        }
-
-    private val selectionListeners = mutableListOf<(PeriodUnit?, Int) -> Unit>()
+    private val selectionListeners = mutableListOf<(PeriodUnit?) -> Unit>()
     private var selectedPeriodUnit: PeriodUnit? = null
-    private var selectedCount: Int = 1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeriodViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -29,32 +23,38 @@ class PeriodsAdapter(
             binding.root.setOnClickListener {
                 val adapterPosition = holder.adapterPosition
                 if (adapterPosition >= 0) {
-                    selectionListener(adapterPosition, items[adapterPosition])
+                    selectionListener(adapterPosition, getItem(adapterPosition))
                 }
             }
             binding.countSelectionView.setOnClickListener {
                 val adapterPosition = holder.adapterPosition
                 if (adapterPosition >= 0) {
-                    countChooserListener(adapterPosition, items[adapterPosition])
+                    countChooserListener(adapterPosition, getItem(adapterPosition))
                 }
             }
-            selectionListeners += { unit: PeriodUnit?, count: Int ->
-                holder.setSelected(unit, count)
+            selectionListeners += { unit: PeriodUnit? ->
+                holder.setSelected(unit)
             }
         }
     }
 
-    override fun getItemCount() = _items?.size ?: 0
-
     override fun onBindViewHolder(holder: PeriodViewHolder, position: Int) {
-        val item = items[position]
-        holder.bind(item)
-        holder.setSelected(selectedPeriodUnit, selectedCount)
+        holder.bind(getItem(position))
+        holder.setSelected(selectedPeriodUnit)
     }
 
-    fun setSelected(unit: PeriodUnit?, count: Int) {
+    fun setSelected(unit: PeriodUnit?) {
         selectedPeriodUnit = unit
-        selectedCount = count
-        selectionListeners.forEach { it(unit, count) }
+        selectionListeners.forEach { it(unit) }
+    }
+}
+
+private object PeriodDiff : DiffUtil.ItemCallback<PeriodUnitUiModel>() {
+    override fun areItemsTheSame(oldItem: PeriodUnitUiModel, newItem: PeriodUnitUiModel): Boolean {
+        return oldItem.unit == newItem.unit
+    }
+
+    override fun areContentsTheSame(oldItem: PeriodUnitUiModel, newItem: PeriodUnitUiModel): Boolean {
+        return oldItem == newItem
     }
 }

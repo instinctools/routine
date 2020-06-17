@@ -7,6 +7,7 @@ import com.instinctools.routine_kmp.databinding.ItemTodoBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.color.toPlatformColor
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
+import java.lang.Math.abs
 
 class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -45,6 +46,11 @@ class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewH
         }
 
         binding.targetDate.text = when {
+            item.daysLeft == -1 -> "Yesterday"
+            item.daysLeft < -1 && item.daysLeft > -7 -> "${abs(item.daysLeft)} days ago"
+            item.daysLeft == -7 -> "1 week ago"
+            item.daysLeft < -7 -> "Expired"
+
             item.daysLeft == 0 -> "Today"
             item.daysLeft == 1 -> "Tomorrow"
             item.daysLeft < 7 -> "${item.daysLeft} days left"

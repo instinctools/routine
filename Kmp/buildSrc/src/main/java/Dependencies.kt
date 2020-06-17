@@ -29,6 +29,7 @@ object Deps {
 
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
+        const val swipeRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-rc01"
     }
 
     object AndroidView {
@@ -40,6 +41,7 @@ object Deps {
         const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"
         const val native = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.coroutines}"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+        const val playServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
     }
 
     object Dagger {
@@ -58,5 +60,10 @@ object Deps {
     object Stately {
         const val common = "co.touchlab:stately-common:${Versions.stately}"
         const val concurrency = "co.touchlab:stately-concurrency:${Versions.stately}"
+    }
+
+    object Firebase {
+        const val auth = "com.google.firebase:firebase-auth-ktx:19.3.1"
+        const val firestore = "com.google.firebase:firebase-firestore-ktx:21.4.3"
     }
 }

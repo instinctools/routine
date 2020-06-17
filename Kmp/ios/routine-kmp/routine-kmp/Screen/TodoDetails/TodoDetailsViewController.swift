@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import RoutineSharedKmp
+import RoutineShared
 
 final class TodoDetailsViewController: UIViewController {
     
@@ -29,6 +29,10 @@ final class TodoDetailsViewController: UIViewController {
         return textView
     }()
     
+    private lazy var resetTypeSegmentControl = UISegmentedControl(
+           items: ["Reset to period", "Reset to date"]
+    )
+    
     private lazy var doneButton = UIBarButtonItem(barButtonSystemItem: .done)
     private lazy var cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel)
     private lazy var periodSelectionView = PeriodSelectionView()
@@ -36,7 +40,7 @@ final class TodoDetailsViewController: UIViewController {
     private let todo: Todo?
     private lazy var presenter: TodoDetailsPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let presenter = TodoDetailsPresenter(todoId: todo?.id as? KotlinLong, todoStore: appDelegate.todoStore)
+        let presenter = TodoDetailsPresenter(todoId: todo?.id as String?, todoRepository: appDelegate.todoRepository)
         return presenter
     }()
     private lazy var uiBinder = UiBinder<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>()
@@ -88,6 +92,7 @@ final class TodoDetailsViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addArrangedSubview(titleView)
+        contentView.addArrangedSubview(resetTypeSegmentControl)
         
         let dividerView = LabelledDivider(label: "Repeat every").padding(.bottom, 8).uiView
         contentView.addArrangedSubview(dividerView)
@@ -125,7 +130,7 @@ final class TodoDetailsViewController: UIViewController {
         
         periodSelectionView.selection
             .do(onNext: { period in
-                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: period)
+                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: period.unit)
                 self.presenter.events.offer(element: event)
             })
             .subscribe()
@@ -138,18 +143,18 @@ final class TodoDetailsViewController: UIViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
-        periodSelectionView.showPeriods(periods: PeriodUnit.Companion().allPeriods())
-        
+        resetTypeSegmentControl.addTarget(self, action: #selector(onStrategyChanged), for: .valueChanged)
+                
 //        let input = TaskDetailsViewModel.Input(
 //            doneButtonAction: doneButton.rx.tap.asDriver(),
 //            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
 //        )
 //        let output = viewModel.transform(input: input)
-//        
+//
 //        output.doneButtonEnabled
 //            .drive(doneButton.rx.isEnabled)
 //            .disposed(by: disposeBag)
-//        
+//
 //
 //        (textView.rx.title <-> viewModel.title)
 //            .disposed(by: disposeBag)
@@ -162,15 +167,36 @@ final class TodoDetailsViewController: UIViewController {
             
             let todo = state.todo
             self.titleView.textView.text = todo.title
-            self.periodSelectionView.selectPeriod(unit: todo.periodUnit, count: Int(todo.periodValue))
+            
+            self.periodSelectionView.showPeriods(periods: state.periods)
+            self.periodSelectionView.selectPeriod(unit: todo.periodUnit)
+            
+            if todo.periodStrategy == PeriodResetStrategy.fromnow {
+                self.resetTypeSegmentControl.selectedSegmentIndex = 0
+            } else {
+                self.resetTypeSegmentControl.selectedSegmentIndex = 1
+            }
         })
         
         presenter.start()
     }
     
+    @objc func onStrategyChanged(target: UISegmentedControl) {
+        if target == resetTypeSegmentControl {
+            let selectedSegmentIndex = target.selectedSegmentIndex
+            let newStrategy: PeriodResetStrategy
+            if selectedSegmentIndex == 0 {
+                newStrategy = .fromnow
+            } else {
+                newStrategy = .fromnextevent
+            }
+            let event = TodoDetailsPresenter.EventChangePeriodStrategy(periodStrategy: newStrategy)
+            presenter.events.offer(element: event)
+        }
+    }
+    
     private func showCountSelectionAlert(initialCount: Int) {
-        let alert = UIAlertController(title: "Choose period", message: nil, preferredStyle: .actionSheet)
-        present(alert, animated: true, completion: nil)
+        present(PeriodPickerViewController(initialCount: initialCount), animated: true)
     }
     
     private func keyboardWillShow(notification: Notification) {

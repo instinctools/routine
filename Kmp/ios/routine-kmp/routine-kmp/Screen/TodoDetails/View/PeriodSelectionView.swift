@@ -1,6 +1,6 @@
 import UIKit
 import RxSwift
-import RoutineSharedKmp
+import RoutineShared
 
 final class PeriodSelectionView: UIView {
 
@@ -12,7 +12,7 @@ final class PeriodSelectionView: UIView {
         return stackView
     }()
     
-    let selection = PublishSubject<PeriodUnit>()
+    let selection = PublishSubject<PeriodUnitUiModel>()
     let countChooser = PublishSubject<Int>()
     private let disposeBag = DisposeBag()
 
@@ -35,26 +35,39 @@ final class PeriodSelectionView: UIView {
         }
     }
     
-    func showPeriods(periods: [PeriodUnit]) {
+    func showPeriods(periods: [PeriodUnitUiModel]) {
         for period in periods {
-            let periodView = PeriodView2(period: period)
+            var periodView: PeriodView? = nil
+            for child in stackView.subviews {
+                if let castedChild = child as? PeriodView {
+                    if(castedChild.period.unit == period.unit) {
+                        periodView = castedChild
+                    }
+                }
+            }
             
-            periodView.selection.map {
-                self.selection.onNext(period)
-            }.subscribe().disposed(by: disposeBag)
+            if periodView == nil {
+                periodView = PeriodView(period: period)
+                
+                periodView!.selection.map {
+                    self.selection.onNext(periodView!.period)
+                }.subscribe().disposed(by: disposeBag)
+                
+                periodView!.countChooser.map { count in
+                    self.countChooser.onNext(count)
+                }.subscribe().disposed(by: disposeBag)
+                
+                stackView.addArrangedSubview(periodView!)
+            }
             
-            periodView.countChooser.map { count in
-                self.countChooser.onNext(count)
-            }.subscribe().disposed(by: disposeBag)
-            
-            stackView.addArrangedSubview(periodView)
+            periodView?.bindPeriod(period: period)
         }
     }
     
-    func selectPeriod(unit: PeriodUnit, count: Int) {
+    func selectPeriod(unit: PeriodUnit?) {
         for view in stackView.subviews {
-            let periodView = view as? PeriodView2
-            periodView?.adjustSelection(selectedUnit: unit, count: count)
+            let periodView = view as? PeriodView
+            periodView?.adjustSelection(selectedUnit: unit)
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.di
 
-import com.instinctools.routine_kmp.data.TodoStore
+import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import dagger.Module
@@ -10,10 +10,10 @@ import dagger.Provides
 object PresentationModule {
 
     @Provides
-    fun provideTodoListPresenter(todoStore: TodoStore) = TodoListPresenter(todoStore)
+    fun provideTodoListPresenter(todoRepository: TodoRepository) = TodoListPresenter(todoRepository)
 
     @Provides
     fun provideTodoDetailsFactory(
-        todoStore: TodoStore
-    ) = TodoDetailsPresenterFactory(todoStore)
+        todoRepository: TodoRepository
+    ) = TodoDetailsPresenterFactory(todoRepository)
 }

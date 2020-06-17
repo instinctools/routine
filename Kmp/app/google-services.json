@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "999805664331",
+    "firebase_url": "https://routine-kmp.firebaseio.com",
+    "project_id": "routine-kmp",
+    "storage_bucket": "routine-kmp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:999805664331:android:606e3ee2329b6e5c1521ce",
+        "android_client_info": {
+          "package_name": "com.instinctools.routine_kmp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "999805664331-7kl409vegupnu1tqnpok2cai085flpjn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5EKe1mUJiYopgM3xjwYCV_FoKnNbWKsE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "999805664331-7kl409vegupnu1tqnpok2cai085flpjn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
