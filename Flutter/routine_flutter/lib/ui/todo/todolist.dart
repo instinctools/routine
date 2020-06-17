@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:routine_flutter/data/db_helper.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/main.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
@@ -13,13 +14,21 @@ import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoList extends StatefulWidget {
+  final mainRepository;
+
+  TodoList(this.mainRepository);
+
   @override
-  State<StatefulWidget> createState() => _TodoListState();
+  State<StatefulWidget> createState() => _TodoListState(mainRepository);
 }
 
 class _TodoListState extends State<TodoList> {
   DatabaseHelper helper = DatabaseHelper();
-  MainRepository mainRepository = MainRepository();
+  MainRepository mainRepository;
+
+  _TodoListState(mainRepository) {
+    this.mainRepository = mainRepository;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +101,7 @@ class _TodoListState extends State<TodoList> {
     List<Todo> todoList = documentSnapshots.map((documentSnapshot) {
       return Todo.fromDocumentSnapshot(documentSnapshot);
     }).toList();
-    print("todoList:  $todoList");
+//    print("todoList:  $todoList");
     todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
     List<Widget> widgets = _createItemWidgetsList(todoList);
     return ListView.builder(
