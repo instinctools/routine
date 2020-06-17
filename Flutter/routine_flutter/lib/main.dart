@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:routine_flutter/ui/todo/todolist.dart';
+import 'package:routine_flutter/ui/splashscreen/splash_screen.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
@@ -19,7 +19,7 @@ class RoutineApp extends StatelessWidget {
         primaryColor: ColorsRes.mainBgColor,
         scaffoldBackgroundColor: ColorsRes.mainBgColor,
       ),
-      home: TodoList(),
+      home: SplashScreen(),
     );
   }
 }
