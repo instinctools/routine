@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.google.android.material.snackbar.Snackbar
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivityTodosBinding
 import com.instinctools.routine_kmp.ui.RetainPresenterActivity
@@ -74,6 +75,19 @@ class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
             adapter.submitList(mergedItems)
 
             binding.swipeToRefresh.isRefreshing = state.refreshing
+
+            if (state.refreshError?.unhandled == true) {
+                Snackbar.make(binding.root, R.string.tasks_error_refresh, Snackbar.LENGTH_SHORT).show()
+                state.refreshError?.consume()
+            }
+            if (state.deleteError?.unhandled == true) {
+                Snackbar.make(binding.root, R.string.tasks_error_delete, Snackbar.LENGTH_SHORT).show()
+                state.deleteError?.consume()
+            }
+            if (state.resetError?.unhandled == true) {
+                Snackbar.make(binding.root, R.string.tasks_error_reset, Snackbar.LENGTH_SHORT).show()
+                state.resetError?.consume()
+            }
         }
             .launchIn(scope)
     }

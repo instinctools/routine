@@ -10,12 +10,18 @@
     <!-- Tasks List -->
     <string name="tasks_empty_title">Oh! It\'s still empty</string>
     <string name="tasks_empty_description">There are no routine tasks</string>
+
+    <string name="tasks_error_refresh">Failed to refresh routines!</string>
+    <string name="tasks_error_delete">Failed to delete routine</string>
+    <string name="tasks_error_reset">Failed to reset routine</string>
     <!-- Tasks List -->
 
     <!-- Task Details -->
     <string name="task_details_repeat_label">Repeat every</string>
     <string name="task_details_title_hint">Type recurring task name…</string>
     <string name="task_details_btn_done">Done</string>
+
+    <string name="task_details_error_save">Failed to save todo</string>
 
     <string name="reset_period_strategy_from_now">Reset to period</string>
     <string name="reset_period_strategy_from_next_event">Reset to date</string>

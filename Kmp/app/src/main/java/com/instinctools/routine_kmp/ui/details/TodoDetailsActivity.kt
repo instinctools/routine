@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
@@ -75,6 +76,11 @@ class TodoDetailsActivity : RetainPresenterActivity<TodoDetailsPresenter>() {
             actionView.isEnabled = state.saveEnabled
 
             binding.periodStrategyToggle.setSelected(todo.periodStrategy)
+
+            if (state.saveError?.unhandled == true) {
+                Snackbar.make(binding.root, R.string.task_details_error_save, Snackbar.LENGTH_SHORT).show()
+                state.saveError?.consume()
+            }
         }
             .launchIn(scope)
     }
