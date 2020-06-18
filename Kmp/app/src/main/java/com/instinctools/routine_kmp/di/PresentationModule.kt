@@ -1,6 +1,8 @@
 package com.instinctools.routine_kmp.di
 
 import com.instinctools.routine_kmp.data.TodoRepository
+import com.instinctools.routine_kmp.data.auth.AuthRepository
+import com.instinctools.routine_kmp.ui.SplashPresenter
 import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import dagger.Module
@@ -16,4 +18,7 @@ object PresentationModule {
     fun provideTodoDetailsFactory(
         todoRepository: TodoRepository
     ) = TodoDetailsPresenterFactory(todoRepository)
+
+    @Provides
+    fun provideSplashPresent(authRepository: AuthRepository) = SplashPresenter(authRepository)
 }

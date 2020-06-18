@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Routine KMP</string>
 
+    <!-- Splash Screen -->
+    <string name="splash_auth_progress">Setting up account</string>
+    <string name="splash_auth_error">An error occurred!</string>
+    <string name="splash_auth_btn_retry">Retry</string>
+    <!-- Splash Screen -->
+
     <!-- Tasks List -->
     <string name="tasks_empty_title">Oh! It\'s still empty</string>
     <string name="tasks_empty_description">There are no routine tasks</string>

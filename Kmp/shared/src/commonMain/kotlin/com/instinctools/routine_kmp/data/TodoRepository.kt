@@ -1,12 +1,15 @@
 package com.instinctools.routine_kmp.data
 
+import com.instinctools.routine_kmp.data.auth.AuthRepository
 import com.instinctools.routine_kmp.data.firestore.FirebaseTodoStore
+import com.instinctools.routine_kmp.data.firestore.error.UnauthorizedFirebaseError
 import com.instinctools.routine_kmp.model.Todo
 import kotlinx.coroutines.flow.Flow
 
 class TodoRepository(
     private val firebaseTodoStore: FirebaseTodoStore,
-    private val localTodoStore: LocalTodoStore
+    private val localTodoStore: LocalTodoStore,
+    private val authRepository: AuthRepository
 ) {
 
     fun getTodosSortedByDate(): Flow<List<Todo>> {
@@ -18,23 +21,27 @@ class TodoRepository(
     }
 
     suspend fun refresh() {
-        val fetchedTodos = firebaseTodoStore.fetchTodos()
+        val userId = authRepository.requireUserId()
+        val fetchedTodos = firebaseTodoStore.fetchTodos(userId)
         localTodoStore.replaceAll(fetchedTodos)
     }
 
     suspend fun add(todo: Todo) {
-        val id = firebaseTodoStore.addTodo(todo)
+        val userId = authRepository.requireUserId()
+        val id = firebaseTodoStore.addTodo(userId, todo)
         val todoWithId = todo.copy(id = id)
         localTodoStore.insert(todoWithId)
     }
 
     suspend fun update(todo: Todo) {
-        firebaseTodoStore.updateTodo(todo)
+        val userId = authRepository.requireUserId()
+        firebaseTodoStore.updateTodo(userId, todo)
         localTodoStore.update(todo)
     }
 
     suspend fun delete(todoId: String) {
-        firebaseTodoStore.deleteTodo(todoId)
+        val userId = authRepository.requireUserId()
+        firebaseTodoStore.deleteTodo(userId, todoId)
         localTodoStore.delete(todoId)
     }
 }
