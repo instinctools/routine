@@ -4,8 +4,8 @@ import com.instinctools.routine_kmp.model.Todo
 import kotlinx.coroutines.flow.Flow
 
 expect class FirebaseTodoStore {
-    suspend fun fetchTodos(): List<Todo>
-    suspend fun deleteTodo(todoId: String)
-    suspend fun addTodo(todo: Todo): String
-    suspend fun updateTodo(todo: Todo)
+    suspend fun fetchTodos(userId: String): List<Todo>
+    suspend fun deleteTodo(userId: String, todoId: String)
+    suspend fun addTodo(userId: String, todo: Todo): String
+    suspend fun updateTodo(userId: String, todo: Todo)
 }

@@ -1,5 +1,9 @@
 <resources>
 
+    <style name="Theme.SplashApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/splashPrimary</item>
+    </style>
+
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimaryDark">#757575</item>
         <item name="colorPrimary">#000000</item>

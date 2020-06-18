@@ -9,8 +9,7 @@ actual class FirebaseTodoStore(
     private val interactor: IosFirestoreInteractor
 ) {
 
-    actual suspend fun fetchTodos(): List<Todo> {
-        val userId = obtainUserId()
+    actual suspend fun fetchTodos(userId: String): List<Todo> {
         return suspendCancellableCoroutine { continuation ->
             interactor.fetchTodos(userId) { todos, exception ->
                 if (exception != null) {
@@ -22,8 +21,7 @@ actual class FirebaseTodoStore(
         }
     }
 
-    actual suspend fun deleteTodo(todoId: String) {
-        val userId = obtainUserId()
+    actual suspend fun deleteTodo(userId: String, todoId: String) {
         return suspendCancellableCoroutine { continuation ->
             interactor.deleteTodo(userId, todoId) { exception ->
                 if (exception != null) {
@@ -35,8 +33,7 @@ actual class FirebaseTodoStore(
         }
     }
 
-    actual suspend fun addTodo(todo: Todo): String {
-        val userId = obtainUserId()
+    actual suspend fun addTodo(userId: String, todo: Todo): String {
         return suspendCancellableCoroutine { continuation ->
             interactor.addTodo(userId, todo) { id, exception ->
                 if (exception != null) {
@@ -48,8 +45,7 @@ actual class FirebaseTodoStore(
         }
     }
 
-    actual suspend fun updateTodo(todo: Todo) {
-        val userId = obtainUserId()
+    actual suspend fun updateTodo(userId: String, todo: Todo) {
         return suspendCancellableCoroutine { continuation ->
             interactor.updateTodo(userId, todo) { exception ->
                 if (exception != null) {
@@ -57,16 +53,6 @@ actual class FirebaseTodoStore(
                 } else {
                     continuation.resume(Unit)
                 }
-            }
-        }
-    }
-
-    private suspend fun obtainUserId(): String = suspendCancellableCoroutine { continuation ->
-        interactor.obtainUserId { userId, exception ->
-            if (exception != null) {
-                continuation.resumeWithException(exception)
-            } else if (userId != null) {
-                continuation.resume(userId)
             }
         }
     }

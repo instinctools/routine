@@ -12,13 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp">
 
-        <activity android:name="com.instinctools.routine_kmp.ui.list.TodoListActivity">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:theme="@style/Theme.SplashApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity android:name="com.instinctools.routine_kmp.ui.list.TodoListActivity" />
         <activity android:name="com.instinctools.routine_kmp.ui.details.TodoDetailsActivity" />
     </application>
 </manifest>

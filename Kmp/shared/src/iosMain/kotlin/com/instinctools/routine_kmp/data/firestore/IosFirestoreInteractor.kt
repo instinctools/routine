@@ -8,6 +8,4 @@ interface IosFirestoreInteractor {
     fun deleteTodo(userId: String, todoId: String, listener: (Exception?) -> Unit)
     fun addTodo(userId: String, todo: Todo, listener: (String?, Exception?) -> Unit)
     fun updateTodo(userId: String, todo: Todo, listener: (Exception?) -> Unit)
-
-    fun obtainUserId(listener: (String?, Exception?) -> Unit)
 }

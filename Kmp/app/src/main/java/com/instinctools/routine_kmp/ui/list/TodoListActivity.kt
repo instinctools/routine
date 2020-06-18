@@ -1,37 +1,36 @@
 package com.instinctools.routine_kmp.ui.list
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivityTodosBinding
+import com.instinctools.routine_kmp.ui.RetainPresenterActivity
 import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
 import com.instinctools.routine_kmp.ui.list.adapter.TodosAdapter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 import com.instinctools.routine_kmp.util.appComponent
-import com.instinctools.routine_kmp.util.cancelChildren
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Provider
 
-class TodoListActivity : AppCompatActivity() {
+class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
 
     private lateinit var binding: ActivityTodosBinding
 
     @Inject lateinit var presenterProvider: Provider<TodoListPresenter>
 
-    private lateinit var presenter: TodoListPresenter
-    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    override lateinit var presenter: TodoListPresenter
+    override val presenterCreator: () -> TodoListPresenter = {
+        presenterProvider.get()
+    }
 
     private val adapter = TodosAdapter { _, item ->
         val intent = TodoDetailsActivity.buildIntent(this, item.todo.id)
@@ -56,9 +55,7 @@ class TodoListActivity : AppCompatActivity() {
 
         appComponent.inject(this)
 
-        presenter = lastCustomNonConfigurationInstance as? TodoListPresenter
-            ?: presenterProvider.get().also { it.start() }
-
+        createPresenter()
         setupUi()
     }
 
@@ -80,20 +77,6 @@ class TodoListActivity : AppCompatActivity() {
         }
             .launchIn(scope)
     }
-
-    override fun onStop() {
-        super.onStop()
-        scope.cancelChildren()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!isChangingConfigurations) {
-            presenter.stop()
-        }
-    }
-
-    override fun onRetainCustomNonConfigurationInstance() = presenter
 
     private fun setupUi() {
         binding.content.layoutManager = LinearLayoutManager(this)
@@ -128,5 +111,9 @@ class TodoListActivity : AppCompatActivity() {
             }
             .setNegativeButton(R.string.todos_delete_cancel, null)
             .show()
+    }
+
+    companion object {
+        fun buildIntent(context: Context) = Intent(context, TodoListActivity::class.java)
     }
 }
