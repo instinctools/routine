@@ -65,5 +65,6 @@ object Deps {
     object Firebase {
         const val auth = "com.google.firebase:firebase-auth-ktx:19.3.1"
         const val firestore = "com.google.firebase:firebase-firestore-ktx:21.4.3"
+        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.1"
     }
 }

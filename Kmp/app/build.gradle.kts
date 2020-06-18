@@ -6,6 +6,8 @@ plugins {
     kotlin("kapt")
 }
 apply(plugin = "com.google.gms.google-services")
+apply(plugin = "com.google.firebase.crashlytics")
+
 
 android {
     compileSdkVersion(Versions.compileSdk)
