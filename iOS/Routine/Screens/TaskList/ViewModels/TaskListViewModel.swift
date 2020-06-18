@@ -21,7 +21,7 @@ final class TaskListViewModel: NSObject {
     }
     
     struct Output {
-        let tasks: PublishSubject<[TasksTableSection]>
+        let tasks: Driver<[TasksTableSection]>
         let taskSelected: Driver<Task>
         let placeholder: Driver<UIImage?>
     }
@@ -29,7 +29,6 @@ final class TaskListViewModel: NSObject {
     private lazy var taskProvier: TaskProvider = {
         let container = CoreDataManager.shared.persistentContainer
         let provider = TaskProvider(persistentContainer: container)
-        provider.fetchedResultsControllerDelegate = self
         return provider
     }()
     
@@ -39,19 +38,29 @@ final class TaskListViewModel: NSObject {
         let tasks = PublishSubject<[TasksTableSection]>()
         
         input.didResetTaskDriver
-            .map(resetTask)
-            .map(refreshTasks)
+            .map { [weak self] viewModel in
+                self?.resetTask(viewModel: viewModel)
+            }
+            .map { [weak self] in
+                self?.refreshTasks() ?? []
+            }
             .bind(to: tasks)
             .disposed(by: disposeBag)
         
         input.didDeleteTaskDriver
-            .map(deleteTask)
-            .map(refreshTasks)
+            .map { [weak self] viewModel in
+                self?.deleteTask(viewModel: viewModel)
+            }
+            .map { [weak self] in
+                self?.refreshTasks() ?? []
+            }
             .bind(to: tasks)
             .disposed(by: disposeBag)
         
         input.viewWillAppearDriver
-            .map(refreshTasks)
+            .map { [weak self] in
+                self?.refreshTasks() ?? []
+            }
             .drive(tasks)
             .disposed(by: disposeBag)
         
@@ -60,12 +69,13 @@ final class TaskListViewModel: NSObject {
         let placeholder = tasks.map { $0.flatMap({ $0.elements }).isEmpty }
             .distinctUntilChanged()
             .map { isEmpty in
-                
                 isEmpty ? UIImage(named: "placeholder") : nil
             }
             .asDriver(onErrorJustReturn: nil)
         
-        return Output(tasks: tasks, taskSelected: taskSelected, placeholder: placeholder)
+        return Output(tasks: tasks.asDriver(onErrorJustReturn: []),
+                      taskSelected: taskSelected,
+                      placeholder: placeholder)
     }
     
     private func resetTask(viewModel: TaskViewModel) {
@@ -105,16 +115,5 @@ final class TaskListViewModel: NSObject {
         let interval = min(220 / tasksCount, 30)
         let color = UIColor(red: 255/255, green: CGFloat(index*interval)/255, blue: 0, alpha: 1.0)
         return color
-    }
-}
-
-extension TaskListViewModel: NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
-    }
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        
     }
 }

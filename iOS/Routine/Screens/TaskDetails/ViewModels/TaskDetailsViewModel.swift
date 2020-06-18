@@ -60,14 +60,18 @@ final class TaskDetailsViewModel {
     
     func transform(input: Input) -> Output {
         let dismissAction = input.doneButtonAction.asObservable()
-            .withLatestFrom(
-                Observable.combineLatest(selectedPeriodItem, title, resetTypeIndex)
-            )
-            .map { (item, title, resetTypeIndex) in
+            .withLatestFrom(Observable.combineLatest(
+                selectedPeriodItem,
+                title,
+                resetTypeIndex
+            ))
+            .map { [weak self] (item, title, resetTypeIndex) in
                 let resetType = Task.ResetType(rawValue: Int16(resetTypeIndex))
-                return (title, item?.period, item?.periodCount.value, resetType)
+                self?.saveTask(withTitle: title,
+                               period: item?.period,
+                               periodCount: item?.periodCount.value,
+                               resetType: resetType)
             }
-            .map(saveTask)
             .asDriver(onErrorJustReturn: ())
         
         let doneButtonEnabled = Observable.combineLatest(title, selectedPeriodItem)
@@ -79,26 +83,26 @@ final class TaskDetailsViewModel {
         let showPickerAction = input.menuSelection
             .asObservable()
             .withLatestFrom(selectedPeriodItem)
-            .map { selectedPeriod in
+            .map { [weak self] selectedPeriod in
                 let selectedItem = String(selectedPeriod?.periodCount.value ?? 1)
-                self.period.selectedItem.accept(selectedItem)
+                self?.period.selectedItem.accept(selectedItem)
             }
             .asDriver(onErrorJustReturn: ())
         
         input.selection
-            .do(onNext: { period in
-                self.selectedPeriodItem.accept(period)
-                self.periodItems.forEach { (item) in
+            .drive(onNext: { [weak self] period in
+                self?.selectedPeriodItem.accept(period)
+                self?.periodItems.forEach { (item) in
                     item.selected.accept(item.period == period.period)
                 }
             })
-            .drive()
             .disposed(by: disposeBag)
         
         period.doneButtonTapped
-            .withLatestFrom(
-                Observable.combineLatest(period.selectedItem, selectedPeriodItem)
-            )
+            .withLatestFrom(Observable.combineLatest(
+                period.selectedItem,
+                selectedPeriodItem
+            ))
             .do(onNext: { (pickerItem, periodItem) in
                 let count = Int(pickerItem) ?? 1
                 periodItem?.periodCount.accept(count)

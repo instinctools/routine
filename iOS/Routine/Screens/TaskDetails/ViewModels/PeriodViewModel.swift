@@ -25,7 +25,9 @@ final class PeriodViewModel {
         self.periodCount.accept(periodCount)
         
         self.periodCount
-            .map(title(periodCount:))
+            .map { [weak self] period in
+                (self?.title(periodCount: period)).orEmpty
+            }
             .bind(to: periodTitle)
             .disposed(by: disposeBag)
     }

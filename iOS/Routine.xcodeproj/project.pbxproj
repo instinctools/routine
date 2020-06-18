@@ -3,30 +3,25 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = D7075A31246AB41000B30C20 /* SwipeCellKit */; };
-		D708CD6E246BF9DC006626C0 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D708CD6D246BF9DC006626C0 /* RxSwift */; };
-		D708CD70246BF9DC006626C0 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = D708CD6F246BF9DC006626C0 /* RxCocoa */; };
+		B04B00B760ED215ADA935D00 /* Pods_Routine.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A95054886FFE6689DF5A261 /* Pods_Routine.framework */; };
 		D709E74C24753127002313BA /* AlphaExpansion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74B24753127002313BA /* AlphaExpansion.swift */; };
 		D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74D2475315D002313BA /* Rx+ViewController.swift */; };
 		D709E75024756013002313BA /* RxDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74F24756013002313BA /* RxDiffableDataSource.swift */; };
 		D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E7522475628A002313BA /* AnimationConfiguration.swift */; };
-		D75B9E9924756EEC000A6AB4 /* DifferenceKit in Frameworks */ = {isa = PBXBuildFile; productRef = D75B9E9824756EEC000A6AB4 /* DifferenceKit */; };
 		D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04B2462FAA00091C56C /* CoreDataManager.swift */; };
 		D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* TaskProvider.swift */; };
 		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
 		DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1508242B46D100A8ED3C /* PeriodView.swift */; };
-		DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD0B150B242B51A700A8ED3C /* SnapKit */; };
 		DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */; };
 		DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502A242DF4C500DE2835 /* TaskViewModel.swift */; };
 		DD10502D242E141F00DE2835 /* TaskDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502C242E141F00DE2835 /* TaskDetailsViewModel.swift */; };
 		DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10502E242F284A00DE2835 /* PlaceholderTextView.swift */; };
 		DD3FBB522487E5E900C016D4 /* BottomCardTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3FBB512487E5E900C016D4 /* BottomCardTransition.swift */; };
 		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
-		DD630CE9246EA12F00F73C79 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = DD630CE8246EA12F00F73C79 /* RxBiBinding */; };
 		DD74BF0C2472C14E00AD663E /* UIControl+Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */; };
 		DD93668B24879FE00002C43B /* PeriodPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD93668A24879FE00002C43B /* PeriodPickerViewController.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
@@ -34,8 +29,11 @@
 		DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */; };
 		DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */; };
 		DDD6AC072488FAB700D398A0 /* PeriodPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */; };
+		DDDA6E97249A3F6100F00CC4 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDA6E96249A3F6100F00CC4 /* ActivityIndicatorView.swift */; };
 		DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAF313242A55B30027BC74 /* LabelledDivider.swift */; };
-		DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDEA3245245ADC4F00AFD189 /* CloudKit.framework */; };
+		DDDF6484249A094A001B36EC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDDF6482249A094A001B36EC /* GoogleService-Info.plist */; };
+		DDDF6488249A0E33001B36EC /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF6487249A0E33001B36EC /* AuthViewController.swift */; };
+		DDDF648A249A0E43001B36EC /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDF6489249A0E43001B36EC /* AuthViewModel.swift */; };
 		DDEE3AFB24924563006E291D /* UITableView+PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEE3AFA24924563006E291D /* UITableView+PlaceholderView.swift */; };
 		DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61D242BCDE50031299A /* TaskListViewController.swift */; };
 		DDF0C620242CA3810031299A /* Period.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF0C61F242CA3810031299A /* Period.swift */; };
@@ -55,6 +53,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A95054886FFE6689DF5A261 /* Pods_Routine.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Routine.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		73B0FAB366BB74A535BFD8FF /* Pods-Routine.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Routine.debug.xcconfig"; path = "Target Support Files/Pods-Routine/Pods-Routine.debug.xcconfig"; sourceTree = "<group>"; };
+		9F282C65AD70086DDB5A4E4C /* Pods-Routine.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Routine.release.xcconfig"; path = "Target Support Files/Pods-Routine/Pods-Routine.release.xcconfig"; sourceTree = "<group>"; };
 		D709E74B24753127002313BA /* AlphaExpansion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphaExpansion.swift; sourceTree = "<group>"; };
 		D709E74D2475315D002313BA /* Rx+ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+ViewController.swift"; sourceTree = "<group>"; };
 		D709E74F24756013002313BA /* RxDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxDiffableDataSource.swift; sourceTree = "<group>"; };
@@ -76,8 +77,12 @@
 		DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
 		DDD2311D242A4B93004194BB /* RepeatPeriodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatPeriodsView.swift; sourceTree = "<group>"; };
 		DDD6AC062488FAB700D398A0 /* PeriodPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickerViewModel.swift; sourceTree = "<group>"; };
+		DDDA6E96249A3F6100F00CC4 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		DDDAF313242A55B30027BC74 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
-		DDEA3243245ADC4C00AFD189 /* Routine.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Routine.entitlements; sourceTree = "<group>"; };
+		DDDF6482249A094A001B36EC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DDDF6483249A094A001B36EC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDDF6487249A0E33001B36EC /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		DDDF6489249A0E43001B36EC /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		DDEA3245245ADC4F00AFD189 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		DDEE3AFA24924563006E291D /* UITableView+PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PlaceholderView.swift"; sourceTree = "<group>"; };
 		DDF0C61D242BCDE50031299A /* TaskListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +94,6 @@
 		DDF395F82428BE27003456DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DDF395FB2428BE27003456DA /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DDF395FE2428BE27003456DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		DDF396002428BE27003456DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF3960D2428BEAB003456DA /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		DDFA7CE02487C903002CDC3F /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
 		DDFA7CE32487CBB2002CDC3F /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
@@ -104,19 +108,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD0B150C242B51A700A8ED3C /* SnapKit in Frameworks */,
-				D7075A32246AB41000B30C20 /* SwipeCellKit in Frameworks */,
-				D708CD70246BF9DC006626C0 /* RxCocoa in Frameworks */,
-				D75B9E9924756EEC000A6AB4 /* DifferenceKit in Frameworks */,
-				DD630CE9246EA12F00F73C79 /* RxBiBinding in Frameworks */,
-				D708CD6E246BF9DC006626C0 /* RxSwift in Frameworks */,
-				DDEA3246245ADC4F00AFD189 /* CloudKit.framework in Frameworks */,
+				B04B00B760ED215ADA935D00 /* Pods_Routine.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8412BC1AD0A35E43CBD1D473 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				73B0FAB366BB74A535BFD8FF /* Pods-Routine.debug.xcconfig */,
+				9F282C65AD70086DDB5A4E4C /* Pods-Routine.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		D709E75124756267002313BA /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +138,7 @@
 			children = (
 				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
 				D709E74B24753127002313BA /* AlphaExpansion.swift */,
+				D709E75124756267002313BA /* DataSource */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -138,6 +146,7 @@
 		DD630CEA246EB50600F73C79 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				DDDF6486249A0E27001B36EC /* Auth */,
 				DD630CEB246EB51400F73C79 /* TaskList */,
 				DD630CEC246EB52000F73C79 /* TaskDetails */,
 				DDFA7CE22487CB8F002CDC3F /* BottomCardViewController */,
@@ -151,7 +160,6 @@
 				DDF0C61D242BCDE50031299A /* TaskListViewController.swift */,
 				DD630CED246EB54100F73C79 /* Views */,
 				DDFCEBE62471B26200954021 /* ViewModels */,
-				D709E75124756267002313BA /* DataSource */,
 			);
 			path = TaskList;
 			sourceTree = "<group>";
@@ -200,10 +208,30 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		DDDF6481249A0940001B36EC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF6483249A094A001B36EC /* Info.plist */,
+				DDDF6482249A094A001B36EC /* GoogleService-Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DDDF6486249A0E27001B36EC /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				DDDF6487249A0E33001B36EC /* AuthViewController.swift */,
+				DDDA6E96249A3F6100F00CC4 /* ActivityIndicatorView.swift */,
+				DDDF6489249A0E43001B36EC /* AuthViewModel.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		DDEA3244245ADC4F00AFD189 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				DDEA3245245ADC4F00AFD189 /* CloudKit.framework */,
+				3A95054886FFE6689DF5A261 /* Pods_Routine.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -224,6 +252,7 @@
 				DDF395F12428BE25003456DA /* Routine */,
 				DDF395F02428BE25003456DA /* Products */,
 				DDEA3244245ADC4F00AFD189 /* Frameworks */,
+				8412BC1AD0A35E43CBD1D473 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -238,7 +267,6 @@
 		DDF395F12428BE25003456DA /* Routine */ = {
 			isa = PBXGroup;
 			children = (
-				DDEA3243245ADC4C00AFD189 /* Routine.entitlements */,
 				DDF396092428BE61003456DA /* Delegate */,
 				DD630CEA246EB50600F73C79 /* Screens */,
 				DDF3960C2428BE9F003456DA /* Models */,
@@ -246,7 +274,7 @@
 				DDF0C623242CE7980031299A /* CoreData */,
 				DD9C0D0324322CB100E4AAFE /* Extensions */,
 				DDF3960A2428BE6D003456DA /* Resource */,
-				DDF3960B2428BE7A003456DA /* Supporting Files */,
+				DDDF6481249A0940001B36EC /* Supporting Files */,
 				DDF395FA2428BE27003456DA /* Preview Content */,
 			);
 			path = Routine;
@@ -276,14 +304,6 @@
 				DDF395FD2428BE27003456DA /* LaunchScreen.storyboard */,
 			);
 			path = Resource;
-			sourceTree = "<group>";
-		};
-		DDF3960B2428BE7A003456DA /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				DDF396002428BE27003456DA /* Info.plist */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		DDF3960C2428BE9F003456DA /* Models */ = {
@@ -332,9 +352,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DDF396032428BE27003456DA /* Build configuration list for PBXNativeTarget "Routine" */;
 			buildPhases = (
+				174FFB75DEF333E360675052 /* [CP] Check Pods Manifest.lock */,
 				DDF395EB2428BE25003456DA /* Sources */,
 				DDF395EC2428BE25003456DA /* Frameworks */,
 				DDF395ED2428BE25003456DA /* Resources */,
+				BEBE203EE871EF8A7C16094E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -342,12 +364,6 @@
 			);
 			name = Routine;
 			packageProductDependencies = (
-				DD0B150B242B51A700A8ED3C /* SnapKit */,
-				D7075A31246AB41000B30C20 /* SwipeCellKit */,
-				D708CD6D246BF9DC006626C0 /* RxSwift */,
-				D708CD6F246BF9DC006626C0 /* RxCocoa */,
-				DD630CE8246EA12F00F73C79 /* RxBiBinding */,
-				D75B9E9824756EEC000A6AB4 /* DifferenceKit */,
 			);
 			productName = Routine;
 			productReference = DDF395EF2428BE25003456DA /* Routine.app */;
@@ -360,7 +376,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1150;
 				ORGANIZATIONNAME = Instinctools;
 				TargetAttributes = {
 					DDF395EE2428BE25003456DA = {
@@ -378,12 +394,6 @@
 			);
 			mainGroup = DDF395E62428BE25003456DA;
 			packageReferences = (
-				DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */,
-				D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
-				D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				D708CD71246BFF8E006626C0 /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */,
-				D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */,
 			);
 			productRefGroup = DDF395F02428BE25003456DA /* Products */;
 			projectDirPath = "";
@@ -400,12 +410,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDF395FF2428BE27003456DA /* LaunchScreen.storyboard in Resources */,
+				DDDF6484249A094A001B36EC /* GoogleService-Info.plist in Resources */,
 				DDF395FC2428BE27003456DA /* Preview Assets.xcassets in Resources */,
 				DDF395F92428BE27003456DA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		174FFB75DEF333E360675052 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Routine-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BEBE203EE871EF8A7C16094E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Routine/Pods-Routine-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Routine/Pods-Routine-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Routine/Pods-Routine-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DDF395EB2428BE25003456DA /* Sources */ = {
@@ -414,6 +467,7 @@
 			files = (
 				DD93668B24879FE00002C43B /* PeriodPickerViewController.swift in Sources */,
 				D709E75024756013002313BA /* RxDiffableDataSource.swift in Sources */,
+				DDDA6E97249A3F6100F00CC4 /* ActivityIndicatorView.swift in Sources */,
 				DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */,
 				DDDAF314242A55B30027BC74 /* LabelledDivider.swift in Sources */,
 				DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */,
@@ -428,6 +482,7 @@
 				DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */,
 				DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */,
 				D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */,
+				DDDF6488249A0E33001B36EC /* AuthViewController.swift in Sources */,
 				DDF3960E2428BEAB003456DA /* Task.swift in Sources */,
 				DDD6AC072488FAB700D398A0 /* PeriodPickerViewModel.swift in Sources */,
 				DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */,
@@ -447,6 +502,7 @@
 				DDD2311E242A4B93004194BB /* RepeatPeriodsView.swift in Sources */,
 				DDF0C61E242BCDE50031299A /* TaskListViewController.swift in Sources */,
 				DD10502D242E141F00DE2835 /* TaskDetailsViewModel.swift in Sources */,
+				DDDF648A249A0E43001B36EC /* AuthViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,16 +636,17 @@
 		};
 		DDF396042428BE27003456DA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73B0FAB366BB74A535BFD8FF /* Pods-Routine.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Routine/Routine.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Routine/Preview Content\"";
 				DEVELOPMENT_TEAM = 27W6695PZZ;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Routine/Supporting Files/Info.plist";
+				INFOPLIST_FILE = Routine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -605,16 +662,17 @@
 		};
 		DDF396052428BE27003456DA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9F282C65AD70086DDB5A4E4C /* Pods-Routine.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Routine/Routine.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"Routine/Preview Content\"";
 				DEVELOPMENT_TEAM = 27W6695PZZ;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = "Routine/Supporting Files/Info.plist";
+				INFOPLIST_FILE = Routine/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -650,90 +708,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwipeCellKit/SwipeCellKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.7.1;
-			};
-		};
-		D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.1;
-			};
-		};
-		D708CD71246BFF8E006626C0 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.1;
-			};
-		};
-		D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ra1028/DifferenceKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.5;
-			};
-		};
-		DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.1;
-			};
-		};
-		DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RxSwiftCommunity/RxBiBinding.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.5;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		D7075A31246AB41000B30C20 /* SwipeCellKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D7075A30246AB41000B30C20 /* XCRemoteSwiftPackageReference "SwipeCellKit" */;
-			productName = SwipeCellKit;
-		};
-		D708CD6D246BF9DC006626C0 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
-		};
-		D708CD6F246BF9DC006626C0 /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D708CD6C246BF9DC006626C0 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-		D75B9E9824756EEC000A6AB4 /* DifferenceKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D75B9E9724756EEC000A6AB4 /* XCRemoteSwiftPackageReference "DifferenceKit" */;
-			productName = DifferenceKit;
-		};
-		DD0B150B242B51A700A8ED3C /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DD0B150A242B51A700A8ED3C /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		DD630CE8246EA12F00F73C79 /* RxBiBinding */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DD630CE7246EA12F00F73C79 /* XCRemoteSwiftPackageReference "RxBiBinding" */;
-			productName = RxBiBinding;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */ = {

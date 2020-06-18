@@ -70,13 +70,15 @@ final class TaskViewController: UIViewController {
     
     private func registerNotifications() {
         NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
-            .map(keyboardWillShow(notification:))
-            .subscribe()
+            .subscribe(onNext: { [weak self] notification in
+                self?.keyboardWillShow(notification: notification)
+            })
             .disposed(by: disposeBag)
         
         NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
-            .map(keyboardWillHide(notification:))
-            .subscribe()
+            .subscribe(onNext: { [weak self] notification in
+                self?.keyboardWillHide(notification: notification)
+            })
             .disposed(by: disposeBag)
     }
     
@@ -90,6 +92,12 @@ final class TaskViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .label
         navigationController?.navigationBar.barTintColor = .systemBackground
         navigationController?.navigationBar.shadowImage = UIImage()
+        
+        cancelButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss()
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setupLayout() {        
@@ -120,10 +128,6 @@ final class TaskViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        cancelButton.rx.tap
-            .subscribe(onNext: dismiss)
-            .disposed(by: disposeBag)
-        
         let input = TaskDetailsViewModel.Input(
             doneButtonAction: doneButton.rx.tap.asDriver(),
             selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never()),
@@ -136,22 +140,24 @@ final class TaskViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.dismissAction
-            .drive(onNext: dismiss)
+            .drive(onNext: { [weak self] in
+                self?.dismiss()
+            })
             .disposed(by: disposeBag)
-        
+
         output.showPickerAction
-            .do(onNext: showPeriodPicker)
-            .drive()
+            .drive(onNext: { [weak self] in
+                self?.showPeriodPicker()
+            })
             .disposed(by: disposeBag)
-        
-        
+
         (resetTypeSegmentControl.rx.selectedSegmentIndex <-> viewModel.resetTypeIndex)
             .disposed(by: disposeBag)
 
         (textView.rx.title <-> viewModel.title)
             .disposed(by: disposeBag)
-        
-        repeatPeriodsView.bind(items: viewModel.periodItems)        
+
+        repeatPeriodsView.bind(items: viewModel.periodItems)
     }
     
     private func keyboardWillShow(notification: Notification) {

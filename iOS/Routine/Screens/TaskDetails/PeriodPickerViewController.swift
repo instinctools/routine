@@ -27,7 +27,7 @@ final class PeriodPickerViewController: BottomCardViewController {
     private let doneButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Done", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
         return button
     }()
@@ -83,10 +83,12 @@ final class PeriodPickerViewController: BottomCardViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         
         doneButton.rx.tap
-            .do(onNext: hide)
+            .do(onNext: { [weak self] in
+                self?.hide()
+            })
             .subscribe()
             .disposed(by: disposeBag)
     }
@@ -117,14 +119,15 @@ final class PeriodPickerViewController: BottomCardViewController {
             .bind(to: viewModel.doneButtonTapped)
             .disposed(by: disposeBag)
         
-        viewModel.selectedItem.do(onNext: { (value) in
+        viewModel.selectedItem.subscribe(onNext: { [weak self] value in
+            guard let `self` = self else { return }
+            
             let row = (Int(value) ?? 1) - 1
             let component = 0
             if self.pickerView.selectedRow(inComponent: component) != row {
                 self.pickerView.selectRow(row, inComponent: 0, animated: false)
             }
         })
-        .subscribe()
         .disposed(by: disposeBag)
     }
 

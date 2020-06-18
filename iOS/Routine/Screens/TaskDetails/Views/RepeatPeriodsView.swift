@@ -51,8 +51,9 @@ final class PeriodsView: UIView {
             
             Observable.of(periodView.selection, periodView.menuSelection)
                 .merge()
-                .do(onNext: { self.selection.onNext(periodViewModel) })
-                .subscribe()
+                .subscribe(onNext: { [weak self] in
+                    self?.selection.onNext(periodViewModel)
+                })
                 .disposed(by: disposeBag)
             
             periodView.menuSelection

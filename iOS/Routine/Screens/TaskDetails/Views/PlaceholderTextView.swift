@@ -64,8 +64,8 @@ final class PlaceholderTextView: UIView {
         super.init(frame: .zero)
         setupLayout()
         
-        textView.rx.text.orEmpty.map { text in
-            return text.isEmpty ? self.placeholder : ""
+        textView.rx.text.orEmpty.map { [weak self] text in
+            return text.isEmpty ? self?.placeholder : ""
         }
         .bind(to: placeholderTextView.rx.text)
         .disposed(by: disposeBag)

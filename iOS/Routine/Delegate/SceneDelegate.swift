@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SwiftUI
+import Firebase
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -20,8 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         if let windowScene = scene as? UIWindowScene {
-            let viewController = TaskListViewController()
+            let viewController = AuthViewController(viewModel: AuthViewModel())
             let rootViewController = UINavigationController(rootViewController: viewController)
+            rootViewController.navigationBar.backgroundColor = .systemBackground
             rootViewController.navigationBar.prefersLargeTitles = true
 
             let window = UIWindow(windowScene: windowScene)
@@ -31,6 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             taskNotificationCenter.requestNotifications()
             taskNotificationCenter.registerTaskCategory()
+            
+            FirebaseApp.configure()
         }
     }
 

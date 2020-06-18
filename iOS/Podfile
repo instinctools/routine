@@ -1,0 +1,16 @@
+platform :ios, '13.0'
+
+target 'Routine' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Routine
+  pod 'RxSwift', '~> 5.1.0'
+  pod 'RxCocoa', '~> 5.1.0'
+  pod 'SnapKit', '~> 5.0.0'
+  pod 'RxBiBinding', '~> 0.2.5'
+  pod 'SwipeCellKit', '~> 2.7.0'
+  pod 'DifferenceKit', '~> 1.1.0'
+  pod 'Firebase/Auth', '~> 6.0.0'
+  pod 'Firebase/Firestore', '~> 6.0.0'
+end

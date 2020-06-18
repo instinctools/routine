@@ -11,7 +11,6 @@ import RxSwift
 import RxCocoa
 import SwipeCellKit
 import DifferenceKit
-import RxBiBinding
 
 extension Int: Differentiable { }
 typealias TasksTableSection = ArraySection<Int, TaskViewModel>
@@ -33,14 +32,33 @@ final class TaskListViewController: UIViewController {
     private let resetTaskSubject = PublishSubject<TaskViewModel>()
     private let deleteTaskSubject = PublishSubject<TaskViewModel>()
     
-    private let viewModel = TaskListViewModel()
+    private let viewModel: TaskListViewModel
     private let disposeBag = DisposeBag()
+    
+    init(viewModel: TaskListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
+        setupLayout()
         bindViewModel()
+    }
+    
+    private func setupLayout() {
+        tableView.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+        }
     }
     
     private func setupView() {
@@ -51,17 +69,13 @@ final class TaskListViewController: UIViewController {
         
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
-
-        tableView.snp.makeConstraints { (make) in
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-        }
+        
+        tableView.rx.setDelegate(self).disposed(by: disposeBag)
         
         addButton.rx.tap
-            .do(onNext: showTaskCreationView)
-            .subscribe()
+            .subscribe(onNext: { [weak self] in
+                self?.showTaskDetailsView(task: nil)
+            })
             .disposed(by: disposeBag)
     }
     
@@ -76,20 +90,18 @@ final class TaskListViewController: UIViewController {
         let output = viewModel.transform(input: input)
         
         output.tasks
-            .asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
         output.taskSelected
-            .do(onNext: showTaskDetailsView)
-            .drive()
+            .drive(onNext: { [weak self] task in
+                self?.showTaskDetailsView(task: task)
+            })
             .disposed(by: disposeBag)
         
         output.placeholder
             .drive(tableView.rx.placeholderView)
             .disposed(by: disposeBag)
-        
-        tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
     
     private func showTaskDetailsView(task: Task?) {
@@ -98,10 +110,6 @@ final class TaskListViewController: UIViewController {
         let viewController = UINavigationController(rootViewController: rootViewController)
         viewController.modalPresentationStyle = .fullScreen
         navigationController?.present(viewController, animated: true)
-    }
-    
-    private func showTaskCreationView() {
-        showTaskDetailsView(task: nil)
     }
     
     private func makeDataSource() -> RxDiffableDataSource<Int, TaskViewModel> {

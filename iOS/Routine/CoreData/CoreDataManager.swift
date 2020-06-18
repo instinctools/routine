@@ -12,10 +12,8 @@ final class CoreDataManager {
     
     static var shared = CoreDataManager()
      
-    private(set) lazy var persistentContainer: NSPersistentCloudKitContainer = {
-        let container = NSPersistentCloudKitContainer(name: "Routine")
-        let description = container.persistentStoreDescriptions.first
-        
+    private(set) lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "Routine")
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
         

@@ -85,8 +85,9 @@ final class PeriodView: UIView {
             .disposed(by: disposeBag)
         
         viewModel.selected
-            .map(setSelected)
-            .subscribe()
+            .subscribe(onNext: { [weak self] selected in
+                self?.setSelected(selected)
+            })
             .disposed(by: disposeBag)
         
         menuButton.rx.tap.bind(to: menuSelection)
