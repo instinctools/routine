@@ -1,39 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:routine_flutter/authentication/authenticationBloc.dart';
+import 'package:routine_flutter/authentication/authenticationEvent.dart';
+import 'package:routine_flutter/authentication/authenticationState.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/todo/todolist.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
-class SplashScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _SplashScreenState();
-}
+class SplashScreen extends StatelessWidget {
+  final MainRepository _mainRepository;
 
-class _SplashScreenState extends State<SplashScreen> {
-  MainRepository _mainRepository = MainRepository();
-
-  _SplashScreenState() {
-    login();
-  }
+  SplashScreen(this._mainRepository);
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: body());
-  }
-
-  Widget body() {
-    if (_mainRepository.isLoggedIn()) {
-      return TodoList(_mainRepository);
-    } else {
-      return _splashScreenScreen();
-    }
-  }
-
-  void login() {
-    _mainRepository.signInAnonymously().then((value) {
-      setState(() {});
-    });
+    final AuthenticationBloc authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
+    return Scaffold(
+      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          print("authenticationBloc  state = $state");
+          if (state is AuthenticationInitial) {
+            authenticationBloc.add(AuthenticationStarted());
+          }
+          if (state is AuthenticationInProgress) {
+            return _splashScreenScreen();
+          }
+          if (state is AuthenticationSuccess) {
+            return TodoList(_mainRepository);
+          }
+          return _splashScreenScreen();
+        },
+      ),
+    );
   }
 
   Widget _splashScreenScreen() {
