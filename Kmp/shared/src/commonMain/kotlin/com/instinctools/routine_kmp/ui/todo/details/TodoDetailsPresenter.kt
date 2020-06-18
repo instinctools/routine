@@ -5,6 +5,8 @@ import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.Presenter
 import com.instinctools.routine_kmp.ui.todo.details.model.*
+import com.instinctools.routine_kmp.util.ConsumableEvent
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -57,13 +59,13 @@ class TodoDetailsPresenter(
                         val todo = state.todo.copy(periodStrategy = event.periodStrategy)
                         sendState(state.copy(todo = todo))
                     }
-                    Event.Save -> save()
+                    Event.Save -> trySave()
                 }
             }
         }
     }
 
-    private suspend fun save() {
+    private suspend fun trySave() {
         val todo = state.todo
         try {
             if (todoId == null) {
@@ -74,8 +76,9 @@ class TodoDetailsPresenter(
                 todoRepository.update(updatedTodo)
             }
             sendState(state.copy(saved = true))
-        } catch (error: IllegalStateException) {
-            // TODO handle validation issue
+        } catch (error: Throwable) {
+            if (error is CancellationException) return
+            sendState(state.copy(saveError = ConsumableEvent(error)))
         }
     }
 
@@ -102,7 +105,8 @@ class TodoDetailsPresenter(
         val periods: List<PeriodUnitUiModel> = allPeriodUiModels(),
         val saved: Boolean = false,
         val saveEnabled: Boolean = false,
-        val validationErrors: Set<ValidationError> = emptySet()
+        val validationErrors: Set<ValidationError> = emptySet(),
+        val saveError: ConsumableEvent<Throwable>? = null
     )
 
     sealed class Event {

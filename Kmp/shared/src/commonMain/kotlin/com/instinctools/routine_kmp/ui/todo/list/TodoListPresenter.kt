@@ -10,14 +10,12 @@ import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
 import com.instinctools.routine_kmp.ui.Presenter
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
+import com.instinctools.routine_kmp.util.ConsumableEvent
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class TodoListPresenter(
     private val todoRepository: TodoRepository
@@ -33,7 +31,7 @@ class TodoListPresenter(
 
     override fun start() {
         scope.launch {
-            todoRepository.refresh()
+            tryRefresh()
         }
 
         todoRepository.getTodosSortedByDate()
@@ -44,22 +42,48 @@ class TodoListPresenter(
         scope.launch {
             for (event in _events) {
                 when (event) {
-                    is Event.Reset -> {
-                        val todo = requireNotNull(todoRepository.getTodoById(event.id)) { "Failed to load todo with id=${event.id}" }
-                        val resetter = TodoResetterFactory.get(todo.periodStrategy)
-                        val resetTodo = resetter.reset(todo)
-                        todoRepository.update(resetTodo)
-                    }
-                    is Event.Delete -> withContext(NonCancellable) {
-                        todoRepository.delete(event.id)
-                    }
-                    Event.Refresh -> {
-                        sendState(state.copy(refreshing = true))
-                        todoRepository.refresh()
-                        sendState(state.copy(refreshing = false))
-                    }
+                    is Event.Reset -> tryReset(event.id)
+                    is Event.Delete -> tryDelete(event.id)
+                    Event.Refresh -> tryRefresh()
                 }
             }
+        }
+    }
+
+    private suspend fun tryRefresh() {
+        try {
+            sendState(state.copy(refreshing = true, refreshError = null))
+            todoRepository.refresh()
+            sendState(state.copy(refreshing = false))
+        } catch (error: Throwable) {
+            if (error is CancellationException) return
+            sendState(state.copy(refreshing = false, refreshError = ConsumableEvent(error)))
+        }
+    }
+
+    private suspend fun tryDelete(todoId: String) = withContext(NonCancellable) {
+        try {
+            sendState(state.copy(refreshing = true, deleteError = null))
+            todoRepository.delete(todoId)
+            sendState(state.copy(refreshing = false))
+        } catch (error: Throwable) {
+            if (error is CancellationException) return@withContext
+            sendState(state.copy(refreshing = false, deleteError = ConsumableEvent(error)))
+        }
+    }
+
+    private suspend fun tryReset(todoId: String) {
+        try {
+            sendState(state.copy(refreshing = true, resetError = null))
+            val todo = requireNotNull(todoRepository.getTodoById(todoId)) { "Failed to load todo with id=${todoId}" }
+            val resetter = TodoResetterFactory.get(todo.periodStrategy)
+            val resetTodo = resetter.reset(todo)
+
+            todoRepository.update(resetTodo)
+            sendState(state.copy(refreshing = false))
+        } catch (error: Throwable) {
+            if (error is CancellationException) return
+            sendState(state.copy(refreshing = false, resetError = ConsumableEvent(error)))
         }
     }
 
@@ -102,6 +126,10 @@ class TodoListPresenter(
     data class State(
         val expiredTodos: List<TodoListUiModel> = emptyList(),
         val futureTodos: List<TodoListUiModel> = emptyList(),
-        val refreshing: Boolean = false
+        val refreshing: Boolean = false,
+
+        val refreshError: ConsumableEvent<Throwable>? = null,
+        val deleteError: ConsumableEvent<Throwable>? = null,
+        val resetError: ConsumableEvent<Throwable>? = null
     )
 }
