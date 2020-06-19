@@ -9,9 +9,11 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 
 import TodoList from './src/ui/todos/TodoList';
 import TodoDetails from './src/ui/details/details';
+import Splash from "./src/ui/splash/Splash";
 
 const AppNavigator = createStackNavigator(
     {
+        Splash: Splash,
         Items: TodoList,
         Details: TodoDetails,
     },{
