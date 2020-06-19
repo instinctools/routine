@@ -13,7 +13,7 @@
 		D709E75024756013002313BA /* RxDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E74F24756013002313BA /* RxDiffableDataSource.swift */; };
 		D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D709E7522475628A002313BA /* AnimationConfiguration.swift */; };
 		D78DE04C2462FAA00091C56C /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04B2462FAA00091C56C /* CoreDataManager.swift */; };
-		D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* TaskProvider.swift */; };
+		D78DE04E2462FABF0091C56C /* CoreDataTaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78DE04D2462FABF0091C56C /* CoreDataTaskProvider.swift */; };
 		DD0B1507242B45EF00A8ED3C /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */; };
 		DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0B1508242B46D100A8ED3C /* PeriodView.swift */; };
 		DD105029242DF1BB00DE2835 /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */; };
@@ -24,6 +24,8 @@
 		DD42C3E9245191FF0028FAB5 /* RoutineNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */; };
 		DD74BF0C2472C14E00AD663E /* UIControl+Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */; };
 		DD93668B24879FE00002C43B /* PeriodPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD93668A24879FE00002C43B /* PeriodPickerViewController.swift */; };
+		DDA907E0249CAB8500F88AB3 /* FirebaseTaskProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA907DF249CAB8500F88AB3 /* FirebaseTaskProvider.swift */; };
+		DDA907E2249CE01B00F88AB3 /* TaskUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA907E1249CE01B00F88AB3 /* TaskUtility.swift */; };
 		DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */; };
 		DDB6B296244DAF5E00069C5D /* View+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B295244DAF5E00069C5D /* View+UIView.swift */; };
 		DDB6B29A244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */; };
@@ -61,7 +63,7 @@
 		D709E74F24756013002313BA /* RxDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxDiffableDataSource.swift; sourceTree = "<group>"; };
 		D709E7522475628A002313BA /* AnimationConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationConfiguration.swift; sourceTree = "<group>"; };
 		D78DE04B2462FAA00091C56C /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		D78DE04D2462FABF0091C56C /* TaskProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskProvider.swift; sourceTree = "<group>"; };
+		D78DE04D2462FABF0091C56C /* CoreDataTaskProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTaskProvider.swift; sourceTree = "<group>"; };
 		DD0B1506242B45EF00A8ED3C /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		DD0B1508242B46D100A8ED3C /* PeriodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodView.swift; sourceTree = "<group>"; };
 		DD105028242DF1BB00DE2835 /* TaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewModel.swift; sourceTree = "<group>"; };
@@ -72,6 +74,8 @@
 		DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineNotificationCenter.swift; sourceTree = "<group>"; };
 		DD74BF0B2472C14E00AD663E /* UIControl+Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Responder.swift"; sourceTree = "<group>"; };
 		DD93668A24879FE00002C43B /* PeriodPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickerViewController.swift; sourceTree = "<group>"; };
+		DDA907DF249CAB8500F88AB3 /* FirebaseTaskProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseTaskProvider.swift; sourceTree = "<group>"; };
+		DDA907E1249CE01B00F88AB3 /* TaskUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskUtility.swift; sourceTree = "<group>"; };
 		DDB6B293244DAF4400069C5D /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
 		DDB6B295244DAF5E00069C5D /* View+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+UIView.swift"; sourceTree = "<group>"; };
 		DDB6B299244DB01D00069C5D /* UITableViewCell+ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+ReuseIdentifier.swift"; sourceTree = "<group>"; };
@@ -137,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				DD42C3E8245191FF0028FAB5 /* RoutineNotificationCenter.swift */,
+				DDA907E1249CE01B00F88AB3 /* TaskUtility.swift */,
 				D709E74B24753127002313BA /* AlphaExpansion.swift */,
 				D709E75124756267002313BA /* DataSource */,
 			);
@@ -236,14 +241,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DDF0C623242CE7980031299A /* CoreData */ = {
+		DDF0C623242CE7980031299A /* Providers */ = {
 			isa = PBXGroup;
 			children = (
 				DDF0C624242CE7C10031299A /* Routine.xcdatamodeld */,
 				D78DE04B2462FAA00091C56C /* CoreDataManager.swift */,
-				D78DE04D2462FABF0091C56C /* TaskProvider.swift */,
+				D78DE04D2462FABF0091C56C /* CoreDataTaskProvider.swift */,
+				DDA907DF249CAB8500F88AB3 /* FirebaseTaskProvider.swift */,
 			);
-			path = CoreData;
+			path = Providers;
 			sourceTree = "<group>";
 		};
 		DDF395E62428BE25003456DA = {
@@ -271,7 +277,7 @@
 				DD630CEA246EB50600F73C79 /* Screens */,
 				DDF3960C2428BE9F003456DA /* Models */,
 				DD42C3E7245191E00028FAB5 /* Helpers */,
-				DDF0C623242CE7980031299A /* CoreData */,
+				DDF0C623242CE7980031299A /* Providers */,
 				DD9C0D0324322CB100E4AAFE /* Extensions */,
 				DDF3960A2428BE6D003456DA /* Resource */,
 				DDDF6481249A0940001B36EC /* Supporting Files */,
@@ -476,9 +482,10 @@
 				DDF0C626242CE7C10031299A /* Routine.xcdatamodeld in Sources */,
 				DDF395F32428BE25003456DA /* AppDelegate.swift in Sources */,
 				DDF395F52428BE25003456DA /* SceneDelegate.swift in Sources */,
+				DDA907E2249CE01B00F88AB3 /* TaskUtility.swift in Sources */,
 				DDFD13312462062C00D3BDC7 /* Optional+Default.swift in Sources */,
 				DD0B1509242B46D100A8ED3C /* PeriodView.swift in Sources */,
-				D78DE04E2462FABF0091C56C /* TaskProvider.swift in Sources */,
+				D78DE04E2462FABF0091C56C /* CoreDataTaskProvider.swift in Sources */,
 				DD10502F242F284A00DE2835 /* PlaceholderTextView.swift in Sources */,
 				DDB6B294244DAF4400069C5D /* UIBarButtonItem+Init.swift in Sources */,
 				D709E74E2475315D002313BA /* Rx+ViewController.swift in Sources */,
@@ -492,6 +499,7 @@
 				DDFA7CE62487D11B002CDC3F /* PresentDismissAnimation.swift in Sources */,
 				D709E7532475628A002313BA /* AnimationConfiguration.swift in Sources */,
 				DD10502B242DF4C500DE2835 /* TaskViewModel.swift in Sources */,
+				DDA907E0249CAB8500F88AB3 /* FirebaseTaskProvider.swift in Sources */,
 				DDEE3AFB24924563006E291D /* UITableView+PlaceholderView.swift in Sources */,
 				DDF0C620242CA3810031299A /* Period.swift in Sources */,
 				DDFA7CE12487C903002CDC3F /* BottomCardViewController.swift in Sources */,

@@ -10,15 +10,33 @@ import UIKit
 
 extension Optional where Wrapped == Task.ResetType {
     var orDefault: Task.ResetType {
-        return self ?? .toPeriod
+        return self ?? .byPeriod
     }
 }
 
 struct Task: Equatable {
     
-    enum ResetType: Int16 {
-        case toPeriod
-        case toDate
+    enum ResetType: String {
+        case byPeriod = "BY_PERIOD"
+        case byDate = "BY_DATE"
+        
+        var index: Int {
+            switch self {
+            case .byPeriod:
+                return 0
+            case .byDate:
+                return 1
+            }
+        }
+        
+        init(indexValue: Int) {
+            switch indexValue {
+            case 0:
+                self = .byPeriod
+            default:
+                self = .byDate
+            }
+        }
     }
     
     let id: String
@@ -48,9 +66,9 @@ struct Task: Equatable {
     init(entity: TaskEntity) {
         self.id = entity.id.orEmpty
         self.title = entity.title.orEmpty
-        self.period = Period(rawValue: entity.period).orDefault
+        self.period = Period(rawValue: entity.period.orEmpty).orDefault
         self.periodCount = Int(entity.periodCount)
         self.startDate = entity.startDate.orToday
-        self.resetType = ResetType(rawValue: entity.resetType).orDefault
+        self.resetType = ResetType(rawValue: entity.resetType.orEmpty).orDefault
     }
 }

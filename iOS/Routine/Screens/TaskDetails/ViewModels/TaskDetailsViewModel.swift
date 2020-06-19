@@ -33,16 +33,12 @@ final class TaskDetailsViewModel {
     private let task: Task?
     private let disposeBag = DisposeBag()
 
-    private lazy var taskProvier: TaskProvider = {
-        let container = CoreDataManager.shared.persistentContainer
-        let provider = TaskProvider(persistentContainer: container)
-        return provider
-    }()
+    private let taskProvier: TaskProvider = FirebaseTaskProvider()
     
     init(task: Task? = nil) {
         self.task = task
         self.title = BehaviorRelay(value: task?.title)
-        self.resetTypeIndex = BehaviorRelay(value: Int(task?.resetType.rawValue ?? 0))
+        self.resetTypeIndex = BehaviorRelay(value: task?.resetType.index ?? 0)
         
         var selectedPeriod: PeriodViewModel?
         self.periodItems = Period.allCases.map { period in
@@ -66,7 +62,7 @@ final class TaskDetailsViewModel {
                 resetTypeIndex
             ))
             .map { [weak self] (item, title, resetTypeIndex) in
-                let resetType = Task.ResetType(rawValue: Int16(resetTypeIndex))
+                let resetType = Task.ResetType(indexValue: resetTypeIndex)
                 self?.saveTask(withTitle: title,
                                period: item?.period,
                                periodCount: item?.periodCount.value,

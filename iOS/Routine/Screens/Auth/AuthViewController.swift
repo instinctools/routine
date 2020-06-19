@@ -136,6 +136,9 @@ final class AuthViewController: UIViewController {
     private func showTaskList() {
         let viewModel = TaskListViewModel()
         let viewController = TaskListViewController(viewModel: viewModel)
-        navigationController?.setViewControllers([viewController], animated: true)
+        let rootViewController = UINavigationController(rootViewController: viewController)
+        rootViewController.navigationBar.backgroundColor = .systemBackground
+        rootViewController.navigationBar.prefersLargeTitles = true
+        UIApplication.shared.windows.first?.rootViewController = rootViewController
     }
 }

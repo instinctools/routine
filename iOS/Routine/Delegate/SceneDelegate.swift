@@ -12,7 +12,7 @@ import Firebase
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    private lazy var taskNotificationCenter = RoutineNotificationCenter()
+    private let taskNotificationCenter = RoutineNotificationCenter()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -20,20 +20,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         if let windowScene = scene as? UIWindowScene {
+            FirebaseApp.configure()
+
+            taskNotificationCenter.requestNotifications()
+            taskNotificationCenter.registerTaskCategory()            
+
             let viewController = AuthViewController(viewModel: AuthViewModel())
             let rootViewController = UINavigationController(rootViewController: viewController)
-            rootViewController.navigationBar.backgroundColor = .systemBackground
-            rootViewController.navigationBar.prefersLargeTitles = true
+            rootViewController.isNavigationBarHidden = true
 
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = rootViewController
             window.makeKeyAndVisible()
             self.window = window
-            
-            taskNotificationCenter.requestNotifications()
-            taskNotificationCenter.registerTaskCategory()
-            
-            FirebaseApp.configure()
         }
     }
 
@@ -54,6 +53,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneWillResignActive(_ scene: UIScene) {
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
+        
+        taskNotificationCenter.refreshNotifications()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -66,7 +67,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
-

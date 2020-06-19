@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum Period: Int16, CaseIterable {
-    case day
-    case week
-    case month
-    case year
+enum Period: String, CaseIterable {
+    case day = "DAY"
+    case week = "WEEK"
+    case month = "MONTH"
+    case year = "YEAR"
         
     var calendarComponent: Calendar.Component {
         switch self {

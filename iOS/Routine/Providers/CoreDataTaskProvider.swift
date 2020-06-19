@@ -6,7 +6,6 @@
 //  Copyright © 2020 Instinctools. All rights reserved.
 //
 
-import UIKit
 import CoreData
 
 extension Task {
@@ -16,7 +15,7 @@ extension Task {
         period: .day,
         periodCount: 2,
         startDate: Date(),
-        resetType: .toPeriod
+        resetType: .byPeriod
     )
     static let mock2: Task = .init(
         id: UUID().uuidString,
@@ -24,24 +23,38 @@ extension Task {
         period: .week,
         periodCount: 1,
         startDate: Date(),
-        resetType: .toDate
+        resetType: .byDate
     )
+}
+
+protocol TaskProvider {
+    func getAllTasks(completion: @escaping ([Task]) -> Void)
+    func add(task: Task)
+    func resetTask(id: String, completion: ((Task?) -> Void)?)
+    func update(task: Task)
+    func deleteTask(byId id: String)
+}
+
+extension TaskProvider {
+    func resetTask(id: String, completion: ((Task?) -> Void)? = nil) {
+        resetTask(id: id, completion: completion)
+    }
 }
 
 private extension TaskEntity {
     func update(from task: Task) {
         id = task.id
         title = task.title
-        period = Int16(task.period.rawValue)
+        period = task.period.rawValue
         periodCount = Int16(task.periodCount)
         startDate = task.startDate
         resetType = task.resetType.rawValue
     }
 }
 
-final class TaskProvider {
+final class CoreDataTaskProvider: TaskProvider {
     
-    private var persistentContainer: NSPersistentContainer
+    private let persistentContainer: NSPersistentContainer
     
     private var context: NSManagedObjectContext {
         return persistentContainer.viewContext
@@ -78,72 +91,41 @@ final class TaskProvider {
         self.persistentContainer = persistentContainer
     }
     
-    func getAllTasks() -> [Task] {
+    func getAllTasks(completion: @escaping ([Task]) -> Void) {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
         do {
-            return try context.fetch(fetchRequest).map(Task.init)
+            let tasks = try context.fetch(fetchRequest).map(Task.init)
+            completion(tasks)
         } catch {
             log(error: error)
+            completion([])
         }
-        return []
     }
-
+    
     func add(task: Task) {
         let taskEntity = TaskEntity(context: context)
         taskEntity.update(from: task)
         saveContext()
     }
     
-    func resetTask(id: String) {
+    func resetTask(id: String, completion: ((Task?) -> Void)?) {
         do {
-            if let taskUpdate = try getTasks(withId: id) {
-                let resetType = Task.ResetType(rawValue: taskUpdate.resetType).orDefault
-                
-                switch resetType {
-                case .toPeriod:
-                    taskUpdate.startDate = Date()
-                    saveContext()
-                case .toDate:
-                    let calendar = Calendar.current
-                    let task = Task(entity: taskUpdate)
-                    
-                    let maxPossibleStartDate = calendar.date(
-                        byAdding: task.period.calendarComponent,
-                        value: task.periodCount / 2,
-                        to: Date()
-                    ).orToday
-                    
-                    guard task.startDate < maxPossibleStartDate else {
-                        return
-                    }
-                    
-                    var newStartDate = task.startDate
-                    let minPossibleStartDate = calendar.date(
-                        byAdding: task.period.calendarComponent,
-                        value: -task.periodCount,
-                        to: Date()
-                    ).orToday
-                    
-                    repeat {
-                        newStartDate = calendar.date(
-                            byAdding: task.period.calendarComponent,
-                            value: task.periodCount,
-                            to: newStartDate
-                        ).orToday
-                    } while newStartDate < minPossibleStartDate
-                    
-                    taskUpdate.startDate = newStartDate
-                    saveContext()
-                }
+            if let taskUpdate = try getTaskEntity(byId: id) {
+                let task = Task(entity: taskUpdate)
+                let resetedTask = TaskUtility.reset(task: task)
+                taskUpdate.update(from: resetedTask)
+                saveContext()
+                completion?(resetedTask)
             }
         } catch {
             log(error: error)
         }
+        completion?(nil)
     }
     
     func update(task: Task) {
         do {
-            if let taskUpdate = try getTasks(withId: task.id) {
+            if let taskUpdate = try getTaskEntity(byId: task.id) {
                 taskUpdate.update(from: task)
                 saveContext()
             }
@@ -154,7 +136,7 @@ final class TaskProvider {
     
     func deleteTask(byId id: String) {
         do {
-            if let taskDelete = try getTasks(withId: id) {
+            if let taskDelete = try getTaskEntity(byId: id) {
                 context.delete(taskDelete)
                 saveContext()
             }
@@ -163,14 +145,14 @@ final class TaskProvider {
         }
     }
     
-    private func getTasks(withId id: String) throws -> TaskEntity? {
+    private func getTaskEntity(byId id: String) throws -> TaskEntity? {
         let fetchRequest: NSFetchRequest<TaskEntity> = TaskEntity.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         fetchRequest.fetchLimit = 1
         return try context.fetch(fetchRequest).first
     }
     
-    func log(error: Error) {
+    private func log(error: Error) {
         assertionFailure("Task Provider error: \(error)")
     }
     

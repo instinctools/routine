@@ -23,19 +23,14 @@ enum TaskCategoryAction: String {
 final class RoutineNotificationCenter: NSObject {
     
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let taskProvider: TaskProvider
-    
-    private var backgroundResponseCompletion: (() -> Void)?
+    private lazy var taskProvider: TaskProvider = FirebaseTaskProvider()
     
     override init() {
-        let container = CoreDataManager.shared.persistentContainer
-        self.taskProvider = TaskProvider(persistentContainer: container)
         super.init()
         notificationCenter.delegate = self
-        taskProvider.fetchedResultsControllerDelegate = self
     }
     
-    private func updateScheduledNotificationsBadgeValues() {
+    private func updateScheduledNotificationsBadgeValues(currentBadge: Int) {
         notificationCenter.getPendingNotificationRequests { (requests) in
             let sortedRequests = requests
                 .filter { $0.trigger is UNCalendarNotificationTrigger }
@@ -52,7 +47,7 @@ final class RoutineNotificationCenter: NSObject {
                     continue
                 }
                 
-                content.badge = (i + 1) as NSNumber
+                content.badge = (currentBadge + i + 1) as NSNumber
                 let newRequest = UNNotificationRequest(
                     identifier: request.identifier,
                     content: content,
@@ -76,33 +71,32 @@ final class RoutineNotificationCenter: NSObject {
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateMatching, repeats: false)
         let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
         
-        notificationCenter.add(request) { (error) in
-            guard error == nil else { return }
-            self.updateScheduledNotificationsBadgeValues()
-        }
+        notificationCenter.add(request)
     }
     
-    func removeNotification(withId id: String) {
-        notificationCenter.removeDeliveredNotifications(withIdentifiers: [id])
-        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
-        updateScheduledNotificationsBadgeValues()
+    func refreshNotifications() {
+        notificationCenter.removeAllDeliveredNotifications()
+        notificationCenter.removeAllPendingNotificationRequests()
+        taskProvider.getAllTasks { [weak self] (tasks) in
+            guard let `self` = self else { return }
+            tasks.forEach(self.addNotification(forTask:))
+            self.updateScheduledNotificationsBadgeValues(currentBadge: 0)
+        }
     }
     
     func removeAllDeliveredNotifications() {
         UIApplication.shared.applicationIconBadgeNumber = 0
         notificationCenter.removeAllDeliveredNotifications()
-        updateScheduledNotificationsBadgeValues()
+        updateScheduledNotificationsBadgeValues(currentBadge: 0)
+    }
+
+    private func removeNotification(withId id: String) {
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [id])
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [id])
     }
 }
 
 extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        
-        updateScheduledNotificationsBadgeValues()
-    }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
@@ -116,36 +110,22 @@ extension RoutineNotificationCenter: UNUserNotificationCenterDelegate {
             
             UIApplication.shared.applicationIconBadgeNumber -= 1
             
-            self.backgroundResponseCompletion = completionHandler
-            
             switch action {
             case .reset:
-                taskProvider.resetTask(id: requestId)
+                taskProvider.resetTask(id: requestId, completion: { task in
+                    if let task = task {
+                        self.addNotification(forTask: task)
+                        self.updateScheduledNotificationsBadgeValues(currentBadge: UIApplication.shared.applicationIconBadgeNumber)
+                    }
+                    completionHandler()
+                })
             case .delete:
                 taskProvider.deleteTask(byId: requestId)
+                removeNotification(withId: requestId)
+                updateScheduledNotificationsBadgeValues(currentBadge: UIApplication.shared.applicationIconBadgeNumber)
+                completionHandler()
             }
         }        
-    }
-}
-
-extension RoutineNotificationCenter: NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
-                    didChange anObject: Any,
-                    at indexPath: IndexPath?,
-                    for type: NSFetchedResultsChangeType,
-                    newIndexPath: IndexPath?) {
-        
-        guard let entity = anObject as? TaskEntity else { return }
-        
-        let task = Task(entity: entity)
-        switch type {
-        case .delete:
-            self.removeNotification(withId: task.id)
-        default:
-            self.addNotification(forTask: task)
-        }
-        
-        backgroundResponseCompletion?()
     }
 }
 

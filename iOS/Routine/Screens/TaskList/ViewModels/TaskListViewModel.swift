@@ -26,11 +26,7 @@ final class TaskListViewModel: NSObject {
         let placeholder: Driver<UIImage?>
     }
     
-    private lazy var taskProvier: TaskProvider = {
-        let container = CoreDataManager.shared.persistentContainer
-        let provider = TaskProvider(persistentContainer: container)
-        return provider
-    }()
+    private let taskProvier: TaskProvider = FirebaseTaskProvider()
     
     private let disposeBag = DisposeBag()
     
@@ -38,11 +34,11 @@ final class TaskListViewModel: NSObject {
         let tasks = PublishSubject<[TasksTableSection]>()
         
         input.didResetTaskDriver
-            .map { [weak self] viewModel in
-                self?.resetTask(viewModel: viewModel)
+            .flatMap { [weak self] viewModel in
+                self?.resetTask(viewModel: viewModel) ?? .just(())
             }
-            .map { [weak self] in
-                self?.refreshTasks() ?? []
+            .flatMap { [weak self] in
+                self?.refreshTasks() ?? .just([])
             }
             .bind(to: tasks)
             .disposed(by: disposeBag)
@@ -51,17 +47,17 @@ final class TaskListViewModel: NSObject {
             .map { [weak self] viewModel in
                 self?.deleteTask(viewModel: viewModel)
             }
-            .map { [weak self] in
-                self?.refreshTasks() ?? []
+            .flatMap { [weak self] in
+                self?.refreshTasks() ?? .just([])
             }
             .bind(to: tasks)
             .disposed(by: disposeBag)
         
-        input.viewWillAppearDriver
-            .map { [weak self] in
-                self?.refreshTasks() ?? []
+        input.viewWillAppearDriver.asObservable()
+            .flatMap { [weak self] in
+                self?.refreshTasks() ?? .just([])
             }
-            .drive(tasks)
+            .bind(to: tasks)
             .disposed(by: disposeBag)
         
         let taskSelected: Driver<Task> = input.didTapCellDriver.map { $0.task }
@@ -78,37 +74,45 @@ final class TaskListViewModel: NSObject {
                       placeholder: placeholder)
     }
     
-    private func resetTask(viewModel: TaskViewModel) {
-        taskProvier.resetTask(id: viewModel.task.id)
+    private func resetTask(viewModel: TaskViewModel) -> Single<Void> {
+        return Single.create { (single) -> Disposable in
+            self.taskProvier.resetTask(id: viewModel.task.id, completion: { _ in
+                single(.success(()))
+            })
+            return Disposables.create()
+        }
     }
     
     private func deleteTask(viewModel: TaskViewModel) {
         taskProvier.deleteTask(byId: viewModel.task.id)
     }
 
-    private func refreshTasks() -> [TasksTableSection] {
-        let newTasks = taskProvier.getAllTasks().sorted { $0.finishDate < $1.finishDate }
-        
-        var futureTasks: [TaskViewModel] = []
-        var expiredTasks: [TaskViewModel] = []
-        
-        let tasksCount = newTasks.count
-        
-        for index in 0..<tasksCount {
-            let task = newTasks[index]
-            let color = makeColor(tasksCount: tasksCount, index: index)
-            let viewModel = TaskViewModel(task: task, color: color)
-            if task.finishDate < Date() {
-                expiredTasks.append(viewModel)
-            } else {
-                futureTasks.append(viewModel)
-            }
+    private func refreshTasks() -> Single<[TasksTableSection]> {
+        return Single.create { (single) -> Disposable in
+            self.taskProvier.getAllTasks(completion: { tasks in
+                let newTasks = tasks.sorted { $0.finishDate < $1.finishDate }
+                var futureTasks: [TaskViewModel] = []
+                var expiredTasks: [TaskViewModel] = []
+                
+                let tasksCount = newTasks.count
+                
+                for index in 0..<tasksCount {
+                    let task = newTasks[index]
+                    let color = self.makeColor(tasksCount: tasksCount, index: index)
+                    let viewModel = TaskViewModel(task: task, color: color)
+                    if task.finishDate < Date() {
+                        expiredTasks.append(viewModel)
+                    } else {
+                        futureTasks.append(viewModel)
+                    }
+                }
+                single(.success([
+                    TasksTableSection(model: 0, elements: expiredTasks),
+                    TasksTableSection(model: 1, elements: futureTasks)
+                ]))
+            })
+            return Disposables.create()
         }
-        
-        return [
-            TasksTableSection(model: 0, elements: expiredTasks),
-            TasksTableSection(model: 1, elements: futureTasks)
-        ]
     }
     
     private func makeColor(tasksCount: Int, index: Int) -> UIColor {

@@ -11,6 +11,7 @@ target 'Routine' do
   pod 'RxBiBinding', '~> 0.2.5'
   pod 'SwipeCellKit', '~> 2.7.0'
   pod 'DifferenceKit', '~> 1.1.0'
-  pod 'Firebase/Auth', '~> 6.0.0'
-  pod 'Firebase/Firestore', '~> 6.0.0'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Firestore'
+  pod 'FirebaseFirestoreSwift'
 end
