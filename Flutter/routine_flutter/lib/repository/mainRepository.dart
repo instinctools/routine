@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:routine_flutter/errors/action_result.dart';
+import 'package:routine_flutter/errors/error_handler.dart';
 import 'package:routine_flutter/data/todo.dart';
 
 class MainRepository {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Firestore _fireStore = Firestore.instance;
   CollectionReference _collectionReference;
+  ErrorHandler _errorHandler = ErrorHandler();
 
   Stream<QuerySnapshot> getTodos() {
     print("get todos");
@@ -31,14 +34,14 @@ class MainRepository {
     });
   }
 
-  Future<AuthResult> signInAnonymously() async {
+  Future<ActionResult> signInAnonymously() async {
     try {
       AuthResult authResult = await _firebaseAuth.signInAnonymously();
       _collectionReference = _fireStore.collection("users/${authResult.user.uid}/todos");
-      return authResult;
+      return ActionSuccess();
     } catch (e) {
       print("error _signInAnonymously exception = $e");
-      return null;
+      return ActionFailure(_errorHandler.getErrorMessage(e));
     }
   }
 }
