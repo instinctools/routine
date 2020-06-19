@@ -1,9 +1,9 @@
 import React from "react";
-import {ActivityIndicator, Image, Text, View, Button} from "react-native";
+import {ActivityIndicator, Image, Text, View} from "react-native";
 import {connect} from "react-redux";
 import SplashAction from "../../action/SplashAction";
 import {TouchableRipple} from "react-native-paper";
-import analytics from "@react-native-firebase/analytics";
+import {splashStyle} from "../../styles/Styles";
 
 class DetailsScreen extends React.Component {
     static navigationOptions = {
@@ -12,7 +12,7 @@ class DetailsScreen extends React.Component {
 
     render() {
         let {isProgress, isSuccess, isError} = this.props.splash
-        if (isSuccess){
+        if (isSuccess) {
             props.navigation.navigate("Items")
         }
         let text = isProgress ? "Setting up account" : "An error occurred!"
@@ -22,7 +22,7 @@ class DetailsScreen extends React.Component {
         }}>
             <View style={{flex: 1, justifyContent: 'center'}}>
                 <Image
-                    style={{width: 196, height: 196, alignSelf: `center`}}
+                    style={splashStyle.image}
                     //TODO Check if it possible to replace by svg
                     source={require('./splash.png')}
                 />
@@ -30,30 +30,18 @@ class DetailsScreen extends React.Component {
             </View>
 
             <View style={{flex: 1, alignItems: 'center'}}>
-                <Text style={{
-                    color: `#835D51`,
-                    textAlign: "center",
-                    fontSize: 18,
-                    fontWeight: 'bold'
-                }}>{text}</Text>
+                <Text style={splashStyle.message}>{text}</Text>
                 {
                     isProgress ?
                         getProgress() :
                         <TouchableRipple
-                            style ={{
-                                justifyContent: `center`,
-                                alignItems: `center`,
-                                marginTop: 32,
-                                borderRadius: 8,
-                                backgroundColor: `#835D51`,
-                                width: 156,
-                                height: 50}}
+                            style={splashStyle.retryBtn}
                             onPress={() => {
 
                             }}
                             borderless={true}
                         >
-                            <Text style={{fontSize: 16, color: `#ffffff`}}>Retry</Text>
+                            <Text style={splashStyle.retryBtnText}>Retry</Text>
                         </TouchableRipple>
                 }
             </View>
