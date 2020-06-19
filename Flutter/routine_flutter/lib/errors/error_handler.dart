@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
+import 'package:routine_flutter/errors/error_codes.dart';
 
 import 'action_result.dart';
 
@@ -10,9 +11,7 @@ class ErrorHandler {
   StreamSubscription _subscription;
 
   ErrorHandler() {
-    _subscription = Connectivity().onConnectivityChanged
-        .asBroadcastStream()
-        .listen((event) {
+    _subscription = Connectivity().onConnectivityChanged.asBroadcastStream().listen((event) {
       _isConnected = event != ConnectivityResult.none;
     });
   }
@@ -29,8 +28,12 @@ class ErrorHandler {
   }
 
   String _handlePlatformException(PlatformException error) {
-//    in future will contain a big switch - case with different error codes
-    return "${error.code} : ${error.message}";
+    switch (error.code) {
+      case ErrorCodes.networkRequestFailed:
+        return "Internet is not available!";
+      default:
+        return "${error.code} : ${error.message}";
+    }
   }
 
   void clear() => _subscription.cancel();
