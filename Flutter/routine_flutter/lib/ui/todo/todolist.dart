@@ -2,28 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:routine_flutter/data/db_helper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/main.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
+import 'package:routine_flutter/ui/todo/todo_bloc/todo_bloc.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoList extends StatefulWidget {
-  final mainRepository;
+  final MainRepository _mainRepository;
 
-  TodoList(this.mainRepository);
+  TodoList(this._mainRepository);
 
   @override
-  State<StatefulWidget> createState() => _TodoListState(mainRepository);
+  State<StatefulWidget> createState() => _TodoListState(_mainRepository);
 }
 
 class _TodoListState extends State<TodoList> {
-  DatabaseHelper helper = DatabaseHelper();
   MainRepository mainRepository;
 
   _TodoListState(mainRepository) {
@@ -142,13 +141,6 @@ class _TodoListState extends State<TodoList> {
         child: Dismissible(
           key: Key(todo.id.toString()),
           child: TodoItem(todo, colorIndex),
-          onResize: () {
-            setState(() {});
-            print("reseted");
-          },
-          onDismissed: (direction) {
-            setState(() {});
-          },
           confirmDismiss: (direction) => _confirmDismiss(direction, todo),
           background: _getDismissibleItemBackground(Strings.listResetSlideActionLabel, Colors.green, true),
           secondaryBackground: _getDismissibleItemBackground(Strings.listDeleteSlideActionLabel, Colors.grey, false),
@@ -219,9 +211,6 @@ class _TodoListState extends State<TodoList> {
       });
 
   void _pushEditScreen({Todo todo}) async {
-    var isAdded = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo, mainRepository: mainRepository)));
-    if (isAdded != null && isAdded) {
-      setState(() {});
-    }
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo, mainRepository: mainRepository)));
   }
 }

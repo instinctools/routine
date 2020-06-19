@@ -16,13 +16,12 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           print("authenticationBloc  state = $state");
           if (state is AuthenticationInitial) {
-            authenticationBloc.add(AuthenticationStarted());
+            BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationStarted());
           }
           if (state is AuthenticationInProgress) {
             return _splashScreenScreen();
