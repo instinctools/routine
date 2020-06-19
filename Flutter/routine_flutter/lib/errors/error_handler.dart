@@ -7,14 +7,17 @@ import 'package:routine_flutter/errors/error_codes.dart';
 import 'action_result.dart';
 
 class ErrorHandler {
-  bool _isConnected;
+  bool _isConnected = false;
   StreamSubscription _subscription;
 
-  ErrorHandler() {
+static final ErrorHandler instance = ErrorHandler._();
+
+  ErrorHandler._() {
     _subscription = Connectivity().onConnectivityChanged.asBroadcastStream().listen((event) {
       _isConnected = event != ConnectivityResult.none;
     });
   }
+
 
   String getErrorMessage(Object error) {
     if (!_isConnected) {
