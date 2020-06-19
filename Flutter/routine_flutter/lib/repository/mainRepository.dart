@@ -8,7 +8,6 @@ class MainRepository {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Firestore _fireStore = Firestore.instance;
   CollectionReference _collectionReference;
-  ErrorHandler _errorHandler = ErrorHandler();
 
   Stream<QuerySnapshot> getTodos() {
     print("get todos");

@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:routine_flutter/authentication/authenticationEvent.dart';
 import 'package:routine_flutter/authentication/authenticationState.dart';
+import 'package:routine_flutter/errors/action_result.dart';
+import 'package:routine_flutter/errors/error_handler.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -16,10 +18,12 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
     if (event is AuthenticationStarted) {
       yield AuthenticationInProgress();
-      dynamic authResult = await mainRepository.signInAnonymously();
-      if (authResult != null) {
+      ActionResult authResult = await mainRepository.signInAnonymously();
+
+      if (authResult is ActionSuccess) {
         yield AuthenticationSuccess();
       } else {
+        print(authResult.message);
         yield AuthenticationFailure();
       }
     }

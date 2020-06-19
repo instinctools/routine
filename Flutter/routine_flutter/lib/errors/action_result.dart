@@ -1,3 +1,5 @@
+import 'package:routine_flutter/utils/consts.dart';
+
 abstract class ActionResult {
   String message;
 
@@ -7,5 +9,5 @@ abstract class ActionResult {
 class ActionSuccess extends ActionResult {}
 
 class ActionFailure extends ActionResult {
-  ActionFailure([String message = "Something went wrong"]) : super(message);
+  ActionFailure([String message = Strings.errorMessageDefault]) : super(message);
 }

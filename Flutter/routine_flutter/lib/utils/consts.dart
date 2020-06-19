@@ -33,6 +33,10 @@ class Strings {
   static const String todoKeyReference = "reference";
 
   static const String splashScreenText = "Setting up account";
+
+//  error handling
+  static const String errorMessageDefault = "Something went wrong...";
+  static const String errorMessageNetworkIsNotAvailable = " Internet is not available!";
 }
 
 class Dimens {

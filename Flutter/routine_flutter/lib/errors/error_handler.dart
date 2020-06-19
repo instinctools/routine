@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:routine_flutter/errors/error_codes.dart';
+import 'package:routine_flutter/utils/consts.dart';
 
 import 'action_result.dart';
 
@@ -21,7 +22,7 @@ static final ErrorHandler instance = ErrorHandler._();
 
   String getErrorMessage(Object error) {
     if (!_isConnected) {
-      return " Internet is not available!";
+      return Strings.errorMessageNetworkIsNotAvailable;
     }
     if (error is PlatformException) {
       return _handlePlatformException(error);
@@ -33,7 +34,7 @@ static final ErrorHandler instance = ErrorHandler._();
   String _handlePlatformException(PlatformException error) {
     switch (error.code) {
       case ErrorCodes.networkRequestFailed:
-        return "Internet is not available!";
+        return Strings.errorMessageNetworkIsNotAvailable;
       default:
         return "${error.code} : ${error.message}";
     }
