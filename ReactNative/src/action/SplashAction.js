@@ -8,17 +8,22 @@ const SplashAction = {
     }
 };
 
-SplashAction.auth = () => {
+SplashAction.startAuth = () => {
     return (dispatch) => {
         dispatch({
-            type: SplashAction.Type.SPLASH_AUTH
+            type: SplashAction.Type.SPLASH_AUTH_PROGRESS
         });
         return auth()
             .signInAnonymously()
-            .then(dispatch({
-                    type: SplashAction.Type.SPLASH_AUTH_SUCCESS
-                }
-            ))
+            .then(()=>{
+                //TODO workaround to prevent error after successful login
+                setTimeout(function() {
+                    dispatch({
+                            type: SplashAction.Type.SPLASH_AUTH_SUCCESS
+                        }
+                    )
+                }, 500);
+            })
     }
 };
 

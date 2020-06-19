@@ -22,6 +22,8 @@ export const splashReducer = (state = SPLASH_INITIAL_STATE, action) => {
         case SplashAction.Type.SPLASH_AUTH_ERROR:
             newState.isError = true
             break
+        default:
+            break;
     }
     return newState
 }

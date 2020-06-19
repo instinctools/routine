@@ -4,16 +4,25 @@ import {connect} from "react-redux";
 import SplashAction from "../../action/SplashAction";
 import {TouchableRipple} from "react-native-paper";
 import {splashStyle} from "../../styles/Styles";
+import auth from "@react-native-firebase/auth";
 
 class DetailsScreen extends React.Component {
     static navigationOptions = {
         header: null
     };
 
+    componentDidMount() {
+        if(auth().currentUser === null){
+            this.props.startAuth()
+        } else {
+            this.props.navigation.replace("Items")
+        }
+    }
+
     render() {
         let {isProgress, isSuccess, isError} = this.props.splash
         if (isSuccess) {
-            props.navigation.navigate("Items")
+            this.props.navigation.replace("Items")
         }
         let text = isProgress ? "Setting up account" : "An error occurred!"
 
@@ -37,7 +46,8 @@ class DetailsScreen extends React.Component {
                         <TouchableRipple
                             style={splashStyle.retryBtn}
                             onPress={() => {
-
+                                let pro = this.props
+                                this.props.startAuth()
                             }}
                             borderless={true}
                         >
