@@ -12,7 +12,7 @@ class DetailsScreen extends React.Component {
     };
 
     componentDidMount() {
-        if(auth().currentUser === null){
+        if (auth().currentUser === null) {
             this.props.startAuth()
         } else {
             this.props.navigation.replace("Items")
@@ -24,7 +24,7 @@ class DetailsScreen extends React.Component {
         if (isSuccess) {
             this.props.navigation.replace("Items")
         }
-        let text = isProgress ? "Setting up account" : "An error occurred!"
+        let text = isError ? "An error occurred!" : "Setting up account"
 
         return <View style={{
             flex: 1,
@@ -41,8 +41,7 @@ class DetailsScreen extends React.Component {
             <View style={{flex: 1, alignItems: 'center'}}>
                 <Text style={splashStyle.message}>{text}</Text>
                 {
-                    isProgress ?
-                        getProgress() :
+                    isError ?
                         <TouchableRipple
                             style={splashStyle.retryBtn}
                             onPress={() => {
@@ -52,7 +51,8 @@ class DetailsScreen extends React.Component {
                             borderless={true}
                         >
                             <Text style={splashStyle.retryBtnText}>Retry</Text>
-                        </TouchableRipple>
+                        </TouchableRipple> :
+                        getProgress()
                 }
             </View>
         </View>
