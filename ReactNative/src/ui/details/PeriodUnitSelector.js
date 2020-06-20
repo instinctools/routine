@@ -8,11 +8,11 @@ import {Period, PeriodsList} from "../../constants";
 import PeriodSelector from "./PeriodSelector";
 import analytics from "@react-native-firebase/analytics";
 
-const bgSelected = `#878787`;
-const bgUnSelected = `#F1F1F1`;
+const bgSelected = `#77767E`;
+const bgUnSelected = `#EEEDF0`;
 
-const textSelected = `#F1F1F1`;
-const textUnselected = `#878787`;
+const textSelected = `#FFFFFF`;
+const textUnselected = `#77767E`;
 
 class PeriodUnitSelector extends React.Component {
 

@@ -9,6 +9,12 @@ import Action from "../../action/todos";
 import analytics from "@react-native-firebase/analytics";
 import {getProgress} from "../../utils";
 
+const bgSelected = `#77767E`;
+const bgUnSelected = `#EEEDF0`;
+
+const textSelected = `#FFFFFF`;
+const textUnselected = `#77767E`;
+
 class DetailsScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -76,9 +82,13 @@ class DetailsScreen extends React.Component {
                             onChangeText={title => this.props.editTodoTitle(title)}
                             value={this.props.title}
                         />
+                        <View style={{flexDirection: `row`, marginTop: 40}}>
+                            {getResetBtn(true, "Reset to period", true)}
+                            {getResetBtn(false, "Reset to date", false)}
+                        </View>
                         <View style={todoDetailsStyle.separatorContainer}>
                             <View style={todoDetailsStyle.separatorLine}/>
-                            <Text style={todoDetailsStyle.separatorText}>Repeat</Text>
+                            <Text style={todoDetailsStyle.separatorText}>Repeat every</Text>
                         </View>
                         <PeriodSelector/>
                     </View>
@@ -87,6 +97,27 @@ class DetailsScreen extends React.Component {
             </View>
         );
     }
+}
+
+const getResetBtn = (isSelected, text, isLeft) => {
+    const bgColor = isSelected ? bgSelected : bgUnSelected;
+    const textColor = isSelected ? textSelected : textUnselected;
+    let defBtnStyle = {flex: 1, height: 36, backgroundColor: bgColor}
+    let style
+    if (isLeft){
+        style = {...defBtnStyle, borderTopLeftRadius: 6, borderBottomLeftRadius: 6}
+    } else {
+        style = {...defBtnStyle, borderBottomRightRadius: 6, borderTopRightRadius: 6}
+    }
+
+    return <TouchableRipple
+        style={style}
+        borderless={true}
+        onPress={() => {
+
+        }}>
+        <Text style={{flex: 1, textAlign: `center`, textAlignVertical: `center`, color: textColor}}>{text}</Text>
+    </TouchableRipple>
 }
 
 const mapStateToProps = (state) => {
