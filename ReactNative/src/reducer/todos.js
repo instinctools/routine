@@ -127,11 +127,9 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             };
             break;
         case ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT:
-            const isPeriodPickerVisible = action.periodUnit === Period.DAY;
             newState.editTodo = {
                 ...newState.editTodo,
                 periodUnit: action.periodUnit,
-                isPeriodSelectorVisible: isPeriodPickerVisible
             };
             if (action.periodUnit !== Period.DAY) {
                 newState.editTodo.period = 1

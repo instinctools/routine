@@ -36,16 +36,13 @@ const createButton = (props, period) => {
         style={{...todoDetailsStyle.periodUnitSelectorContainer, backgroundColor: bgColor}}
         borderless={true}
         onPress={() => {
-            if (period === Period.DAY){
-                analytics().logEvent('period_todo_react', {});
-            }
             props.editTodoPeriodUnit(period);
         }}>
         <View style={todoDetailsStyle.periodUnitSelectorContainerWrapper}>
             <TouchableRipple style={toolbarStyle.menuItem}
                              borderless={true}
                              onPress={()=>{
-
+                                 props.changePeriodSelector(true)
                              }}>
                 <Icon name="md-menu" size={24} color={textColor}/>
             </TouchableRipple>

@@ -21,22 +21,27 @@ class PeriodSelector extends React.Component {
         return <Modal animationType="slide"
                       visible={this.props.isVisible}
                       transparent={true}
-                      onRequestClose = {() => this.props.changePeriodSelector(false)}>
+                      onRequestClose={() => this.props.changePeriodSelector(false)}>
             <View
                 style={todoDetailsStyle.periodSelectorContainer}>
                 <View style={todoDetailsStyle.periodSelectorCancelWrapper}>
-                    <TouchableRipple
-                        style={todoDetailsStyle.periodSelectorCancel}
-                        borderless={true}
-                        onPress={() => this.props.changePeriodSelector(false)}>
-                        <Text>Close</Text>
-                    </TouchableRipple>
+                    <View style={{flexDirection: `row`, justifyContent: `flex-end`}}>
+                        <Text style={todoDetailsStyle.periodSelectorInfo}>Choose period</Text>
+                        <TouchableRipple
+                            style={todoDetailsStyle.periodSelectorCancel}
+                            borderless={true}
+                            onPress={() => this.props.changePeriodSelector(false)}>
+                            <Text style={{fontSize: 16, fontWeight: `bold`}}>Done</Text>
+                        </TouchableRipple>
+                    </View>
+                    <View style={{height: 1, backgroundColor: `#AAA9A9`}}/>
                     <WheelPicker style={{width: `auto`, height: 196, marginTop: 24}}
                                  selectedItem={this.props.period - 1}
-                                 indicatorColor={`#8B8B8B`}
+                                 indicatorColor={`rgba(139, 139, 139, 0.87)`}
                                  itemTextSize={24}
+                                 itemTextColor={`#9A99A2`}
                                  selectedItemTextSize={24}
-                                 selectedItemTextColor={`#8B8B8B`}
+                                 selectedItemTextColor={`#232326`}
                                  data={pickerData()}
                                  onItemSelected={value => this.props.editTodoPeriod(value + 1)}
                     />
