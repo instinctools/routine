@@ -139,3 +139,28 @@ export const toolbarStyle = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
+
+export const splashStyle = StyleSheet.create({
+    image: {
+        width: 196, height: 196, alignSelf: `center`
+    },
+    message:{
+        color: `#835D51`,
+        textAlign: "center",
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    retryBtn:{
+        justifyContent: `center`,
+        alignItems: `center`,
+        marginTop: 32,
+        borderRadius: 8,
+        backgroundColor: `#835D51`,
+        width: 156,
+        height: 50
+    },
+    retryBtnText:{
+        fontSize: 16,
+        color: `#ffffff`
+    }
+})
