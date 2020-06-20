@@ -1,18 +1,19 @@
 import React from 'react';
 import {View} from 'react-native';
 import {Text, TouchableRipple} from "react-native-paper";
-import {todoDetailsStyle} from "../../styles/Styles";
+import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
 import {connect} from "react-redux";
 import ActionEditTodo from "../../action/EditTodoAction";
 import {Period, PeriodsList} from "../../constants";
 import PeriodSelector from "./PeriodSelector";
 import analytics from "@react-native-firebase/analytics";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const bgSelected = `#77767E`;
 const bgUnSelected = `#EEEDF0`;
 
-const textSelected = `#FFFFFF`;
-const textUnselected = `#77767E`;
+const textSelected = `#E1E1E1`;
+const textUnselected = `#8B8D8E`;
 
 class PeriodUnitSelector extends React.Component {
 
@@ -41,10 +42,16 @@ const createButton = (props, period) => {
             props.editTodoPeriodUnit(period);
         }}>
         <View style={todoDetailsStyle.periodUnitSelectorContainerWrapper}>
-            <Text style={{...todoDetailsStyle.periodUnitSelectorText, color: textColor}}>
+            <TouchableRipple style={toolbarStyle.menuItem}
+                             borderless={true}
+                             onPress={()=>{
+
+                             }}>
+                <Icon name="md-menu" size={24} color={textColor}/>
+            </TouchableRipple>
+            <Text style={{...todoDetailsStyle.periodUnitSelectorText, color: textColor, textAlign: `right`}}>
                 Every {period.toLowerCase()}
             </Text>
-            <View style={{...todoDetailsStyle.periodUnitSelectorIndicator, backgroundColor: textColor}}/>
         </View>
     </TouchableRipple>
 };

@@ -66,7 +66,7 @@ export const todoDetailsStyle = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     separatorContainer: {
-        marginTop: 16,
+        marginTop: 30,
         flexDirection: `row`,
         alignItems: `center`
     },
@@ -92,17 +92,14 @@ export const todoDetailsStyle = StyleSheet.create({
     periodUnitSelectorContainerWrapper:{
         flexDirection: `row`,
         flex: 1,
-        alignItems: `center`,
-        margin: 16
+        marginTop: 8,
+        marginBottom: 8
     },
     periodUnitSelectorText:{
         flex: 1,
         fontSize: 20,
-    },
-    periodUnitSelectorIndicator:{
-        width: 12,
-        height: 12,
-        borderRadius: 8
+        textAlignVertical: `center`,
+        marginRight: 16
     },
     periodSelectorContainer: {
         flex: 1,
