@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:routine_flutter/errors/action_result.dart';
-import 'package:routine_flutter/errors/error_handler.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/errors/error_extensions.dart';
 
 class MainRepository {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -38,17 +38,5 @@ class MainRepository {
         .signInAnonymously()
         .then((value) => _collectionReference = _fireStore.collection("users/${value.user.uid}/todos"))
         .wrapError("error _signInAnonymously exception");
-  }
-}
-
-extension FutureExt<T> on Future<T> {
-  Future<ActionResult> wrapError([String logPrefix]) async {
-    try {
-      await this;
-      return ActionSuccess();
-    } catch (e) {
-      print("$logPrefix : $e");
-      return ActionFailure(ErrorHandler.instance.getErrorMessage(e));
-    }
   }
 }
