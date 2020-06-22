@@ -15,27 +15,32 @@ class SplashScreen extends StatelessWidget {
   SplashScreen(this._mainRepository);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     return Scaffold(
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          print("authenticationBloc  state = $state");
+          print("authenticationState = $state");
           if (state is AuthenticationInitial) {
             BlocProvider.of<AuthenticationBloc>(context).add(AuthenticationStarted());
+            return _splashScreenProgress();
           }
           if (state is AuthenticationInProgress) {
-            return _splashScreenScreen();
+            return _splashScreenProgress();
           }
           if (state is AuthenticationSuccess) {
             return TodoList(_mainRepository);
           }
-          return _splashScreenScreen();
+          if (state is AuthenticationFailure) {
+            print("AuthenticationFailure error = ${state.error}");
+            return _splashScreenFailure(buildContext);
+          }
+          throw Exception("unexpected AuthenticationState = $state");
         },
       ),
     );
   }
 
-  Widget _splashScreenScreen() {
+  Widget _splashScreenProgress() {
     return Scaffold(
       body: Center(
         child: Column(
@@ -51,6 +56,41 @@ class SplashScreen extends StatelessWidget {
             CircularProgressIndicator(
               backgroundColor: ColorsRes.splashScreenTextColor,
               valueColor: new AlwaysStoppedAnimation<Color>(ColorsRes.splashScreenProgressAnimationColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _splashScreenFailure(BuildContext buildContext) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/images/loading_logo.png'),
+            SizedBox(height: 50),
+            Text(
+              Strings.splashScreenFailureText,
+              style: Styles.splashScreenTextStyle,
+            ),
+            SizedBox(height: 40),
+            SizedBox(
+              width: Dimens.splashScreenRetryButtonWidth,
+              height: Dimens.splashScreenRetryButtonHeight,
+              child: FlatButton(
+                child: Text(
+                  Strings.splashScreenRetryButtonText,
+                  style: Styles.splashScreenRetryButton,
+                ),
+                onPressed: () => BlocProvider.of<AuthenticationBloc>(buildContext).add(AuthenticationRetry()),
+                color: ColorsRes.splashScreenRetryButtonBackgroundColor,
+                textColor: ColorsRes.splashScreenRetryButtonTextColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Dimens.commonBorderRadius),
+                ),
+              ),
             ),
           ],
         ),

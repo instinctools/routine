@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 import 'package:routine_flutter/authentication/authenticationEvent.dart';
 import 'package:routine_flutter/authentication/authenticationState.dart';
 import 'package:routine_flutter/errors/action_result.dart';
-import 'package:routine_flutter/errors/error_handler.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -16,15 +15,16 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
 
   @override
   Stream<AuthenticationState> mapEventToState(AuthenticationEvent event) async* {
-    if (event is AuthenticationStarted) {
+    if (event is AuthenticationStarted || event is AuthenticationRetry) {
       yield AuthenticationInProgress();
-      ActionResult authResult = await mainRepository.signInAnonymously();
+      ActionResult actionResult = await mainRepository.signInAnonymously();
 
-      if (authResult is ActionSuccess) {
+      if (actionResult is ActionSuccess) {
         yield AuthenticationSuccess();
       } else {
-        print(authResult.message);
-        yield AuthenticationFailure();
+        var message = actionResult.message;
+        print(message);
+        yield AuthenticationFailure(message);
       }
     }
   }

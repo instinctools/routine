@@ -40,6 +40,11 @@ class Styles {
     fontSize: Dimens.editResetSelectorTextSize,
   );
 
+  static TextStyle splashScreenRetryButton = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenRetryButtonTextSize,
+  );
+
   static TextStyle splashScreenTextStyle = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: Dimens.splashScreenTextSize,

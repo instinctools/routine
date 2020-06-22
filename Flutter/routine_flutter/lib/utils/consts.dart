@@ -18,8 +18,7 @@ class Strings {
 
   static const String listResetSlideActionLabel = "Reset";
   static const String listDeleteSlideActionLabel = "Delete";
-  static const String listDialogContentText =
-      "Are You sure want to delete this task?";
+  static const String listDialogContentText = "Are You sure want to delete this task?";
   static const String listDialogActionCancel = "Cancel";
   static const String listDialogActionDelete = "Delete";
 
@@ -33,6 +32,8 @@ class Strings {
   static const String todoKeyReference = "reference";
 
   static const String splashScreenText = "Setting up account";
+  static const String splashScreenFailureText = "An error occurred!";
+  static const String splashScreenRetryButtonText = "Retry";
 
 //  error handling
   static const String errorMessageDefault = "Something went wrong...";
@@ -44,6 +45,7 @@ class Dimens {
   static const double commonPadding = 8.0;
   static const double commonPaddingDouble = 16.0;
   static const double commonPaddingLarge = 32.0;
+  static const double commonBorderRadius = 8.0;
 
   static const double listProgressSize = 20.0;
 
@@ -55,9 +57,15 @@ class Dimens {
   static const double editResetSelectorBorderRadius = 4.0;
   static const double editResetSelectorTextSize = 13;
   static const double splashScreenTextSize = 24;
+  static const double splashScreenRetryButtonTextSize = 17;
+  static const double splashScreenRetryButtonWidth = 156;
+  static const double splashScreenRetryButtonHeight = 50;
 }
 
 class ColorsRes {
+  static Color stdWhite = Colors.white;
+  static Color stdBrown = Color(0xff835D51);
+
   static Color mainBgColor = Colors.grey[200];
   static Color darkGrayColor = Colors.grey[800];
   static Color lightGrayColor = Colors.grey[400];
@@ -71,7 +79,9 @@ class ColorsRes {
   static Color selectedResetTypeBackgroundColor = darkGrayColor;
   static Color unselectedResetTypeBackgroundColor = lightGrayColor;
 
-  static Color splashScreenTextColor = Color(0xff835D51);
-  static Color splashScreenProgressBackgroundColor = Color(0xff835D51);
+  static Color splashScreenTextColor = stdBrown;
+  static Color splashScreenProgressBackgroundColor = stdBrown;
   static Color splashScreenProgressAnimationColor = Color(0xffBCA89A);
+  static Color splashScreenRetryButtonTextColor = stdWhite;
+  static Color splashScreenRetryButtonBackgroundColor = stdBrown;
 }
