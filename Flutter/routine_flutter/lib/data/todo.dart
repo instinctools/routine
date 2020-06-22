@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/ui/edit/resetType.dart';
 import 'package:routine_flutter/utils/consts.dart';
 
 class Todo {
   final String id;
   final String title;
-  final String periodUnit;
+  final PeriodUnit periodUnit;
   final int periodValue;
   final int targetDate; //MillisecondsSinceEpoch
   final ResetType resetType;
@@ -17,7 +18,7 @@ class Todo {
     final Map<String, dynamic> values = {
       Strings.todoKeyId: id,
       Strings.todoKeyPeriod: periodValue,
-      Strings.todoKeyPeriodUnit: periodUnit,
+      Strings.todoKeyPeriodUnit: periodUnit.name,
       Strings.todoKeyResetType: resetType.value,
       Strings.todoKeyTimestamp: Timestamp.fromMillisecondsSinceEpoch(targetDate),
       Strings.todoKeyTitle: title,
@@ -54,7 +55,7 @@ class Todo {
         assert(map[Strings.todoKeyTitle] != null),
         id = map[Strings.todoKeyId],
         periodValue = map[Strings.todoKeyPeriod],
-        periodUnit = map[Strings.todoKeyPeriodUnit],
+        periodUnit = findPeriodUnit(map[Strings.todoKeyPeriodUnit]),
         resetType = findResetType(map[Strings.todoKeyResetType]),
         targetDate = ((map[Strings.todoKeyTimestamp]) as Timestamp).millisecondsSinceEpoch,
         title = map[Strings.todoKeyTitle];

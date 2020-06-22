@@ -1,6 +1,6 @@
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/ui/edit/resetType.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
+import 'package:routine_flutter/ui/edit/resetType.dart';
 
 class TimeUtils {
   static DateTime getCurrentTime() {
@@ -13,9 +13,9 @@ class TimeUtils {
   static String getPrettyPeriod(String periodUnit, [int periodValue = 1]) {
     var isPlural = periodValue > 1;
     var periodCount = isPlural ? '$periodValue ' : '';
-    var pluralPostfix = isPlural && periodUnit != Period.MONTH.name ? 's' : '';
+    var pluralPostfix = isPlural && periodUnit != PeriodUnit.MONTH.name ? 's' : '';
 
-    return '$periodCount$periodUnit$pluralPostfix';
+    return '$periodCount${periodUnit.toLowerCase()}$pluralPostfix';
   }
 
   static Todo updateTargetDate(Todo todo) {
@@ -35,14 +35,14 @@ class TimeUtils {
           var daysLeft = targetDateTime.difference(now).inDays;
           int day = 0;
           int month = 0;
-          switch (findPeriod(todo.periodUnit)) {
-            case Period.DAY:
+          switch (todo.periodUnit) {
+            case PeriodUnit.DAY:
               day = todo.periodValue;
               break;
-            case Period.WEEK:
+            case PeriodUnit.WEEK:
               day = todo.periodValue * 7;
               break;
-            case Period.MONTH:
+            case PeriodUnit.MONTH:
               month = todo.periodValue;
               break;
           }
@@ -58,17 +58,17 @@ class TimeUtils {
     return Todo.updateTargetDate(todo, newTargetDate.millisecondsSinceEpoch);
   }
 
-  static DateTime addPeriodToCurrentMoment(String title, String periodUnit, int periodValue) {
+  static DateTime addPeriodToCurrentMoment(String title, PeriodUnit periodUnit, int periodValue) {
     int day = 0;
     int month = 0;
-    switch (findPeriod(periodUnit)) {
-      case Period.DAY:
+    switch (periodUnit) {
+      case PeriodUnit.DAY:
         day = periodValue;
         break;
-      case Period.WEEK:
+      case PeriodUnit.WEEK:
         day = periodValue * 7;
         break;
-      case Period.MONTH:
+      case PeriodUnit.MONTH:
         month = periodValue;
         break;
     }

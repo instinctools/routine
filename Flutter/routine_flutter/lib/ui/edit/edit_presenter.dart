@@ -13,7 +13,7 @@ import 'resetType.dart';
 
 class EditPresenter {
   String id;
-  String periodUnit = Period.DAY.name;
+  PeriodUnit periodUnit = PeriodUnit.DAY;
   int periodValue = 1;
   ResetType resetType = ResetType.RESET_TO_PERIOD;
   DocumentReference reference;
