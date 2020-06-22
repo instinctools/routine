@@ -17,14 +17,14 @@ class MainRepository {
     _collectionReference.add(todo.toMap());
   }
 
-  void updateTodo(Todo todo) {
+  Future<void> updateTodo(Todo todo) async {
     print("update Todo");
     _fireStore.runTransaction((transaction) async {
       await transaction.update(todo.reference, todo.toMap());
     });
   }
 
-  void deleteTodo(Todo todo) {
+  Future<void> deleteTodo(Todo todo) async {
     print("delete Todo");
     _fireStore.runTransaction((transaction) async {
       await transaction.delete(todo.reference);
