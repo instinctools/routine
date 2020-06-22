@@ -49,21 +49,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.6"
-  cloud_firestore_platform_interface:
-    dependency: transitive
-    description:
-      name: cloud_firestore_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.2"
-  cloud_firestore_web:
-    dependency: transitive
-    description:
-      name: cloud_firestore_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.1+2"
+    version: "0.12.10+2"
   collection:
     dependency: transitive
     description:
@@ -71,6 +57,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.12"
+  connectivity:
+    dependency: "direct main"
+    description:
+      name: connectivity
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.8+6"
+  connectivity_macos:
+    dependency: transitive
+    description:
+      name: connectivity_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0+3"
+  connectivity_platform_interface:
+    dependency: transitive
+    description:
+      name: connectivity_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   convert:
     dependency: transitive
     description:
@@ -330,7 +337,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.0+1"
   term_glyph:
     dependency: transitive
     description:
@@ -367,5 +374,5 @@ packages:
     source: hosted
     version: "3.6.1"
 sdks:
-  dart: ">=2.7.0 <3.0.0"
+  dart: ">=2.8.0 <3.0.0"
   flutter: ">=1.16.0 <2.0.0"

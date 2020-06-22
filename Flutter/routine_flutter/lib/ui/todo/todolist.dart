@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/errors/error_utils.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
@@ -96,7 +97,7 @@ class TodoList extends StatelessWidget {
                 print("todoUpdateState");
               } else if (todoUpdateState is TodoUpdateFailure) {
                 print("TodoUpdateFailure todoUpdateState.error = ${todoUpdateState.error}");
-                //show snackbar
+                ErrorUtils.showError(context, message: todoUpdateState.error);
               }
               return ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),

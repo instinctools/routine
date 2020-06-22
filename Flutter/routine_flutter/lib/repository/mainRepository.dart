@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:routine_flutter/errors/action_result.dart';
+import 'package:routine_flutter/errors/error_handler.dart';
 import 'package:routine_flutter/data/todo.dart';
 
 class MainRepository {
@@ -12,33 +14,41 @@ class MainRepository {
     return _collectionReference.snapshots();
   }
 
-  void addTodo(Todo todo) async {
+  Future<ActionResult> addTodo(Todo todo) {
     print("add Todo");
-    _collectionReference.add(todo.toMap());
+    return _collectionReference.add(todo.toMap()).wrapError("add todo error");
   }
 
-  Future<void> updateTodo(Todo todo) async {
+  Future<ActionResult> updateTodo(Todo todo) {
     print("update Todo");
-    _fireStore.runTransaction((transaction) async {
+    return _fireStore.runTransaction((transaction) async {
       await transaction.update(todo.reference, todo.toMap());
-    });
+    }).wrapError("update todo error");
   }
 
-  Future<void> deleteTodo(Todo todo) async {
+  Future<ActionResult> deleteTodo(Todo todo) {
     print("delete Todo");
-    _fireStore.runTransaction((transaction) async {
+    return _fireStore.runTransaction((transaction) async {
       await transaction.delete(todo.reference);
-    });
+    }).wrapError("delete todo error");
   }
 
-  Future<AuthResult> signInAnonymously() async {
+  Future<ActionResult> signInAnonymously() async {
+    return await _firebaseAuth
+        .signInAnonymously()
+        .then((value) => _collectionReference = _fireStore.collection("users/${value.user.uid}/todos"))
+        .wrapError("error _signInAnonymously exception");
+  }
+}
+
+extension FutureExt<T> on Future<T> {
+  Future<ActionResult> wrapError([String logPrefix]) async {
     try {
-      AuthResult authResult = await _firebaseAuth.signInAnonymously();
-      _collectionReference = _fireStore.collection("users/${authResult.user.uid}/todos");
-      return authResult;
+      await this;
+      return ActionSuccess();
     } catch (e) {
-      print("error _signInAnonymously exception = $e");
-      return null;
+      print("$logPrefix : $e");
+      return ActionFailure(ErrorHandler.instance.getErrorMessage(e));
     }
   }
 }
