@@ -13,4 +13,14 @@ class AuthenticationInProgress extends AuthenticationState {}
 
 class AuthenticationSuccess extends AuthenticationState {}
 
-class AuthenticationFailure extends AuthenticationState {}
+class AuthenticationFailure extends AuthenticationState {
+  final String error;
+
+  const AuthenticationFailure(this.error);
+
+  @override
+  List<Object> get props => [error];
+
+  @override
+  String toString() => 'AuthenticationFailure{error: $error}';
+}
