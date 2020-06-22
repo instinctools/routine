@@ -85,7 +85,7 @@ class _EditScreenState extends State<EditScreen> {
   void doDone() async {
     if (presenter.validateAndPrint()) {
       presenter.onDoneClicked();
-      Navigator.pop(context, true);
+      Navigator.pop(context);
     }
   }
 }

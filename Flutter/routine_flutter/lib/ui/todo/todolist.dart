@@ -2,33 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:routine_flutter/data/db_helper.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/main.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
+import 'package:routine_flutter/ui/todo/todo_bloc/todo_bloc.dart';
+import 'package:routine_flutter/ui/todo/todo_bloc/todo_event.dart';
+import 'package:routine_flutter/ui/todo/todo_bloc/todo_state.dart';
 import 'package:routine_flutter/ui/todo/todoitem.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
-class TodoList extends StatefulWidget {
-  final mainRepository;
+class TodoList extends StatelessWidget {
+  final MainRepository _mainRepository;
 
-  TodoList(this.mainRepository);
-
-  @override
-  State<StatefulWidget> createState() => _TodoListState(mainRepository);
-}
-
-class _TodoListState extends State<TodoList> {
-  DatabaseHelper helper = DatabaseHelper();
-  MainRepository mainRepository;
-
-  _TodoListState(mainRepository) {
-    this.mainRepository = mainRepository;
-  }
+  TodoList(this._mainRepository);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +30,7 @@ class _TodoListState extends State<TodoList> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: _pushEditScreen,
+            onPressed: () => _pushEditScreen(context),
           )
         ],
       ),
@@ -77,37 +67,46 @@ class _TodoListState extends State<TodoList> {
           ],
         ),
       ),
-      body: _buildBody(context),
+      body: BlocProvider<TodoBloc>(
+        create: (context) => TodoBloc(mainRepository: _mainRepository),
+        child: _buildBody(context),
+      ),
     );
   }
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: mainRepository.getTodos(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return LinearProgressIndicator();
-          }
-          if (snapshot.data.documents.isEmpty) {
+      stream: _mainRepository.getTodos(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return LinearProgressIndicator();
+        }
+        if (snapshot.data.documents.isEmpty) {
 //              placeholder for empty list
-            return EmptyTodoPlaceholder();
-          } else {
-            return _buildList(context, snapshot.data.documents);
-          }
-        });
-  }
-
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> documentSnapshots) {
-    List<Todo> todoList = documentSnapshots.map((documentSnapshot) {
-      return Todo.fromDocumentSnapshot(documentSnapshot);
-    }).toList();
-//    print("todoList:  $todoList");
-    todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
-    List<Widget> widgets = _createItemWidgetsList(todoList);
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
-      itemCount: widgets.length,
-      itemBuilder: (context, index) => widgets[index],
+          return EmptyTodoPlaceholder();
+        } else {
+          List<Todo> todoList = snapshot.data.documents.map((documentSnapshot) {
+            return Todo.fromDocumentSnapshot(documentSnapshot);
+          }).toList();
+          todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
+          List<Widget> widgets = _createItemWidgetsList(context, todoList);
+          return BlocBuilder<TodoBloc, TodoUpdateState>(
+            builder: (context, todoUpdateState) {
+              if (todoUpdateState is TodoUpdateSuccess) {
+                print("todoUpdateState");
+              } else if (todoUpdateState is TodoUpdateFailure) {
+                print("TodoUpdateFailure todoUpdateState.error = ${todoUpdateState.error}");
+                //show snackbar
+              }
+              return ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
+                itemCount: widgets.length,
+                itemBuilder: (context, index) => widgets[index],
+              );
+            },
+          );
+        }
+      },
     );
   }
 
@@ -123,13 +122,13 @@ class _TodoListState extends State<TodoList> {
     return index;
   }
 
-  List<Widget> _createItemWidgetsList(List<Todo> sortedList) {
+  List<Widget> _createItemWidgetsList(BuildContext context, List<Todo> sortedList) {
     List<Widget> widgets = List();
     int lastExpiredIndex = findLastExpiredIndex(sortedList);
     for (int i = 0; i < sortedList.length; i++) {
       Todo todo = sortedList[i];
       int gradientColorIndex = lastExpiredIndex != -1 ? i - lastExpiredIndex - 1 : i;
-      widgets.add(_getItemWidget(todo, gradientColorIndex));
+      widgets.add(_getItemWidget(context, todo, gradientColorIndex));
       if (lastExpiredIndex == i) {
         widgets.add(Divider(color: ColorsRes.selectedPeriodUnitColor));
       }
@@ -137,23 +136,16 @@ class _TodoListState extends State<TodoList> {
     return widgets;
   }
 
-  Widget _getItemWidget(Todo todo, int colorIndex) {
+  Widget _getItemWidget(BuildContext context, Todo todo, int colorIndex) {
     return GestureDetector(
         child: Dismissible(
           key: Key(todo.id.toString()),
           child: TodoItem(todo, colorIndex),
-          onResize: () {
-            setState(() {});
-            print("reseted");
-          },
-          onDismissed: (direction) {
-            setState(() {});
-          },
-          confirmDismiss: (direction) => _confirmDismiss(direction, todo),
+          confirmDismiss: (direction) => _confirmDismiss(context, direction, todo),
           background: _getDismissibleItemBackground(Strings.listResetSlideActionLabel, Colors.green, true),
           secondaryBackground: _getDismissibleItemBackground(Strings.listDeleteSlideActionLabel, Colors.grey, false),
         ),
-        onTap: () => _pushEditScreen(todo: todo));
+        onTap: () => _pushEditScreen(context, todo: todo));
   }
 
   Widget _getDismissibleItemBackground(String title, Color color, bool isPrimary) {
@@ -188,40 +180,36 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
-  Future<bool> _confirmDismiss(DismissDirection direction, Todo item) async {
+  Future<bool> _confirmDismiss(BuildContext buildContext, DismissDirection direction, Todo item) async {
     if (direction == DismissDirection.startToEnd) {
-      await _resetTodo(item);
+      BlocProvider.of<TodoBloc>(buildContext).add(TodoReset(todo: item));
+      return false;
     } else {
-      return _showConfirmDialog(item);
+      return _showConfirmDialog(buildContext, item);
     }
-    return false;
   }
 
-  Future<void> _resetTodo(Todo todo) async {
-    mainRepository.updateTodo(TimeUtils.updateTargetDate(todo));
-  }
-
-  Future<bool> _showConfirmDialog(Todo todo) async => await showDialog(
-      context: context,
+  Future<bool> _showConfirmDialog(BuildContext buildContext, Todo todo) async => await showDialog(
+      context: buildContext,
       builder: (context) {
         return AlertDialog(
           content: Text(Strings.listDialogContentText),
           actions: <Widget>[
-            FlatButton(child: Text(Strings.listDialogActionCancel), onPressed: () => Navigator.pop(context, false)),
+            FlatButton(
+              child: Text(Strings.listDialogActionCancel),
+              onPressed: () => Navigator.pop(context, false),
+            ),
             FlatButton(
                 child: Text(Strings.listDialogActionDelete),
                 onPressed: () {
-                  mainRepository.deleteTodo(todo);
-                  Navigator.pop(context);
+                  BlocProvider.of<TodoBloc>(buildContext).add(TodoDelete(todo: todo));
+                  Navigator.pop(context, true);
                 }),
           ],
         );
       });
 
-  void _pushEditScreen({Todo todo}) async {
-    var isAdded = await Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo, mainRepository: mainRepository)));
-    if (isAdded != null && isAdded) {
-      setState(() {});
-    }
+  void _pushEditScreen(BuildContext context, {Todo todo}) async {
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo, mainRepository: _mainRepository)));
   }
 }
