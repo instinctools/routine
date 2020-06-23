@@ -48,7 +48,7 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
   Widget _createPeriodButton(PeriodUnit periodUnit) {
     var name = periodUnit.name;
     var isSelected = _presenter.selectedPeriodUnit == periodUnit;
-    var periodText = TimeUtils.getPrettyPeriod(name, _presenter.valuesPeriods[periodUnit]);
+    var periodText = TimeUtils.getPrettyPeriodSelector(name, _presenter.valuesPeriods[periodUnit]);
     var bgColor = isSelected ? ColorsRes.selectedPeriodUnitColor : ColorsRes.unselectedPeriodUnitColor;
     var iconColor = isSelected ? ColorsRes.unselectedPeriodUnitColor : ColorsRes.selectedPeriodUnitColor;
     var textStyle = isSelected ? Styles.editUnselectedPeriodTextStyle : Styles.editSelectedPeriodTextStyle;

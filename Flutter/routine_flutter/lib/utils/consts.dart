@@ -47,6 +47,8 @@ class Dimens {
   static const double commonPaddingLarge = 32.0;
   static const double commonBorderRadius = 8.0;
 
+  static const double todoItemVerticalPadding = 13.0;
+
   static const double listProgressSize = 20.0;
 
   static const double itemBoxBorderRadius = 8.0;
@@ -69,6 +71,8 @@ class ColorsRes {
   static Color mainBgColor = Colors.grey[200];
   static Color darkGrayColor = Colors.grey[800];
   static Color lightGrayColor = Colors.grey[400];
+
+  static Color listResetSlideActionBackground = Color(0xffE3E3E3);
 
   static Color selectedPeriodUnitColor = Colors.grey[800];
   static Color unselectedPeriodUnitColor = Colors.grey[400];

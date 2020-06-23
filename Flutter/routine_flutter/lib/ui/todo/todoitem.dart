@@ -19,35 +19,37 @@ class TodoItem extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: Dimens.commonPaddingHalf),
         decoration: BoxDecoration(color: _pickItemColor(index), borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius)),
         child: Padding(
-          padding: EdgeInsets.all(Dimens.commonPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: Dimens.commonPaddingDouble,
+            vertical: Dimens.todoItemVerticalPadding,
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                entry.title,
-                style: Styles.TODO_ITEM_TITLE_TEXT,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    entry.title,
+                    style: Styles.TODO_ITEM_TITLE_TEXT,
+                  ),
+                  Text(
+                    TimeUtils.calculateTimeLeft(entry.targetDate),
+                    style: Styles.TODO_ITEM_TIME_TEXT,
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: Dimens.commonPaddingDouble),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(TimeUtils.getPrettyPeriod(entry.periodUnit.name, entry.periodValue), style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(TimeUtils.calculateTimeLeft(entry.targetDate), style: Styles.TODO_ITEM_TIME_TEXT)
-                  ],
-                ),
-              )
+              SizedBox(
+                height: Dimens.commonPaddingHalf,
+              ),
+              Text(TimeUtils.getPrettyPeriod(entry.periodUnit.name, entry.periodValue), style: Styles.TODO_ITEM_TIME_TEXT),
             ],
           ),
         ));
   }
 
-  Color _pickItemColor(int index,
-      {int maxIndex = 15,
-      color1 = const [255, 190, 67],
-      color2 = const [255, 57, 55]}) {
+  Color _pickItemColor(int index, {int maxIndex = 15, color1 = const [255, 190, 67], color2 = const [255, 57, 55]}) {
     if (index < 0) {
       return Colors.red.shade900;
     }

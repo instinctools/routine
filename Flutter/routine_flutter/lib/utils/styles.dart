@@ -7,8 +7,11 @@ class Styles {
       color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 32.0);
 
   // ignore: non_constant_identifier_names
-  static TextStyle TODO_ITEM_TITLE_TEXT =
-      TextStyle(color: Colors.white.withOpacity(0.95), fontSize: 19.0);
+  static TextStyle TODO_ITEM_TITLE_TEXT = TextStyle(
+    fontWeight: FontWeight.w600,
+    color: Colors.white.withOpacity(0.95),
+    fontSize: 19.0,
+  );
 
   static const TODO_ITEM_TIME_TEXT = TextStyle(
     color: Colors.white54,
