@@ -11,14 +11,22 @@ class ErrorHandler {
   bool _isConnected = false;
   StreamSubscription _subscription;
 
-static final ErrorHandler instance = ErrorHandler._();
+  static final ErrorHandler instance = ErrorHandler._();
 
   ErrorHandler._() {
     _subscription = Connectivity().onConnectivityChanged.asBroadcastStream().listen((event) {
       _isConnected = event != ConnectivityResult.none;
+      print("set isconnected = $_isConnected");
     });
   }
 
+  Future<bool> get isConnectedAsync async {
+    return await Connectivity().checkConnectivity() != ConnectivityResult.none;
+  }
+
+  bool get isConnected {
+    return  _isConnected;
+  }
 
   String getErrorMessage(Object error) {
     if (!_isConnected) {
