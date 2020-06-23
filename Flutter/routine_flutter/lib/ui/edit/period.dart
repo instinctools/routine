@@ -1,13 +1,12 @@
-enum Period { DAY, WEEK, MONTH }
+enum PeriodUnit { DAY, WEEK, MONTH }
 
-Period findPeriod(String value) =>
-    Period.values.firstWhere((element) => element.name == value);
+PeriodUnit findPeriodUnit(String value) => PeriodUnit.values.firstWhere((element) => element.name == value);
 
-extension PeriodExt on Period {
+extension PeriodExt on PeriodUnit {
   static const periodNameMap = {
-    Period.DAY: 'day',
-    Period.WEEK: 'week',
-    Period.MONTH: 'month'
+    PeriodUnit.DAY: 'DAY',
+    PeriodUnit.WEEK: 'WEEK',
+    PeriodUnit.MONTH: 'MONTH',
   };
 
   int get id => this.index;

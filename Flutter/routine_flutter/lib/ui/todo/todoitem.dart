@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
@@ -16,9 +17,7 @@ class TodoItem extends StatelessWidget {
     return Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: Dimens.commonPaddingHalf),
-        decoration: BoxDecoration(
-            color: _pickItemColor(index),
-            borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius)),
+        decoration: BoxDecoration(color: _pickItemColor(index), borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius)),
         child: Padding(
           padding: EdgeInsets.all(Dimens.commonPadding),
           child: Column(
@@ -35,13 +34,8 @@ class TodoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                        TimeUtils.getPrettyPeriod(
-                            entry.periodUnit, entry.periodValue),
-                        style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(
-                        TimeUtils.calculateTimeLeft(entry.targetDate),
-                        style: Styles.TODO_ITEM_TIME_TEXT)
+                    Text(TimeUtils.getPrettyPeriod(entry.periodUnit.name, entry.periodValue), style: Styles.TODO_ITEM_TIME_TEXT),
+                    Text(TimeUtils.calculateTimeLeft(entry.targetDate), style: Styles.TODO_ITEM_TIME_TEXT)
                   ],
                 ),
               )

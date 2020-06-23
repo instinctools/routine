@@ -21,104 +21,81 @@ class PeriodUnitSelector extends StatefulWidget {
 }
 
 class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
-  int _selectedIndex;
-  EditPresenter presenter;
+  EditPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
-    presenter = widget.presenter;
-    _selectedIndex = Period.values
-        .firstWhere((value) => value.name == presenter.periodUnit)
-        .id;
+    _presenter = widget.presenter;
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: _createButtons());
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: _createButtons(),
+    );
   }
 
   List<Widget> _createButtons() {
-    List<Widget> result = <Widget>[];
-    final periodUnits = Period.values;
-    for (var index = 0; index < periodUnits.length; index++) {
-      var data = PeriodData(index, periodUnits[index]);
-      var periodButton = _createPeriodButton(data);
-      result.add(periodButton);
-    }
-    return result;
+    List<Widget> buttons = <Widget>[];
+    PeriodUnit.values.forEach((periodUnit) {
+      buttons.add(_createPeriodButton(periodUnit));
+    });
+    return buttons;
   }
 
-  Widget _createPeriodButton(PeriodData data) {
-    var name = data.periodUnit.name;
-    var isSelected = data.id == _selectedIndex;
-    var periodText = isSelected
-        ? TimeUtils.getPrettyPeriod(name, presenter.periodValue)
-        : TimeUtils.getPrettyPeriod(name);
-    var bgColor = isSelected
-        ? ColorsRes.selectedPeriodUnitColor
-        : ColorsRes.unselectedPeriodUnitColor;
-    var iconColor = isSelected
-        ? ColorsRes.unselectedPeriodUnitColor
-        : ColorsRes.selectedPeriodUnitColor;
-    var textStyle = isSelected
-        ? Styles.editUnselectedPeriodTextStyle
-        : Styles.editSelectedPeriodTextStyle;
+  Widget _createPeriodButton(PeriodUnit periodUnit) {
+    var name = periodUnit.name;
+    var isSelected = _presenter.selectedPeriodUnit == periodUnit;
+    var periodText = TimeUtils.getPrettyPeriod(name, _presenter.valuesPeriods[periodUnit]);
+    var bgColor = isSelected ? ColorsRes.selectedPeriodUnitColor : ColorsRes.unselectedPeriodUnitColor;
+    var iconColor = isSelected ? ColorsRes.unselectedPeriodUnitColor : ColorsRes.selectedPeriodUnitColor;
+    var textStyle = isSelected ? Styles.editUnselectedPeriodTextStyle : Styles.editSelectedPeriodTextStyle;
 
     return GestureDetector(
-        onTap: () {
-          _onPeriodSelected(data.id);
-        },
-        child: Container(
-            margin: EdgeInsets.only(top: Dimens.commonPaddingDouble),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                    Dimens.editPeriodButtonBorderRadius),
-                color: bgColor),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: Dimens.commonPaddingDouble,
-                  vertical: Dimens.commonPaddingDouble),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: () {
-                      _showPeriodPicker(context, data.id);
-                    },
-                    icon: Icon(
-                      Icons.menu,
-                      color: iconColor,
-                    ),
-                  ),
-                  Text(
-                    periodText,
-                    style: textStyle,
-                  )
-                ],
+      onTap: () {
+        _onPeriodClicked(periodUnit);
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: Dimens.commonPaddingDouble),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimens.editPeriodButtonBorderRadius), color: bgColor),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: Dimens.commonPaddingDouble, vertical: Dimens.commonPaddingDouble),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                onPressed: () {
+                  _showPeriodPicker(context, periodUnit);
+                },
+                icon: Icon(
+                  Icons.menu,
+                  color: iconColor,
+                ),
               ),
-            )));
+              Text(
+                periodText,
+                style: textStyle,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  void _onPeriodSelected(int id) {
-    print('Selected index = $id period = ${Period.values[id].name}');
-    presenter.periodUnit = Period.values[id].name;
+  void _onPeriodClicked(PeriodUnit periodUnit) {
+    print("_onPeriodClicked $periodUnit");
     setState(() {
-      _selectedIndex = id;
+      _presenter.selectedPeriodUnit = periodUnit;
     });
   }
 
-  void _showPeriodPicker(BuildContext context, int id) {
+  void _showPeriodPicker(BuildContext context, PeriodUnit periodUnit) {
     Picker(
-      adapter: NumberPickerAdapter(data: [
-        NumberPickerColumn(
-            begin: BEGIN_VALUE,
-            end: END_VALUE,
-            initValue: presenter.periodValue)
-      ]),
+      adapter: NumberPickerAdapter(data: [NumberPickerColumn(begin: BEGIN_VALUE, end: END_VALUE, initValue: _presenter.valuesPeriods[periodUnit])]),
       title: Text(
         Strings.editPickerDialogTitle,
         style: Styles.edit_divider_label_style,
@@ -129,17 +106,10 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
       itemExtent: Dimens.editPickerItemExtent,
       onConfirm: (picker, values) {
         setState(() {
-          _selectedIndex = id;
-          presenter.periodValue = picker.getSelectedValues().first;
+          _presenter.selectedPeriodUnit = periodUnit;
+          _presenter.valuesPeriods[periodUnit] = picker.getSelectedValues().first;
         });
       },
     ).showModal(context);
   }
-}
-
-class PeriodData {
-  int id;
-  Period periodUnit;
-
-  PeriodData(this.id, this.periodUnit);
 }
