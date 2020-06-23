@@ -10,7 +10,7 @@ class TimeUtils {
 
   static int getCurrentTimeMillis() => getCurrentTime().millisecondsSinceEpoch;
 
-  static String getPrettyPeriod(String periodUnit, [int periodValue = 1]) {
+  static String getPrettyPeriod(String periodUnit, int periodValue) {
     var isPlural = periodValue > 1;
     var periodCount = isPlural ? '$periodValue ' : '';
     var pluralPostfix = isPlural && periodUnit != PeriodUnit.MONTH.name ? 's' : '';

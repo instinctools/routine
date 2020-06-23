@@ -21,19 +21,12 @@ class PeriodUnitSelector extends StatefulWidget {
 }
 
 class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
-  PeriodUnit _selectedPeriod;
-  Map<PeriodUnit, int> _valuesPeriods;
   EditPresenter _presenter;
 
   @override
   void initState() {
     super.initState();
     _presenter = widget.presenter;
-    PeriodUnit.values.forEach((element) {
-      _valuesPeriods = {element: 1};
-    });
-    _selectedPeriod = _presenter.periodUnit;
-    _valuesPeriods[_selectedPeriod] = _presenter.periodValue;
   }
 
   @override
@@ -54,8 +47,8 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
 
   Widget _createPeriodButton(PeriodUnit periodUnit) {
     var name = periodUnit.name;
-    var isSelected = _selectedPeriod == periodUnit;
-    var periodText = isSelected ? TimeUtils.getPrettyPeriod(name, _presenter.periodValue) : TimeUtils.getPrettyPeriod(name);
+    var isSelected = _presenter.selectedPeriodUnit == periodUnit;
+    var periodText = TimeUtils.getPrettyPeriod(name, _presenter.valuesPeriods[periodUnit]);
     var bgColor = isSelected ? ColorsRes.selectedPeriodUnitColor : ColorsRes.unselectedPeriodUnitColor;
     var iconColor = isSelected ? ColorsRes.unselectedPeriodUnitColor : ColorsRes.selectedPeriodUnitColor;
     var textStyle = isSelected ? Styles.editUnselectedPeriodTextStyle : Styles.editSelectedPeriodTextStyle;
@@ -93,17 +86,16 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
     );
   }
 
-  void _onPeriodClicked(PeriodUnit period) {
-    print("_onPeriodClicked $period");
-    _presenter.periodUnit = period;
+  void _onPeriodClicked(PeriodUnit periodUnit) {
+    print("_onPeriodClicked $periodUnit");
     setState(() {
-      _selectedPeriod = period;
+      _presenter.selectedPeriodUnit = periodUnit;
     });
   }
 
-  void _showPeriodPicker(BuildContext context, PeriodUnit period) {
+  void _showPeriodPicker(BuildContext context, PeriodUnit periodUnit) {
     Picker(
-      adapter: NumberPickerAdapter(data: [NumberPickerColumn(begin: BEGIN_VALUE, end: END_VALUE, initValue: _presenter.periodValue)]),
+      adapter: NumberPickerAdapter(data: [NumberPickerColumn(begin: BEGIN_VALUE, end: END_VALUE, initValue: _presenter.valuesPeriods[periodUnit])]),
       title: Text(
         Strings.editPickerDialogTitle,
         style: Styles.edit_divider_label_style,
@@ -114,8 +106,8 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
       itemExtent: Dimens.editPickerItemExtent,
       onConfirm: (picker, values) {
         setState(() {
-          _selectedPeriod = period;
-          _presenter.periodValue = picker.getSelectedValues().first;
+          _presenter.selectedPeriodUnit = periodUnit;
+          _presenter.valuesPeriods[periodUnit] = picker.getSelectedValues().first;
         });
       },
     ).showModal(context);

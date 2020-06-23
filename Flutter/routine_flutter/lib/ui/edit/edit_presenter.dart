@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/errors/action_result.dart';
 import 'package:routine_flutter/errors/error_extensions.dart';
-import 'package:routine_flutter/errors/error_utils.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
@@ -12,11 +10,13 @@ import 'package:routine_flutter/utils/time_utils.dart';
 import 'resetType.dart';
 
 class EditPresenter {
+  static const int initValue = 1;
+
   String id;
-  PeriodUnit periodUnit = PeriodUnit.DAY;
-  int periodValue = 1;
+  PeriodUnit selectedPeriodUnit = PeriodUnit.DAY;
   ResetType resetType = ResetType.RESET_TO_PERIOD;
   DocumentReference reference;
+  Map<PeriodUnit, int> valuesPeriods = {};
 
   final TextEditingController controller = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -25,13 +25,17 @@ class EditPresenter {
 
   EditPresenter(MainRepository mainRepository, Todo todo) {
     this.mainRepository = mainRepository;
+    PeriodUnit.values.forEach((element) {
+      valuesPeriods.addAll({element: initValue});
+    });
+
     if (todo != null) {
-      this.id = todo.id;
-      this.periodUnit = todo.periodUnit;
-      this.periodValue = todo.periodValue;
-      this.controller.text = todo.title;
-      this.resetType = todo.resetType;
-      this.reference = todo.reference;
+      id = todo.id;
+      selectedPeriodUnit = todo.periodUnit;
+      valuesPeriods[selectedPeriodUnit] = todo.periodValue;
+      controller.text = todo.title;
+      resetType = todo.resetType;
+      reference = todo.reference;
     }
   }
 
@@ -45,13 +49,14 @@ class EditPresenter {
   }
 
   void onDoneClicked(BuildContext context) async {
+    var selectedValuePeriod = valuesPeriods[selectedPeriodUnit];
     var todo = Todo(
       controller.value.text + DateTime.now().millisecondsSinceEpoch.toString(),
       // id = title + now.inMillisecondsSinceEpoch
       controller.value.text,
-      periodUnit,
-      periodValue,
-      TimeUtils.addPeriodToCurrentMoment(controller.value.text, periodUnit, periodValue).millisecondsSinceEpoch,
+      selectedPeriodUnit,
+      selectedValuePeriod,
+      TimeUtils.addPeriodToCurrentMoment(controller.value.text, selectedPeriodUnit, selectedValuePeriod).millisecondsSinceEpoch,
       resetType,
       reference,
     );
