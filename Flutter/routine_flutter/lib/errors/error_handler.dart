@@ -20,8 +20,12 @@ class ErrorHandler {
     });
   }
 
-  Future<bool> get isConnected async {
+  Future<bool> get isConnectedAsync async {
     return await Connectivity().checkConnectivity() != ConnectivityResult.none;
+  }
+
+  bool get isConnected {
+    return  _isConnected;
   }
 
   String getErrorMessage(Object error) {

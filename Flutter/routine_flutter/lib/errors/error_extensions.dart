@@ -9,16 +9,16 @@ import 'action_result.dart';
 import 'error_utils.dart';
 
 extension FutureExt<T> on Future<T> {
-  Future<ActionResult> wrapError([String logPrefix]) async {
+  Future<ActionResult> wrapError({String logMessage = "wrap future error"}) async {
     ErrorHandler errorHandler = ErrorHandler.instance;
     try {
-      if (!(await errorHandler.isConnected)) {
+      if (!(await errorHandler.isConnectedAsync)) {
         throw PlatformException(code: ErrorCodes.networkRequestFailed);
       }
       await this;
       return ActionSuccess();
     } catch (e) {
-      print("$logPrefix : $e");
+      print("$logMessage : $e");
       return ActionFailure(errorHandler.getErrorMessage(e));
     }
   }
@@ -29,5 +29,20 @@ extension FutureExt<T> on Future<T> {
       ErrorUtils.showError(context, message: null);
     }
     return result;
+  }
+}
+
+extension StreamExt<T> on Stream<T> {
+  Stream<ActionResult> wrapError({String logMessage = "wrap stream error"}) {
+    ErrorHandler errorHandler = ErrorHandler.instance;
+    return this.map((snap) {
+      if (!errorHandler.isConnected) {
+        throw PlatformException(code: ErrorCodes.networkRequestFailed);
+      }
+      return ActionSuccess(snap);
+    }).handleError((error) {
+      print("$logMessage : $error");
+      return ActionFailure(errorHandler.getErrorMessage(error));
+    });
   }
 }

@@ -6,7 +6,11 @@ abstract class ActionResult {
   ActionResult([this.message]);
 }
 
-class ActionSuccess extends ActionResult {}
+class ActionSuccess<T> extends ActionResult {
+  T payload;
+
+  ActionSuccess([this.payload, String message]):super(message);
+}
 
 class ActionFailure extends ActionResult {
   ActionFailure([String message = Strings.errorMessageDefault]) : super(message);

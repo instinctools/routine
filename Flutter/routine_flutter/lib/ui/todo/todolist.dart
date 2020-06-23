@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/errors/action_result.dart';
 import 'package:routine_flutter/errors/error_utils.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
@@ -76,36 +77,42 @@ class TodoList extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
+    return StreamBuilder<ActionResult>(
       stream: _mainRepository.getTodos(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
         }
-        if (snapshot.data.documents.isEmpty) {
-//              placeholder for empty list
-          return EmptyTodoPlaceholder();
-        } else {
-          List<Todo> todoList = snapshot.data.documents.map((documentSnapshot) {
-            return Todo.fromDocumentSnapshot(documentSnapshot);
-          }).toList();
-          todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
-          List<Widget> widgets = _createItemWidgetsList(context, todoList);
-          return BlocBuilder<TodoBloc, TodoUpdateState>(
-            builder: (context, todoUpdateState) {
-              if (todoUpdateState is TodoUpdateSuccess) {
-                print("todoUpdateState");
-              } else if (todoUpdateState is TodoUpdateFailure) {
-                print("TodoUpdateFailure todoUpdateState.error = ${todoUpdateState.error}");
-                ErrorUtils.showError(context, message: todoUpdateState.error);
-              }
-              return ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
-                itemCount: widgets.length,
-                itemBuilder: (context, index) => widgets[index],
-              );
-            },
-          );
+        ActionResult actionResult = snapshot.data;
+        if (actionResult is ActionSuccess) {
+          var payload = actionResult.payload as QuerySnapshot;
+          if (payload.documents.isEmpty) {
+          //              placeholder for empty list
+            return EmptyTodoPlaceholder();
+          } else {
+            List<Todo> todoList = payload.documents.map((documentSnapshot) {
+              return Todo.fromDocumentSnapshot(documentSnapshot);
+            }).toList();
+            todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
+            List<Widget> widgets = _createItemWidgetsList(context, todoList);
+            return BlocBuilder<TodoBloc, TodoUpdateState>(
+              builder: (context, todoUpdateState) {
+                if (todoUpdateState is TodoUpdateSuccess) {
+                  print("todoUpdateState");
+                } else if (todoUpdateState is TodoUpdateFailure) {
+                  print("TodoUpdateFailure todoUpdateState.error = ${todoUpdateState.error}");
+                  ErrorUtils.showError(context, message: todoUpdateState.error);
+                }
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
+                  itemCount: widgets.length,
+                  itemBuilder: (context, index) => widgets[index],
+                );
+              },
+            );
+          }
+        } else if(actionResult is ActionFailure){
+          ErrorUtils.showError(context, message: actionResult.message);
         }
       },
     );

@@ -9,34 +9,34 @@ class MainRepository {
   Firestore _fireStore = Firestore.instance;
   CollectionReference _collectionReference;
 
-  Stream<QuerySnapshot> getTodos() {
+  Stream<ActionResult> getTodos() {
     print("get todos");
-    return _collectionReference.snapshots();
+    return _collectionReference.snapshots().wrapError(logMessage: "get todos error");
   }
 
   Future<ActionResult> addTodo(Todo todo) {
     print("add Todo");
-    return _collectionReference.add(todo.toMap()).wrapError("add todo error");
+    return _collectionReference.add(todo.toMap()).wrapError(logMessage: "add todo error");
   }
 
   Future<ActionResult> updateTodo(Todo todo) {
     print("update Todo");
     return _fireStore.runTransaction((transaction) async {
       await transaction.update(todo.reference, todo.toMap());
-    }).wrapError("update todo error");
+    }).wrapError(logMessage: "update todo error");
   }
 
   Future<ActionResult> deleteTodo(Todo todo) {
     print("delete Todo");
     return _fireStore.runTransaction((transaction) async {
       await transaction.delete(todo.reference);
-    }).wrapError("delete todo error");
+    }).wrapError(logMessage: "delete todo error");
   }
 
   Future<ActionResult> signInAnonymously() async {
     return await _firebaseAuth
         .signInAnonymously()
         .then((value) => _collectionReference = _fireStore.collection("users/${value.user.uid}/todos"))
-        .wrapError("error _signInAnonymously exception");
+        .wrapError(logMessage: "error _signInAnonymously exception");
   }
 }
