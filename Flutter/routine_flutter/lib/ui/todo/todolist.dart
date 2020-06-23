@@ -150,7 +150,7 @@ class TodoList extends StatelessWidget {
           key: Key(todo.id.toString()),
           child: TodoItem(todo, colorIndex),
           confirmDismiss: (direction) => _confirmDismiss(context, direction, todo),
-          background: _getDismissibleItemBackground(Strings.listResetSlideActionLabel, Colors.green, true),
+          background: _getDismissibleItemBackground(Strings.listResetSlideActionLabel, ColorsRes.listResetSlideActionBackground, true),
           secondaryBackground: _getDismissibleItemBackground(Strings.listDeleteSlideActionLabel, Colors.grey, false),
         ),
         onTap: () => _pushEditScreen(context, todo: todo));

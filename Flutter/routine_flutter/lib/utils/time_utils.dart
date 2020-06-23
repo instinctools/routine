@@ -2,6 +2,8 @@ import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/ui/edit/resetType.dart';
 
+import 'extensions.dart';
+
 class TimeUtils {
   static DateTime getCurrentTime() {
     DateTime current = DateTime.now();
@@ -10,12 +12,19 @@ class TimeUtils {
 
   static int getCurrentTimeMillis() => getCurrentTime().millisecondsSinceEpoch;
 
+  static String getPrettyPeriodSelector(String periodUnit, int periodValue) {
+    var isPlural = periodValue > 1;
+    var periodCount = isPlural ? '$periodValue ' : '';
+    var pluralPostfix = isPlural && periodUnit != PeriodUnit.MONTH.name ? 's' : '';
+    return '$periodCount${periodUnit.capitalize}$pluralPostfix';
+  }
+
   static String getPrettyPeriod(String periodUnit, int periodValue) {
     var isPlural = periodValue > 1;
     var periodCount = isPlural ? '$periodValue ' : '';
     var pluralPostfix = isPlural && periodUnit != PeriodUnit.MONTH.name ? 's' : '';
-
-    return '$periodCount${periodUnit.toLowerCase()}$pluralPostfix';
+    var prefix = isPlural ? "Every" : "Once a";
+    return '$prefix $periodCount${periodUnit.toLowerCase()}$pluralPostfix';
   }
 
   static Todo updateTargetDate(Todo todo) {
