@@ -4,6 +4,7 @@ import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/todo/todo_bloc/todo_event.dart';
 import 'package:routine_flutter/ui/todo/todo_bloc/todo_state.dart';
+import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoUpdateState> {
@@ -30,8 +31,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoUpdateState> {
       _mainRepository.deleteTodo(event.todo);
       yield TodoUpdateSuccess();
     } catch (exception) {
-      print("_mapTodoDeleteToState TodoUpdateFailure exception = $exception");
-      yield TodoUpdateFailure(exception.toString());
+      print("TodoUpdateFailure _mapTodoDeleteToState exception = $exception");
+      yield TodoUpdateFailure(Strings.errorMessageDefault);
     }
   }
 
@@ -42,7 +43,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoUpdateState> {
       _mainRepository.updateTodo(newTodo);
       yield TodoUpdateSuccess();
     } catch (exception) {
-      yield TodoUpdateFailure("_mapTodoResetToState exception = $exception");
+      print("TodoUpdateFailure _mapTodoResetToState exception = $exception");
+      yield TodoUpdateFailure(Strings.errorMessageDefault);
     }
   }
 }

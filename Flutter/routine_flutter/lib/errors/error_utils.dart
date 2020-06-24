@@ -20,6 +20,7 @@ class ErrorUtils {
 
   static SnackBar _createSnackbar(String message, {SnackBarAction action}) => SnackBar(
         content: Text(message),
+        duration: Duration(seconds: 3),
         action: action,
       );
 }
