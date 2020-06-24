@@ -172,6 +172,12 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 };
             }
             break;
+        case ActionEditTodo.Type.TODO_EDIT_CHANGE_RESET_TYPE:
+            newState.editTodo = {
+                ...newState.editTodo,
+                resetType: action.resetType
+            };
+            break;
         default:
             return state;
     }

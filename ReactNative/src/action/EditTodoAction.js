@@ -4,6 +4,7 @@ const ActionEditTodo = {
         TODO_EDIT_PERIOD: `TODO_EDIT_PERIOD`,
         TODO_EDIT_PERIOD_UNIT: `TODO_EDIT_PERIOD_UNIT`,
         TODO_EDIT_CHANGE_PERIOD_SELECTOR: `TODO_EDIT_CHANGE_PERIOD_SELECTOR`,
+        TODO_EDIT_CHANGE_RESET_TYPE: `TODO_EDIT_CHANGE_RESET_TYPE`,
     }
 };
 
@@ -39,5 +40,12 @@ ActionEditTodo.changePeriodSelector = (isVisible, periodUnit) => {
         periodUnit
     };
 };
+
+ActionEditTodo.changeResetType = (resetType) => {
+    return {
+        type: ActionEditTodo.Type.TODO_EDIT_CHANGE_RESET_TYPE,
+        resetType
+    }
+}
 
 export default ActionEditTodo;

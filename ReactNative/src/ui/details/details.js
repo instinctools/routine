@@ -8,6 +8,7 @@ import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
 import analytics from "@react-native-firebase/analytics";
 import {getProgress} from "../../utils";
+import {ResetType} from "../../constants";
 
 const bgSelected = `#77767E`;
 const bgUnSelected = `#EEEDF0`;
@@ -64,7 +65,7 @@ class DetailsScreen extends React.Component {
 
     render() {
         console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
-        const {isProgress, success} = this.props;
+        const {isProgress, success, resetType} = this.props;
         if (success) {
             this.props.navigation.pop();
         }
@@ -83,8 +84,8 @@ class DetailsScreen extends React.Component {
                             value={this.props.title}
                         />
                         <View style={{flexDirection: `row`, marginTop: 40}}>
-                            {getResetBtn(true, "Reset to period", true)}
-                            {getResetBtn(false, "Reset to date", false)}
+                            {getResetBtn(this.props, resetType === ResetType.BY_PERIOD, "Reset to period", true, ResetType.BY_PERIOD)}
+                            {getResetBtn(this.props, resetType === ResetType.BY_DATE, "Reset to date", false, ResetType.BY_DATE)}
                         </View>
                         <View style={todoDetailsStyle.separatorContainer}>
                             <View style={todoDetailsStyle.separatorLine}/>
@@ -99,12 +100,12 @@ class DetailsScreen extends React.Component {
     }
 }
 
-const getResetBtn = (isSelected, text, isLeft) => {
+const getResetBtn = (props, isSelected, text, isLeft, resetType) => {
     const bgColor = isSelected ? bgSelected : bgUnSelected;
     const textColor = isSelected ? textSelected : textUnselected;
     let defBtnStyle = {flex: 1, height: 36, backgroundColor: bgColor}
     let style
-    if (isLeft){
+    if (isLeft) {
         style = {...defBtnStyle, borderTopLeftRadius: 6, borderBottomLeftRadius: 6}
     } else {
         style = {...defBtnStyle, borderBottomRightRadius: 6, borderTopRightRadius: 6}
@@ -114,7 +115,7 @@ const getResetBtn = (isSelected, text, isLeft) => {
         style={style}
         borderless={true}
         onPress={() => {
-
+            props.changeResetType(resetType)
         }}>
         <Text style={{flex: 1, textAlign: `center`, textAlignVertical: `center`, color: textColor}}>{text}</Text>
     </TouchableRipple>
@@ -125,7 +126,8 @@ const mapStateToProps = (state) => {
         success: state.todos.editTodo.success,
         isProgress: state.todos.editTodo.isProgress,
         canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit || state.todos.editTodo.isProgress),
-        title: state.todos.editTodo.title
+        title: state.todos.editTodo.title,
+        resetType: state.todos.editTodo.resetType
     }
 };
 
