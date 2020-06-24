@@ -17,9 +17,15 @@ const pickerData = () => {
 
 class PeriodSelector extends React.Component {
     render() {
+        const periodData = this.props.periods.find((period) => {
+            return period.periodUnit === this.props.periodSelector;
+        })
+
+        const selectedItem = periodData != null ? periodData.period - 1: 0
+
         console.log(`PeriodSelector render props: ${JSON.stringify(this.props)}`);
         return <Modal animationType="slide"
-                      visible={this.props.isVisible}
+                      visible={periodData != null}
                       transparent={true}
                       onRequestClose={() => this.props.changePeriodSelector(false)}>
             <View
@@ -36,7 +42,7 @@ class PeriodSelector extends React.Component {
                     </View>
                     <View style={{height: 1, backgroundColor: `#AAA9A9`}}/>
                     <WheelPicker style={{width: `auto`, height: 196, marginTop: 24}}
-                                 selectedItem={this.props.period - 1}
+                                 selectedItem={selectedItem}
                                  indicatorColor={`rgba(139, 139, 139, 0.87)`}
                                  itemTextSize={24}
                                  itemTextColor={`#9A99A2`}
@@ -54,8 +60,8 @@ class PeriodSelector extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        period: state.todos.editTodo.period,
-        isVisible: state.todos.editTodo.isPeriodSelectorVisible
+        periods: state.todos.editTodo.periods,
+        periodSelector: state.todos.editTodo.periodSelector
     };
 };
 

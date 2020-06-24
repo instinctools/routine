@@ -29,7 +29,10 @@ class PeriodUnitSelector extends React.Component {
 }
 
 const createButton = (props, period) => {
-    const isSelected = period === props.selectedPeriodUnit;
+    const periodData = props.periods.find((currentPeriod)=>{
+        return currentPeriod.periodUnit === period;
+    })
+    const isSelected = periodData.isSelected;
     const bgColor = isSelected ? bgSelected : bgUnSelected;
     const textColor = isSelected ? textSelected : textUnselected;
     return <TouchableRipple
@@ -42,22 +45,34 @@ const createButton = (props, period) => {
             <TouchableRipple style={toolbarStyle.menuItem}
                              borderless={true}
                              onPress={()=>{
-                                 props.changePeriodSelector(true)
+                                 props.changePeriodSelector(true, period)
                              }}>
                 <Icon name="md-menu" size={24} color={textColor}/>
             </TouchableRipple>
             <Text style={{...todoDetailsStyle.periodUnitSelectorText, color: textColor, textAlign: `right`}}>
-                Every {period.toLowerCase()}
+                {getCorrectPeriodStr(periodData)}
             </Text>
         </View>
     </TouchableRipple>
 };
 
+const getCorrectPeriodStr = (period) => {
+    switch (period.periodUnit) {
+        case Period.DAY:
+            return period.period === 1 ? `Day` : `${period.period} Days`
+        case Period.WEEK:
+            return period.period === 1 ? `Week` : `${period.period} Weeks`
+        case Period.MONTH:
+            return period.period === 1 ? `Month` : `${period.period} Months`
+    }
+}
+
 const mapStateToProps = (state) => {
     return {
-        selectedPeriodUnit: state.todos.editTodo.periodUnit
+        periods: state.todos.editTodo.periods
     };
 };
+
 
 
 export default connect(

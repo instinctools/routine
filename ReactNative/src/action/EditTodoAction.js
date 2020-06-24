@@ -31,11 +31,12 @@ ActionEditTodo.editTodoPeriodUnit = (periodUnit) => {
     };
 };
 
-ActionEditTodo.changePeriodSelector = (isVisible) => {
+ActionEditTodo.changePeriodSelector = (isVisible, periodUnit) => {
     console.log(`edit todo change period selector state: ${isVisible}`);
     return {
         type: ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR,
-        isVisible
+        isVisible,
+        periodUnit
     };
 };
 
