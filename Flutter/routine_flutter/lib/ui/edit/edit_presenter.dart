@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/errors/error_extensions.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/period.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
@@ -48,7 +47,7 @@ class EditPresenter {
     }
   }
 
-  void onDoneClicked(BuildContext context) async {
+  void onDoneClicked(BuildContext context) {
     var selectedValuePeriod = valuesPeriods[selectedPeriodUnit];
     var todo = Todo(
       controller.value.text + DateTime.now().millisecondsSinceEpoch.toString(),
@@ -62,9 +61,9 @@ class EditPresenter {
     );
     print("onDoneClicked todo = $todo");
     if (id == null) {
-      await mainRepository.addTodo(todo).checkAndShowFailure(context);
+      mainRepository.addTodo(todo);
     } else {
-      await mainRepository.updateTodo(todo).checkAndShowFailure(context);
+      mainRepository.updateTodo(todo);
     }
   }
 }

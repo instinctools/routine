@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/errors/action_result.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/todo/todo_bloc/todo_event.dart';
 import 'package:routine_flutter/ui/todo/todo_bloc/todo_state.dart';
@@ -27,23 +26,23 @@ class TodoBloc extends Bloc<TodoEvent, TodoUpdateState> {
   }
 
   Stream<TodoUpdateState> _mapTodoDeleteToState(TodoDelete event) async* {
-    ActionResult actionResult = await _mainRepository.deleteTodo(event.todo);
-    if (actionResult is ActionSuccess) {
+    try {
+      _mainRepository.deleteTodo(event.todo);
       yield TodoUpdateSuccess();
-    } else if (actionResult is ActionFailure) {
-      yield TodoUpdateFailure(actionResult.message);
+    } catch (exception) {
+      print("_mapTodoDeleteToState TodoUpdateFailure exception = $exception");
+      yield TodoUpdateFailure(exception.toString());
     }
   }
 
   Stream<TodoUpdateState> _mapTodoResetToState(TodoReset event) async* {
     Todo oldTodo = event.todo;
     Todo newTodo = TimeUtils.updateTargetDate(oldTodo);
-
-    ActionResult actionResult = await _mainRepository.updateTodo(newTodo);
-    if (actionResult is ActionSuccess) {
+    try {
+      _mainRepository.updateTodo(newTodo);
       yield TodoUpdateSuccess();
-    } else if (actionResult is ActionFailure) {
-      yield TodoUpdateFailure(actionResult.message);
+    } catch (exception) {
+      yield TodoUpdateFailure("_mapTodoResetToState exception = $exception");
     }
   }
 }

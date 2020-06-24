@@ -1,42 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/errors/action_result.dart';
-import 'package:routine_flutter/errors/error_extensions.dart';
 
 class MainRepository {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   Firestore _fireStore = Firestore.instance;
   CollectionReference _collectionReference;
 
-  Stream<ActionResult> getTodos() {
+  Stream<QuerySnapshot> getTodos() {
     print("get todos");
-    return _collectionReference.snapshots().wrapError(logMessage: "get todos error");
+    return _collectionReference.snapshots();
   }
 
-  Future<ActionResult> addTodo(Todo todo) {
+  void addTodo(Todo todo) {
     print("add Todo");
-    return _collectionReference.add(todo.toMap()).wrapError(logMessage: "add todo error");
+    _collectionReference.add(todo.toMap());
   }
 
-  Future<ActionResult> updateTodo(Todo todo) {
-    print("update Todo");
-    return _fireStore.runTransaction((transaction) async {
-      await transaction.update(todo.reference, todo.toMap());
-    }).wrapError(logMessage: "update todo error");
+  void updateTodo(Todo todo) {
+    todo.reference.updateData(todo.toMap());
   }
 
-  Future<ActionResult> deleteTodo(Todo todo) {
+  void deleteTodo(Todo todo) {
     print("delete Todo");
-    return _fireStore.runTransaction((transaction) async {
-      await transaction.delete(todo.reference);
-    }).wrapError(logMessage: "delete todo error");
+    todo.reference.delete();
   }
 
-  Future<ActionResult> signInAnonymously() async {
-    return await _firebaseAuth
-        .signInAnonymously()
-        .then((value) => _collectionReference = _fireStore.collection("users/${value.user.uid}/todos"))
-        .wrapError(logMessage: "error _signInAnonymously exception");
+  Future<void> signInAnonymously() async {
+    return await _firebaseAuth.signInAnonymously().then(
+      (authResult) {
+        if (authResult != null) {
+          _collectionReference = _fireStore.collection("users/${authResult.user.uid}/todos");
+        } else {
+          throw Exception("_firebaseAuth.signInAnonymously authResult = null");
+        }
+      },
+    );
   }
 }
