@@ -17,13 +17,14 @@ class MainRepository {
     _collectionReference.add(todo.toMap());
   }
 
-  void updateTodo(Todo todo) {
-    todo.reference.updateData(todo.toMap());
+  Future<void> updateTodo(Todo todo) async {
+    print("update Todo");
+    await todo.reference.updateData(todo.toMap());
   }
 
-  void deleteTodo(Todo todo) {
+  Future<void> deleteTodo(Todo todo) async {
     print("delete Todo");
-    todo.reference.delete();
+    await todo.reference.delete();
   }
 
   Future<void> signInAnonymously() async {

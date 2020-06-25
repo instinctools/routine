@@ -21,6 +21,7 @@ class Strings {
   static const String listDialogContentText = "Are You sure want to delete this task?";
   static const String listDialogActionCancel = "Cancel";
   static const String listDialogActionDelete = "Delete";
+  static const String listFailureText = "An error occurred!";
 
   static const String todoKeyId = "id";
   static const String todoKeyPeriod = "period";
@@ -38,6 +39,7 @@ class Strings {
 //  error handling
   static const String errorMessageDefault = "Something went wrong...";
   static const String errorMessageNetworkIsNotAvailable = " Internet is not available!";
+  static const String snackbarRetry = "Retry";
 }
 
 class Dimens {

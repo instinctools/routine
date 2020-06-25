@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ErrorUtils {
-  static void showError(BuildContext context, {@required String message, SnackBarAction action}) {
+  static void showError(BuildContext context, {@required String message, SnackBarAction action, Duration duration}) {
     try {
-      Scaffold.of(context).showSnackBar(_createSnackbar(message, action: action));
+      Scaffold.of(context).showSnackBar(_createSnackbar(message, action: action, duration: duration));
     } catch (error) {
       print("show error with context: $error");
     }
@@ -18,9 +18,9 @@ class ErrorUtils {
     }
   }
 
-  static SnackBar _createSnackbar(String message, {SnackBarAction action}) => SnackBar(
+  static SnackBar _createSnackbar(String message, {SnackBarAction action, Duration duration}) => SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 3),
+        duration: duration ?? Duration(seconds: 3),
         action: action,
       );
 }

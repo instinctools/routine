@@ -70,14 +70,53 @@ class TodoList extends StatelessWidget {
       ),
       body: BlocProvider<TodoBloc>(
         create: (context) => TodoBloc(mainRepository: _mainRepository),
-        child: _buildBody(context),
+        child: _buildBody(),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody() {
+    return BlocBuilder<TodoBloc, TodoUpdateState>(builder: (buildContext, state) {
+      print("todoUpdateState = $state");
+      if (state is TodoInitial) {
+        BlocProvider.of<TodoBloc>(buildContext).add(GetTodos());
+        return LinearProgressIndicator();
+      } else if (state is TodosReceived) {
+        return _todoList(buildContext, state.todos);
+      } else if (state is TodoUpdateSuccess) {
+        return _todoList(buildContext, state.todos);
+      } else if (state is TodoUpdateFailure) {
+        print("TodoUpdateFailure todoUpdateState.error = ${state.error}");
+        ErrorUtils.showError(
+          buildContext,
+          message: state.error,
+          action: SnackBarAction(
+            label: Strings.snackbarRetry,
+            onPressed: () {
+              BlocProvider.of<TodoBloc>(buildContext).add(GetTodos());
+            },
+          ),
+          duration: Duration(days: 1),
+        );
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                Strings.listFailureText,
+                style: Styles.todosListErrorTextStyle,
+              )
+            ],
+          ),
+        );
+      }
+      throw Exception("unexpected todoUpdateState = $state");
+    });
+  }
+
+  Widget _todoList(BuildContext buildContext, Stream<QuerySnapshot> todos) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _mainRepository.getTodos(),
+      stream: todos,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();
@@ -90,21 +129,11 @@ class TodoList extends StatelessWidget {
             return Todo.fromDocumentSnapshot(documentSnapshot);
           }).toList();
           todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
-          List<Widget> widgets = _createItemWidgetsList(context, todoList);
-          return BlocBuilder<TodoBloc, TodoUpdateState>(
-            builder: (context, todoUpdateState) {
-              if (todoUpdateState is TodoUpdateSuccess) {
-                print("todoUpdateState");
-              } else if (todoUpdateState is TodoUpdateFailure) {
-                print("TodoUpdateFailure todoUpdateState.error = ${todoUpdateState.error}");
-                ErrorUtils.showError(context, message: todoUpdateState.error);
-              }
-              return ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
-                itemCount: widgets.length,
-                itemBuilder: (context, index) => widgets[index],
-              );
-            },
+          List<Widget> widgets = _createItemWidgetsList(buildContext, todoList);
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
+            itemCount: widgets.length,
+            itemBuilder: (context, index) => widgets[index],
           );
         }
       },

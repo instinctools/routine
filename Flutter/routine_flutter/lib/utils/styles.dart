@@ -54,6 +54,12 @@ class Styles {
     color: ColorsRes.splashScreenTextColor,
   );
 
+  static TextStyle todosListErrorTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenTextSize,
+    color: ColorsRes.splashScreenTextColor,
+  );
+
   static TextStyle drawerHeaderTitleTextStyle = TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 24,
