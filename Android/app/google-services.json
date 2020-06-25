@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:714449343672:android:08fe5d30eb464a0702d04d",
+        "mobilesdk_app_id": "1:714449343672:android:886325642984257002d04d",
         "android_client_info": {
-          "package_name": "com.routine"
+          "package_name": "com.instinctools.routine"
         }
       },
       "oauth_client": [
@@ -30,6 +30,13 @@
             {
               "client_id": "714449343672-4uc8bqgl372g3056u1nbcij1joqmom13.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "714449343672-f65ra1o72cia5r7fch8ktlgj7g4f4f93.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.instinctools.Routine"
+              }
             }
           ]
         }
@@ -37,9 +44,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:714449343672:android:ecceaaa7d71ae2e202d04d",
+        "mobilesdk_app_id": "1:714449343672:android:c977de44cb0710a902d04d",
         "android_client_info": {
-          "package_name": "com.routine.debug"
+          "package_name": "com.instinctools.routine.debug"
         }
       },
       "oauth_client": [
@@ -59,6 +66,13 @@
             {
               "client_id": "714449343672-4uc8bqgl372g3056u1nbcij1joqmom13.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "714449343672-f65ra1o72cia5r7fch8ktlgj7g4f4f93.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.instinctools.Routine"
+              }
             }
           ]
         }
