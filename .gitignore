@@ -60,3 +60,4 @@ buck-out/
 
 # Credentials
 signing.props
+release.props

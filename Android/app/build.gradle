@@ -22,11 +22,11 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file("../my_key.jks")
-            storePassword "QWERTY12345"
-            keyAlias "todo"
-            keyPassword "QWERTY12345"
+        debug {
+            storeFile file("../signing/debug.keystore")
+            storePassword "routinedebug"
+            keyAlias "routinedebug"
+            keyPassword "routinedebug"
         }
     }
 
@@ -37,7 +37,6 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
-            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -98,4 +97,34 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+File signPropsFile = file("../signing/release.props")
+if (signPropsFile.exists()) {
+    Properties props = new Properties()
+    props.load(new FileInputStream(signPropsFile))
+    android {
+        signingConfigs {
+            release {
+                storeFile file("../signing/release.keystore")
+                storePassword props['storePass']
+                keyAlias props['keyAlias']
+                keyPassword props['keyPass']
+            }
+        }
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+} else {
+    println("WARNING: debug keystore will be used for signing")
+    android {
+        buildTypes {
+            release {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
 }
