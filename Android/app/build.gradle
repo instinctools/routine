@@ -7,8 +7,6 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
-
     defaultConfig {
         applicationId "com.instinctools.routine"
         minSdkVersion 16
@@ -16,6 +14,7 @@ android {
         versionCode 1
         versionName "0.1"
 
+        setProperty("archivesBaseName", "Routine-v.${versionName}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -43,16 +42,16 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 
     kotlinOptions {
         jvmTarget = '1.8'
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -97,6 +96,15 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def newName = "Routine-v.${variant.mergedFlavor.versionName}-${variant.buildType.name}.apk"
+            outputFileName = newName.replace("-release", "")
+        }
+    }
 }
 
 File signPropsFile = file("../signing/release.props")
