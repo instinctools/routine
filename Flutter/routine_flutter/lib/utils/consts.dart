@@ -39,7 +39,7 @@ class Strings {
 //  error handling
   static const String errorMessageDefault = "Something went wrong...";
   static const String errorMessageNetworkIsNotAvailable = " Internet is not available!";
-  static const String snackbarRetry = "Retry";
+  static const String close = "Close";
 }
 
 class Dimens {

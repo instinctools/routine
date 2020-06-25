@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/errors/error_utils.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/edit/edit_screen.dart';
 import 'package:routine_flutter/ui/todo/empty_todo_placeholder.dart';
@@ -87,17 +86,22 @@ class TodoList extends StatelessWidget {
         return _todoList(buildContext, state.todos);
       } else if (state is TodoUpdateFailure) {
         print("TodoUpdateFailure todoUpdateState.error = ${state.error}");
-        ErrorUtils.showError(
-          buildContext,
-          message: state.error,
-          action: SnackBarAction(
-            label: Strings.snackbarRetry,
-            onPressed: () {
-              BlocProvider.of<TodoBloc>(buildContext).add(GetTodos());
-            },
-          ),
-          duration: Duration(days: 1),
-        );
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          await showDialog<String>(
+            context: buildContext,
+            builder: (BuildContext context) => new AlertDialog(
+              content: new Text(state.error),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text(Strings.close),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
