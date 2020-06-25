@@ -82,7 +82,7 @@ class TodoList extends StatelessWidget {
         BlocProvider.of<TodoBloc>(buildContext).add(GetTodos());
         return LinearProgressIndicator();
       } else if (state is TodosReceived) {
-        return _todoList(buildContext, state.todos);
+        return _todoList(buildContext, state.todosStream);
       } else if (state is TodoUpdateSuccess) {
         return _todoList(buildContext, state.todos);
       } else if (state is TodoUpdateFailure) {
@@ -114,9 +114,9 @@ class TodoList extends StatelessWidget {
     });
   }
 
-  Widget _todoList(BuildContext buildContext, Stream<QuerySnapshot> todos) {
+  Widget _todoList(BuildContext buildContext, Stream<QuerySnapshot> todosStream) {
     return StreamBuilder<QuerySnapshot>(
-      stream: todos,
+      stream: todosStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LinearProgressIndicator();

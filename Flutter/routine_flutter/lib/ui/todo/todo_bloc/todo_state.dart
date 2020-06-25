@@ -11,16 +11,16 @@ abstract class TodoUpdateState extends Equatable {
 class TodoInitial extends TodoUpdateState {}
 
 class TodosReceived extends TodoUpdateState {
-  final Stream<QuerySnapshot> todos;
+  final Stream<QuerySnapshot> todosStream;
 
-  const TodosReceived(this.todos);
+  const TodosReceived(this.todosStream);
 
   @override
-  List<Object> get props => [todos];
+  List<Object> get props => [todosStream];
 
   @override
   String toString() {
-    return 'TodoReceived{todos: $todos}';
+    return 'TodoReceived{todos: $todosStream}';
   }
 }
 

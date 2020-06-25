@@ -7,7 +7,7 @@ class MainRepository {
   Firestore _fireStore = Firestore.instance;
   CollectionReference _collectionReference;
 
-  Stream<QuerySnapshot> getTodos() {
+  Stream<QuerySnapshot> getTodosStream() {
     print("get todos");
     return _collectionReference.snapshots();
   }
@@ -17,14 +17,14 @@ class MainRepository {
     _collectionReference.add(todo.toMap());
   }
 
-  Future<void> updateTodo(Todo todo) async {
+  void updateTodo(Todo todo) {
     print("update Todo");
-    await todo.reference.updateData(todo.toMap());
+    todo.reference.updateData(todo.toMap());
   }
 
-  Future<void> deleteTodo(Todo todo) async {
+  void deleteTodo(Todo todo) {
     print("delete Todo");
-    await todo.reference.delete();
+    todo.reference.delete();
   }
 
   Future<void> signInAnonymously() async {
