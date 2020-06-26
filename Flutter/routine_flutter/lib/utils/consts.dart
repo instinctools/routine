@@ -6,7 +6,6 @@ class Strings {
   static const String editCancelButtonText = 'Cancel';
   static const String editDoneButtonText = 'Done';
   static const String editTextInputHint = 'Type recurring task name...';
-  static const String editInputErrorMessage = 'Title should be not empty!';
   static const String editDividerLabel = 'Repeat every';
   static const String editPickerDialogTitle = 'Choose period';
   static const String editPickerDialogConfirmButton = 'Done';

@@ -244,6 +244,6 @@ class TodoList extends StatelessWidget {
       });
 
   void _pushEditScreen(BuildContext context, {Todo todo}) async {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(entry: todo, mainRepository: _mainRepository)));
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(todo: todo, mainRepository: _mainRepository)));
   }
 }

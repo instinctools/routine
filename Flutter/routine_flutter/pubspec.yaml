@@ -29,6 +29,7 @@ dependencies:
   bloc: ^4.0.0
   flutter_bloc: ^4.0.1
   meta: ^1.1.6
+  rxdart: ^0.23.1
   equatable: ^1.0.0
   sqflite: any
 

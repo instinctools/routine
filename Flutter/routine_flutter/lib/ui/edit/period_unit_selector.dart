@@ -21,13 +21,7 @@ class PeriodUnitSelector extends StatefulWidget {
 }
 
 class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
-  EditPresenter _presenter;
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter = widget.presenter;
-  }
+  EditPresenter get _presenter => widget.presenter;
 
   @override
   Widget build(BuildContext context) {

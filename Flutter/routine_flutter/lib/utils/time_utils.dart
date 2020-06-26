@@ -31,13 +31,13 @@ class TimeUtils {
     DateTime newTargetDate;
     switch (todo.resetType) {
       case ResetType.RESET_TO_PERIOD:
-        newTargetDate = addPeriodToCurrentMoment(todo.title, todo.periodUnit, todo.periodValue);
+        newTargetDate = addPeriodToCurrentMoment(todo.periodUnit, todo.periodValue);
         break;
       case ResetType.RESET_TO_DATE:
         DateTime now = getCurrentTime();
         if (compareDateTimes(todo.targetDate, now.millisecondsSinceEpoch) < 0) {
           // targetDate is gone. set now + period
-          newTargetDate = addPeriodToCurrentMoment(todo.title, todo.periodUnit, todo.periodValue);
+          newTargetDate = addPeriodToCurrentMoment(todo.periodUnit, todo.periodValue);
           break;
         } else {
           DateTime targetDateTime = DateTime.fromMillisecondsSinceEpoch(todo.targetDate, isUtc: false);
@@ -67,7 +67,7 @@ class TimeUtils {
     return Todo.updateTargetDate(todo, newTargetDate.millisecondsSinceEpoch);
   }
 
-  static DateTime addPeriodToCurrentMoment(String title, PeriodUnit periodUnit, int periodValue) {
+  static DateTime addPeriodToCurrentMoment(PeriodUnit periodUnit, int periodValue) {
     int day = 0;
     int month = 0;
     switch (periodUnit) {
