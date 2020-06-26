@@ -74,10 +74,21 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 ...TODO_INITIAL_STATE.editTodo,
             };
             if (action.todo !== undefined) {
-                newState.editTodo.id = action.todo.id;
-                newState.editTodo.title = action.todo.title;
-                newState.editTodo.period = action.todo.period;
-                newState.editTodo.periodUnit = action.todo.periodUnit;
+                newState.editTodo = {
+                    ...newState.editTodo,
+                    id: action.todo.id,
+                    title: action.todo.title,
+                    resetType: action.todo.resetType,
+                    periods: newState.editTodo.periods.map((period) => {
+                        let periodDay = 1
+                        let isSelected = false
+                        if (period.periodUnit === action.todo.periodUnit) {
+                            isSelected = true
+                            periodDay = action.todo.period
+                        }
+                        return {...period, period: periodDay, isSelected: isSelected}
+                    })
+                };
             }
             break;
         case Action.Type.TODO_PROGRESS:
