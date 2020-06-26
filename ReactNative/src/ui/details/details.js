@@ -125,7 +125,7 @@ const mapStateToProps = (state) => {
     return {
         success: state.todos.editTodo.success,
         isProgress: state.todos.editTodo.isProgress,
-        canBeSaved: !(!state.todos.editTodo.title || !state.todos.editTodo.period || !state.todos.editTodo.periodUnit || state.todos.editTodo.isProgress),
+        canBeSaved: !(!state.todos.editTodo.title || state.todos.editTodo.isProgress),
         title: state.todos.editTodo.title,
         resetType: state.todos.editTodo.resetType
     }
