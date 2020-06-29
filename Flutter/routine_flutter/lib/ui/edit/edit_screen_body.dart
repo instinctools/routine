@@ -54,6 +54,23 @@ class _EditScreenBodyState extends State<EditScreenBody> {
         if (state.isSuccess) {
           Navigator.pop(context);
         }
+        if (state.isFailure) {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => new AlertDialog(
+              content: new Text(Strings.errorMessageDefault),
+              actions: <Widget>[
+                new FlatButton(
+                  child: new Text(Strings.close),
+                  onPressed: () {
+                    _editScreenBloc.add(CloseErrorDialogPressed());
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        }
       },
       child: BlocBuilder<EditScreenBloc, EditScreenState>(
         builder: (context, state) {
@@ -78,7 +95,11 @@ class _EditScreenBodyState extends State<EditScreenBody> {
                       Strings.editDoneButtonText,
                       style: Styles.edit_appbar_done_text_style,
                     ),
-                    onPressed: state.isTitleTodoValid ? donePressed : null,
+                    onPressed: state.isTitleTodoValid
+                        ? () {
+                            _editScreenBloc.add(DonePressed(todo: editPresenter.getTodo(_titleTodoController.text)));
+                          }
+                        : null,
                   )
                 ],
               ),
@@ -111,10 +132,6 @@ class _EditScreenBodyState extends State<EditScreenBody> {
         },
       ),
     );
-  }
-
-  void donePressed() {
-    _editScreenBloc.add(DonePressed(todo: editPresenter.getTodo(_titleTodoController.text)));
   }
 
   @override

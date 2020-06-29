@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_picker/Picker.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:routine_flutter/ui/edit/edit_presenter.dart';
-import 'package:routine_flutter/ui/edit/period.dart';
+import 'package:routine_flutter/ui/edit/period_unit.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';

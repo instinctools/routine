@@ -1,5 +1,5 @@
 class Validators {
-  static isValidTitleTodo(String titleTodo) {
+  static isTitleTodoValid(String titleTodo) {
     return titleTodo.isNotEmpty;
   }
 }

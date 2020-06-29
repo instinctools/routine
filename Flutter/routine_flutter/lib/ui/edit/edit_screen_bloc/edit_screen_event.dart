@@ -25,6 +25,8 @@ class EditScreenTitleTodoChanged extends EditScreenEvent {
 
 class CancelPressed extends EditScreenEvent {}
 
+class CloseErrorDialogPressed extends EditScreenEvent {}
+
 class DonePressed extends EditScreenEvent {
   final Todo todo;
 

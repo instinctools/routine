@@ -27,6 +27,8 @@ class EditScreenBloc extends Bloc<EditScreenEvent, EditScreenState> {
       yield* _mapCancelPressedToState();
     } else if (event is DonePressed) {
       yield* _mapDonePressedToState(event.todo);
+    } else if (event is CloseErrorDialogPressed) {
+      yield* _mapCloseErrorDialogPressedToState();
     }
   }
 
@@ -38,9 +40,12 @@ class EditScreenBloc extends Bloc<EditScreenEvent, EditScreenState> {
     final nonDebounceStream = events.where((event) {
       return (event is! EditScreenTitleTodoChanged);
     });
-    final debounceStream = events.where((event) {
-      return (event is EditScreenTitleTodoChanged);
-    }).debounceTime(Duration(milliseconds: 300));
+    final debounceStream = events
+        .where((event) {
+          return (event is EditScreenTitleTodoChanged);
+        })
+        .distinct()
+        .debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
       transitionFn,
@@ -49,7 +54,7 @@ class EditScreenBloc extends Bloc<EditScreenEvent, EditScreenState> {
 
   Stream<EditScreenState> _mapEditScreenTitleTodoChangedToState(String titleTodo) async* {
     yield state.update(
-      isTitleTodoValid: Validators.isValidTitleTodo(titleTodo),
+      isTitleTodoValid: Validators.isTitleTodoValid(titleTodo),
     );
   }
 
@@ -75,5 +80,9 @@ class EditScreenBloc extends Bloc<EditScreenEvent, EditScreenState> {
         isFailure: true,
       );
     }
+  }
+
+  Stream<EditScreenState> _mapCloseErrorDialogPressedToState() async* {
+    yield state.update(isFailure: false);
   }
 }

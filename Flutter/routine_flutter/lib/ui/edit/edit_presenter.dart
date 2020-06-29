@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:routine_flutter/data/todo.dart';
-import 'package:routine_flutter/ui/edit/period.dart';
+import 'package:routine_flutter/ui/edit/period_unit.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
 import 'resetType.dart';

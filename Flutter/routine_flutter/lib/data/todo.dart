@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:routine_flutter/ui/edit/period.dart';
+import 'package:routine_flutter/ui/edit/period_unit.dart';
 import 'package:routine_flutter/ui/edit/resetType.dart';
 import 'package:routine_flutter/utils/consts.dart';
 
