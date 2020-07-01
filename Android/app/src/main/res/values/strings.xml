@@ -6,6 +6,10 @@
     <string name="splash_screen_status_error">An error occurred!</string>
     <string name="splash_screen_retry">Retry</string>
 
+    <!--    Main screen-->
+    <string name="main_screen_title_place_holder">Oh! It\'s still empty</string>
+    <string name="main_screen_sub_title_place_holder">There are no routine tasks</string>
+
     <plurals name="day">
         <item quantity="one">Day</item>
         <item quantity="other">%1$d Days</item>
