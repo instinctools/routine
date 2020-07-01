@@ -2,4 +2,6 @@
 <resources>
     <color name="ic_launcher_background">#FFFFFF</color>
     <color name="period_tint">#1f000000</color>
+
+    <color name="std_brown">#835D51</color>
 </resources>

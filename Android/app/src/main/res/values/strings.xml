@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Routine</string>
 
+    <!--Splashscreen-->
+    <string name="splash_screen_status_progress">Setting up account</string>
+    <string name="splash_screen_status_error">An error occurred!</string>
+    <string name="splash_screen_retry">Retry</string>
+
     <plurals name="day">
         <item quantity="one">Day</item>
         <item quantity="other">%1$d Days</item>
