@@ -66,7 +66,7 @@ export const todoDetailsStyle = StyleSheet.create({
         justifyContent: 'space-evenly',
     },
     separatorContainer: {
-        marginTop: 16,
+        marginTop: 30,
         flexDirection: `row`,
         alignItems: `center`
     },
@@ -92,17 +92,14 @@ export const todoDetailsStyle = StyleSheet.create({
     periodUnitSelectorContainerWrapper:{
         flexDirection: `row`,
         flex: 1,
-        alignItems: `center`,
-        margin: 16
+        marginTop: 8,
+        marginBottom: 8
     },
     periodUnitSelectorText:{
         flex: 1,
         fontSize: 20,
-    },
-    periodUnitSelectorIndicator:{
-        width: 12,
-        height: 12,
-        borderRadius: 8
+        textAlignVertical: `center`,
+        marginRight: 16
     },
     periodSelectorContainer: {
         flex: 1,
@@ -110,8 +107,16 @@ export const todoDetailsStyle = StyleSheet.create({
         backgroundColor: `rgba(0, 0, 0, 0.2)`
     },
     periodSelectorCancelWrapper: {
-        backgroundColor: `#F1F1F1`,
+        backgroundColor: `#FFFFFF`,
         borderRadius: 16
+    },
+    periodSelectorInfo: {
+        flex: 1,
+        fontWeight: `bold`,
+        marginStart: 16,
+        alignSelf: `center`,
+        color: `#9E9DA8`,
+        fontSize: 16
     },
     periodSelectorCancel: {
         borderRadius: 16,

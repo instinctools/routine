@@ -1,11 +1,16 @@
 import moment from "moment";
-import {Period} from "./constants";
+import {Period, ResetType} from "./constants";
 import {View, ActivityIndicator} from "react-native";
 import React from "react";
 
-export const calculateTimestamp = (period, periodUnit, from = moment()) => {
-    let date = moment(from);
-    console.log(`calculateTimestamp: ${date.toISOString()}`);
+export const calculateTimestamp = (period, periodUnit, resetType, currentTimestamp) => {
+    let date
+    if (resetType === ResetType.BY_PERIOD || currentTimestamp == null) {
+        date = moment()
+    } else {
+        date = moment(currentTimestamp)
+    }
+
     switch (periodUnit) {
         case Period.WEEK:
             date.add(period, `w`);

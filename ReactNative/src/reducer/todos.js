@@ -1,7 +1,7 @@
 import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
 import {calculateTimestamp} from "../utils";
-import {Period} from "../constants";
+import {Period, ResetType} from "../constants";
 import uuid from "react-native-uuid";
 
 export const TODO_INITIAL_STATE = {
@@ -18,9 +18,24 @@ export const TODO_INITIAL_STATE = {
         isProgress: false,
         id: undefined,
         title: undefined,
-        period: 1,
-        periodUnit: Period.DAY,
-        isPeriodSelectorVisible: false,
+        periods: [
+            {
+                periodUnit: Period.DAY,
+                period: 1,
+                isSelected: true
+            },
+            {
+                periodUnit: Period.WEEK,
+                period: 1,
+                isSelected: false
+            },
+            {
+                periodUnit: Period.MONTH,
+                period: 1,
+                isSelected: false
+            }],
+        periodSelector: null,
+        resetType: ResetType.BY_PERIOD,
         success: false
     }
 };
@@ -59,10 +74,21 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 ...TODO_INITIAL_STATE.editTodo,
             };
             if (action.todo !== undefined) {
-                newState.editTodo.id = action.todo.id;
-                newState.editTodo.title = action.todo.title;
-                newState.editTodo.period = action.todo.period;
-                newState.editTodo.periodUnit = action.todo.periodUnit;
+                newState.editTodo = {
+                    ...newState.editTodo,
+                    id: action.todo.id,
+                    title: action.todo.title,
+                    resetType: action.todo.resetType,
+                    periods: newState.editTodo.periods.map((period) => {
+                        let periodDay = 1
+                        let isSelected = false
+                        if (period.periodUnit === action.todo.periodUnit) {
+                            isSelected = true
+                            periodDay = action.todo.period
+                        }
+                        return {...period, period: periodDay, isSelected: isSelected}
+                    })
+                };
             }
             break;
         case Action.Type.TODO_PROGRESS:
@@ -123,25 +149,44 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
         case ActionEditTodo.Type.TODO_EDIT_PERIOD:
             newState.editTodo = {
                 ...newState.editTodo,
-                period: action.period
+                periods: newState.editTodo.periods.map((period) => {
+                    let currentPeriod = period.period
+                    if (period.periodUnit === newState.editTodo.periodSelector) {
+                        currentPeriod = action.period
+                    }
+                    return {...period, period: currentPeriod}
+                })
             };
             break;
         case ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT:
-            const isPeriodPickerVisible = action.periodUnit === Period.DAY;
             newState.editTodo = {
                 ...newState.editTodo,
-                periodUnit: action.periodUnit,
-                isPeriodSelectorVisible: isPeriodPickerVisible
+                periods: newState.editTodo.periods.map((period) => {
+                    let isSelected = false
+                    if (period.periodUnit === action.periodUnit) {
+                        isSelected = true
+                    }
+                    return {...period, isSelected: isSelected}
+                })
             };
-            if (action.periodUnit !== Period.DAY) {
-                newState.editTodo.period = 1
-            }
             break;
         case ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR:
-            newState.isActionProgress = false;
+            if (!action.isVisible) {
+                newState.editTodo = {
+                    ...newState.editTodo,
+                    periodSelector: null
+                };
+            } else {
+                newState.editTodo = {
+                    ...newState.editTodo,
+                    periodSelector: action.periodUnit
+                };
+            }
+            break;
+        case ActionEditTodo.Type.TODO_EDIT_CHANGE_RESET_TYPE:
             newState.editTodo = {
                 ...newState.editTodo,
-                isPeriodSelectorVisible: action.isVisible
+                resetType: action.resetType
             };
             break;
         default:

@@ -2,6 +2,8 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {calculateTimestamp} from "../utils";
 import uuid from "react-native-uuid";
+import {Period, ResetType} from "../constants";
+import moment from "moment";
 
 const Action = {
     Type: {
@@ -71,8 +73,9 @@ Action.requestTodos = () => {
                             id: documentSnapshot.data().id,
                             period: documentSnapshot.data().period,
                             periodUnit: documentSnapshot.data().periodUnit,
-                            timestamp: documentSnapshot.data().timestamp,
-                            title: documentSnapshot.data().title
+                            timestamp: moment(documentSnapshot.data().timestamp.toDate()),
+                            title: documentSnapshot.data().title,
+                            resetType: documentSnapshot.data().resetType
                         }
                     )
                 });
@@ -104,13 +107,34 @@ Action.deleteTodo = id => {
 };
 
 Action.resetTodo = item => {
+    if (item.resetType === ResetType.BY_DATE) {
+        let timeStamp = moment(item.timestamp)
+        switch (item.periodUnit) {
+            case Period.DAY:
+                timeStamp.subtract(1, `days`)
+                break
+            case Period.WEEK:
+                timeStamp.subtract(1, `weeks`)
+                break
+            case Period.MONTH:
+                timeStamp.subtract(1, `months`)
+                break
+        }
+        if (timeStamp.isAfter(moment())) {
+            console.log("TEST123 AFTER")
+            return {
+                type: `any`
+            }
+        }
+    }
     return (dispatch) => {
         dispatch(Action.todoAction());
         let todo = {
             id: item.id,
             period: item.period,
             periodUnit: item.periodUnit,
-            timestamp: calculateTimestamp(item.period, item.periodUnit),
+            resetType: item.resetType,
+            timestamp: calculateTimestamp(item.period, item.periodUnit, item.resetType, item.timestamp),
             title: item.title
         };
         return firestore()
@@ -143,12 +167,17 @@ Action.selectTodo = (todo) => {
 Action.addTodo = () => {
     return (dispatch, getState) => {
         let editTodo = getState().todos.editTodo;
+        const period = editTodo.periods.find((currentPeriod) => {
+            return currentPeriod.isSelected === true;
+        })
+
         let todo = {
             id: editTodo.id,
-            period: editTodo.period,
-            periodUnit: editTodo.periodUnit,
-            timestamp: calculateTimestamp(editTodo.period, editTodo.periodUnit),
-            title: editTodo.title
+            title: editTodo.title,
+            resetType: editTodo.resetType,
+            period: period.period,
+            periodUnit: period.periodUnit,
+            timestamp: calculateTimestamp(period.period, period.periodUnit, editTodo.resetType),
         };
 
         if (todo.id === undefined) {
