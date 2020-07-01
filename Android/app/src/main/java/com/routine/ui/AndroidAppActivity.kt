@@ -107,6 +107,7 @@ class AndroidAppActivity : AppCompatActivity() {
     private fun adjustVisibility(isProgress: Boolean) {
         binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
         binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
+        binding.placeHolderGroup.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
         binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
         swipeCallback.isEnabled = !isProgress
     }
