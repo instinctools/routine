@@ -4,6 +4,7 @@ import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.StoreBuilder
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.nonFlowValueFetcher
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -15,7 +16,6 @@ import com.routine.data.db.entity.ResetType
 import com.routine.data.db.entity.TodoEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.tasks.await
 import org.joda.time.DateTime
 
 @ExperimentalCoroutinesApi
@@ -25,7 +25,7 @@ object TodosRepository {
 
     val todosStore = StoreBuilder
         .from<Pair<String, Boolean>, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { pair ->
-            val result =
+            val result = Tasks.await(
                 Firebase.firestore
                     .collection("users")
                     .document(Firebase.auth.userIdOrEmpty())
@@ -36,7 +36,7 @@ object TodosRepository {
                         }
                     }
                     .get()
-                    .await()
+            )
 
             buildList {
                 for (document in result) {
@@ -76,7 +76,6 @@ object TodosRepository {
             .collection("todos")
             .document(it)
             .delete()
-            .await()
 
         todosStore.clear(Pair(it, false))
         true
@@ -108,7 +107,6 @@ object TodosRepository {
             .collection("todos")
             .document(it)
             .set(newtodoEntity)
-            .await()
 
         todosStore.fresh(Pair(it, false))
         true
@@ -132,7 +130,6 @@ object TodosRepository {
             .collection("todos")
             .document(it.id)
             .set(it)
-            .await()
         todosStore.fresh(Pair(it.id, false))
         true
     })
