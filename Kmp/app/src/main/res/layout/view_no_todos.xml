@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/tasks_empty_description"
+        app:srcCompat="@drawable/ic_no_todos" />
+
+    <TextView
+        android:id="@+id/emptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="-0.02"
+        android:lineHeight="22sp"
+        android:lineSpacingExtra="2sp"
+        android:text="@string/tasks_empty_title"
+        android:textColor="#4E4E53"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/emptyDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="-0.01"
+        android:lineHeight="18sp"
+        android:lineSpacingExtra="2sp"
+        android:text="@string/tasks_empty_description"
+        android:textColor="#9A99A2"
+        android:textSize="13sp" />
+
+</LinearLayout>

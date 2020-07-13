@@ -1,0 +1,50 @@
+<resources>
+
+    <style name="Theme.SplashApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimaryDark">#757575</item>
+        <item name="colorPrimary">@color/splashPrimary</item>
+    </style>
+
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimaryDark">#757575</item>
+        <item name="colorPrimary">#000000</item>
+        <item name="colorSecondary">#03dac6</item>
+        <item name="toolbarStyle">@style/Widget.MyTheme.Toolbar</item>
+    </style>
+
+    <style name="Theme.MyApp.Details">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+
+    <!--Toolbar-->
+    <style name="Widget.MyTheme.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
+        <item name="android:background">#ffffff</item>
+        <item name="titleTextAppearance">@style/ToolbarTitle</item>
+        <item name="titleTextColor">#000000</item>
+    </style>
+
+    <style name="ToolbarTitle">
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <color name="period_tint">#1f000000</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
+
+    <style name="SlideAnimation">
+        <item name="android:windowEnterAnimation">@anim/enter</item>
+        <item name="android:windowExitAnimation">@anim/exit</item>
+    </style>
+
+    <style name="ToggleWidgetItem">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">@dimen/space</item>
+        <item name="android:paddingBottom">@dimen/space</item>
+        <item name="android:textColor">@color/toggle_widget_item_text_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+</resources>
