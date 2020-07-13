@@ -7,8 +7,11 @@ class Styles {
       color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 32.0);
 
   // ignore: non_constant_identifier_names
-  static TextStyle TODO_ITEM_TITLE_TEXT =
-      TextStyle(color: Colors.white.withOpacity(0.95), fontSize: 19.0);
+  static TextStyle TODO_ITEM_TITLE_TEXT = TextStyle(
+    fontWeight: FontWeight.w600,
+    color: Colors.white.withOpacity(0.95),
+    fontSize: 19.0,
+  );
 
   static const TODO_ITEM_TIME_TEXT = TextStyle(
     color: Colors.white54,
@@ -34,4 +37,43 @@ class Styles {
 
   static TextStyle  editUnselectedPeriodTextStyle = TextStyle(
       fontWeight: FontWeight.w500, fontSize: 20.0, color: ColorsRes.unselectedPeriodUnitColor);
+
+  static TextStyle editResetTypeTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.editResetSelectorTextSize,
+  );
+
+  static TextStyle splashScreenRetryButton = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenRetryButtonTextSize,
+  );
+
+  static TextStyle splashScreenTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenTextSize,
+    color: ColorsRes.splashScreenTextColor,
+  );
+
+  static TextStyle todosListErrorTextStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.splashScreenTextSize,
+    color: ColorsRes.splashScreenTextColor,
+  );
+
+  static TextStyle drawerHeaderTitleTextStyle = TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+  );
+
+  static TextStyle drawerHeaderSubtitleTextStyle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+
+  static const TextStyle emptyTodosPlaceholderTitle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+  );
+
+  static const TextStyle emptyTodosPlaceholderSubtitle = TextStyle(fontSize: 14, color: Colors.black38);
 }

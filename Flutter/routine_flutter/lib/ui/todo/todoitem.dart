@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/ui/edit/period_unit.dart';
 import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo entry;
@@ -14,40 +16,43 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: double.infinity,
-        margin: EdgeInsets.symmetric(vertical: Dimens.COMMON_PADDING_HALF),
-        decoration: BoxDecoration(
-            color: _pickItemColor(index),
-            borderRadius: BorderRadius.circular(Dimens.ITEM_BOX_BORDER_RADIUS)),
+        margin: EdgeInsets.symmetric(vertical: Dimens.commonPaddingHalf),
+        decoration: BoxDecoration(color: _pickItemColor(index), borderRadius: BorderRadius.circular(Dimens.itemBoxBorderRadius)),
         child: Padding(
-          padding: EdgeInsets.all(Dimens.COMMON_PADDING),
+          padding: EdgeInsets.symmetric(
+            horizontal: Dimens.commonPaddingDouble,
+            vertical: Dimens.todoItemVerticalPadding,
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                entry.title,
-                style: Styles.TODO_ITEM_TITLE_TEXT,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    entry.title,
+                    style: Styles.TODO_ITEM_TITLE_TEXT,
+                  ),
+                  Text(
+                    TimeUtils.calculateTimeLeft(entry.targetDate),
+                    style: Styles.TODO_ITEM_TIME_TEXT,
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: Dimens.COMMON_PADDING_DOUBLE),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(entry.periodUnit, style: Styles.TODO_ITEM_TIME_TEXT),
-                    Text(entry.periodValue.toString(), style: Styles.TODO_ITEM_TIME_TEXT)
-                  ],
-                ),
-              )
+              SizedBox(
+                height: Dimens.commonPaddingHalf,
+              ),
+              Text(TimeUtils.getPrettyPeriod(entry.periodUnit.name, entry.periodValue), style: Styles.TODO_ITEM_TIME_TEXT),
             ],
           ),
         ));
   }
 
-  Color _pickItemColor(int index,
-      {int maxIndex = 15,
-      color1 = const [255, 190, 67],
-      color2 = const [255, 57, 55]}) {
+  Color _pickItemColor(int index, {int maxIndex = 15, color1 = const [255, 190, 67], color2 = const [255, 57, 55]}) {
+    if (index < 0) {
+      return Colors.red.shade900;
+    }
     var w1 = 1.0;
     if (index < maxIndex) {
       w1 = index / maxIndex;
@@ -60,12 +65,4 @@ class TodoItem extends StatelessWidget {
     }
     return Color.fromRGBO(colorRgb[0], colorRgb[1], colorRgb[2], 1);
   }
-}
-
-class TodoTMP {
-  String title;
-  String timeLeft;
-  String period;
-
-  TodoTMP(this.title, {this.timeLeft = '5 days left', this.period = 'per 2 days'});
 }

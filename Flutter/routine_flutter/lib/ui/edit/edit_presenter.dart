@@ -1,38 +1,45 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:routine_flutter/data/todo.dart';
+import 'package:routine_flutter/ui/edit/period_unit.dart';
+import 'package:routine_flutter/utils/time_utils.dart';
+
+import 'resetType.dart';
 
 class EditPresenter {
-  int id;
-  String periodUnit = 'day';
-  int periodValue = 1;
-  int timestamp = 0;
+  static const int initValue = 1;
 
-  final TextEditingController controller = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  String id;
+  PeriodUnit selectedPeriodUnit = PeriodUnit.DAY;
+  ResetType resetType = ResetType.RESET_TO_PERIOD;
+  DocumentReference reference;
+  Map<PeriodUnit, int> valuesPeriods = {};
+
 
   EditPresenter(Todo todo) {
+    PeriodUnit.values.forEach((element) {
+      valuesPeriods.addAll({element: initValue});
+    });
+
     if (todo != null) {
-      this.id = todo.id;
-      this.periodUnit = todo.periodUnit;
-      this.periodValue = todo.periodValue;
-      this.timestamp = todo.timestamp;
-      this.controller.text = todo.title;
+      id = todo.id;
+      selectedPeriodUnit = todo.periodUnit;
+      valuesPeriods[selectedPeriodUnit] = todo.periodValue;
+      resetType = todo.resetType;
+      reference = todo.reference;
     }
   }
 
-  bool validateAndPrint() {
-    if (formKey.currentState.validate()) {
-      return true;
-    } else {
-      print('Validation failed!');
-      return false;
-    }
+  Todo getTodo(String titleTodo) {
+    var selectedValuePeriod = valuesPeriods[selectedPeriodUnit];
+    return Todo(
+      titleTodo + DateTime.now().millisecondsSinceEpoch.toString(),
+      // id = title + now.inMillisecondsSinceEpoch
+      titleTodo,
+      selectedPeriodUnit,
+      selectedValuePeriod,
+      TimeUtils.addPeriodToCurrentMoment(selectedPeriodUnit, selectedValuePeriod).millisecondsSinceEpoch,
+      resetType,
+      reference,
+    );
   }
-
-  Todo getResult() => Todo(
-      id: id,
-      title: controller.value.text,
-      periodUnit: periodUnit,
-      periodValue: periodValue,
-      timestamp: timestamp);
 }

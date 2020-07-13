@@ -9,7 +9,8 @@ const COLUMN_ID = 'id';
 const COLUMN_TITLE = 'title';
 const COLUMN_UNIT = 'period_unit';
 const COLUMN_VALUE = 'period_value';
-const COLUMN_TIMESTAMP = 'timestamp';
+const COLUMN_TARGET_DATE = 'target_time';
+const COLUMN_RESET_TYPE = 'reset_type';
 
 const WHERE_ID_CLAUSE = 'id = ?';
 
@@ -38,11 +39,12 @@ class DatabaseHelper {
         version: DB_VERSION,
         onCreate: (db, version) async {
           await db.execute("CREATE TABLE $TABLE_NAME ("
-              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-              "title TEXT,"
-              "period_unit TEXT,"
-              "period_value INTEGER,"
-              "timestamp INTEGER"
+              "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+              "$COLUMN_TITLE TEXT,"
+              "$COLUMN_UNIT TEXT,"
+              "$COLUMN_VALUE INTEGER,"
+              "$COLUMN_TARGET_DATE INTEGER,"
+              "$COLUMN_RESET_TYPE TEXT"
               ")");
         },
         onOpen: (db) async => print("database = ${await db.getVersion()}"));
@@ -51,24 +53,24 @@ class DatabaseHelper {
   Future<List<Todo>> getTodos() async {
     var db = await database;
     var queryMap = await db.query(TABLE_NAME);
-    var todos = queryMap.map((item) => Todo.fromMap(item)).toList();
+    print("all items:  $queryMap");
+    var todos = Iterable.empty();
+//    queryMap.map((item) => Todo.fromMap(item)).toList();
     return todos.toList();
   }
-
+/*
   Future<int> changeTodo(Todo todo) async {
     var db = await database;
 
     if (todo.id != null) {
-      return await db.update(TABLE_NAME, todo.toMap(),
-          where: WHERE_ID_CLAUSE, whereArgs: [todo.id]);
+      return await db.update(TABLE_NAME, todo.toMap(), where: WHERE_ID_CLAUSE, whereArgs: [todo.id]);
     } else {
       return await db.insert(TABLE_NAME, todo.toMap());
     }
-  }
+  }*/
 
   Future<int> deleteTodo(int id) async {
     var db = await database;
-    return await db
-        .delete(TABLE_NAME, where: WHERE_ID_CLAUSE, whereArgs: [id.toString()]);
+    return await db.delete(TABLE_NAME, where: WHERE_ID_CLAUSE, whereArgs: [id.toString()]);
   }
 }
