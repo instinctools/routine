@@ -1,6 +1,5 @@
 package com.routine.react;
 
-import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactNativeHost;
@@ -11,7 +10,9 @@ import com.routine.BuildConfig;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class ReactApplication extends Application implements com.facebook.react.ReactApplication {
+import io.flutter.app.FlutterApplication;
+
+public class ReactApplication extends FlutterApplication implements com.facebook.react.ReactApplication {
 
     private final ReactNativeHost mReactNativeHost =
         new ReactNativeHost(this) {
