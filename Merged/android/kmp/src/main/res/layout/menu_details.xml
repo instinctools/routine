@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp"
+    android:paddingRight="@dimen/space"
+    android:paddingLeft="@dimen/space"
+    android:background="?attr/actionBarItemBackground"
+    android:enabled="true"
+    android:fontFamily="sans-serif-medium"
+    android:gravity="center"
+    android:text="@string/task_details_btn_done"
+    android:textColor="@color/add_todo_done_color"
+    android:textSize="18sp" />
