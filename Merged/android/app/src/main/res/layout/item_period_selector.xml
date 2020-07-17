@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/period_selector"
+        android:button="@null"
+        android:gravity="end"
+        android:padding="16dp"
+        android:textColor="@color/period_selector"
+        android:textSize="20sp"
+        tools:text="Every week" />
+
+    <ImageView
+        android:id="@+id/period_menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="start|center"
+        android:background="?attr/actionBarItemBackground"
+        android:padding="12dp"
+        app:srcCompat="@drawable/ic_menu" />
+
+</FrameLayout>
