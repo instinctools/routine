@@ -1,10 +1,10 @@
 package com.routine
 
-import android.app.Application
 import android.content.Context
+import com.routine.react.ReactApplication
 import timber.log.Timber
 
-class App : Application() {
+class App : ReactApplication() {
 
     companion object {
         @JvmStatic

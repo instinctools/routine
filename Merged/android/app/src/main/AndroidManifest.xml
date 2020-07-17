@@ -23,6 +23,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.AndroidAppActivity" />
+
+        <!--ReactNative-->
+
+        <activity
+            android:name=".react.ReactActivity"
+            android:label="RoutineReact"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

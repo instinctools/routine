@@ -5,12 +5,24 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
+import com.android.build.OutputFile
+
+project.ext.react = [
+        entryFile: "index.js",
+        enableHermes: false,  // clean and rebuild if changing
+]
+
+apply from: "../../node_modules/react-native/react.gradle"
+def enableSeparateBuildPerCPUArchitecture = false
+def jscFlavor = 'org.webkit:android-jsc:+'
+def enableHermes = project.ext.react.get("enableHermes", false);
+
 android {
-    compileSdkVersion 29
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.instinctools.routine"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.1"
 
@@ -42,8 +54,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -96,12 +108,23 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // react-native
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    if (enableHermes) {
+        def hermesPath = "../../node_modules/hermes-engine/android/";
+        debugImplementation files(hermesPath + "hermes-debug.aar")
+        releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+        implementation jscFlavor
+    }
 }
 
 afterEvaluate {
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            def newName = "Routine-v.${variant.mergedFlavor.versionName}-${variant.buildType.name}.apk"
+            def newName = "RoutineMerged-v.${variant.mergedFlavor.versionName}-${variant.buildType.name}.apk"
             outputFileName = newName.replace("-release", "")
         }
     }
@@ -136,3 +159,9 @@ if (signPropsFile.exists()) {
         }
     }
 }
+
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
