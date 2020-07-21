@@ -146,6 +146,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // kmp
+    implementation project(':kmp')
 }
 
 afterEvaluate {

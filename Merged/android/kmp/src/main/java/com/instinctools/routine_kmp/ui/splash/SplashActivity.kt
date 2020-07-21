@@ -3,7 +3,7 @@ package com.instinctools.routine_kmp.ui.splash
 import android.os.Bundle
 import android.view.View
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.ActivitySplashBinding
+import com.instinctools.routine_kmp.databinding.ActivitySplashKmpBinding
 import com.instinctools.routine_kmp.ui.RetainPresenterActivity
 import com.instinctools.routine_kmp.ui.SplashPresenter
 import com.instinctools.routine_kmp.ui.list.TodoListActivity
@@ -15,7 +15,7 @@ import javax.inject.Provider
 
 class SplashActivity : RetainPresenterActivity<SplashPresenter>() {
 
-    private lateinit var binding: ActivitySplashBinding
+    private lateinit var binding: ActivitySplashKmpBinding
 
     @Inject lateinit var presenterProvider: Provider<SplashPresenter>
 
@@ -26,7 +26,7 @@ class SplashActivity : RetainPresenterActivity<SplashPresenter>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
+        binding = ActivitySplashKmpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         appComponent.inject(this)

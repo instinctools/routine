@@ -3,13 +3,13 @@ package com.instinctools.routine_kmp.ui.list.adapter
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.instinctools.routine_kmp.databinding.ItemTodoBinding
+import com.instinctools.routine_kmp.databinding.ItemTodoKmpBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.color.toPlatformColor
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 import java.lang.Math.abs
 
-class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+class TodosViewHolder(private val binding: ItemTodoKmpBinding) : RecyclerView.ViewHolder(binding.root) {
 
     var item: TodoListUiModel? = null
 

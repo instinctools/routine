@@ -1,18 +1,18 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     kotlin("android")
     kotlin("kapt")
 }
-apply(plugin = "com.google.gms.google-services")
-apply(plugin = "com.google.firebase.crashlytics")
+// apply(plugin = "com.google.gms.google-services")
+// apply(plugin = "com.google.firebase.crashlytics")
 
 
 android {
     compileSdkVersion(Versions.compileSdk)
     defaultConfig {
-        applicationId = "com.instinctools.routine_kmp"
+        // applicationId = "com.instinctools.routine_kmp"
         minSdkVersion(Versions.minSdk)
         targetSdkVersion(Versions.targetSdk)
         versionCode = 1

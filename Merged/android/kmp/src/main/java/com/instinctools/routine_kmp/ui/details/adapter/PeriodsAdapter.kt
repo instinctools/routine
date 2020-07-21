@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.instinctools.routine_kmp.databinding.ItemPeriodBinding
+import com.instinctools.routine_kmp.databinding.ItemPeriodKmpBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel
 
@@ -18,7 +18,7 @@ class PeriodsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeriodViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemPeriodBinding.inflate(inflater, parent, false)
+        val binding = ItemPeriodKmpBinding.inflate(inflater, parent, false)
         return PeriodViewHolder(binding).also { holder ->
             binding.root.setOnClickListener {
                 val adapterPosition = holder.adapterPosition

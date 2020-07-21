@@ -7,7 +7,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.ActivityDetailsBinding
+import com.instinctools.routine_kmp.databinding.ActivityDetailsKmpBinding
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.ui.RetainPresenterActivity
 import com.instinctools.routine_kmp.ui.details.adapter.PeriodsAdapter
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 class TodoDetailsActivity : RetainPresenterActivity<TodoDetailsPresenter>() {
 
-    private lateinit var binding: ActivityDetailsBinding
+    private lateinit var binding: ActivityDetailsKmpBinding
 
     @Inject lateinit var presenterProvider: TodoDetailsPresenterFactory
 
@@ -47,7 +47,7 @@ class TodoDetailsActivity : RetainPresenterActivity<TodoDetailsPresenter>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDetailsBinding.inflate(layoutInflater)
+        binding = ActivityDetailsKmpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         appComponent.inject(this)

@@ -18,4 +18,9 @@ plugins.each { name, path ->
     project(":$name").projectDir = pluginDirectory
 }
 
+// kmp
+include(":kmp", ":shared")
+
+enableFeaturePreview("GRADLE_METADATA")
+
 rootProject.name='Routine-Merged'

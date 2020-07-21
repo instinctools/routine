@@ -3,13 +3,13 @@ package com.instinctools.routine_kmp.ui.details.adapter
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.ItemPeriodBinding
+import com.instinctools.routine_kmp.databinding.ItemPeriodKmpBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel
 import com.instinctools.routine_kmp.util.title
 
 class PeriodViewHolder(
-    private val binding: ItemPeriodBinding
+    private val binding: ItemPeriodKmpBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var item: PeriodUnitUiModel

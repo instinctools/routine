@@ -9,13 +9,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.FragmentPeriodPickerBinding
+import com.instinctools.routine_kmp.databinding.FragmentPeriodPickerKmpBinding
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.util.viewBinding
 
-class PeriodPickerFragment : DialogFragment(R.layout.fragment_period_picker) {
+class PeriodPickerFragment : DialogFragment(R.layout.fragment_period_picker_kmp) {
 
-    private val binding by viewBinding(FragmentPeriodPickerBinding::bind)
+    private val binding by viewBinding(FragmentPeriodPickerKmpBinding::bind)
 
     private var _period: Int? = null
     private val period: Int get() = _period ?: arguments?.getInt(ARG_SELECTED_PERIOD) ?: 1

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.ItemTodoBinding
+import com.instinctools.routine_kmp.databinding.ItemTodoKmpBinding
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 
 class TodosAdapter(
@@ -23,7 +23,7 @@ class TodosAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             TYPE_TODO -> {
-                val binding = ItemTodoBinding.inflate(inflater, parent, false)
+                val binding = ItemTodoKmpBinding.inflate(inflater, parent, false)
                 TodosViewHolder(binding).also { holder ->
                     holder.itemView.setOnClickListener {
                         val adapterPosition = holder.adapterPosition
@@ -35,7 +35,7 @@ class TodosAdapter(
                 }
             }
             TYPE_SEPARATOR -> {
-                val view = inflater.inflate(R.layout.item_separator, parent, false)
+                val view = inflater.inflate(R.layout.item_separator_kmp, parent, false)
                 EmptyViewHolder(view)
             }
             else -> throw IllegalStateException("Couldn't create view for view type $viewType")

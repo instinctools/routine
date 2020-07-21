@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import com.instinctools.routine_kmp.R
-import com.instinctools.routine_kmp.databinding.ActivityTodosBinding
+import com.instinctools.routine_kmp.databinding.ActivityTodosKmpBinding
 import com.instinctools.routine_kmp.ui.RetainPresenterActivity
 import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
 import com.instinctools.routine_kmp.ui.list.adapter.TodosAdapter
@@ -24,7 +24,7 @@ import javax.inject.Provider
 
 class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
 
-    private lateinit var binding: ActivityTodosBinding
+    private lateinit var binding: ActivityTodosKmpBinding
 
     @Inject lateinit var presenterProvider: Provider<TodoListPresenter>
 
@@ -51,7 +51,7 @@ class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityTodosBinding.inflate(layoutInflater)
+        binding = ActivityTodosKmpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         appComponent.inject(this)
