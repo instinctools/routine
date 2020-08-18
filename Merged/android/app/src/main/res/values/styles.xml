@@ -40,5 +40,13 @@
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
 
+    <style name="menu_technology">
+        <item name="android:gravity">end</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#8D8C98</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+
 </resources>
 

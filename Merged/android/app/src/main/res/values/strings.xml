@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Routine</string>
+    <string name="app_developer">by Instinctools</string>
 
     <!--Splashscreen-->
     <string name="splash_screen_status_progress">Setting up account</string>
@@ -24,4 +25,13 @@
         <item quantity="one">Month</item>
         <item quantity="other">%1$d Months</item>
     </plurals>
+
+    <string name="menu_technology">Technology</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_terms">Terms and conditions</string>
+
+    <string name="technology_android_native">Android Native</string>
+    <string name="technology_react_native">React Native</string>
+    <string name="technology_flutter">Flutter</string>
+    <string name="technology_kmp">Kotlin Multiplatform</string>
 </resources>
