@@ -1,19 +1,21 @@
 package com.routine.common.home
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.routine.databinding.ItemMenuTechnologyBinding
 
 class TechnologyViewHolder(private val binding: ItemMenuTechnologyBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
+    var isExpanded = false
+
     init {
-        binding.root.setOnClickListener {
-            if (binding.technologyGroup.visibility == View.VISIBLE){
-                binding.technologyGroup.visibility = View.GONE
+        binding.title.setOnClickListener {
+            if (isExpanded){
+                binding.root.transitionToStart()
             } else {
-                binding.technologyGroup.visibility = View.VISIBLE
+                binding.root.transitionToEnd()
             }
+            isExpanded = !isExpanded
         }
     }
 }

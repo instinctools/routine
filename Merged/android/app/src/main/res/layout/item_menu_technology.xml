@@ -1,90 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp">
-
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_technology"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title" />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/menu_technology"
-        android:textColor="#616165"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/next"
-        app:layout_constraintStart_toEndOf="@+id/icon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/next"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/ic_sub_menu"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title" />
+    android:background="#ffffff"
+    app:layoutDescription="@xml/item_menu_technology_scene">
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/technology_group"
+        android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="technology_android_native, technology_react_native, technology_flutter, technology_kmp"/>
+        app:constraint_referenced_ids="technology_kmp, technology_flutter, technology_react_native, technology_android_native"/>
 
     <TextView
         android:id="@+id/technology_android_native"
         style="@style/menu_technology"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/technology_android_native"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        android:text="@string/technology_android_native" />
 
     <TextView
         android:id="@+id/technology_react_native"
         style="@style/menu_technology"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/technology_react_native"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/technology_android_native" />
+        android:text="@string/technology_react_native" />
 
     <TextView
         android:id="@+id/technology_flutter"
         style="@style/menu_technology"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/technology_flutter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/technology_react_native" />
+        android:text="@string/technology_flutter"/>
 
     <TextView
         android:id="@+id/technology_kmp"
         style="@style/menu_technology"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/technology_kmp"
+        android:text="@string/technology_kmp"/>
+
+    <View
+        android:id="@+id/placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="@+id/title"
+        app:layout_constraintBottom_toBottomOf="@+id/title"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingStart="56dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="56dp"
+        android:paddingBottom="8dp"
+        android:text="@string/menu_technology"
+        android:textColor="#616165"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/technology_flutter" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_technology"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:id="@+id/next"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_sub_menu"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title" />
+</androidx.constraintlayout.motion.widget.MotionLayout>
