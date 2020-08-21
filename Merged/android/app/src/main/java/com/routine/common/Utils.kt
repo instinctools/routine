@@ -8,6 +8,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.yield
 import org.joda.time.DateTime
@@ -117,3 +120,17 @@ fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""
 
 
 fun Throwable.getErrorMessage() = message ?: "An error occurred!"
+
+fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {
+    require(periodMillis > 0) { "period should be positive" }
+    return flow {
+        var lastTime = 0L
+        collect { value ->
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastTime >= periodMillis) {
+                lastTime = currentTime
+                emit(value)
+            }
+        }
+    }
+}
