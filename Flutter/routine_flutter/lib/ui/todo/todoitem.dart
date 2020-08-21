@@ -30,9 +30,12 @@ class TodoItem extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(
-                    entry.title,
-                    style: Styles.TODO_ITEM_TITLE_TEXT,
+                  Flexible(
+                    child: Text(
+                      entry.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.TODO_ITEM_TITLE_TEXT,
+                    ),
                   ),
                   Text(
                     TimeUtils.calculateTimeLeft(entry.targetDate),
