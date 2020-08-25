@@ -1,6 +1,7 @@
 package com.routine.common.home
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -21,6 +22,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+const val SP_MENU = "MENU"
+
 @ExperimentalCoroutinesApi
 class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
@@ -32,30 +35,18 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         setContentView(binding.root)
         binding.menu.adapter = adapter
 
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .getString(SP_MENU, Menu.ANDROID_NATIVE.name)?.let {
+                handleMenu(Menu.valueOf(it))
+            }
+
         adapter.submitList(listOf(Menu.TECHNOLOGY))
 
 
         adapter.clicksFlow
             .onEach {
-                when (it?.getContentIfNotHandled()) {
-                    Menu.ANDROID_NATIVE -> {
-                        openApp(Fragment(R.layout.fragment_android_app))
-                    }
-                    Menu.REACT_NATIVE -> {
-                        openApp(ReactFragment.Builder()
-                            .setComponentName("routine")
-                            .build())
-                    }
-                    Menu.FLUTTER -> {
-                        openApp(FlutterFragment.NewEngineFragmentBuilder(FlutterAppFragment::class.java)
-                            .renderMode(RenderMode.surface)
-                            .transparencyMode(TransparencyMode.opaque)
-                            .build<FlutterAppFragment>())
-                    }
-                    Menu.KMP -> {
-                    }
-                    else -> {
-                    }
+                it?.getContentIfNotHandled()?.let {
+                    handleMenu(it)
                 }
             }
             .launchIn(lifecycleScope)
@@ -64,13 +55,38 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun invokeDefaultOnBackPressed() {
     }
 
-    fun openApp(fragment: Fragment) {
+    private fun handleMenu(menu: Menu) {
+        when (menu) {
+            Menu.ANDROID_NATIVE -> {
+                openApp(Menu.ANDROID_NATIVE, Fragment(R.layout.fragment_android_app))
+            }
+            Menu.REACT_NATIVE -> {
+                openApp(Menu.REACT_NATIVE, ReactFragment.Builder()
+                    .setComponentName("routine")
+                    .build())
+            }
+            Menu.FLUTTER -> {
+                openApp(Menu.FLUTTER, FlutterFragment.NewEngineFragmentBuilder(FlutterAppFragment::class.java)
+                    .renderMode(RenderMode.surface)
+                    .transparencyMode(TransparencyMode.opaque)
+                    .build<FlutterAppFragment>())
+            }
+            Menu.KMP -> {
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun openApp(menu: Menu, fragment: Fragment) {
         supportFragmentManager.commit {
-            replace(
-                    R.id.content,
-                    fragment
-            )
+            replace(R.id.content, fragment)
         }
         binding.drawer.closeDrawer(GravityCompat.END, true)
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+            .edit()
+            .putString(SP_MENU, menu.name)
+            .apply()
     }
 }
