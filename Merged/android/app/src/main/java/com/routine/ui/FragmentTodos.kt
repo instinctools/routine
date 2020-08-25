@@ -8,49 +8,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
 import com.google.android.material.snackbar.Snackbar
 import com.routine.R
-import com.routine.common.Analytics
-import com.routine.common.getErrorMessage
-import com.routine.common.showError
-import com.routine.common.viewBinding
+import com.routine.common.*
+import com.routine.common.home.menu.Menu
+import com.routine.data.model.Event
 import com.routine.data.model.Todo
-import com.routine.vm.AndroidAppViewModel
-import com.routine.databinding.ActivityMainBinding
+import com.routine.databinding.FragmentTodosBinding
 import com.routine.databinding.ItemTodoBinding
+import com.routine.vm.AndroidAppViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.flow.*
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 import kotlin.math.abs
 
 @ExperimentalStdlibApi
 @FlowPreview
 @ExperimentalCoroutinesApi
-class AndroidAppActivity : AppCompatActivity() {
+class FragmentTodos : Fragment(R.layout.fragment_todos) {
 
     private val viewModel by viewModels<AndroidAppViewModel>()
-    private val binding: ActivityMainBinding by viewBinding(ActivityMainBinding::inflate)
-    private val adapter =
-        TodosAdapter()
-    private val swipeCallback by lazy { SwipeCallback(this) }
+    private val binding by viewBinding(FragmentTodosBinding::bind)
+    private val adapter = TodosAdapter(lifecycleScope)
+    private val swipeCallback by lazy { SwipeCallback(requireActivity()) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnMenuItemClickListener {
             Analytics.action("add_todo_android")
-            startActivity(Intent(this, DetailsActivity::class.java))
+            findNavController().navigate(R.id.action_todos_details)
             true
         }
 
@@ -93,7 +91,7 @@ class AndroidAppActivity : AppCompatActivity() {
         }
 
         viewModel.actionTodo
-            .observe(this, Observer {
+            .observe(requireActivity(), Observer {
                 when (it) {
                     is StoreResponse.Error.Exception -> {
                         Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
@@ -102,6 +100,14 @@ class AndroidAppActivity : AppCompatActivity() {
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
             })
+
+        adapter.clicksFlow
+            .onEach {
+                it?.getContentIfNotHandled()?.let {
+                    findNavController().navigate(FragmentTodosDirections.actionTodosDetails(it.id))
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun adjustVisibility(isProgress: Boolean) {
@@ -112,7 +118,8 @@ class AndroidAppActivity : AppCompatActivity() {
         swipeCallback.isEnabled = !isProgress
     }
 
-    private class TodosAdapter : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
+    private class TodosAdapter(val coroutineScope: CoroutineScope) : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
+
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
             if (oldItem is Todo && newItem is Todo) {
                 return oldItem.id == newItem.id
@@ -128,6 +135,8 @@ class AndroidAppActivity : AppCompatActivity() {
         }
     }) {
 
+        val clicksFlow = MutableStateFlow<Event<Todo>?>(null)
+
         companion object {
             const val TYPE_TODO = 0
             const val TYPE_SEPARATOR = 1
@@ -137,7 +146,9 @@ class AndroidAppActivity : AppCompatActivity() {
             return if (viewType == TYPE_TODO) {
                 TodosViewHolder(
                     ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-                )
+                ).apply {
+                    clicks().launchIn(coroutineScope, clicksFlow)
+                }
             } else {
                 EmptyViewHolder(
                     LayoutInflater.from(parent.context).inflate(
@@ -170,17 +181,6 @@ class AndroidAppActivity : AppCompatActivity() {
 
         var todo: Todo? = null
 
-        init {
-            binding.root.setOnClickListener {
-                todo?.let {
-                    val intent = Intent(binding.root.context, DetailsActivity::class.java)
-                    intent.putExtra("EXTRA_ID", it.id)
-                    Analytics.action("edit_todo_android)")
-                    binding.root.context.startActivity(intent)
-                }
-            }
-        }
-
         fun bind(todo: Todo) {
             this.todo = todo
             binding.title.text = todo.title
@@ -190,6 +190,14 @@ class AndroidAppActivity : AppCompatActivity() {
             val drawable = binding.root.background.mutate() as GradientDrawable
             drawable.setColor(todo.background)
         }
+
+        fun clicks() =
+            binding.root
+                .clicks()
+                .throttleFirst(500)
+                .map { todo }
+                .filter { it != null }
+                .map { it!! }
     }
 
     private class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -239,7 +247,7 @@ class AndroidAppActivity : AppCompatActivity() {
                         Analytics.action("reset_todo_android")
                         viewModel.resetTodo(todo)
                     } else if (isRightActivated) {
-                        AlertDialog.Builder(this@AndroidAppActivity)
+                        AlertDialog.Builder(requireActivity())
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
                                 Analytics.action("delete_todo_android")

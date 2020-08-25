@@ -7,12 +7,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.yield
+import com.routine.data.model.Event
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.joda.time.Period
@@ -133,4 +130,11 @@ fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {
             }
         }
     }
+}
+
+@ExperimentalCoroutinesApi
+fun <T> Flow<T>.launchIn(coroutineScope: CoroutineScope, stateFlow: MutableStateFlow<Event<T>?>) {
+    map { Event(it) }.onEach {
+        stateFlow.value = it
+    }.launchIn(coroutineScope)
 }

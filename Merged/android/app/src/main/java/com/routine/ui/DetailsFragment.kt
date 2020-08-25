@@ -2,14 +2,14 @@ package com.routine.ui
 
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
 import com.routine.common.Analytics
@@ -17,7 +17,7 @@ import com.routine.common.showError
 import com.routine.common.viewBinding
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
-import com.routine.databinding.ActivityDetailsBinding
+import com.routine.databinding.FragmentDetailsBinding
 import com.routine.databinding.ItemPeriodSelectorBinding
 import com.routine.vm.DetailsViewModel
 import com.routine.vm.DetailsViewModelFactory
@@ -37,21 +37,17 @@ const val ARG_PERIOD_UNIT = "ARG_PERIOD_UNIT"
 @FlowPreview
 @ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
-open class DetailsActivity : AppCompatActivity() {
+open class DetailsFragment : Fragment(R.layout.fragment_details) {
 
-    private val binding: ActivityDetailsBinding by viewBinding(ActivityDetailsBinding::inflate)
+    private val args: DetailsFragmentArgs by navArgs()
+    private val binding: FragmentDetailsBinding by viewBinding(FragmentDetailsBinding::bind)
 
     private val viewModel by viewModels<DetailsViewModel> {
-        DetailsViewModelFactory(
-            intent.getStringExtra(
-                "EXTRA_ID"
-            )
-        )
+        DetailsViewModelFactory(args.EXTRAID)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         viewModel.titleFlow
             .onEach {
@@ -125,7 +121,7 @@ open class DetailsActivity : AppCompatActivity() {
 
         viewModel.addTodo
             .onEach {
-                if (it is StoreResponse.Data && it.value) onBackPressed()
+                if (it is StoreResponse.Data && it.value) findNavController().popBackStack()
             }
             .launchIn(lifecycleScope)
 
@@ -138,7 +134,7 @@ open class DetailsActivity : AppCompatActivity() {
                             putInt(ARG_PERIOD, it.period)
                             putSerializable(ARG_PERIOD_UNIT, it.periodUnit)
                         }
-                    }.show(supportFragmentManager, WheelPickerFragment::class.java.simpleName)
+                    }.show(childFragmentManager, WheelPickerFragment::class.java.simpleName)
                 }
             }
             .launchIn(lifecycleScope)
@@ -179,7 +175,7 @@ open class DetailsActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            findNavController().popBackStack()
         }
 
         binding.toolbar.menu.findItem(R.id.done)
@@ -194,11 +190,11 @@ open class DetailsActivity : AppCompatActivity() {
             binding.dayPeriodSelector.periodMenu
                 .clicks()
                 .map { PeriodUnit.DAY },
-                    binding.weekPeriodSelector.periodMenu
-                    .clicks()
+            binding.weekPeriodSelector.periodMenu
+                .clicks()
                 .map { PeriodUnit.WEEK },
-                    binding.monthPeriodSelector.periodMenu
-                    .clicks()
+            binding.monthPeriodSelector.periodMenu
+                .clicks()
                 .map { PeriodUnit.MONTH }
         )
             .onEach {
@@ -206,13 +202,13 @@ open class DetailsActivity : AppCompatActivity() {
             }
             .launchIn(lifecycleScope)
 
-        supportFragmentManager.setFragmentResultListener(
+        childFragmentManager.setFragmentResultListener(
             ARG_PERIOD,
-                this@DetailsActivity,
-                FragmentResultListener { requestKey, result ->
-                    viewModel.onPeriodChanged(
-                        result.getInt(ARG_PERIOD), result.getSerializable(ARG_PERIOD_UNIT) as PeriodUnit
-                    )
-                })
+            this@DetailsFragment,
+            FragmentResultListener { requestKey, result ->
+                viewModel.onPeriodChanged(
+                    result.getInt(ARG_PERIOD), result.getSerializable(ARG_PERIOD_UNIT) as PeriodUnit
+                )
+            })
     }
 }

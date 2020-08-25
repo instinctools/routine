@@ -1,24 +1,24 @@
 package com.routine.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.routine.R
 import com.routine.common.viewBinding
-import com.routine.databinding.ActivitySplashBinding
+import com.routine.databinding.FragmentSplashBinding
 import com.routine.vm.SplashViewModel
 import com.routine.vm.status.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
-class SplashActivity : AppCompatActivity() {
+class SplashFragment : Fragment(R.layout.fragment_splash) {
 
-    private val binding by viewBinding(ActivitySplashBinding::inflate)
+    private val binding by viewBinding(FragmentSplashBinding::bind)
     private val viewModel by viewModels<SplashViewModel>()
 
     companion object{
@@ -26,15 +26,12 @@ class SplashActivity : AppCompatActivity() {
         const val IS_ERROR = false
     }
 
-    @ExperimentalStdlibApi
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .error
             .asLiveData()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 it.peekContent()?.let { error ->
                     Timber.d(error, "STATUS_LOGIN error ")
                     adjustVisibility(IS_ERROR)
@@ -44,7 +41,7 @@ class SplashActivity : AppCompatActivity() {
         viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
             .state
             .asLiveData()
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 when (it.peekContent()) {
                     State.EMPTY -> adjustVisibility(IS_PROGRESS)
                     State.PROGRESS -> adjustVisibility(IS_PROGRESS)
@@ -53,9 +50,9 @@ class SplashActivity : AppCompatActivity() {
             })
 
         viewModel.result
-            .observe(this, Observer {
+            .observe(viewLifecycleOwner, Observer {
                 if (it) {
-                    startActivity(Intent(this@SplashActivity, AndroidAppActivity::class.java))
+                    findNavController().navigate(R.id.action_splash_todos)
                 }
             })
 

@@ -10,14 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         android:name=".App">
-        <activity
-            android:name=".ui.DetailsActivity"
-            android:theme="@style/Theme.MyApp.Details"/>
-        <activity
-            android:name=".ui.SplashActivity"
-            android:noHistory="true"/>
-        <activity android:name=".ui.AndroidAppActivity" />
-
         <activity android:name=".common.home.ActivityHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

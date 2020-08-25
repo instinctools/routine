@@ -2,6 +2,7 @@ package com.routine.common.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.facebook.react.ReactFragment
@@ -37,7 +38,9 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             .onEach {
                 when (it?.getContentIfNotHandled()) {
                     Menu.ANDROID_NATIVE -> {
-
+                        supportFragmentManager.commit {
+                            replace(R.id.content, Fragment(R.layout.fragment_android_app))
+                        }
                     }
                     Menu.REACT_NATIVE -> {
                         supportFragmentManager.commit {
@@ -60,6 +63,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
                         }
                     }
                     Menu.KMP -> {
+
                     }
                     else -> {
                     }

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.routine.R
+import com.routine.common.launchIn
 import com.routine.data.model.Event
 import com.routine.databinding.ItemMenuBinding
 import com.routine.databinding.ItemMenuTechnologyBinding
@@ -75,11 +76,4 @@ object MenuDiff : DiffUtil.ItemCallback<Menu>() {
     override fun areItemsTheSame(oldItem: Menu, newItem: Menu) = oldItem == newItem
 
     override fun areContentsTheSame(oldItem: Menu, newItem: Menu) = oldItem == newItem
-}
-
-@ExperimentalCoroutinesApi
-fun <T> Flow<T>.launchIn(coroutineScope: CoroutineScope, stateFlow: MutableStateFlow<Event<T>?>) {
-    map { Event(it) }.onEach {
-        stateFlow.value = it
-    }.launchIn(coroutineScope)
 }
