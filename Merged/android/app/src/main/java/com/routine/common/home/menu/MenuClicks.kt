@@ -23,20 +23,12 @@ class MenuClicksImpl(val view: View) : MenuClicks {
 
 class MenuTechnologyClicks(val binding: ItemMenuTechnologyBinding) : MenuClicks {
 
-    private var isExpanded = false
+    var selectedMenu: Menu? = null
 
     @ExperimentalCoroutinesApi
     override fun menuClicks(): Flow<Menu> =
         merge(
             binding.title.clicks()
-                .onEach {
-                    if (isExpanded) {
-                        binding.root.transitionToStart()
-                    } else {
-                        binding.root.transitionToEnd()
-                    }
-                    isExpanded = !isExpanded
-                }
                 .map { Menu.TECHNOLOGY },
             binding.technologyAndroidNative.clicks()
                 .map { Menu.ANDROID_NATIVE },
@@ -46,6 +38,5 @@ class MenuTechnologyClicks(val binding: ItemMenuTechnologyBinding) : MenuClicks 
                 .map { Menu.FLUTTER },
             binding.technologyKmp.clicks()
                 .map { Menu.KMP }
-                .filter { it != Menu.TECHNOLOGY }
-        )
+        ).filter { it != selectedMenu }
 }

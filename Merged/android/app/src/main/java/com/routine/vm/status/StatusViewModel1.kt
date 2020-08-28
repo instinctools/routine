@@ -25,7 +25,7 @@ fun <T, R> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Throws(ClassCastException::class)
-fun <T> ViewModel.getAction(actionKey: String): Action<T>? {
+fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
     val delegate = LazyRegistry.find(this, actionKey)
     if (delegate != null) {
         return delegate as Action<T>
@@ -41,7 +41,7 @@ private class Delegate<T, R>(
         val scope: CoroutineScope,
         val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
-    // TODO: 11.06.2020 StateFlow?
+    // TODO: 11.06.2020 StateFlow, Catch.
     private val channel = BroadcastChannel<T>(Channel.CONFLATED)
     private val cache = MutableStateFlow<R?>(null)
     private var isInitialized = false

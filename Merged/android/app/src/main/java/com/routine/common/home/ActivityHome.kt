@@ -1,52 +1,71 @@
 package com.routine.common.home
 
 import android.os.Bundle
-import android.preference.PreferenceManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.facebook.react.ReactFragment
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.routine.R
 import com.routine.common.home.menu.Menu
 import com.routine.common.home.menu.MenuAdapter
+import com.routine.common.home.vm.HomeViewModel
 import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
-const val SP_MENU = "MENU"
 
 @ExperimentalCoroutinesApi
 class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
+    private val viewModel by viewModels<HomeViewModel>()
     private val binding: ActivityHomeBinding by viewBinding(ActivityHomeBinding::inflate)
     private val adapter = MenuAdapter(lifecycleScope)
 
+    @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.menu.adapter = adapter
 
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .getString(SP_MENU, Menu.ANDROID_NATIVE.name)?.let {
-                handleMenu(Menu.valueOf(it))
-            }
+        val animator = binding.menu.itemAnimator
+        if (animator is SimpleItemAnimator) {
+            animator.supportsChangeAnimations = false
+        }
 
-        adapter.submitList(listOf(Menu.TECHNOLOGY))
+        viewModel.content
+            .flowOn(Dispatchers.IO)
+            .onEach {
+                it.getContentIfNotHandled()?.let {
+                    handleContentChanges(it)
+                }
+            }
+            .launchIn(lifecycleScope)
+
+        viewModel.menus
+            .flowOn(Dispatchers.IO)
+            .onEach {
+                adapter.submitList(it)
+            }
+            .launchIn(lifecycleScope)
 
 
         adapter.clicksFlow
             .onEach {
                 it?.getContentIfNotHandled()?.let {
-                    handleMenu(it)
+                    viewModel.onMenuSelected(it)
                 }
             }
             .launchIn(lifecycleScope)
@@ -55,18 +74,18 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun invokeDefaultOnBackPressed() {
     }
 
-    private fun handleMenu(menu: Menu) {
+    private fun handleContentChanges(menu: Menu) {
         when (menu) {
             Menu.ANDROID_NATIVE -> {
-                openApp(Menu.ANDROID_NATIVE, Fragment(R.layout.fragment_android_app))
+                openApp(Fragment(R.layout.fragment_android_app))
             }
             Menu.REACT_NATIVE -> {
-                openApp(Menu.REACT_NATIVE, ReactFragment.Builder()
+                openApp(ReactFragment.Builder()
                     .setComponentName("routine")
                     .build())
             }
             Menu.FLUTTER -> {
-                openApp(Menu.FLUTTER, FlutterFragment.NewEngineFragmentBuilder(FlutterAppFragment::class.java)
+                openApp(FlutterFragment.NewEngineFragmentBuilder(FlutterAppFragment::class.java)
                     .renderMode(RenderMode.surface)
                     .transparencyMode(TransparencyMode.opaque)
                     .build<FlutterAppFragment>())
@@ -78,15 +97,10 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         }
     }
 
-    private fun openApp(menu: Menu, fragment: Fragment) {
+    private fun openApp(fragment: Fragment) {
         supportFragmentManager.commit {
             replace(R.id.content, fragment)
         }
         binding.drawer.closeDrawer(GravityCompat.END, true)
-
-        PreferenceManager.getDefaultSharedPreferences(this)
-            .edit()
-            .putString(SP_MENU, menu.name)
-            .apply()
     }
 }
