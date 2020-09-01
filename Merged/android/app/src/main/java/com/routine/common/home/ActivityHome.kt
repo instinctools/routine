@@ -17,6 +17,7 @@ import com.routine.common.home.vm.HomeViewModel
 import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
+import com.routine.ui.AndroidAppFragment
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
@@ -40,9 +41,10 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         setContentView(binding.root)
         binding.menu.adapter = adapter
 
-        val animator = binding.menu.itemAnimator
-        if (animator is SimpleItemAnimator) {
-            animator.supportsChangeAnimations = false
+        binding.menu.itemAnimator.apply {
+            if (this is SimpleItemAnimator) {
+                supportsChangeAnimations = false
+            }
         }
 
         viewModel.content
@@ -76,9 +78,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
     private fun handleContentChanges(menu: Menu) {
         when (menu) {
-            Menu.ANDROID_NATIVE -> {
-                openApp(Fragment(R.layout.fragment_android_app))
-            }
+            Menu.ANDROID_NATIVE -> { openApp(AndroidAppFragment()) }
             Menu.REACT_NATIVE -> {
                 openApp(ReactFragment.Builder()
                     .setComponentName("routine")
