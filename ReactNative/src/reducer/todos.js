@@ -1,12 +1,17 @@
 import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
-import {calculateTimestamp} from "../utils";
 import {Period, ResetType} from "../constants";
-import uuid from "react-native-uuid";
 
 export const TODO_INITIAL_STATE = {
-    isFetching: false,
     isActionProgress: false,
+    todoActionState:{
+        isProgress: false,
+        isError: false
+    },
+    todoFetchState: {
+      isProgress: false,
+      isError: false
+    },
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
@@ -47,11 +52,11 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
         case Action.Type.TODO_ACTION:
             newState.isActionProgress = true;
             break;
-        case Action.Type.TODO_FETCH:
-            newState.isFetching = true;
+        case Action.Type.TODO_FETCH_STATE:
+            newState.todoFetchState = action.todoFetchState
             break;
         case Action.Type.TODO_FETCH_RESULT:
-            newState.isFetching = false;
+            newState.todoFetchState = TODO_INITIAL_STATE.todoFetchState
             newState.items = action.todos;
             break;
         case Action.Type.TODO_ADD: {

@@ -1,10 +1,10 @@
-import {ActivityIndicator, FlatList, Platform, RefreshControl, View} from 'react-native';
+import {ActivityIndicator, FlatList, Image, Platform, RefreshControl, View} from 'react-native';
 import React from 'react';
-import {todoListStyle, toolbarStyle} from '../../styles/Styles';
+import {splashStyle, todoListStyle, toolbarStyle} from '../../styles/Styles';
 import {connect} from "react-redux";
 import Action from '../../action/todos';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {TouchableRipple} from 'react-native-paper';
+import {Text, TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
 import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod} from "../../utils";
 import moment from "moment";
@@ -43,11 +43,15 @@ class TodoList extends React.PureComponent {
     }
 
     render() {
-        const {items, isScrollEnabled, isFetching, isActionProgress} = this.props;
+        const {items, isScrollEnabled, todoFetchState, isActionProgress} = this.props;
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
-        if (isFetching && uiItems.length === 0) {
+        if (todoFetchState.isProgress && uiItems.length === 0) {
             return getProgress()
+        } else if (todoFetchState.isError && uiItems.length === 0){
+            return emptyErrorView()
+        } else if (uiItems.length === 0){
+            return emptyListView()
         }
         return <View style={{
             flex: 1,
@@ -60,7 +64,7 @@ class TodoList extends React.PureComponent {
                       keyExtractor={item => item.id}
                       renderItem={({item}) => <TodoItem item={item}/>}
                       refreshControl={
-                          <RefreshControl refreshing={isFetching} onRefresh={() => {
+                          <RefreshControl refreshing={todoFetchState.isProgress} onRefresh={() => {
                               this.props.requestTodos();
                           }}/>
                       }
@@ -69,10 +73,27 @@ class TodoList extends React.PureComponent {
     }
 }
 
+const emptyErrorView = () => {
+    return <View style={{flex: 1, justifyContent: `center`}}>
+        <Text style={todoListStyle.errorMessage}>An error occurred!</Text>
+    </View>
+}
+
+const emptyListView = () => {
+    return <View style={{flex: 1, justifyContent: `center`, alignItems: `center`}}>
+        <Image
+            style={todoListStyle.emptyListImage}
+            source={require('./empty_list.png')}
+        />
+        <Text style={todoListStyle.emptyListTitle}>Oh! it's still empty</Text>
+        <Text style={todoListStyle.emptyListDescription}>There are no routine tasks</Text>
+    </View>
+}
+
 const mapStateToProps = (state) => ({
         items: state.todos.items,
         isScrollEnabled: state.todos.isScrollEnabled,
-        isFetching: state.todos.isFetching,
+        todoFetchState: state.todos.todoFetchState,
         isActionProgress: state.todos.isActionProgress
     }
 );

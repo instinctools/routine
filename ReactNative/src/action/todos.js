@@ -7,7 +7,7 @@ import moment from "moment";
 
 const Action = {
     Type: {
-        TODO_FETCH: `TODO_FETCH`,
+        TODO_FETCH_STATE: `TODO_FETCH_STATE`,
         TODO_FETCH_RESULT: `TODO_FETCH_RESULT`,
         TODO_DELETE: 'todo-delete',
         TODO_ACTION: 'TODO_ACTION',
@@ -45,9 +45,10 @@ Action.changeMenuActivationState = (id, isMenuActivated) => {
     };
 };
 
-Action.fetchTodos = () => {
+Action.fetchTodosState = (state) => {
     return {
-        type: Action.Type.TODO_FETCH
+        type: Action.Type.TODO_FETCH_STATE,
+        todoFetchState: state
     };
 };
 
@@ -60,8 +61,11 @@ Action.fetchResults = (todos) => {
 
 Action.requestTodos = () => {
     return (dispatch) => {
-        dispatch(Action.fetchTodos());
-        return firestore()
+        dispatch(Action.fetchTodosState({
+            isProgress: true,
+            isError: false
+        }));
+         firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
@@ -80,6 +84,12 @@ Action.requestTodos = () => {
                     )
                 });
                 dispatch(Action.fetchResults(todos))
+            })
+            .catch(()=>{
+                dispatch(Action.fetchTodosState({
+                    isProgress: false,
+                    isError: true
+                }));
             });
     }
 };
