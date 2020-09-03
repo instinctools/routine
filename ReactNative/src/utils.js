@@ -1,7 +1,10 @@
 import moment from "moment";
 import {Period, ResetType} from "./constants";
-import {View, ActivityIndicator} from "react-native";
+import {View, ActivityIndicator, Alert} from "react-native";
 import React from "react";
+import {store} from "./store";
+import {TODO_ACTION_STATE} from "./reducer/todos";
+import Action from "./action/todos";
 
 export const calculateTimestamp = (period, periodUnit, resetType, currentTimestamp) => {
     let date
@@ -83,3 +86,15 @@ export const getProgress = () => {
     return (Platform.OS === 'ios') ? <ActivityIndicator style = {style} size="large"/> :
         <ActivityIndicator style = {style} size={48} />
 };
+
+
+export const showErrorAlert = (onDismiss) =>
+    Alert.alert(
+        null,
+        "Something went wrong...",
+        [{text: "Close", onPress: onDismiss}],
+        {
+            cancelable: true,
+            onDismiss
+        }
+    );

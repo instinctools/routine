@@ -6,9 +6,10 @@ import Action from '../../action/todos';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Text, TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
-import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod} from "../../utils";
+import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showErrorAlert} from "../../utils";
 import moment from "moment";
 import analytics from "@react-native-firebase/analytics";
+import {TODO_ACTION_STATE} from "../../reducer/todos";
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -43,8 +44,7 @@ class TodoList extends React.PureComponent {
     }
 
     render() {
-        const {items, isScrollEnabled, todoFetchState, todoActionState} = this.props;
-        console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
+        const {items, isScrollEnabled, todoFetchState, actionState} = this.props;
         const uiItems = items ? toUiModels(items) : [];
         if (todoFetchState.isProgress && uiItems.length === 0) {
             return getProgress()
@@ -53,6 +53,15 @@ class TodoList extends React.PureComponent {
         } else if (uiItems.length === 0){
             return emptyListView()
         }
+
+        if (actionState.isError && !this.isActionErrorShown) {
+            this.isActionErrorShown = true
+            showErrorAlert(() => {
+                this.isActionErrorShown = false
+                this.props.todoActionState(TODO_ACTION_STATE.empty)
+            })
+        }
+
         return <View style={{
             flex: 1,
             justifyContent: 'center'
@@ -68,7 +77,7 @@ class TodoList extends React.PureComponent {
                               this.props.requestTodos();
                           }}/>
                       }
-            />{todoActionState.isProgress ? getProgress() : null}
+            />{actionState.isProgress ? getProgress() : null}
         </View>
     }
 }
@@ -94,7 +103,7 @@ const mapStateToProps = (state) => ({
         items: state.todos.items,
         isScrollEnabled: state.todos.isScrollEnabled,
         todoFetchState: state.todos.todoFetchState,
-        todoActionState: state.todos.todoActionState
+        actionState: state.todos.todoActionState
     }
 );
 

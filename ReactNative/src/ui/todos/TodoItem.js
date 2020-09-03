@@ -20,7 +20,6 @@ class TodoItem extends React.Component {
 
     render() {
         const {item, todoActionState} = this.props;
-        console.log(`TodoItem render: item: ${JSON.stringify(item)}`);
         if (item.itemType === ITEM_TYPE_SEPARATOR) {
             return <View style={todoListStyle.itemExpiredSeparator}/>
         } else {

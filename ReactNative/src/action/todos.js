@@ -111,10 +111,15 @@ Action.deleteTodo = id => {
             .collection("todos")
             .doc(id)
             .delete()
-            .then(dispatch({
-                type: Action.Type.TODO_DELETE,
-                id
-            }))
+            .then(()=>{
+                dispatch({
+                    type: Action.Type.TODO_DELETE,
+                    id
+                })
+            })
+            .catch(()=>{
+                dispatch(Action.todoActionState(TODO_ACTION_STATE.error))
+            })
     }
 };
 
@@ -133,7 +138,6 @@ Action.resetTodo = item => {
                 break
         }
         if (timeStamp.isAfter(moment())) {
-            console.log("TEST123 AFTER")
             return {
                 type: `any`
             }
@@ -155,11 +159,16 @@ Action.resetTodo = item => {
             .collection("todos")
             .doc(item.id)
             .set(todo)
-            .then(dispatch({
-                    type: Action.Type.TODO_RESET,
-                    item: todo
-                }
-            ))
+            .then(()=>{
+                dispatch({
+                        type: Action.Type.TODO_RESET,
+                        item: todo
+                    }
+                )
+            })
+            .catch(()=>{
+                dispatch(Action.todoActionState(TODO_ACTION_STATE.error))
+            })
     }
 };
 
