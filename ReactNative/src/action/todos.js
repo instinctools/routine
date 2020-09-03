@@ -16,7 +16,7 @@ const Action = {
 
         TODO_ADD: 'todo-add',
         TODO_SELECT: 'todo-select',
-        TODO_PROGRESS: 'TODO_PROGRESS',
+        TODO_EDIT_STATE: 'TODO_EDIT_STATE',
 
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
         CHANGE_SCROLL_STATE: `change-scroll-state`,
@@ -172,9 +172,10 @@ Action.resetTodo = item => {
     }
 };
 
-Action.todoProgress = () => {
+Action.todoProgress = (state) => {
     return {
-        type: Action.Type.TODO_PROGRESS
+        type: Action.Type.TODO_EDIT_STATE,
+        todoEditState: state
     }
 };
 
@@ -205,7 +206,7 @@ Action.addTodo = () => {
             todo.id = uuid.v1()
         }
 
-        dispatch(Action.todoProgress());
+        dispatch(Action.todoProgress(TODO_ACTION_STATE.progress));
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
@@ -217,6 +218,9 @@ Action.addTodo = () => {
                     type: Action.Type.TODO_ADD,
                     todo: todo
                 })
+            })
+            .catch(()=>{
+                dispatch(Action.todoProgress(TODO_ACTION_STATE.error));
             })
     };
 };

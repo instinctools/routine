@@ -65,7 +65,7 @@ class DetailsScreen extends React.Component {
 
     render() {
         console.log(`DetailsScreen render props: ${JSON.stringify(this.props)}`);
-        const {isProgress, success, resetType} = this.props;
+        const {todoEditState, success, resetType} = this.props;
         if (success) {
             this.props.navigation.pop();
         }
@@ -94,7 +94,7 @@ class DetailsScreen extends React.Component {
                         <PeriodSelector/>
                     </View>
                 </ScrollView>
-                {isProgress ? getProgress() : null}
+                {todoEditState.isProgress ? getProgress() : null}
             </View>
         );
     }
@@ -124,8 +124,8 @@ const getResetBtn = (props, isSelected, text, isLeft, resetType) => {
 const mapStateToProps = (state) => {
     return {
         success: state.todos.editTodo.success,
-        isProgress: state.todos.editTodo.isProgress,
-        canBeSaved: !(!state.todos.editTodo.title || state.todos.editTodo.isProgress),
+        todoEditState: state.todos.editTodo.todoEditState,
+        canBeSaved: !(!state.todos.editTodo.title || state.todos.editTodo.todoEditState.isProgress),
         title: state.todos.editTodo.title,
         resetType: state.todos.editTodo.resetType
     }

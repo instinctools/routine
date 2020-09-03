@@ -33,7 +33,7 @@ export const TODO_INITIAL_STATE = {
         isMenuActivated: false
     },
     editTodo: {
-        isProgress: false,
+        todoEditState: TODO_ACTION_STATE.empty,
         id: undefined,
         title: undefined,
         periods: [
@@ -108,9 +108,9 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 };
             }
             break;
-        case Action.Type.TODO_PROGRESS:
+        case Action.Type.TODO_EDIT_STATE:
             newState.editTodo = Object.assign({}, newState.editTodo, {
-                isProgress: true
+                todoEditState: action.todoEditState
             });
             break;
         case Action.Type.TODO_RESET: {
