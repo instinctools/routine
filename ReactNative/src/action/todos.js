@@ -4,13 +4,14 @@ import {calculateTimestamp} from "../utils";
 import uuid from "react-native-uuid";
 import {Period, ResetType} from "../constants";
 import moment from "moment";
+import {TODO_ACTION_STATE} from "../reducer/todos";
 
 const Action = {
     Type: {
         TODO_FETCH_STATE: `TODO_FETCH_STATE`,
         TODO_FETCH_RESULT: `TODO_FETCH_RESULT`,
         TODO_DELETE: 'todo-delete',
-        TODO_ACTION: 'TODO_ACTION',
+        TODO_ACTION_STATE: 'TODO_ACTION_STATE',
         TODO_RESET: 'todo-reset',
 
         TODO_ADD: 'todo-add',
@@ -94,15 +95,16 @@ Action.requestTodos = () => {
     }
 };
 
-Action.todoAction = () => {
+Action.todoActionState = (state) => {
     return {
-        type: Action.Type.TODO_ACTION
+        type: Action.Type.TODO_ACTION_STATE,
+        todoActionState: state
     }
 };
 
 Action.deleteTodo = id => {
     return (dispatch) => {
-        dispatch(Action.todoAction());
+        dispatch(Action.todoActionState(TODO_ACTION_STATE.progress));
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
@@ -138,7 +140,7 @@ Action.resetTodo = item => {
         }
     }
     return (dispatch) => {
-        dispatch(Action.todoAction());
+        dispatch(Action.todoActionState(TODO_ACTION_STATE.progress));
         let todo = {
             id: item.id,
             period: item.period,

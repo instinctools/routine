@@ -15,16 +15,16 @@ class TodoItem extends React.Component {
         return JSON.stringify(nextProps.item) !== JSON.stringify(this.props.item) ||
             JSON.stringify(nextProps.isMenuActivated) !== JSON.stringify(this.props.isMenuActivated) ||
             JSON.stringify(nextState) !== JSON.stringify(this.state) ||
-            JSON.stringify(nextProps.isActionProgress) !== JSON.stringify(this.props.isActionProgress);
+            JSON.stringify(nextProps.todoActionState) !== JSON.stringify(this.props.todoActionState);
     }
 
     render() {
-        const {item, isActionProgress} = this.props;
+        const {item, todoActionState} = this.props;
         console.log(`TodoItem render: item: ${JSON.stringify(item)}`);
         if (item.itemType === ITEM_TYPE_SEPARATOR) {
             return <View style={todoListStyle.itemExpiredSeparator}/>
         } else {
-            if (isActionProgress) {
+            if (todoActionState.isProgress) {
                 return createContent(this.props)
             } else {
                 return <Swipeable
@@ -91,7 +91,7 @@ const createContent = (props) => {
         style={{...todoListStyle.item, backgroundColor: props.item.backgroundColor}}
         borderless={true}
         onPress={() => {
-            if (!props.isActionProgress){
+            if (!props.todoActionState.isProgress){
                 analytics().logEvent('edit_todo_react', {});
                 props.selectTodo(props.item);
                 props.navigation.navigate("Details")
@@ -112,7 +112,7 @@ const createContent = (props) => {
 const mapStateToProps = (state, ownProps) => {
     return {
         isMenuActivated: state.todos.menuActivation.id === ownProps.item.id && state.todos.menuActivation.isMenuActivated,
-        isActionProgress: state.todos.isActionProgress
+        todoActionState: state.todos.todoActionState
     };
 };
 

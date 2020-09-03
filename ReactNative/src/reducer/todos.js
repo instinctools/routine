@@ -2,12 +2,25 @@ import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
 import {Period, ResetType} from "../constants";
 
-export const TODO_INITIAL_STATE = {
-    isActionProgress: false,
-    todoActionState:{
+
+export const TODO_ACTION_STATE = {
+    empty: {
         isProgress: false,
         isError: false
     },
+    progress: {
+        isProgress: true,
+        isError: false
+    },
+    error: {
+        isProgress: false,
+        isError: true
+    }
+}
+
+
+export const TODO_INITIAL_STATE = {
+    todoActionState: TODO_ACTION_STATE.empty,
     todoFetchState: {
       isProgress: false,
       isError: false
@@ -50,7 +63,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
     const newState = {...state};
     switch (action.type) {
         case Action.Type.TODO_ACTION:
-            newState.isActionProgress = true;
+            newState.todoActionState = action.todoActionState;
             break;
         case Action.Type.TODO_FETCH_STATE:
             newState.todoFetchState = action.todoFetchState
@@ -102,7 +115,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             });
             break;
         case Action.Type.TODO_RESET: {
-            newState.isActionProgress = false;
+            newState.todoActionState = TODO_ACTION_STATE.empty
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.item.id) {
                     return action.item
@@ -112,7 +125,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         }
         case Action.Type.TODO_DELETE: {
-            newState.isActionProgress = false;
+            newState.todoActionState = TODO_ACTION_STATE.empty
             newState.items = [...newState.items];
             const index = newState.items.map((item) => {
                 return item.id;

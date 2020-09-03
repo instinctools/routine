@@ -43,7 +43,7 @@ class TodoList extends React.PureComponent {
     }
 
     render() {
-        const {items, isScrollEnabled, todoFetchState, isActionProgress} = this.props;
+        const {items, isScrollEnabled, todoFetchState, todoActionState} = this.props;
         console.log(`TodoList render: items: ${JSON.stringify(items)}, isScrollEnabled: ${JSON.stringify(isScrollEnabled)}`);
         const uiItems = items ? toUiModels(items) : [];
         if (todoFetchState.isProgress && uiItems.length === 0) {
@@ -68,7 +68,7 @@ class TodoList extends React.PureComponent {
                               this.props.requestTodos();
                           }}/>
                       }
-            />{isActionProgress ? getProgress() : null}
+            />{todoActionState.isProgress ? getProgress() : null}
         </View>
     }
 }
@@ -94,7 +94,7 @@ const mapStateToProps = (state) => ({
         items: state.todos.items,
         isScrollEnabled: state.todos.isScrollEnabled,
         todoFetchState: state.todos.todoFetchState,
-        isActionProgress: state.todos.isActionProgress
+        todoActionState: state.todos.todoActionState
     }
 );
 
