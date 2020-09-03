@@ -7,8 +7,9 @@ import PeriodSelector from "./PeriodUnitSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
 import analytics from "@react-native-firebase/analytics";
-import {getProgress} from "../../utils";
+import {getProgress, showErrorAlert} from "../../utils";
 import {ResetType} from "../../constants";
+import {STATE} from "../../reducer/todos";
 
 const bgSelected = `#77767E`;
 const bgUnSelected = `#EEEDF0`;
@@ -69,6 +70,15 @@ class DetailsScreen extends React.Component {
         if (success) {
             this.props.navigation.pop();
         }
+
+        if (todoEditState.isError && !this.isActionErrorShown) {
+            this.isActionErrorShown = true
+            showErrorAlert(() => {
+                this.isActionErrorShown = false
+                this.props.todoActionState(STATE.empty)
+            })
+        }
+
         return (
             <View style={{
                 flex: 1
