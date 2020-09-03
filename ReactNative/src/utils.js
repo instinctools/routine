@@ -3,7 +3,7 @@ import {Period, ResetType} from "./constants";
 import {View, ActivityIndicator, Alert} from "react-native";
 import React from "react";
 import {store} from "./store";
-import {TODO_ACTION_STATE} from "./reducer/todos";
+import {STATE} from "./reducer/todos";
 import Action from "./action/todos";
 
 export const calculateTimestamp = (period, periodUnit, resetType, currentTimestamp) => {

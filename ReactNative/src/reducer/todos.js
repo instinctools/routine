@@ -3,7 +3,7 @@ import ActionEditTodo from "../action/EditTodoAction";
 import {Period, ResetType} from "../constants";
 
 
-export const TODO_ACTION_STATE = {
+export const STATE = {
     empty: {
         isProgress: false,
         isError: false
@@ -20,11 +20,8 @@ export const TODO_ACTION_STATE = {
 
 
 export const TODO_INITIAL_STATE = {
-    todoActionState: TODO_ACTION_STATE.empty,
-    todoFetchState: {
-      isProgress: false,
-      isError: false
-    },
+    todoActionState: STATE.empty,
+    todoFetchState: STATE.empty,
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
@@ -33,7 +30,7 @@ export const TODO_INITIAL_STATE = {
         isMenuActivated: false
     },
     editTodo: {
-        todoEditState: TODO_ACTION_STATE.empty,
+        todoEditState: STATE.empty,
         id: undefined,
         title: undefined,
         periods: [
@@ -61,7 +58,7 @@ export const TODO_INITIAL_STATE = {
 export const reducer = (state = TODO_INITIAL_STATE, action) => {
     const newState = {...state};
     switch (action.type) {
-        case Action.Type.TODO_ACTION_STATE:
+        case Action.Type.TODO_STATE:
             newState.todoActionState = action.todoActionState
             break;
         case Action.Type.TODO_FETCH_STATE:
@@ -114,7 +111,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             });
             break;
         case Action.Type.TODO_RESET: {
-            newState.todoActionState = TODO_ACTION_STATE.empty
+            newState.todoActionState = STATE.empty
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.item.id) {
                     return action.item
@@ -124,7 +121,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         }
         case Action.Type.TODO_DELETE: {
-            newState.todoActionState = TODO_ACTION_STATE.empty
+            newState.todoActionState = STATE.empty
             newState.items = [...newState.items];
             const index = newState.items.map((item) => {
                 return item.id;

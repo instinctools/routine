@@ -9,7 +9,7 @@ import TodoItem from "./TodoItem";
 import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showErrorAlert} from "../../utils";
 import moment from "moment";
 import analytics from "@react-native-firebase/analytics";
-import {TODO_ACTION_STATE} from "../../reducer/todos";
+import {STATE} from "../../reducer/todos";
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -58,7 +58,7 @@ class TodoList extends React.PureComponent {
             this.isActionErrorShown = true
             showErrorAlert(() => {
                 this.isActionErrorShown = false
-                this.props.todoActionState(TODO_ACTION_STATE.empty)
+                this.props.todoActionState(STATE.empty)
             })
         }
 
