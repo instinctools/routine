@@ -83,8 +83,8 @@ export const getProgress = () => {
         width: "100%",
         height: "100%"
     };
-    return (Platform.OS === 'ios') ? <ActivityIndicator style = {style} size="large"/> :
-        <ActivityIndicator style = {style} size={48} />
+    return (Platform.OS === 'ios') ? <ActivityIndicator style = {style} size="large" color ="#835D51"/> :
+        <ActivityIndicator style = {style} size={48} color ="#835D51"/>
 };
 
 
