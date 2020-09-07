@@ -1,12 +1,27 @@
 import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
-import {calculateTimestamp} from "../utils";
 import {Period, ResetType} from "../constants";
-import uuid from "react-native-uuid";
+
+
+export const STATE = {
+    empty: {
+        isProgress: false,
+        isError: false
+    },
+    progress: {
+        isProgress: true,
+        isError: false
+    },
+    error: {
+        isProgress: false,
+        isError: true
+    }
+}
+
 
 export const TODO_INITIAL_STATE = {
-    isFetching: false,
-    isActionProgress: false,
+    todoActionState: STATE.empty,
+    todoFetchState: STATE.empty,
     items: [],
     selectedFilter: 'all',
     isScrollEnabled: true,
@@ -15,7 +30,7 @@ export const TODO_INITIAL_STATE = {
         isMenuActivated: false
     },
     editTodo: {
-        isProgress: false,
+        todoEditState: STATE.empty,
         id: undefined,
         title: undefined,
         periods: [
@@ -41,17 +56,16 @@ export const TODO_INITIAL_STATE = {
 };
 
 export const reducer = (state = TODO_INITIAL_STATE, action) => {
-    console.log(`reducer action: ${JSON.stringify(action)}`);
     const newState = {...state};
     switch (action.type) {
-        case Action.Type.TODO_ACTION:
-            newState.isActionProgress = true;
+        case Action.Type.TODO_STATE:
+            newState.todoActionState = action.todoActionState
             break;
-        case Action.Type.TODO_FETCH:
-            newState.isFetching = true;
+        case Action.Type.TODO_FETCH_STATE:
+            newState.todoFetchState = action.todoFetchState
             break;
         case Action.Type.TODO_FETCH_RESULT:
-            newState.isFetching = false;
+            newState.todoFetchState = TODO_INITIAL_STATE.todoFetchState
             newState.items = action.todos;
             break;
         case Action.Type.TODO_ADD: {
@@ -91,13 +105,13 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 };
             }
             break;
-        case Action.Type.TODO_PROGRESS:
+        case Action.Type.TODO_EDIT_STATE:
             newState.editTodo = Object.assign({}, newState.editTodo, {
-                isProgress: true
+                todoEditState: action.todoEditState
             });
             break;
         case Action.Type.TODO_RESET: {
-            newState.isActionProgress = false;
+            newState.todoActionState = STATE.empty
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.item.id) {
                     return action.item
@@ -107,7 +121,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         }
         case Action.Type.TODO_DELETE: {
-            newState.isActionProgress = false;
+            newState.todoActionState = STATE.empty
             newState.items = [...newState.items];
             const index = newState.items.map((item) => {
                 return item.id;

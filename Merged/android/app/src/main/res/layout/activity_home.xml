@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawer"
-    android:fitsSystemWindows="true">
+    android:id="@+id/drawer">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/content"
@@ -14,8 +13,7 @@
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:fitsSystemWindows="true">
+        android:layout_gravity="end">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/menu"

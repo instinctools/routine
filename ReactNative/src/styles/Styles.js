@@ -1,6 +1,27 @@
 import {StyleSheet} from 'react-native';
 
 export const todoListStyle = StyleSheet.create({
+    errorMessage:{
+        color: `#835D51`,
+        textAlign: "center",
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    emptyListImage:{
+        width: 124, height: 124
+    },
+    emptyListTitle:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: `center`,
+        color: `#4E4E53`
+    },
+    emptyListDescription:{
+        marginTop: 8,
+        fontSize: 16,
+        textAlign: `center`,
+        color: `#9A99A2`
+    },
     container: {
         paddingTop: 12,
         paddingBottom: 12

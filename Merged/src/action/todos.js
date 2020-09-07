@@ -4,18 +4,19 @@ import {calculateTimestamp} from "../utils";
 import uuid from "react-native-uuid";
 import {Period, ResetType} from "../constants";
 import moment from "moment";
+import {STATE} from "../reducer/todos";
 
 const Action = {
     Type: {
-        TODO_FETCH: `TODO_FETCH`,
+        TODO_FETCH_STATE: `TODO_FETCH_STATE`,
         TODO_FETCH_RESULT: `TODO_FETCH_RESULT`,
         TODO_DELETE: 'todo-delete',
-        TODO_ACTION: 'TODO_ACTION',
+        TODO_STATE: 'TODO_STATE',
         TODO_RESET: 'todo-reset',
 
         TODO_ADD: 'todo-add',
         TODO_SELECT: 'todo-select',
-        TODO_PROGRESS: 'TODO_PROGRESS',
+        TODO_EDIT_STATE: 'TODO_EDIT_STATE',
 
         TODO_CHANGE_MENU_ACTIVATION_STATE: 'todo-change-menu-activation-state',
         CHANGE_SCROLL_STATE: `change-scroll-state`,
@@ -45,9 +46,10 @@ Action.changeMenuActivationState = (id, isMenuActivated) => {
     };
 };
 
-Action.fetchTodos = () => {
+Action.fetchTodosState = (state) => {
     return {
-        type: Action.Type.TODO_FETCH
+        type: Action.Type.TODO_FETCH_STATE,
+        todoFetchState: state
     };
 };
 
@@ -60,8 +62,8 @@ Action.fetchResults = (todos) => {
 
 Action.requestTodos = () => {
     return (dispatch) => {
-        dispatch(Action.fetchTodos());
-        return firestore()
+        dispatch(Action.fetchTodosState(STATE.progress));
+         firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
@@ -80,29 +82,38 @@ Action.requestTodos = () => {
                     )
                 });
                 dispatch(Action.fetchResults(todos))
+            })
+            .catch(()=>{
+                dispatch(Action.fetchTodosState(STATE.error));
             });
     }
 };
 
-Action.todoAction = () => {
+Action.todoActionState = (state) => {
     return {
-        type: Action.Type.TODO_ACTION
+        type: Action.Type.TODO_STATE,
+        todoActionState: state
     }
 };
 
 Action.deleteTodo = id => {
     return (dispatch) => {
-        dispatch(Action.todoAction());
+        dispatch(Action.todoActionState(STATE.progress));
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
             .collection("todos")
             .doc(id)
             .delete()
-            .then(dispatch({
-                type: Action.Type.TODO_DELETE,
-                id
-            }))
+            .then(()=>{
+                dispatch({
+                    type: Action.Type.TODO_DELETE,
+                    id
+                })
+            })
+            .catch(()=>{
+                dispatch(Action.todoActionState(STATE.error))
+            })
     }
 };
 
@@ -121,14 +132,13 @@ Action.resetTodo = item => {
                 break
         }
         if (timeStamp.isAfter(moment())) {
-            console.log("TEST123 AFTER")
             return {
                 type: `any`
             }
         }
     }
     return (dispatch) => {
-        dispatch(Action.todoAction());
+        dispatch(Action.todoActionState(STATE.progress));
         let todo = {
             id: item.id,
             period: item.period,
@@ -143,17 +153,23 @@ Action.resetTodo = item => {
             .collection("todos")
             .doc(item.id)
             .set(todo)
-            .then(dispatch({
-                    type: Action.Type.TODO_RESET,
-                    item: todo
-                }
-            ))
+            .then(()=>{
+                dispatch({
+                        type: Action.Type.TODO_RESET,
+                        item: todo
+                    }
+                )
+            })
+            .catch(()=>{
+                dispatch(Action.todoActionState(STATE.error))
+            })
     }
 };
 
-Action.todoProgress = () => {
+Action.todoProgress = (state) => {
     return {
-        type: Action.Type.TODO_PROGRESS
+        type: Action.Type.TODO_EDIT_STATE,
+        todoEditState: state
     }
 };
 
@@ -184,7 +200,7 @@ Action.addTodo = () => {
             todo.id = uuid.v1()
         }
 
-        dispatch(Action.todoProgress());
+        dispatch(Action.todoProgress(STATE.progress));
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
@@ -196,6 +212,9 @@ Action.addTodo = () => {
                     type: Action.Type.TODO_ADD,
                     todo: todo
                 })
+            })
+            .catch(()=>{
+                dispatch(Action.todoProgress(STATE.error));
             })
     };
 };
