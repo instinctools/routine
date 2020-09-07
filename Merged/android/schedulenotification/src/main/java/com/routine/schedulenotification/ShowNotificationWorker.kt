@@ -23,8 +23,6 @@ import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-//import com.routine.R
-//import com.routine.common.home.ActivityHome
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.joda.time.DateTime
 import org.joda.time.Seconds

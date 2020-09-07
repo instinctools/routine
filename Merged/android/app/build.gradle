@@ -139,8 +139,6 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    implementation "androidx.work:work-runtime-ktx:2.4.0"
-
     // react-native
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

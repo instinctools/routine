@@ -138,4 +138,3 @@ fun <T> Flow<T>.launchIn(coroutineScope: CoroutineScope, stateFlow: MutableState
         stateFlow.value = it
     }.launchIn(coroutineScope)
 }
-
