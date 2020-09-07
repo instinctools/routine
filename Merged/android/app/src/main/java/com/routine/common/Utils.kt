@@ -141,10 +141,10 @@ fun <T> Flow<T>.launchIn(coroutineScope: CoroutineScope, stateFlow: MutableState
     }.launchIn(coroutineScope)
 }
 
-fun addReminder(context: Context, text: String, timeDelay: Long) {
-    WorkManager.getInstance(context).enqueue(ShowNotificationWorker.getInstance(text, timeDelay))
+fun addReminder(context: Context, idTag: String, message: String, targetDateLong: Long) {
+    WorkManager.getInstance(context).enqueue(ShowNotificationWorker.getInstance(idTag, message, targetDateLong))
 }
 
-fun cancelReminder(context: Context, tag: String) {
-    WorkManager.getInstance(context).cancelAllWorkByTag(tag)
+fun cancelReminder(context: Context, idTag: String) {
+    WorkManager.getInstance(context).cancelAllWorkByTag(idTag)
 }

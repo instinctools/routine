@@ -26,20 +26,25 @@ import androidx.work.WorkerParameters
 import com.routine.R
 import com.routine.common.home.ActivityHome
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.joda.time.DateTime
+import org.joda.time.Seconds
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class ShowNotificationWorker(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
     companion object {
+        private const val FIVE_HOUR_IN_SECONDS = 18000
         private lateinit var message: String
-        private var timeDelay: Long = 0
-        const val NOTIFICATION_NAME = "reminder"
 
-        fun getInstance(message: String, timeDelay: Long): OneTimeWorkRequest {
+        fun getInstance(idTag: String, message: String, targetDateLong: Long): OneTimeWorkRequest {
             ShowNotificationWorker.message = message
-            ShowNotificationWorker.timeDelay = timeDelay
+
+            val targetMoment = DateTime(targetDateLong + FIVE_HOUR_IN_SECONDS)
+            val currentMoment = DateTime(Calendar.getInstance().time.time)
+            val timeDelay = Seconds.secondsBetween(currentMoment, targetMoment).seconds.toLong()
             return OneTimeWorkRequest.Builder(ShowNotificationWorker::class.java)
-                .addTag(message)
+                .addTag(idTag)
                 .setInitialDelay(timeDelay, TimeUnit.SECONDS)
                 .build()
         }
@@ -58,12 +63,12 @@ class ShowNotificationWorker(appContext: Context, workerParams: WorkerParameters
         }
 
         val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val notificationChannel = applicationContext.resources.getString(R.string.app_name)
+        val notificationChannelId = applicationContext.resources.getString(R.string.notification_channel_id)
 
         val pendingIntent = getActivity(applicationContext, 0, intent, 0)
         val notification = NotificationCompat
-            .Builder(applicationContext, notificationChannel)
-            .setSmallIcon(R.drawable.ic_launcher)
+            .Builder(applicationContext, notificationChannelId)
+            .setSmallIcon(R.drawable.ic_launcher_round)
             .setContentTitle(message)
             .setDefaults(DEFAULT_ALL)
             .setContentIntent(pendingIntent)
@@ -71,15 +76,15 @@ class ShowNotificationWorker(appContext: Context, workerParams: WorkerParameters
             .setPriority(PRIORITY_MAX)
 
         if (SDK_INT >= O) {
-            notification.setChannelId(notificationChannel)
+            notification.setChannelId(notificationChannelId)
             val ringtoneManager = getDefaultUri(TYPE_NOTIFICATION)
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(USAGE_NOTIFICATION_RINGTONE)
                 .setContentType(CONTENT_TYPE_SONIFICATION)
                 .build()
             val channel = NotificationChannel(
-                applicationContext.resources.getString(R.string.app_name),
-                NOTIFICATION_NAME,
+                applicationContext.resources.getString(R.string.notification_channel_id),
+                applicationContext.resources.getString(R.string.notification_channel_name),
                 IMPORTANCE_HIGH
             ).apply {
                 enableLights(true)
