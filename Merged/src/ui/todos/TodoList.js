@@ -10,7 +10,6 @@ import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showEr
 import moment from "moment";
 import analytics from "@react-native-firebase/analytics";
 import {STATE} from "../../reducer/todos";
-import NotificationHandler from '../notification/Notification';
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;

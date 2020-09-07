@@ -1,4 +1,4 @@
-package com.routine.notification
+package com.routine.schedulenotification
 
 import android.view.View
 import com.facebook.react.ReactPackage
@@ -7,13 +7,13 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
 
-class NotificationPackage : ReactPackage {
+class ScheduleNotificationPackage : ReactPackage {
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<View, ReactShadowNode<*>>> {
-        return listOf()
+        return emptyList()
     }
 
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return mutableListOf(NotificationModule(reactContext))
+        return listOf(ScheduleNotification(reactContext))
     }
 }

@@ -6,7 +6,7 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.soloader.SoLoader
 import com.routine.react.ReactApplication
-import com.routine.notification.NotificationPackage
+import com.routine.schedulenotification.ScheduleNotificationPackage
 import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 
@@ -33,7 +33,7 @@ class App : ReactApplication() {
             override fun getPackages(): MutableList<ReactPackage> =
                 PackageList(this).packages
                     .apply {
-                        add(NotificationPackage())
+                        add(ScheduleNotificationPackage())
                     }
 
             override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
