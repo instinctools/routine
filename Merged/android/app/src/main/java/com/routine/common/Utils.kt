@@ -1,10 +1,8 @@
 package com.routine.common
 
-import android.content.Context
 import android.graphics.Color
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import androidx.work.WorkManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.routine.data.db.entity.PeriodUnit
@@ -141,10 +139,3 @@ fun <T> Flow<T>.launchIn(coroutineScope: CoroutineScope, stateFlow: MutableState
     }.launchIn(coroutineScope)
 }
 
-fun addReminder(context: Context, idTag: String, message: String, targetDateLong: Long) {
-    WorkManager.getInstance(context).enqueue(ShowNotificationWorker.getInstance(idTag, message, targetDateLong))
-}
-
-fun cancelReminder(context: Context, idTag: String) {
-    WorkManager.getInstance(context).cancelAllWorkByTag(idTag)
-}
