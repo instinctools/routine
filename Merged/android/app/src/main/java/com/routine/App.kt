@@ -6,6 +6,7 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.soloader.SoLoader
 import com.routine.react.ReactApplication
+import com.routine.schedulenotification.ScheduleNotification
 import com.routine.schedulenotification.react.ScheduleNotificationPackage
 import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
@@ -15,11 +16,16 @@ class App : ReactApplication() {
     companion object {
         @JvmStatic
         lateinit var CONTEXT: Context
+
+        @JvmStatic
+        lateinit var scheduleNotification: ScheduleNotification
     }
 
     override fun onCreate() {
         super.onCreate()
         CONTEXT = this
+        scheduleNotification = ScheduleNotification(CONTEXT)
+
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
