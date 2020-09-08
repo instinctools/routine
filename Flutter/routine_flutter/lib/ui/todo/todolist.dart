@@ -34,39 +34,6 @@ class TodoList extends StatelessWidget {
           )
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: ListTile(
-                title: Text(
-                  "Routine",
-                  style: Styles.drawerHeaderTitleTextStyle,
-                ),
-                subtitle: Text(
-                  "by Instinctools",
-                  style: Styles.drawerHeaderSubtitleTextStyle,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text("Settings"),
-              onTap: () {
-                print("on item 1 clicked");
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text("Technology"),
-              onTap: () {
-                print("on item 2 clicked");
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
       body: BlocProvider<TodoBloc>(
         create: (context) => TodoBloc(mainRepository: _mainRepository),
         child: _buildBody(),
