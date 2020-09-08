@@ -1,7 +1,7 @@
 import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
 import {Period, ResetType} from "../constants";
-
+import NotificationHandler from '../notification/Notification';
 
 export const STATE = {
     empty: {
@@ -69,6 +69,8 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             newState.items = action.todos;
             break;
         case Action.Type.TODO_ADD: {
+            NotificationHandler.addReminder(action.todo.id, action.todo.title, action.todo.timestamp.getTime())
+
             newState.items = [...newState.items];
             let index = newState.items.findIndex(todo => todo.id === action.todo.id);
             if (index > -1) {
@@ -111,6 +113,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             });
             break;
         case Action.Type.TODO_RESET: {
+            NotificationHandler.addReminder(action.item.id, action.item.title, action.item.timestamp.getTime())
             newState.todoActionState = STATE.empty
             newState.items = newState.items.map((todo, _) => {
                 if (todo.id === action.item.id) {
@@ -121,6 +124,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
             break;
         }
         case Action.Type.TODO_DELETE: {
+            NotificationHandler.cancelReminder(action.id)
             newState.todoActionState = STATE.empty
             newState.items = [...newState.items];
             const index = newState.items.map((item) => {
