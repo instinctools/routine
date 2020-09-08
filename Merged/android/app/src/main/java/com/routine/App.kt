@@ -6,7 +6,7 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.soloader.SoLoader
 import com.routine.react.ReactApplication
-import com.routine.schedulenotification.ScheduleNotificationPackage
+import com.routine.schedulenotification.react.ScheduleNotificationPackage
 import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 
