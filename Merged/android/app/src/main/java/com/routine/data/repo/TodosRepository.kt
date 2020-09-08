@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.routine.App
 import com.routine.common.calculateTimestamp
 import com.routine.common.userIdOrEmpty
 import com.routine.data.db.database
@@ -78,6 +79,7 @@ object TodosRepository {
             .delete()
 
         todosStore.clear(Pair(it, false))
+        App.scheduleNotification.cancelReminder(it)
         true
     })
         .disableCache()
@@ -109,6 +111,7 @@ object TodosRepository {
             .set(newtodoEntity)
 
         todosStore.fresh(Pair(it, false))
+        App.scheduleNotification.addReminder(newtodoEntity.id, newtodoEntity.title, newtodoEntity.timestamp.time)
         true
     })
         .disableCache()
@@ -131,6 +134,7 @@ object TodosRepository {
             .document(it.id)
             .set(it)
         todosStore.fresh(Pair(it.id, false))
+        App.scheduleNotification.addReminder(it.id, it.title, it.timestamp.time)
         true
     })
         .disableCache()
