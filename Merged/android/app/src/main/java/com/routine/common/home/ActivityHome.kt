@@ -47,6 +47,18 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             }
         }
 
+        viewModel.menuClicks
+            .onEach {
+                if (!it.hasBeenHandled){
+                    if (binding.drawer.isDrawerOpen(GravityCompat.END)){
+                        binding.drawer.closeDrawer(GravityCompat.END, true)
+                    } else {
+                        binding.drawer.openDrawer(GravityCompat.END, true)
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+
         viewModel.content
             .flowOn(Dispatchers.IO)
             .onEach {
