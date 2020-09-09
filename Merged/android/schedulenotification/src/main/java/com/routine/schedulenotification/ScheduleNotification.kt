@@ -7,18 +7,13 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import org.joda.time.DateTime
 import org.joda.time.Seconds
-import java.util.*
 import java.util.concurrent.TimeUnit
 
-class ScheduleNotification(val context: Context) {
-    companion object {
-        private const val SEVENTEEN_HOUR_IN_SECONDS = 61200
-    }
+class ScheduleNotification(private val context: Context) {
 
     fun addReminder(idName: String, message: String, targetDateLong: Long) {
-        val targetMoment = DateTime(targetDateLong + SEVENTEEN_HOUR_IN_SECONDS)
-        val currentMoment = DateTime(Calendar.getInstance().time.time)
-        val timeDelay = Seconds.secondsBetween(currentMoment, targetMoment).seconds.toLong()
+        val targetMoment = DateTime(targetDateLong).plusHours(12)
+        val timeDelay = Seconds.secondsBetween(DateTime(), targetMoment).seconds.toLong()
 
         val oneTimeWorkRequest = OneTimeWorkRequestBuilder<ShowNotificationWorker>()
             .setInitialDelay(timeDelay, TimeUnit.SECONDS)
