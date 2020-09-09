@@ -19,7 +19,7 @@ plugins.each { name, path ->
 }
 
 // kmp
-include(":kmp", ":shared")
+//include(":kmp", ":shared")
 
 enableFeaturePreview("GRADLE_METADATA")
 
