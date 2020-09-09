@@ -14,6 +14,7 @@ import com.routine.R
 import com.routine.common.home.menu.Menu
 import com.routine.common.home.menu.MenuAdapter
 import com.routine.common.home.vm.HomeViewModel
+import com.routine.common.react.ReactAppModule
 import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
@@ -27,6 +28,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.lang.ref.WeakReference
 
 @ExperimentalCoroutinesApi
 class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
@@ -34,6 +36,10 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     private val viewModel by viewModels<HomeViewModel>()
     private val binding: ActivityHomeBinding by viewBinding(ActivityHomeBinding::inflate)
     private val adapter = MenuAdapter(lifecycleScope)
+
+    private val menuClickListener = {
+        viewModel.onMenuClicked()
+    }
 
     @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +52,8 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
                 supportsChangeAnimations = false
             }
         }
+
+        ReactAppModule.menuClickListener = WeakReference(menuClickListener)
 
         viewModel.menuClicks
             .onEach {

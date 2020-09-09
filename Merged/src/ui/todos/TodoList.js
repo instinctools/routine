@@ -10,6 +10,7 @@ import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showEr
 import moment from "moment";
 import analytics from "@react-native-firebase/analytics";
 import {STATE} from "../../reducer/todos";
+import NativeAppModule from '../../native/Native';
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -21,6 +22,13 @@ class TodoList extends React.PureComponent {
         return {
             title: 'Routine',
             headerTitleStyle: toolbarStyle.title,
+            headerLeft: () => (
+                <TouchableRipple style={toolbarStyle.menuItem}
+                                 borderless={true}
+                                 onPress={navigation.getParam('menuClicks')}>
+                    <Icon name="md-menu" size={24} color="#000000"/>
+                </TouchableRipple>
+            ),
             headerRight: () => (
                 <TouchableRipple style={toolbarStyle.menuItem}
                                  borderless={true}
@@ -39,6 +47,9 @@ class TodoList extends React.PureComponent {
                 analytics().logEvent('add_todo_react', {});
                 this.props.selectTodo(this.props.item);
                 this.props.navigation.navigate(`Details`)
+            },
+            menuClicks: () => {
+                NativeAppModule.onMenuClicked()
             }
         });
     }

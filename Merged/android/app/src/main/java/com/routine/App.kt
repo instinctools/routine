@@ -5,6 +5,7 @@ import com.facebook.react.PackageList
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.soloader.SoLoader
+import com.routine.common.react.ReactAppPackage
 import com.routine.react.ReactApplication
 import com.routine.schedulenotification.ScheduleNotification
 import com.routine.schedulenotification.react.ScheduleNotificationPackage
@@ -40,6 +41,7 @@ class App : ReactApplication() {
                 PackageList(this).packages
                     .apply {
                         add(ScheduleNotificationPackage())
+                        add(ReactAppPackage())
                     }
 
             override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
