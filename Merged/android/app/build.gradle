@@ -151,7 +151,7 @@ dependencies {
     }
 
     // kmp
-    implementation project(':kmp')
+//    implementation project(':kmp')
     implementation project(':schedulenotification')
 }
 
