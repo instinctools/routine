@@ -25,7 +25,10 @@ const val PREF_MENU = "MENU"
 class HomeViewModel : ViewModel() {
 
     private val menus_ = MutableStateFlow(listOf(MenuData.HeaderMenu(), MenuTechnology(false, Menu.ANDROID_NATIVE)))
+    private val menuClicks_ = MutableStateFlow(Event(Any()))
+
     val menus: Flow<List<MenuData>> = menus_
+    val menuClicks: Flow<Event<Any>> = menuClicks_
 
     @FlowPreview
     val content by wrapWithAction(initialAction = Any()) {
@@ -67,5 +70,9 @@ class HomeViewModel : ViewModel() {
                 else -> it
             }
         }
+    }
+
+    fun onMenuClicked() {
+        menuClicks_.value = Event(Any())
     }
 }

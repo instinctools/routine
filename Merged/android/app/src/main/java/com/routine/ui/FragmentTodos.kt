@@ -1,7 +1,6 @@
 package com.routine.ui
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +19,7 @@ import com.dropbox.android.external.store4.StoreResponse
 import com.google.android.material.snackbar.Snackbar
 import com.routine.R
 import com.routine.common.*
-import com.routine.common.home.menu.Menu
+import com.routine.common.home.vm.HomeViewModel
 import com.routine.data.model.Event
 import com.routine.data.model.Todo
 import com.routine.databinding.FragmentTodosBinding
@@ -38,6 +38,7 @@ import kotlin.math.abs
 @ExperimentalCoroutinesApi
 class FragmentTodos : Fragment(R.layout.fragment_todos) {
 
+    private val homeViewModel by activityViewModels<HomeViewModel>()
     private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding by viewBinding(FragmentTodosBinding::bind)
     private val adapter = TodosAdapter(lifecycleScope)
@@ -45,6 +46,9 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.setNavigationOnClickListener {
+            homeViewModel.onMenuClicked()
+        }
 
         binding.toolbar.setOnMenuItemClickListener {
             Analytics.action("add_todo_android")
