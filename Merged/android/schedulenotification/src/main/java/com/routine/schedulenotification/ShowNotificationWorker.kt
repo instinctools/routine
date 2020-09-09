@@ -20,36 +20,18 @@ import android.os.Build.VERSION_CODES.O
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.DEFAULT_ALL
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
-import androidx.work.OneTimeWorkRequest
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.joda.time.DateTime
-import org.joda.time.Seconds
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 
 class ShowNotificationWorker(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
     companion object {
-        private const val FIVE_HOUR_IN_SECONDS = 18000
         private const val SCHEDULE_NOTIFICATION_ACTION = "android.intent.action.SCHEDULE_NOTIFICATION_ACTION"
         private const val NOTIFICATION_CHANNEL_ID = "Routine"
         private const val NOTIFICATION_CHANNEL_NAME = "Routines"
-        private lateinit var message: String
-
-        fun getInstance(idTag: String, message: String, targetDateLong: Long): OneTimeWorkRequest {
-            ShowNotificationWorker.message = message
-
-            val targetMoment = DateTime(targetDateLong + FIVE_HOUR_IN_SECONDS)
-            val currentMoment = DateTime(Calendar.getInstance().time.time)
-            val timeDelay = Seconds.secondsBetween(currentMoment, targetMoment).seconds.toLong()
-            return OneTimeWorkRequest.Builder(ShowNotificationWorker::class.java)
-                .addTag(idTag)
-                .setInitialDelay(timeDelay, TimeUnit.SECONDS)
-                .build()
-        }
+        const val KEY_MESSAGE = "KEY_MESSAGE"
     }
 
     @ExperimentalCoroutinesApi
@@ -60,6 +42,7 @@ class ShowNotificationWorker(appContext: Context, workerParams: WorkerParameters
 
     @ExperimentalCoroutinesApi
     private fun showNotification() {
+        val message = inputData.getString(KEY_MESSAGE)
         val notificationManager = applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         val notificationChannelId = NOTIFICATION_CHANNEL_ID
 

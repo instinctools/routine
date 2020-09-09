@@ -11,10 +11,10 @@ const val MODULE_NAME = "NotificationHandler"
 class ScheduleNotificationModule(private val scheduleNotification: ScheduleNotification, context: ReactApplicationContext) : ReactContextBaseJavaModule(context) {
 
     @ReactMethod
-    fun addReminder(idTag: String, message: String, targetDate: Double) = scheduleNotification.addReminder(idTag, message, targetDate.toLong())
+    fun addReminder(idName: String, message: String, targetDate: Double) = scheduleNotification.addReminder(idName, message, targetDate.toLong())
 
     @ReactMethod
-    fun cancelReminder(idTag: String) = scheduleNotification.cancelReminder(idTag)
+    fun cancelReminder(idName: String) = scheduleNotification.cancelReminder(idName)
 
     override fun getName(): String = MODULE_NAME
 }
