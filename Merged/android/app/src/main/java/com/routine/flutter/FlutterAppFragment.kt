@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import com.routine.App
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import timber.log.Timber
@@ -20,7 +21,7 @@ class FlutterAppFragment : FlutterFragment() {
     }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
+        GeneratedPluginRegistrant.registerWith(ShimPluginRegistry(flutterEngine))
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, Companion.CHANNEL).setMethodCallHandler {
             // Note: this method is invoked on the main thread.
