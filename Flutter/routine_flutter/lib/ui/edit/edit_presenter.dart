@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/ui/edit/period_unit.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
+import 'package:uuid/uuid.dart';
 
 import 'resetType.dart';
 
@@ -32,8 +33,7 @@ class EditPresenter {
   Todo getTodo(String titleTodo) {
     var selectedValuePeriod = valuesPeriods[selectedPeriodUnit];
     return Todo(
-      titleTodo + DateTime.now().millisecondsSinceEpoch.toString(),
-      // id = title + now.inMillisecondsSinceEpoch
+      Uuid().v4(),
       titleTodo,
       selectedPeriodUnit,
       selectedValuePeriod,
