@@ -32,7 +32,7 @@ dependencies:
   rxdart: ^0.23.1
   equatable: ^1.0.0
   sqflite: any
-
+  uuid: 2.2.2
   connectivity: ^0.4.8+6
 
   flutter_picker:

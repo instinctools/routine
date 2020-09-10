@@ -1,9 +1,10 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:routine_flutter/utils/consts.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
 import 'package:routine_flutter/ui/splashscreen/splash_screen.dart';
+import 'package:routine_flutter/utils/consts.dart';
 import 'package:routine_flutter/utils/styles.dart';
 
 import 'authentication/authenticationBloc.dart';
@@ -17,6 +18,10 @@ void main() {
 class RoutineApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     final MainRepository _mainRepository = MainRepository();
 
     return MaterialApp(
