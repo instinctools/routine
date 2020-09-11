@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:routine_flutter/data/todo.dart';
 import 'package:routine_flutter/repository/mainRepository.dart';
@@ -16,6 +17,8 @@ import 'package:routine_flutter/utils/styles.dart';
 import 'package:routine_flutter/utils/time_utils.dart';
 
 class TodoList extends StatelessWidget {
+  static const methodChannelSideMenu = const MethodChannel('routine.flutter/side_menu');
+  static const methodOnMenuClicked = "onMenuClicked";
   final MainRepository _mainRepository;
 
   TodoList(this._mainRepository);
@@ -24,6 +27,10 @@ class TodoList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () => _onMenuClicked(),
+        ),
         title: Text(
           Strings.appName,
         ),
@@ -212,5 +219,14 @@ class TodoList extends StatelessWidget {
 
   void _pushEditScreen(BuildContext context, {Todo todo}) async {
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => EditScreen(todo: todo, mainRepository: _mainRepository)));
+  }
+
+  Future<void> _onMenuClicked() async {
+    try {
+      await methodChannelSideMenu.invokeMethod(methodOnMenuClicked);
+      print("methodChannelSideMenu methodOnMenuClicked -> done");
+    } on PlatformException catch (e) {
+      print("methodChannelSideMenu methodOnMenuClicked PlatformException = $e");
+    }
   }
 }
