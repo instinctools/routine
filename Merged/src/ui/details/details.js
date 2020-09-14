@@ -6,7 +6,6 @@ import {TouchableRipple} from "react-native-paper";
 import PeriodSelector from "./PeriodUnitSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
-import analytics from "@react-native-firebase/analytics";
 import {getProgress, showErrorAlert} from "../../utils";
 import {ResetType} from "../../constants";
 import {STATE} from "../../reducer/todos";
@@ -49,7 +48,6 @@ class DetailsScreen extends React.Component {
     componentDidMount() {
         this.props.navigation.setParams({
             done: () => {
-                analytics().logEvent('save_todo_react', {});
                 this.props.addTodo();
             }
         });

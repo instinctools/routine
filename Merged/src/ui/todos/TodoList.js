@@ -8,7 +8,6 @@ import {Text, TouchableRipple} from 'react-native-paper';
 import TodoItem from "./TodoItem";
 import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showErrorAlert} from "../../utils";
 import moment from "moment";
-import analytics from "@react-native-firebase/analytics";
 import {STATE} from "../../reducer/todos";
 import NativeAppModule from '../../native/Native';
 
@@ -44,7 +43,6 @@ class TodoList extends React.PureComponent {
 
         this.props.navigation.setParams({
             navigateToDetails: () => {
-                analytics().logEvent('add_todo_react', {});
                 this.props.selectTodo(this.props.item);
                 this.props.navigation.navigate(`Details`)
             },

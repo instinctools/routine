@@ -6,7 +6,6 @@ import {connect} from "react-redux";
 import ActionEditTodo from "../../action/EditTodoAction";
 import {Period, PeriodsList} from "../../constants";
 import PeriodSelector from "./PeriodSelector";
-import analytics from "@react-native-firebase/analytics";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const bgSelected = `#77767E`;

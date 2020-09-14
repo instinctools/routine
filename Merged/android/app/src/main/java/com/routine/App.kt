@@ -1,18 +1,20 @@
 package com.routine
 
+import android.app.Application
 import android.content.Context
 import com.facebook.react.PackageList
+import com.facebook.react.ReactApplication
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.soloader.SoLoader
 import com.routine.common.react.ReactAppPackage
-import com.routine.react.ReactApplication
 import com.routine.schedulenotification.ScheduleNotification
 import com.routine.schedulenotification.react.ScheduleNotificationPackage
+import io.flutter.app.FlutterApplication
 import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 
-class App : ReactApplication() {
+class App : FlutterApplication(), ReactApplication {
 
     companion object {
         @JvmStatic

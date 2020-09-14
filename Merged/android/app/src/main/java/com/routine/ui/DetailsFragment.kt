@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
-import com.routine.common.Analytics
 import com.routine.common.showError
 import com.routine.common.viewBinding
 import com.routine.data.db.entity.PeriodUnit
@@ -181,7 +180,6 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
         binding.toolbar.menu.findItem(R.id.done)
             .actionView.clicks()
             .onEach {
-                Analytics.action("save_todo_android")
                 viewModel.saveTodo()
             }
             .launchIn(lifecycleScope)

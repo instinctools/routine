@@ -51,7 +51,6 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
         }
 
         binding.toolbar.setOnMenuItemClickListener {
-            Analytics.action("add_todo_android")
             findNavController().navigate(R.id.action_todos_details)
             true
         }
@@ -248,13 +247,11 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
                 val todo = viewHolder.todo
                 if (todo != null) {
                     if (isLeftActivated) {
-                        Analytics.action("reset_todo_android")
                         viewModel.resetTodo(todo)
                     } else if (isRightActivated) {
                         AlertDialog.Builder(requireActivity())
                             .setMessage("Are you sure want to delete this task?")
                             .setPositiveButton("DELETE") { dialog, which ->
-                                Analytics.action("delete_todo_android")
                                 viewModel.removeTodo(todo)
                                 dialog.dismiss()
                             }

@@ -7,7 +7,6 @@ import Action from "../../action/todos";
 import {connect} from "react-redux";
 import {ITEM_TYPE_SEPARATOR} from "./TodoList";
 import {withNavigation} from 'react-navigation';
-import analytics from '@react-native-firebase/analytics';
 
 class TodoItem extends React.Component {
 
@@ -36,7 +35,6 @@ class TodoItem extends React.Component {
                     leftContent={createSwipeableContent(`Reset`, `flex-end`, this.props.isMenuActivated)}
                     rightContent={createSwipeableContent(`Delete`, `flex-start`, this.props.isMenuActivated)}
                     onLeftActionRelease={() => {
-                        analytics().logEvent('reset_todo_react', {});
                         this.props.resetTodo(item)
                     }}
                     onRightActionRelease={() =>
@@ -51,7 +49,6 @@ class TodoItem extends React.Component {
                                 {
                                     text: 'Delete',
                                     onPress: () => {
-                                        analytics().logEvent('delete_todo_react', {});
                                         this.props.deleteTodo(item.id)
                                     }
                                 },
@@ -91,7 +88,6 @@ const createContent = (props) => {
         borderless={true}
         onPress={() => {
             if (!props.actionState.isProgress){
-                analytics().logEvent('edit_todo_react', {});
                 props.selectTodo(props.item);
                 props.navigation.navigate("Details")
             }
