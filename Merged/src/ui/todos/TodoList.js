@@ -9,7 +9,7 @@ import TodoItem from "./TodoItem";
 import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showErrorAlert} from "../../utils";
 import moment from "moment";
 import {STATE} from "../../reducer/todos";
-import NativeAppModule from '../../native/Native';
+import {NativeAppModule} from '../../native/Native';
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;

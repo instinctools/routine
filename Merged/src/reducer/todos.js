@@ -1,7 +1,7 @@
 import Action from "../action/todos";
 import ActionEditTodo from "../action/EditTodoAction";
 import {Period, ResetType} from "../constants";
-import NotificationHandler from '../native/Native';
+import {NotificationHandler} from '../native/Native';
 
 export const STATE = {
     empty: {

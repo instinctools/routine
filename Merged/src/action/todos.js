@@ -166,7 +166,7 @@ Action.resetTodo = item => {
     }
 };
 
-Action.todoProgress = (state) => {
+Action.todoEditState = (state) => {
     return {
         type: Action.Type.TODO_EDIT_STATE,
         todoEditState: state
@@ -200,7 +200,7 @@ Action.addTodo = () => {
             todo.id = uuid.v1()
         }
 
-        dispatch(Action.todoProgress(STATE.progress));
+        dispatch(Action.todoEditState(STATE.progress));
         return firestore()
             .collection("users")
             .doc(auth().currentUser.uid)
@@ -214,7 +214,7 @@ Action.addTodo = () => {
                 })
             })
             .catch(()=>{
-                dispatch(Action.todoProgress(STATE.error));
+                dispatch(Action.todoEditState(STATE.error));
             })
     };
 };
