@@ -21,7 +21,7 @@ class MainRepository {
 
   void addTodo(Todo todo) {
     print("add Todo");
-    _collectionReference.add(todo.toMap());
+    _collectionReference.document(todo.id).setData(todo.toMap());
     _addReminderToNative(todo);
   }
 
