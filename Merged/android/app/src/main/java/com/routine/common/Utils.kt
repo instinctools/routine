@@ -24,7 +24,7 @@ fun prettyPeriod(period: Int, periodUnit: PeriodUnit): String {
             PeriodUnit.MONTH -> "Once a month"
         }
     } else {
-        "Every $period ${periodUnit.name.toLowerCase()}"
+        "Every $period ${periodUnit.name.toLowerCase()}s"
     }
 }
 
