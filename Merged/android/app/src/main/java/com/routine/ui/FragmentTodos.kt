@@ -41,11 +41,14 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
     private val homeViewModel by activityViewModels<HomeViewModel>()
     private val viewModel by viewModels<AndroidAppViewModel>()
     private val binding by viewBinding(FragmentTodosBinding::bind)
-    private val adapter = TodosAdapter(lifecycleScope)
+    private var adapter: TodosAdapter? = null
     private val swipeCallback by lazy { SwipeCallback(requireActivity()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = TodosAdapter(viewLifecycleOwner.lifecycleScope)
+
         binding.toolbar.setNavigationOnClickListener {
             homeViewModel.onMenuClicked()
         }
@@ -65,7 +68,7 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
 
         viewModel.todosData
             .onEach {
-                adapter.submitList(it.dataOrNull())
+                adapter?.submitList(it.dataOrNull())
             }
             .launchIn(lifecycleScope)
 
@@ -104,20 +107,24 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
             })
 
-        adapter.clicksFlow
-            .onEach {
+        adapter?.clicksFlow?.onEach {
                 it?.getContentIfNotHandled()?.let {
                     findNavController().navigate(FragmentTodosDirections.actionTodosDetails(it.id))
                 }
-            }
-            .launchIn(lifecycleScope)
+            }?.launchIn(lifecycleScope)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
     }
 
     private fun adjustVisibility(isProgress: Boolean) {
-        binding.progress.visibility = if (isProgress && adapter.itemCount == 0) View.VISIBLE else View.GONE
-        binding.content.visibility = if (isProgress && adapter.itemCount == 0) View.GONE else View.VISIBLE
-        binding.placeHolderGroup.visibility = if (adapter.itemCount == 0) View.VISIBLE else View.GONE
-        binding.refresh.isRefreshing = isProgress && adapter.itemCount > 0
+        binding.progress.visibility = if (isProgress && adapter?.itemCount == 0) View.VISIBLE else View.GONE
+        binding.content.visibility = if (isProgress && adapter?.itemCount == 0) View.GONE else View.VISIBLE
+        binding.placeHolderGroup.visibility = if (adapter?.itemCount == 0) View.VISIBLE else View.GONE
+        binding.refresh.isRefreshing = isProgress && (adapter?.let { it.itemCount > 0 } == true)
+
         swipeCallback.isEnabled = !isProgress
     }
 
