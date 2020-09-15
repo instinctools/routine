@@ -54,7 +54,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     binding.text.setText(it)
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.resetTypeFlow
             .onEach {
@@ -65,7 +65,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     }
                 )
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.periodSelectionFlow
             .onEach {
@@ -90,14 +90,14 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     period.periodMenu.isSelected = data.isSelected
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         viewModel.progressFlow
             .onEach {
                 binding.progress.visibility = if (it) View.VISIBLE else View.GONE
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.errorFlow
             .onEach {
@@ -105,7 +105,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     showError(binding.root, it.error)
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.isSaveButtonEnabledFlow
             .onEach {
@@ -116,13 +116,13 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     }
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.addTodo
             .onEach {
                 if (it is StoreResponse.Data && it.value) findNavController().popBackStack()
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.wheelPickerFlow
             .onEach {
@@ -136,14 +136,14 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     }.show(childFragmentManager, WheelPickerFragment::class.java.simpleName)
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.text
             .textChanges()
             .onEach {
                 viewModel.onTextChanged(it.toString())
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         merge(
             binding.dayPeriodSelector.text
@@ -159,7 +159,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             .onEach {
                 viewModel.onPeriodUnitChanged(it)
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.reset.checkedChanges()
             .onEach {
@@ -171,7 +171,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     }
                 )
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -182,7 +182,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             .onEach {
                 viewModel.saveTodo()
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         merge(
             binding.dayPeriodSelector.periodMenu
@@ -198,7 +198,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             .onEach {
                 viewModel.onMenuClicked(it)
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         childFragmentManager.setFragmentResultListener(
             ARG_PERIOD,

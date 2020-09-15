@@ -70,7 +70,7 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
             .onEach {
                 adapter?.submitList(it.dataOrNull())
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.todosStatus
             .sample(400)
@@ -90,7 +90,7 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
                     }
                 }
             }
-            .launchIn(lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.refresh.setOnRefreshListener {
             viewModel.refresh()
@@ -108,10 +108,10 @@ class FragmentTodos : Fragment(R.layout.fragment_todos) {
             })
 
         adapter?.clicksFlow?.onEach {
-                it?.getContentIfNotHandled()?.let {
-                    findNavController().navigate(FragmentTodosDirections.actionTodosDetails(it.id))
-                }
-            }?.launchIn(lifecycleScope)
+            it?.getContentIfNotHandled()?.let {
+                findNavController().navigate(FragmentTodosDirections.actionTodosDetails(it.id))
+            }
+        }?.launchIn(lifecycleScope)
     }
 
     override fun onDestroyView() {
