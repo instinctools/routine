@@ -131,7 +131,7 @@ Action.resetTodo = item => {
                 timeStamp.subtract(1, `months`)
                 break
         }
-        if (timeStamp.isAfter(moment())) {
+        if (timeStamp.isAfter(moment().startOf("day"))) {
             return {
                 type: `any`
             }

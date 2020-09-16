@@ -8,7 +8,7 @@ import Action from "./action/todos";
 
 export const calculateTimestamp = (period, periodUnit, resetType, currentTimestamp) => {
     let date
-    if (resetType === ResetType.BY_PERIOD || currentTimestamp == null) {
+    if (resetType === ResetType.BY_PERIOD || currentTimestamp == null || moment(currentTimestamp).isBefore(moment().startOf("day"))) {
         date = moment()
     } else {
         date = moment(currentTimestamp)
