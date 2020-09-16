@@ -92,8 +92,8 @@ object TodosRepository {
             val timestamp = DateTime(todoEntity.timestamp)
             val checkDate = when (todoEntity.periodUnit) {
                 PeriodUnit.DAY -> timestamp.minusDays(todoEntity.period)
-                PeriodUnit.WEEK -> timestamp.minusMonths(todoEntity.period)
-                PeriodUnit.MONTH -> timestamp.minusYears(todoEntity.period)
+                PeriodUnit.WEEK -> timestamp.minusWeeks(todoEntity.period)
+                PeriodUnit.MONTH -> timestamp.minusMonths(todoEntity.period)
             }
 
             if (checkDate.isAfter(DateTime().withTimeAtStartOfDay())){

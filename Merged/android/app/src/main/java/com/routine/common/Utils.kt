@@ -89,8 +89,8 @@ fun calculateTimestamp(
     }
     val timestamp = when (periodUnit) {
         PeriodUnit.DAY -> dateTime.plusDays(period)
-        PeriodUnit.WEEK -> dateTime.plusMonths(period)
-        PeriodUnit.MONTH -> dateTime.plusYears(period)
+        PeriodUnit.WEEK -> dateTime.plusWeeks(period)
+        PeriodUnit.MONTH -> dateTime.plusMonths(period)
     }
     return timestamp.withTimeAtStartOfDay().toDate()
 }
