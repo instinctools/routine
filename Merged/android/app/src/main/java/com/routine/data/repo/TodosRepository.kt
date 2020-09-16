@@ -96,7 +96,7 @@ object TodosRepository {
                 PeriodUnit.MONTH -> timestamp.minusYears(todoEntity.period)
             }
 
-            if (checkDate.isAfter(DateTime())){
+            if (checkDate.isAfter(DateTime().withTimeAtStartOfDay())){
                 return@nonFlowValueFetcher true
             }
         }
