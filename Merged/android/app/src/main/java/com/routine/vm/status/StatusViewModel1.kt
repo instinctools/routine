@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
@@ -16,9 +14,9 @@ const val DEF_ACTION = "DEF_ACTION"
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-fun <T, R> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
-                                    initialAction: T? = null,
-                                    function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+fun <T : Any, R : Any> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
+                                                initialAction: T? = null,
+                                                function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
     return Delegate(actionKey, initialAction, viewModelScope, function)
 }
 
@@ -35,14 +33,13 @@ fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-private class Delegate<T, R>(
+private class Delegate<T: Any, R : Any>(
         val actionKey: String,
         val initialAction: T?,
         val scope: CoroutineScope,
         val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
-    // TODO: 11.06.2020 StateFlow, Catch.
-    private val channel = BroadcastChannel<T>(Channel.CONFLATED)
+    private val flow = MutableStateFlow<T?>(null)
     private val cache = MutableStateFlow<R?>(null)
     private var isInitialized = false
     private val lock = this
@@ -53,7 +50,7 @@ private class Delegate<T, R>(
             synchronized(lock) {
                 if (!isInitialized) {
                     LazyRegistry.register(thisRef, actionKey, this)
-                    channel.asFlow()
+                    flow.filterNotNull()
                         .onStart {
                             if (initialAction != null) {
                                 emit(initialAction)
@@ -67,13 +64,11 @@ private class Delegate<T, R>(
                 }
             }
         }
-        return cache
-            .filter { it != null }
-            .map { it!! }
+        return cache.filterNotNull()
     }
 
     override fun proceed(value: T) {
-        channel.offer(value)
+        flow.value = value
     }
 }
 
@@ -82,7 +77,7 @@ private class Delegate<T, R>(
 private object LazyRegistry {
     private val lazyMap = WeakHashMap<Any, MutableMap<String, Delegate<*, *>>>()
 
-    fun <T, R> register(target: Any, actionKey: String, lazy: Delegate<T, R>) {
+    fun <T : Any, R : Any> register(target: Any, actionKey: String, lazy: Delegate<T, R>) {
         lazyMap.getOrPut(target) { WeakHashMap() }[actionKey] = lazy
     }
 

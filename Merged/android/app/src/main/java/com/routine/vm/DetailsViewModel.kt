@@ -38,7 +38,6 @@ class  DetailsViewModel(val id: String?) : StatusViewModel() {
         )
     )
 
-    // TODO: 11.06.2020 ArrayBroadcastChannel?
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
     val todo by wrapWithAction(GET_TODO, id ?: "") {
