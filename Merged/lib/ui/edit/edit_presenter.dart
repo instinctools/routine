@@ -33,7 +33,7 @@ class EditPresenter {
   Todo getTodo(String titleTodo) {
     var selectedValuePeriod = valuesPeriods[selectedPeriodUnit];
     return Todo(
-      Uuid().v4(),
+      id == null ? Uuid().v4() : id,
       titleTodo,
       selectedPeriodUnit,
       selectedValuePeriod,
