@@ -1,36 +1,30 @@
 package com.routine.vm
 
-import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.routine.common.push
+import com.dropbox.android.external.store4.StoreRequest
+import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.StatusViewModel
+import com.routine.vm.status.getAction
+import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.FlowPreview
 
 @ExperimentalCoroutinesApi
 class SplashViewModel : StatusViewModel() {
 
-    val result = MutableLiveData<Boolean>()
-
     companion object {
-        val STATUS_LOGIN = "STATUS_LOGIN"
+        const val ACTION_LOGIN = "ACTION_LOGIN"
     }
 
-    private val action: (suspend () -> Unit) = {
-        delay(500)
-        if (Firebase.auth.currentUser == null) {
-            Firebase.auth.signInAnonymously().await()
-        }
-        result.push(true)
-    }
-
-    init {
-        process(STATUS_LOGIN, action)
-    }
-
+    @FlowPreview
     fun onRefreshClicked() {
-        process(STATUS_LOGIN, action)
+        getAction<Any>(ACTION_LOGIN)?.proceed(Any())
+    }
+
+    @ExperimentalStdlibApi
+    @FlowPreview
+    val login by wrapWithAction(ACTION_LOGIN, Any()) {
+        TodosRepository
+            .loginStore
+            .stream(StoreRequest.fresh(Any()))
     }
 }

@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
 import com.routine.common.viewBinding
 import com.routine.databinding.FragmentSplashBinding
 import com.routine.vm.SplashViewModel
-import com.routine.vm.status.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import timber.log.Timber
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 @ExperimentalCoroutinesApi
 class SplashFragment : Fragment(R.layout.fragment_splash) {
@@ -21,40 +22,24 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private val binding by viewBinding(FragmentSplashBinding::bind)
     private val viewModel by viewModels<SplashViewModel>()
 
-    companion object{
-        const val IS_PROGRESS = true
-        const val IS_ERROR = false
-    }
-
+    @ExperimentalStdlibApi
+    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
-            .error
-            .asLiveData()
-            .observe(viewLifecycleOwner, Observer {
-                it.peekContent()?.let { error ->
-                    Timber.d(error, "STATUS_LOGIN error ")
-                    adjustVisibility(IS_ERROR)
-                }
-            })
 
-        viewModel.getStatus(SplashViewModel.STATUS_LOGIN)
-            .state
-            .asLiveData()
-            .observe(viewLifecycleOwner, Observer {
-                when (it.peekContent()) {
-                    State.EMPTY -> adjustVisibility(IS_PROGRESS)
-                    State.PROGRESS -> adjustVisibility(IS_PROGRESS)
-                    State.ERROR -> adjustVisibility(IS_ERROR)
+        viewModel.login
+            .onEach {
+                when (it) {
+                    is StoreResponse.Loading -> adjustVisibility(true)
+                    is StoreResponse.Data -> {
+                        if (it.value) {
+                            findNavController().navigate(R.id.action_splash_todos)
+                        }
+                    }
+                    is StoreResponse.Error.Exception -> adjustVisibility(false)
                 }
-            })
-
-        viewModel.result
-            .observe(viewLifecycleOwner, Observer {
-                if (it) {
-                    findNavController().navigate(R.id.action_splash_todos)
-                }
-            })
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.retry.setOnClickListener {
             viewModel.onRefreshClicked()
