@@ -41,7 +41,7 @@ class  DetailsViewModel(val id: String?) : ViewModel() {
 
     val todo by wrapWithAction(GET_TODO, id ?: "") {
         TodosRepository.getTodoStore
-            .stream(StoreRequest.fresh(it))
+            .stream(StoreRequest.cached(it, false))
             .onEach {
                 if (it is StoreResponse.Data) {
                     titleFlow.value = it.value.title
