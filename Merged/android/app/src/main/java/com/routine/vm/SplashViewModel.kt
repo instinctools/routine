@@ -1,15 +1,15 @@
 package com.routine.vm
 
+import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.StoreRequest
 import com.routine.data.repo.TodosRepository
-import com.routine.vm.status.StatusViewModel
 import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
 @ExperimentalCoroutinesApi
-class SplashViewModel : StatusViewModel() {
+class SplashViewModel : ViewModel() {
 
     companion object {
         const val ACTION_LOGIN = "ACTION_LOGIN"
