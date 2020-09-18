@@ -1,10 +1,10 @@
 package com.routine.data.repo
 
+import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.SourceOfTruth
 import com.dropbox.android.external.store4.StoreBuilder
 import com.dropbox.android.external.store4.fresh
-import com.dropbox.android.external.store4.nonFlowValueFetcher
-import com.google.android.gms.tasks.Tasks
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -17,6 +17,8 @@ import com.routine.data.db.entity.ResetType
 import com.routine.data.db.entity.TodoEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withTimeout
 import org.joda.time.DateTime
 
 @ExperimentalCoroutinesApi
@@ -24,27 +26,37 @@ import org.joda.time.DateTime
 @ExperimentalStdlibApi
 object TodosRepository {
 
+    val loginStore = StoreBuilder.from<Any, Boolean>(Fetcher.of {
+        if (Firebase.auth.currentUser == null) {
+            Firebase.auth
+                .signInAnonymously()
+                .awaitTimeout()
+        }
+        true
+    })
+        .disableCache()
+        .build()
+
     val todosStore = StoreBuilder
-        .from<Pair<String, Boolean>, List<TodoEntity>, List<TodoEntity>>(nonFlowValueFetcher { pair ->
-            val result = Tasks.await(
-                Firebase.firestore
-                    .collection("users")
-                    .document(Firebase.auth.userIdOrEmpty())
-                    .collection("todos")
-                    .apply {
-                        if (pair.first.isNotEmpty()) {
-                            document(pair.first)
-                        }
+        .from<Pair<String, Boolean>, List<TodoEntity>, List<TodoEntity>>(Fetcher.of { pair ->
+            val result = Firebase.firestore
+                .collection("users")
+                .document(Firebase.auth.userIdOrEmpty())
+                .collection("todos")
+                .apply {
+                    if (pair.first.isNotEmpty()) {
+                        document(pair.first)
                     }
-                    .get()
-            )
+                }
+                .get()
+                .awaitTimeout()
 
             buildList {
                 for (document in result) {
                     add(document.toObject(TodoEntity::class.java))
                 }
             }
-        }, SourceOfTruth.from(
+        }, SourceOfTruth.of(
                 reader = {
                     database().todos()
                         .getTodos()
@@ -70,13 +82,14 @@ object TodosRepository {
         ))
         .build()
 
-    val removeTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, Boolean> {
+    val removeTodoStore = StoreBuilder.from(Fetcher.of<String, Boolean> {
         Firebase.firestore
             .collection("users")
             .document(Firebase.auth.userIdOrEmpty())
             .collection("todos")
             .document(it)
             .delete()
+            .awaitTimeout()
 
         todosStore.clear(Pair(it, false))
         App.scheduleNotification.cancelReminder(it)
@@ -85,7 +98,7 @@ object TodosRepository {
         .disableCache()
         .build()
 
-    val resetTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, Boolean> {
+    val resetTodoStore = StoreBuilder.from(Fetcher.of<String, Boolean> {
         val todoEntity = database().todos().getTodo(it)
 
         if (todoEntity.resetType == ResetType.BY_DATE){
@@ -97,7 +110,7 @@ object TodosRepository {
             }
 
             if (checkDate.isAfter(DateTime().withTimeAtStartOfDay())){
-                return@nonFlowValueFetcher true
+                return@of true
             }
         }
 
@@ -109,6 +122,7 @@ object TodosRepository {
             .collection("todos")
             .document(it)
             .set(newtodoEntity)
+            .awaitTimeout()
 
         todosStore.fresh(Pair(it, false))
         App.scheduleNotification.addReminder(newtodoEntity.id, newtodoEntity.title, newtodoEntity.timestamp.time)
@@ -117,7 +131,7 @@ object TodosRepository {
         .disableCache()
         .build()
 
-    val getTodoStore = StoreBuilder.from(nonFlowValueFetcher<String, TodoEntity> {
+    val getTodoStore = StoreBuilder.from(Fetcher.of<String, TodoEntity> {
         if (it.isNotEmpty()) {
             database().todos().getTodo(it)
         } else {
@@ -127,12 +141,13 @@ object TodosRepository {
         .disableCache()
         .build()
 
-    val addTodoStore = StoreBuilder.from(nonFlowValueFetcher<TodoEntity, Boolean> {
+    val addTodoStore = StoreBuilder.from(Fetcher.of<TodoEntity, Boolean> {
         Firebase.firestore.collection("users")
             .document(Firebase.auth.userIdOrEmpty())
             .collection("todos")
             .document(it.id)
             .set(it)
+            .awaitTimeout()
         todosStore.fresh(Pair(it.id, false))
         App.scheduleNotification.addReminder(it.id, it.title, it.timestamp.time)
         true
@@ -140,5 +155,7 @@ object TodosRepository {
         .disableCache()
         .build()
 }
+
+suspend fun <T> Task<T>.awaitTimeout(): T = withTimeout(10000L) { await() }
 
 

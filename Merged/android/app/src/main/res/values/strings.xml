@@ -2,6 +2,8 @@
     <string name="app_name">Routine</string>
     <string name="app_developer">by Instinctools</string>
 
+    <string name="error">An error occurred!</string>
+
     <!--Splashscreen-->
     <string name="splash_screen_status_progress">Setting up account</string>
     <string name="splash_screen_status_error">An error occurred!</string>

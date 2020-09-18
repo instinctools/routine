@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.routine.R
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
 import com.routine.data.model.Event
@@ -104,7 +105,7 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
 
 fun showError(view: View, throwable: Throwable, block: (() -> Unit)? = null) {
     val length = if (block != null) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
-    val snackbar = Snackbar.make(view, throwable.getErrorMessage(), length)
+    val snackbar = Snackbar.make(view, R.string.error, length)
     if (block != null) {
         snackbar.setAction("Retry") {
             block.invoke()
@@ -114,9 +115,6 @@ fun showError(view: View, throwable: Throwable, block: (() -> Unit)? = null) {
 }
 
 fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""
-
-
-fun Throwable.getErrorMessage() = message ?: "An error occurred!"
 
 fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {
     require(periodMillis > 0) { "period should be positive" }

@@ -1,5 +1,6 @@
 package com.routine.vm
 
+import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.ResponseOrigin
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
@@ -9,19 +10,17 @@ import com.routine.data.db.entity.ResetType
 import com.routine.data.db.entity.TodoEntity
 import com.routine.data.model.Event
 import com.routine.data.repo.TodosRepository
-import com.routine.vm.status.StatusViewModel
 import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import java.lang.Exception
 import java.util.*
 
 @FlowPreview
 @ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
-class  DetailsViewModel(val id: String?) : StatusViewModel() {
+class  DetailsViewModel(val id: String?) : ViewModel() {
 
     companion object {
         const val GET_TODO = "GET_TODO"
@@ -38,12 +37,11 @@ class  DetailsViewModel(val id: String?) : StatusViewModel() {
         )
     )
 
-    // TODO: 11.06.2020 ArrayBroadcastChannel?
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
     val todo by wrapWithAction(GET_TODO, id ?: "") {
         TodosRepository.getTodoStore
-            .stream(StoreRequest.fresh(it))
+            .stream(StoreRequest.cached(it, false))
             .onEach {
                 if (it is StoreResponse.Data) {
                     titleFlow.value = it.value.title

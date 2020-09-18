@@ -118,9 +118,9 @@ dependencies {
 
     implementation 'cn.aigestudio.wheelpicker:WheelPicker:1.1.3'
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.6"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.9"
     implementation "io.github.reactivecircus.flowbinding:flowbinding-android:0.12.0"
 
     implementation "androidx.room:room-runtime:2.2.5"
@@ -133,13 +133,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:19.3.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
 
-    implementation "com.dropbox.mobile.store:store4:4.0.0-alpha06"
+    implementation "com.dropbox.mobile.store:store4:4.0.0-alpha07"
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation 'androidx.multidex:multidex:2.0.1'
 
     // react-native
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
