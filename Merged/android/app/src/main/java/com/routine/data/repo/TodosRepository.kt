@@ -89,7 +89,6 @@ object TodosRepository {
             .collection("todos")
             .document(it)
             .delete()
-            .awaitTimeout()
 
         todosStore.clear(Pair(it, false))
         App.scheduleNotification.cancelReminder(it)
@@ -122,7 +121,6 @@ object TodosRepository {
             .collection("todos")
             .document(it)
             .set(newtodoEntity)
-            .awaitTimeout()
 
         todosStore.fresh(Pair(it, false))
         App.scheduleNotification.addReminder(newtodoEntity.id, newtodoEntity.title, newtodoEntity.timestamp.time)
@@ -147,7 +145,6 @@ object TodosRepository {
             .collection("todos")
             .document(it.id)
             .set(it)
-            .awaitTimeout()
         todosStore.fresh(Pair(it.id, false))
         App.scheduleNotification.addReminder(it.id, it.title, it.timestamp.time)
         true
