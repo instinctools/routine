@@ -1,5 +1,6 @@
 package com.routine.vm.status
 
+import android.util.ArrayMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
@@ -58,6 +59,7 @@ private class Delegate<T: Any, R : Any>(
                         }
                         .flatMapLatest { function(it) }
                         .onEach { cache.value = it }
+                        .onCompletion { LazyRegistry.unregister(thisRef, actionKey) }
                         .launchIn(scope)
 
                     isInitialized = true
@@ -77,9 +79,11 @@ private class Delegate<T: Any, R : Any>(
 private object LazyRegistry {
     private val lazyMap = WeakHashMap<Any, MutableMap<String, Delegate<*, *>>>()
 
-    fun <T : Any, R : Any> register(target: Any, actionKey: String, lazy: Delegate<T, R>) {
-        lazyMap.getOrPut(target) { WeakHashMap() }[actionKey] = lazy
+    fun <T : Any, R : Any> register(target: ViewModel, actionKey: String, lazy: Delegate<T, R>) {
+        lazyMap.getOrPut(target) { ArrayMap() }[actionKey] = lazy
     }
+
+    fun unregister(target: ViewModel, actionKey: String) = lazyMap[target]?.remove(actionKey)
 
     fun find(target: Any, actionKey: String) = lazyMap[target]?.get(actionKey)
 }

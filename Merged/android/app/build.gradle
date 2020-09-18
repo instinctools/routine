@@ -140,6 +140,7 @@ dependencies {
 
     // react-native
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
