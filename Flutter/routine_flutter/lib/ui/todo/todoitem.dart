@@ -38,7 +38,7 @@ class TodoItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    TimeUtils.calculateTimeLeft(entry.targetDate),
+                    TimeUtils.getDifferenceTargetToToday(entry.targetDate),
                     style: Styles.TODO_ITEM_TIME_TEXT,
                   ),
                 ],
