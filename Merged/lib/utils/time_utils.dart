@@ -85,25 +85,40 @@ class TimeUtils {
     return DateTime(now.year, now.month + month, now.day + day);
   }
 
-  static String calculateTimeLeft(int targetDate) {
+  static String getDifferenceTargetToToday(int targetDate) {
+    String result = "";
     DateTime target = DateTime.fromMillisecondsSinceEpoch(targetDate, isUtc: false);
     DateTime now = getCurrentTime();
-    var days = target.difference(now).inDays;
-    String result = "";
-    switch (days) {
-      case 0:
-        result = "Today";
-        break;
-      case 1:
-        result = "Tomorrow";
-        break;
-      case 7:
-        result = "One week left";
-        break;
-      default:
-        if (days > 1 && days < 7) {
-          result = "$days days left";
-        }
+    var days = target.difference(now).inDays.abs();
+    if (target.isAfter(now)) {
+      switch (days) {
+        case 1:
+          result = "Tomorrow";
+          break;
+        case 7:
+          result = "One week left";
+          break;
+        default:
+          if (days < 7) {
+            result = "$days days left";
+          }
+      }
+    } else {
+      switch (days) {
+        case 0:
+          result = "Today";
+          break;
+        case 1:
+          result = "Yesterday";
+          break;
+        case 7:
+          result = "One week ago";
+          break;
+        default:
+          if (days < 7) {
+            result = "$days days ago";
+          }
+      }
     }
     return result;
   }

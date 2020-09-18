@@ -1,8 +1,10 @@
 package com.routine.ui
 
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
@@ -120,7 +122,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
 
         viewModel.addTodo
             .onEach {
-                if (it is StoreResponse.Data && it.value) findNavController().popBackStack()
+                if (it is StoreResponse.Data && it.value) popBackStack()
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -173,9 +175,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.toolbar.setNavigationOnClickListener { popBackStack() }
 
         binding.toolbar.menu.findItem(R.id.done)
             .actionView.clicks()
@@ -208,5 +208,16 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                     result.getInt(ARG_PERIOD), result.getSerializable(ARG_PERIOD_UNIT) as PeriodUnit
                 )
             })
+    }
+
+    private fun popBackStack() {
+        activity?.let {
+            val inputManager = it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val view = it.currentFocus
+            if (view != null) {
+                inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+        findNavController().popBackStack()
     }
 }
