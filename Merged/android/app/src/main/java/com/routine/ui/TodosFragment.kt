@@ -109,7 +109,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
 
         adapter?.clicksFlow?.onEach {
             it?.getContentIfNotHandled()?.let {
-                findNavController().navigate(FragmentTodosDirections.actionTodosDetails(it.id))
+                findNavController().navigate(TodosFragmentDirections.actionTodosDetails(it.id))
             }
         }?.launchIn(lifecycleScope)
     }
