@@ -83,16 +83,13 @@ object TodosRepository {
         .build()
 
     val removeTodoStore = StoreBuilder.from(Fetcher.of<String, Boolean> {
-        withTimeout(1000){
-            Firebase.firestore
-                .collection("users")
-                .document(Firebase.auth.userIdOrEmpty())
-                .collection("todos")
-                .document(it)
-                .delete()
-                .awaitTimeout()
-        }
-
+        Firebase.firestore
+            .collection("users")
+            .document(Firebase.auth.userIdOrEmpty())
+            .collection("todos")
+            .document(it)
+            .delete()
+            .awaitTimeout()
 
         todosStore.clear(Pair(it, false))
         App.scheduleNotification.cancelReminder(it)
