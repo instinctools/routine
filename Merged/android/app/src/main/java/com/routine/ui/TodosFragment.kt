@@ -11,15 +11,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
-import com.google.android.material.snackbar.Snackbar
 import com.routine.R
-import com.routine.common.*
 import com.routine.common.home.vm.HomeViewModel
+import com.routine.common.launchIn
+import com.routine.common.showError
+import com.routine.common.throttleFirst
+import com.routine.common.viewBinding
 import com.routine.data.model.Event
 import com.routine.data.model.Todo
 import com.routine.databinding.FragmentTodosBinding
@@ -97,15 +98,14 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         }
 
         viewModel.actionTodo
-            .observe(requireActivity(), Observer {
-                when (it) {
-                    is StoreResponse.Error.Exception -> {
-                        Snackbar.make(binding.root, it.error.getErrorMessage(), Snackbar.LENGTH_SHORT).show()
-                    }
+            .onEach {
+                if (it is StoreResponse.Error.Exception){
+                    showError(binding.root, it.error)
                 }
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
-            })
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         adapter?.clicksFlow?.onEach {
             it?.getContentIfNotHandled()?.let {

@@ -53,7 +53,6 @@ class AndroidAppViewModel : ViewModel() {
     val todosStatus = todos
 
     val actionTodo = merge(removeTodo, resetTodo)
-        .asLiveData()
 
     fun refresh() {
         getAction<Any>(GET_TODOS)?.proceed(Any())
