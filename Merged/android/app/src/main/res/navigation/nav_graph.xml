@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/fragment_todos"
-        android:name="com.routine.ui.FragmentTodos"
+        android:name="com.routine.ui.TodosFragment"
         android:label="TodoListFragment"
         tools:layout="@layout/fragment_todos">
         <action

@@ -36,7 +36,7 @@ import kotlin.math.abs
 @ExperimentalStdlibApi
 @FlowPreview
 @ExperimentalCoroutinesApi
-class FragmentTodos : Fragment(R.layout.fragment_todos) {
+class TodosFragment : Fragment(R.layout.fragment_todos) {
 
     private val homeViewModel by activityViewModels<HomeViewModel>()
     private val viewModel by viewModels<AndroidAppViewModel>()
