@@ -107,6 +107,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             Menu.FLUTTER -> {
                 openApp(FlutterFragment.NewEngineFragmentBuilder(FlutterAppFragment::class.java)
                     .renderMode(RenderMode.surface)
+                    .renderMode(RenderMode.texture)
                     .transparencyMode(TransparencyMode.opaque)
                     .build<FlutterAppFragment>())
             }
