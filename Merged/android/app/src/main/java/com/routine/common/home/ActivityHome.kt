@@ -52,9 +52,6 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        Insetter.builder()
-            .applySystemWindowInsetsToMargin(Side.TOP)
-            .applyToView(binding.root)
 
         binding.menu.adapter = adapter
 
