@@ -10,6 +10,7 @@ import {calculateTargetDate, getProgress, pickColorBetween, prettyPeriod, showEr
 import moment from "moment";
 import {STATE} from "../../reducer/todos";
 import {NativeAppModule} from '../../native/Native';
+import StaticSafeAreaInsets from 'react-native-static-safe-area-insets';
 
 export const ITEM_TYPE_TODO = `ITEM_TYPE_TODO`;
 export const ITEM_TYPE_SEPARATOR = `ITEM_TYPE_SEPARATOR`;
@@ -76,7 +77,7 @@ class TodoList extends React.PureComponent {
             justifyContent: 'center'
         }}>
             <FlatList style={{flex: 1}}
-                      contentContainerStyle={todoListStyle.container}
+                      contentContainerStyle={{...todoListStyle.container, paddingBottom: todoListStyle.container.paddingBottom + StaticSafeAreaInsets.safeAreaInsetsBottom}}
                       scrollEnabled={isScrollEnabled}
                       data={uiItems}
                       keyExtractor={item => item.id}
