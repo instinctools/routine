@@ -1,6 +1,7 @@
 package com.routine.common.home
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -19,6 +20,8 @@ import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import com.routine.ui.AndroidAppFragment
+import dev.chrisbanes.insetter.Insetter
+import dev.chrisbanes.insetter.Side
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
@@ -45,6 +48,14 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        Insetter.builder()
+            .applySystemWindowInsetsToMargin(Side.TOP)
+            .applyToView(binding.root)
+
         binding.menu.adapter = adapter
 
         binding.menu.itemAnimator.apply {

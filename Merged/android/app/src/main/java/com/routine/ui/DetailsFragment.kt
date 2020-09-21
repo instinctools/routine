@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.viewModels
@@ -22,6 +23,8 @@ import com.routine.databinding.FragmentDetailsBinding
 import com.routine.databinding.ItemPeriodSelectorBinding
 import com.routine.vm.DetailsViewModel
 import com.routine.vm.DetailsViewModelFactory
+import dev.chrisbanes.insetter.Insetter
+import dev.chrisbanes.insetter.Side
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
@@ -131,6 +134,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
                 val content = it?.getContentIfNotHandled()
                 content?.let {
                     WheelPickerFragment().apply {
+                        setStyle(DialogFragment.STYLE_NORMAL, R.style.WheelPickerTheme)
                         arguments = Bundle().apply {
                             putInt(ARG_PERIOD, it.period)
                             putSerializable(ARG_PERIOD_UNIT, it.periodUnit)

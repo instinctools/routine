@@ -26,6 +26,8 @@ import com.routine.data.model.Todo
 import com.routine.databinding.FragmentTodosBinding
 import com.routine.databinding.ItemTodoBinding
 import com.routine.vm.AndroidAppViewModel
+import dev.chrisbanes.insetter.Insetter
+import dev.chrisbanes.insetter.Side
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -47,6 +49,10 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Insetter.builder()
+            .applySystemWindowInsetsToPadding(Side.BOTTOM)
+            .applyToView(binding.content)
 
         adapter = TodosAdapter(viewLifecycleOwner.lifecycleScope)
 

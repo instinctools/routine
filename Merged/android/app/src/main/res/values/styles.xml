@@ -11,6 +11,7 @@
 
         <item name="android:statusBarColor">#ffffff</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">#4D000000</item>
     </style>
 
     <style name="Theme.MyApp.Details">
@@ -54,5 +55,11 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
+    <style name="WheelPickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@style/SlideAnimation</item>
+        <item name="android:navigationBarColor">#4D000000</item>
+    </style>
 </resources>
 

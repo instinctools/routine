@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import androidx.fragment.app.setFragmentResult
 import com.routine.R
 import com.routine.common.viewBinding
 import com.routine.databinding.FragmentWheelPickerBinding
+import dev.chrisbanes.insetter.Insetter
+import dev.chrisbanes.insetter.Side
 
 class WheelPickerFragment : DialogFragment() {
 
@@ -22,6 +25,15 @@ class WheelPickerFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+
+        Insetter.builder()
+            .applySystemWindowInsetsToPadding(Side.LEFT or Side.RIGHT or Side.BOTTOM)
+            .applyToView(binding.wheelPicker)
+
         val period = arguments?.getInt(ARG_PERIOD, 1)
 
         binding.close.setOnClickListener {
@@ -40,15 +52,6 @@ class WheelPickerFragment : DialogFragment() {
                     putSerializable(ARG_PERIOD_UNIT, arguments?.getSerializable(ARG_PERIOD_UNIT))
                 })
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        dialog?.window?.let {
-            it.setWindowAnimations(R.style.SlideAnimation)
-            it.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            it.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
     }
 }
