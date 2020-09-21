@@ -22,7 +22,7 @@ import com.routine.common.showError
 import com.routine.common.throttleFirst
 import com.routine.common.viewBinding
 import com.routine.data.model.Event
-import com.routine.data.model.Todo
+import com.routine.data.model.TodoListItem
 import com.routine.databinding.FragmentTodosBinding
 import com.routine.databinding.ItemTodoBinding
 import com.routine.vm.AndroidAppViewModel
@@ -75,7 +75,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
 
         viewModel.todosData
             .onEach {
-                adapter?.submitList(it.dataOrNull())
+                adapter?.submitList(it.value)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -134,24 +134,21 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         swipeCallback.isEnabled = !isProgress
     }
 
-    private class TodosAdapter(val coroutineScope: CoroutineScope) : ListAdapter<Any, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<Any>() {
+    private class TodosAdapter(val coroutineScope: CoroutineScope) : ListAdapter<TodoListItem, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<TodoListItem>() {
 
-        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is Todo && newItem is Todo) {
-                return oldItem.id == newItem.id
-            }
-            return true
+        override fun areItemsTheSame(oldItem: TodoListItem, newItem: TodoListItem): Boolean {
+            return ((oldItem is TodoListItem.Todo && newItem is TodoListItem.Todo) || (oldItem is TodoListItem.Separator && newItem is TodoListItem.Separator))
         }
 
-        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
-            if (oldItem is Todo && newItem is Todo) {
-                return (oldItem as Todo) == (newItem as Todo)
+        override fun areContentsTheSame(oldItem: TodoListItem, newItem: TodoListItem): Boolean {
+            if (oldItem is TodoListItem.Todo && newItem is TodoListItem.Todo) {
+                return oldItem == newItem
             }
             return true
         }
     }) {
 
-        val clicksFlow = MutableStateFlow<Event<Todo>?>(null)
+        val clicksFlow = MutableStateFlow<Event<TodoListItem.Todo>?>(null)
 
         companion object {
             const val TYPE_TODO = 0
@@ -178,26 +175,23 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val item = getItem(position)
-            if (item is Todo) {
-                (holder as TodosViewHolder).bind(item)
+            if (item is TodoListItem.Todo && holder is TodosViewHolder) {
+                holder.bind(item)
             }
         }
 
-        override fun getItemViewType(position: Int): Int {
-            val item = getItem(position)
-            return if (item is Todo) {
-                TYPE_TODO
-            } else {
-                TYPE_SEPARATOR
+        override fun getItemViewType(position: Int): Int =
+            when (getItem(position)) {
+                is TodoListItem.Todo -> TYPE_TODO
+                is TodoListItem.Separator -> TYPE_SEPARATOR
             }
-        }
     }
 
     class TodosViewHolder(private val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        var todo: Todo? = null
+        var todo: TodoListItem.Todo? = null
 
-        fun bind(todo: Todo) {
+        fun bind(todo: TodoListItem.Todo) {
             this.todo = todo
             binding.title.text = todo.title
             binding.periodStr.text = todo.periodStr

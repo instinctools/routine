@@ -2,22 +2,17 @@ package com.routine.data.model
 
 import android.graphics.Color
 import com.routine.common.calculateTargetDate
-import com.routine.data.db.entity.TodoEntity
 import com.routine.common.pickColorBetween
 import com.routine.common.prettyPeriod
+import com.routine.data.db.entity.TodoEntity
 import org.joda.time.DateTime
 
-data class Todo(
-        val id: String,
-        val title: String,
-        val periodStr: String,
-        val targetDate: String,
-        val background: Int
-) {
+sealed class TodoListItem {
+
     companion object {
 
-        fun from(list: List<TodoEntity>): List<Any> {
-            val uiTodos = mutableListOf<Any>()
+        fun from(list: List<TodoEntity>): List<TodoListItem> {
+            val uiTodos = mutableListOf<TodoListItem>()
             val currentDate = DateTime().withTimeAtStartOfDay()
             var lastExpiredTodoFound = false
             var lastExpiredTodoIndex = 0
@@ -26,7 +21,7 @@ data class Todo(
                 val todoTime = DateTime(list[i].timestamp)
                 if (!lastExpiredTodoFound && todoTime.isAfter(currentDate)) {
                     if (uiTodos.size > 0) {
-                        uiTodos.add(Any())
+                        uiTodos.add(Separator())
                         lastExpiredTodoIndex = i - 1;
                     }
                     lastExpiredTodoFound = true
@@ -34,22 +29,33 @@ data class Todo(
                 val color = if (lastExpiredTodoFound) pickColorBetween(
                     i - lastExpiredTodoIndex + 1
                 ) else Color.parseColor("#FF0000")
+
                 uiTodos.add(
-                        Todo(
-                                list[i].id,
-                                list[i].title,
-                            prettyPeriod(
-                                list[i].period,
-                                list[i].periodUnit
-                            ),
-                            calculateTargetDate(
-                                list[i].timestamp
-                            ),
-                                color
-                        )
+                    Todo(
+                        list[i].id,
+                        list[i].title,
+                        prettyPeriod(
+                            list[i].period,
+                            list[i].periodUnit
+                        ),
+                        calculateTargetDate(
+                            list[i].timestamp
+                        ),
+                        color
+                    )
                 )
             }
             return uiTodos
         }
     }
+
+    data class Todo(
+        val id: String,
+        val title: String,
+        val periodStr: String,
+        val targetDate: String,
+        val background: Int
+    ): TodoListItem()
+
+    class Separator : TodoListItem()
 }
