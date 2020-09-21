@@ -137,7 +137,8 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
     private class TodosAdapter(val coroutineScope: CoroutineScope) : ListAdapter<TodoListItem, RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<TodoListItem>() {
 
         override fun areItemsTheSame(oldItem: TodoListItem, newItem: TodoListItem): Boolean {
-            return ((oldItem is TodoListItem.Todo && newItem is TodoListItem.Todo) || (oldItem is TodoListItem.Separator && newItem is TodoListItem.Separator))
+            return ((oldItem is TodoListItem.Todo && newItem is TodoListItem.Todo && (oldItem.id == newItem.id)) ||
+                    (oldItem is TodoListItem.Separator && newItem is TodoListItem.Separator))
         }
 
         override fun areContentsTheSame(oldItem: TodoListItem, newItem: TodoListItem): Boolean {
