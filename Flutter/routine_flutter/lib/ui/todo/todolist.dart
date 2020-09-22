@@ -26,6 +26,7 @@ class TodoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.menu),
@@ -109,7 +110,11 @@ class TodoList extends StatelessWidget {
           todoList.sort((a, b) => TimeUtils.compareDateTimes(a.targetDate, b.targetDate));
           List<Widget> widgets = _createItemWidgetsList(buildContext, todoList);
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: Dimens.commonPadding),
+            padding: EdgeInsets.only(
+              left: Dimens.commonPadding,
+              right: Dimens.commonPadding,
+              bottom: Dimens.bottomInset,
+            ),
             itemCount: widgets.length,
             itemBuilder: (context, index) => widgets[index],
           );

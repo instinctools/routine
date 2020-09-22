@@ -17,6 +17,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext buildContext) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           print("authenticationState = $state");
