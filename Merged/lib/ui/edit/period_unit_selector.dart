@@ -89,6 +89,8 @@ class _PeriodUnitSelectorState extends State<PeriodUnitSelector> {
 
   void _showPeriodPicker(BuildContext context, PeriodUnit periodUnit) {
     Picker(
+      height: Dimens.periodPickerHeight,
+      columnPadding: EdgeInsets.only(bottom: Dimens.bottomInset),
       adapter: NumberPickerAdapter(data: [NumberPickerColumn(begin: BEGIN_VALUE, end: END_VALUE, initValue: _presenter.valuesPeriods[periodUnit])]),
       title: Text(
         Strings.editPickerDialogTitle,

@@ -63,6 +63,9 @@ class Dimens {
   static const double splashScreenRetryButtonTextSize = 17;
   static const double splashScreenRetryButtonWidth = 156;
   static const double splashScreenRetryButtonHeight = 50;
+
+  static const double bottomInset = 50;
+  static const double periodPickerHeight = 200;
 }
 
 class ColorsRes {

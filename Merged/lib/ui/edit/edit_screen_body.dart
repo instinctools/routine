@@ -75,7 +75,6 @@ class _EditScreenBodyState extends State<EditScreenBody> {
       child: BlocBuilder<EditScreenBloc, EditScreenState>(
         builder: (context, state) {
           return Scaffold(
-            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: Row(
