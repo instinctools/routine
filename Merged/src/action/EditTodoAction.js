@@ -16,11 +16,12 @@ ActionEditTodo.editTodoTitle = (title) => {
     };
 };
 
-ActionEditTodo.editTodoPeriod = (period) => {
+ActionEditTodo.editTodoPeriod = (period, periodUnit) => {
     console.log(`edit todo period: ${period}`);
     return {
         type: ActionEditTodo.Type.TODO_EDIT_PERIOD,
-        period
+        period,
+        periodUnit
     };
 };
 
@@ -28,15 +29,6 @@ ActionEditTodo.editTodoPeriodUnit = (periodUnit) => {
     console.log(`edit todo period unit: ${periodUnit}`);
     return {
         type: ActionEditTodo.Type.TODO_EDIT_PERIOD_UNIT,
-        periodUnit
-    };
-};
-
-ActionEditTodo.changePeriodSelector = (isVisible, periodUnit) => {
-    console.log(`edit todo change period selector state: ${isVisible}`);
-    return {
-        type: ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR,
-        isVisible,
         periodUnit
     };
 };

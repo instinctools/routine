@@ -125,7 +125,7 @@ export const todoDetailsStyle = StyleSheet.create({
     periodSelectorContainer: {
         flex: 1,
         justifyContent: `flex-end`,
-        backgroundColor: `rgba(0, 0, 0, 0.2)`
+        backgroundColor: `rgba(0, 0, 0, 0.6)`
     },
     periodSelectorCancelWrapper: {
         backgroundColor: `#FFFFFF`,

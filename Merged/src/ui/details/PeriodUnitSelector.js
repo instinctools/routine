@@ -17,12 +17,10 @@ const textUnselected = `#8B8D8E`;
 class PeriodUnitSelector extends React.Component {
 
     render() {
-        console.log(`PeriodUnitSelector render props: ${JSON.stringify(this.props)}`);
         return <View style={{marginTop: 24}}>
             {PeriodsList.map(period => {
                 return createButton(this.props, period)
             })}
-            <PeriodSelector/>
         </View>
     }
 }
@@ -44,7 +42,9 @@ const createButton = (props, period) => {
             <TouchableRipple style={toolbarStyle.menuItem}
                              borderless={true}
                              onPress={()=>{
-                                 props.changePeriodSelector(true, period)
+                                 props.navigation.navigate("PeriodSelector", {
+                                     periodUnit: period
+                                 })
                              }}>
                 <Icon name="md-menu" size={24} color={textColor}/>
             </TouchableRipple>

@@ -3,12 +3,12 @@ import React from 'react';
 import {connect} from "react-redux";
 import {todoDetailsStyle, toolbarStyle} from "../../styles/Styles";
 import {TouchableRipple} from "react-native-paper";
-import PeriodSelector from "./PeriodUnitSelector";
 import ActionEditTodo from "../../action/EditTodoAction";
 import Action from "../../action/todos";
 import {getProgress, showErrorAlert} from "../../utils";
 import {ResetType} from "../../constants";
 import {STATE} from "../../reducer/todos";
+import PeriodUnitSelector from "./PeriodUnitSelector";
 
 const bgSelected = `#77767E`;
 const bgUnSelected = `#EEEDF0`;
@@ -99,7 +99,7 @@ class DetailsScreen extends React.Component {
                             <View style={todoDetailsStyle.separatorLine}/>
                             <Text style={todoDetailsStyle.separatorText}>Repeat every</Text>
                         </View>
-                        <PeriodSelector/>
+                        <PeriodUnitSelector navigation = {this.props.navigation}/>
                     </View>
                 </ScrollView>
                 {editState.isProgress ? getProgress() : null}

@@ -49,7 +49,6 @@ export const TODO_INITIAL_STATE = {
                 period: 1,
                 isSelected: false
             }],
-        periodSelector: null,
         resetType: ResetType.BY_PERIOD,
         success: false
     }
@@ -169,7 +168,7 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                 ...newState.editTodo,
                 periods: newState.editTodo.periods.map((period) => {
                     let currentPeriod = period.period
-                    if (period.periodUnit === newState.editTodo.periodSelector) {
+                    if (period.periodUnit === action.periodUnit) {
                         currentPeriod = action.period
                     }
                     return {...period, period: currentPeriod}
@@ -187,19 +186,6 @@ export const reducer = (state = TODO_INITIAL_STATE, action) => {
                     return {...period, isSelected: isSelected}
                 })
             };
-            break;
-        case ActionEditTodo.Type.TODO_EDIT_CHANGE_PERIOD_SELECTOR:
-            if (!action.isVisible) {
-                newState.editTodo = {
-                    ...newState.editTodo,
-                    periodSelector: null
-                };
-            } else {
-                newState.editTodo = {
-                    ...newState.editTodo,
-                    periodSelector: action.periodUnit
-                };
-            }
             break;
         case ActionEditTodo.Type.TODO_EDIT_CHANGE_RESET_TYPE:
             newState.editTodo = {

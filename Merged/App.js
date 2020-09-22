@@ -10,12 +10,14 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import TodoList from './src/ui/todos/TodoList';
 import TodoDetails from './src/ui/details/details';
 import Splash from "./src/ui/splash/Splash";
+import PeriodSelector from "./src/ui/details/PeriodSelector";
 
 const AppNavigator = createStackNavigator(
     {
         Splash: Splash,
         Items: TodoList,
         Details: TodoDetails,
+        PeriodSelector: PeriodSelector,
     },{
         defaultNavigationOptions: () => ({
             cardStyle: {
