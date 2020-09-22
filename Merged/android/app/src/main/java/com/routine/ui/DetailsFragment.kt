@@ -107,7 +107,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
         viewModel.errorFlow
             .onEach {
                 it.getContentIfNotHandled()?.let {
-                    showError(binding.root, it.error)
+                    binding.root.showError()
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

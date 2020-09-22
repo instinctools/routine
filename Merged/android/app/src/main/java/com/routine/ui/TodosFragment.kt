@@ -82,18 +82,12 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         viewModel.todosStatus
             .sample(400)
             .onEach { data: StoreResponse<List<Any>> ->
-                Timber.i("Response, ${data::class} from: ${data.origin}, data: ${data.dataOrNull()}")
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> adjustVisibility(false)
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
-                        showError(
-                            binding.root,
-                            data.error
-                        ) {
-                            viewModel.refresh()
-                        }
+                        binding.root.showError { viewModel.refresh() }
                     }
                 }
             }
@@ -106,7 +100,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         viewModel.actionTodo
             .onEach {
                 if (it is StoreResponse.Error.Exception){
-                    showError(binding.root, it.error)
+                    binding.root.showError()
                 }
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE

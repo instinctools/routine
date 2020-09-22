@@ -3,11 +3,12 @@
     <string name="app_developer">by Instinctools</string>
 
     <string name="error">An error occurred!</string>
+    <string name="retry">Retry</string>
 
     <!--Splashscreen-->
     <string name="splash_screen_status_progress">Setting up account</string>
     <string name="splash_screen_status_error">An error occurred!</string>
-    <string name="splash_screen_retry">Retry</string>
+    <string name="splash_screen_retry">@string/retry</string>
 
     <!--    Main screen-->
     <string name="main_screen_title_place_holder">Oh! It\'s still empty</string>
@@ -27,6 +28,32 @@
         <item quantity="one">Month</item>
         <item quantity="other">%1$d Months</item>
     </plurals>
+
+    <plurals name="pretty_period_day">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %1$d days</item>
+    </plurals>
+
+    <plurals name="pretty_period_week">
+        <item quantity="one">Every week</item>
+        <item quantity="other">Every %1$d weeks</item>
+    </plurals>
+
+    <plurals name="pretty_period_month">
+        <item quantity="one">Every month</item>
+        <item quantity="other">Every %1$d months</item>
+    </plurals>
+
+    <string name="target_date_empty" />
+    <string name="target_date_today">Today</string>
+    <string name="target_date_tomorrow">Tomorrow</string>
+    <string name="target_date_week">1 week left</string>
+    <string name="target_date_days">%1$d days left</string>
+    <string name="target_date_yesterday">Yesterday</string>
+    <string name="target_date_last_years">%1$d years ago</string>
+    <string name="target_date_last_months">%1$d month ago</string>
+    <string name="target_date_last_weeks">%1$d week ago</string>
+    <string name="target_date_last_days">%1$d days ago</string>
 
     <string name="menu_technology">Technology</string>
     <string name="menu_settings">Settings</string>

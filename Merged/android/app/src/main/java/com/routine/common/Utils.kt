@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.routine.App
 import com.routine.R
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
@@ -12,56 +13,41 @@ import com.routine.data.model.Event
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
-import org.joda.time.Days
 import org.joda.time.Period
 import java.util.*
 import kotlin.math.roundToInt
 
-fun prettyPeriod(period: Int, periodUnit: PeriodUnit): String {
-    return if (period == 1) {
+fun prettyPeriod(period: Int, periodUnit: PeriodUnit): String =
+    App.CONTEXT.resources.getQuantityString(
         when (periodUnit) {
-            PeriodUnit.DAY -> "Every day"
-            PeriodUnit.WEEK -> "Once a week"
-            PeriodUnit.MONTH -> "Once a month"
-        }
-    } else {
-        "Every $period ${periodUnit.name.toLowerCase()}s"
-    }
-}
+            PeriodUnit.DAY -> R.plurals.pretty_period_day
+            PeriodUnit.WEEK -> R.plurals.pretty_period_week
+            PeriodUnit.MONTH -> R.plurals.pretty_period_month
+        }, period, period
+    )
 
 fun calculateTargetDate(date: Date): String {
     val targetDate = DateTime(date)
     val currentDate = DateTime().withTimeAtStartOfDay()
 
-    val diffDays = Days.daysBetween(currentDate, targetDate).days
-
-
-    return when {
-        diffDays == 0 -> "Today"
-        diffDays == 1 -> "Tomorrow"
-        diffDays == 7 -> "1 week left"
-        diffDays in 2..6 -> "$diffDays days left"
-        diffDays == -1 -> "Yesterday"
-        diffDays < -1 -> {
-            val period = Period(targetDate, currentDate)
-            return when {
-                period.years > 0 -> {
-                    "${period.years} years ago"
-                }
-                period.months > 0 -> {
-                    "${period.months} months ago"
-                }
-                period.weeks > 0 -> {
-                    "${period.weeks} weeks ago"
-                }
-                period.days > 0 -> {
-                    "${period.days} days ago"
-                }
-                else -> ""
+    val period = Period(currentDate, targetDate)
+    val (resId, quantity) = when {
+        period.days == 0 -> Pair(R.string.target_date_today, 0)
+        period.days == 1 -> Pair(R.string.target_date_tomorrow, 0)
+        period.days == 7 -> Pair(R.string.target_date_week, 0)
+        period.days in 2..6 -> Pair(R.string.target_date_days, period.days)
+        period.days == -1 -> Pair(R.string.target_date_yesterday, 0)
+        period.days < -1 -> {
+            when {
+                period.years < 0 -> Pair(R.string.target_date_last_years, Math.abs(period.years))
+                period.months < 0 -> Pair(R.string.target_date_last_months, Math.abs(period.months))
+                period.weeks < 0 -> Pair(R.string.target_date_last_weeks, Math.abs(period.weeks))
+                else -> Pair(R.string.target_date_last_days, period.days)
             }
         }
-        else -> ""
+        else -> Pair(R.string.target_date_empty, 0)
     }
+    return App.CONTEXT.getString(resId, quantity)
 }
 
 fun pickColorBetween(index: Int, maxIndex: Int = 15, color1: IntArray = intArrayOf(255, 190, 67), color2: IntArray = intArrayOf(255, 57, 55)): Int {
@@ -103,11 +89,11 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
     }
 }
 
-fun showError(view: View, throwable: Throwable, block: (() -> Unit)? = null) {
+fun View.showError(block: (() -> Unit)? = null) {
     val length = if (block != null) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
-    val snackbar = Snackbar.make(view, R.string.error, length)
+    val snackbar = Snackbar.make(this, R.string.error, length)
     if (block != null) {
-        snackbar.setAction("Retry") {
+        snackbar.setAction(resources.getString(R.string.retry)) {
             block.invoke()
         }
     }
