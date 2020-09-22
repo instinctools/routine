@@ -13,6 +13,7 @@ import com.routine.data.model.Event
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
+import org.joda.time.Days
 import org.joda.time.Period
 import java.util.*
 import kotlin.math.roundToInt
@@ -31,19 +32,22 @@ fun calculateTargetDate(date: Date): String {
     val currentDate = DateTime().withTimeAtStartOfDay()
 
     val period = Period(currentDate, targetDate)
+    val diffDays = Days.daysBetween(currentDate, targetDate).days
+
     val (resId, quantity) = when {
-        period.days == 0 -> Pair(R.string.target_date_today, 0)
-        period.days == 1 -> Pair(R.string.target_date_tomorrow, 0)
-        period.days == 7 -> Pair(R.string.target_date_week, 0)
-        period.days in 2..6 -> Pair(R.string.target_date_days, period.days)
-        period.days == -1 -> Pair(R.string.target_date_yesterday, 0)
-        period.days < -1 -> {
-            when {
-                period.years < 0 -> Pair(R.string.target_date_last_years, Math.abs(period.years))
-                period.months < 0 -> Pair(R.string.target_date_last_months, Math.abs(period.months))
-                period.weeks < 0 -> Pair(R.string.target_date_last_weeks, Math.abs(period.weeks))
-                else -> Pair(R.string.target_date_last_days, period.days)
+        diffDays == 0 -> Pair(R.string.target_date_today, 0)
+        diffDays == 1 -> Pair(R.string.target_date_tomorrow, 0)
+        diffDays == 7 -> Pair(R.string.target_date_week, 0)
+        diffDays in 2..6 -> Pair(R.string.target_date_days, diffDays)
+        diffDays == -1 -> Pair(R.string.target_date_yesterday, 0)
+        diffDays < -1 -> {
+            val (resId, quantity) = when {
+                period.years < 0 -> Pair(R.plurals.target_date_last_years, Math.abs(period.years))
+                period.months < 0 -> Pair(R.plurals.target_date_last_months, Math.abs(period.months))
+                period.weeks < 0 -> Pair(R.plurals.target_date_last_weeks, Math.abs(period.weeks))
+                else -> Pair(R.plurals.target_date_last_days, Math.abs(period.days))
             }
+            return App.CONTEXT.resources.getQuantityString(resId, quantity, quantity)
         }
         else -> Pair(R.string.target_date_empty, 0)
     }
