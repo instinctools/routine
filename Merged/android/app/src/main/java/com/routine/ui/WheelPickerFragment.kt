@@ -15,13 +15,9 @@ import com.routine.databinding.FragmentWheelPickerBinding
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
 
-class WheelPickerFragment : DialogFragment() {
+class WheelPickerFragment : DialogFragment(R.layout.fragment_wheel_picker) {
 
     private val binding: FragmentWheelPickerBinding by viewBinding(FragmentWheelPickerBinding::bind)
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_wheel_picker, null, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
