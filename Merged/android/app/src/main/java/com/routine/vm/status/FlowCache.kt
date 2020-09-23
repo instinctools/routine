@@ -59,6 +59,7 @@ private class Delegate<T: Any, R : Any>(
                         }
                         .flatMapLatest { function(it) }
                         .onEach { cache.value = it }
+                        .onEach { flow.value = null }
                         .onCompletion { LazyRegistry.unregister(thisRef, actionKey) }
                         .launchIn(scope)
 
