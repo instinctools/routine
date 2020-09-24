@@ -14,8 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.dropbox.android.external.store4.StoreResponse
+import com.google.android.material.snackbar.Snackbar
 import com.routine.R
-import com.routine.common.showError
+import com.routine.common.applyTextAndVisibility
+import com.routine.common.lazyOnViewLifecycle
 import com.routine.common.viewBinding
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
@@ -49,6 +51,13 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val viewModel by viewModels<DetailsViewModel> {
         DetailsViewModelFactory(args.EXTRAID)
     }
+
+    private val snackbar: Snackbar by lazyOnViewLifecycle ({
+        Snackbar.make(binding.root, "", Snackbar.LENGTH_LONG)
+            .apply { anchorView =  binding.messageAnchor}
+    }, {
+        it.dismiss()
+    })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,7 +120,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
         viewModel.errorFlow
             .onEach {
                 it.getContentIfNotHandled()?.let {
-                    binding.messageAnchor.showError()
+                    snackbar.applyTextAndVisibility(getString(R.string.error))
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

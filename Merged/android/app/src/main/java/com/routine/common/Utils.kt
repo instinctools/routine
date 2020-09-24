@@ -93,18 +93,6 @@ suspend fun <T> MutableLiveData<T>.push(data: T) {
     }
 }
 
-fun View.showError(block: (() -> Unit)? = null) {
-    val length = if (block != null) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
-    val snackbar = Snackbar.make(this, R.string.error, length)
-    if (block != null) {
-        snackbar.setAction(resources.getString(R.string.retry)) {
-            block.invoke()
-        }
-    }
-    snackbar.anchorView = this
-    snackbar.show()
-}
-
 fun FirebaseAuth.userIdOrEmpty(): String = currentUser?.uid ?: ""
 
 fun <T> Flow<T>.throttleFirst(periodMillis: Long): Flow<T> {

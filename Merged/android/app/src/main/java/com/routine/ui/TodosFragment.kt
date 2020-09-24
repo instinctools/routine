@@ -15,12 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
 import com.dropbox.android.external.store4.StoreResponse
+import com.google.android.material.snackbar.Snackbar
 import com.routine.R
+import com.routine.common.*
 import com.routine.common.home.vm.HomeViewModel
-import com.routine.common.launchIn
-import com.routine.common.showError
-import com.routine.common.throttleFirst
-import com.routine.common.viewBinding
 import com.routine.data.model.Event
 import com.routine.data.model.TodoListItem
 import com.routine.databinding.FragmentTodosBinding
@@ -46,6 +44,15 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
     private val binding by viewBinding(FragmentTodosBinding::bind)
     private var adapter: TodosAdapter? = null
     private val swipeCallback by lazy { SwipeCallback(requireActivity()) }
+
+
+    private val snackbar: Snackbar by lazyOnViewLifecycle ({
+        Snackbar.make(binding.root, "", Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.retry) { viewModel.refresh() }
+            .apply { anchorView =  binding.messageAnchor}
+    }, {
+        it.dismiss()
+    })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -89,9 +96,9 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
                 when (data) {
                     is StoreResponse.Loading -> adjustVisibility(true)
                     is StoreResponse.Data -> adjustVisibility(false)
-                    is StoreResponse.Error.Exception -> {
-                        binding.progress.visibility = View.GONE
-                        binding.messageAnchor.showError { viewModel.refresh() }
+                    is StoreResponse.Error -> {
+                        adjustVisibility(false)
+                        snackbar.applyTextAndVisibility(getString(R.string.error))
                     }
                 }
             }
@@ -104,7 +111,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         viewModel.actionTodo
             .onEach {
                 if (it is StoreResponse.Error.Exception){
-                    binding.messageAnchor.showError()
+                    snackbar.applyTextAndVisibility(getString(R.string.error))
                 }
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
@@ -128,7 +135,9 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         binding.content.visibility = if (isProgress && adapter?.itemCount == 0) View.GONE else View.VISIBLE
         binding.placeHolderGroup.visibility = if (adapter?.itemCount == 0) View.VISIBLE else View.GONE
         binding.refresh.isRefreshing = isProgress && (adapter?.let { it.itemCount > 0 } == true)
-
+        if (isProgress){
+            snackbar.dismiss()
+        }
         swipeCallback.isEnabled = !isProgress
     }
 
