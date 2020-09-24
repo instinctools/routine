@@ -53,6 +53,10 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Insetter.builder()
+            .applySystemGestureInsetsToMargin(Side.BOTTOM)
+            .applyToView(binding.messageAnchor)
+
         viewModel.titleFlow
             .onEach {
                 if (binding.text.text.toString() != it) {
@@ -107,7 +111,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
         viewModel.errorFlow
             .onEach {
                 it.getContentIfNotHandled()?.let {
-                    binding.root.showError()
+                    binding.messageAnchor.showError()
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

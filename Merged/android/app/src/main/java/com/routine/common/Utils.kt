@@ -101,6 +101,7 @@ fun View.showError(block: (() -> Unit)? = null) {
             block.invoke()
         }
     }
+    snackbar.anchorView = this
     snackbar.show()
 }
 

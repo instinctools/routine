@@ -54,6 +54,10 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
             .applySystemWindowInsetsToPadding(Side.BOTTOM)
             .applyToView(binding.content)
 
+        Insetter.builder()
+            .applySystemGestureInsetsToMargin(Side.BOTTOM)
+            .applyToView(binding.messageAnchor)
+
         adapter = TodosAdapter(viewLifecycleOwner.lifecycleScope)
 
         binding.toolbar.setNavigationOnClickListener {
@@ -87,7 +91,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
                     is StoreResponse.Data -> adjustVisibility(false)
                     is StoreResponse.Error.Exception -> {
                         binding.progress.visibility = View.GONE
-                        binding.root.showError { viewModel.refresh() }
+                        binding.messageAnchor.showError { viewModel.refresh() }
                     }
                 }
             }
@@ -100,7 +104,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         viewModel.actionTodo
             .onEach {
                 if (it is StoreResponse.Error.Exception){
-                    binding.root.showError()
+                    binding.messageAnchor.showError()
                 }
                 swipeCallback.isEnabled = it !is StoreResponse.Loading
                 binding.progress.visibility = if (it !is StoreResponse.Loading) View.GONE else View.VISIBLE
