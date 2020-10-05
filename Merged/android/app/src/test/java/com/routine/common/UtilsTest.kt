@@ -1,12 +1,15 @@
 package com.routine.common
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.routine.R
 import com.routine.data.db.entity.PeriodUnit
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.*
 
+@RunWith(AndroidJUnit4::class)
 class UtilsTest {
 
     @Test
@@ -123,6 +126,16 @@ class UtilsTest {
             assertEquals(result.resId, R.plurals.target_date_last_days)
             assertEquals(result.args, i)
             assertEquals(result.quantity, i)
+        }
+    }
+
+    @Test
+    fun pickColorBetween(){
+        val colors = intArrayOf(-50889, -48584, -46279, -43975, -41926, -39621, -37316, -35011, -32707,
+            -30402, -28097, -25792, -23743, -21439, -19134, -16829, -16829, -16829, -16829, -16829)
+        for (i in 0..19) {
+            val color = pickColorBetween(i)
+            assertEquals(color, colors[i])
         }
     }
 }
