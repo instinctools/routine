@@ -1,12 +1,40 @@
 package com.routine.common
 
 import com.routine.R
+import com.routine.data.db.entity.PeriodUnit
 import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
 
 class UtilsTest {
+
+    @Test
+    fun prettyPeriod_day(){
+        val period = Random().nextInt()
+        val result = getPrettyPeriod(period, PeriodUnit.DAY)
+        assertEquals(result.resId, R.plurals.pretty_period_day)
+        assertEquals(result.args, period)
+        assertEquals(result.quantity, period)
+    }
+
+    @Test
+    fun prettyPeriod_week(){
+        val period = Random().nextInt()
+        val result = getPrettyPeriod(period, PeriodUnit.WEEK)
+        assertEquals(result.resId, R.plurals.pretty_period_week)
+        assertEquals(result.args, period)
+        assertEquals(result.quantity, period)
+    }
+
+    @Test
+    fun prettyPeriod_month(){
+        val period = Random().nextInt()
+        val result = getPrettyPeriod(period, PeriodUnit.MONTH)
+        assertEquals(result.resId, R.plurals.pretty_period_month)
+        assertEquals(result.args, period)
+        assertEquals(result.quantity, period)
+    }
 
     @Test
     fun calculateTargetDate_today() {

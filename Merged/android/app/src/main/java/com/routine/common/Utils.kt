@@ -3,12 +3,11 @@ package com.routine.common
 import android.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.routine.App
 import com.routine.R
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
 import com.routine.data.model.Event
-import com.routine.data.model.TodoListItem
+import com.routine.data.model.ResStringWrapper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
@@ -17,16 +16,14 @@ import org.joda.time.Period
 import java.util.*
 import kotlin.math.roundToInt
 
-fun prettyPeriod(period: Int, periodUnit: PeriodUnit): String =
-    App.CONTEXT.resources.getQuantityString(
-        when (periodUnit) {
-            PeriodUnit.DAY -> R.plurals.pretty_period_day
-            PeriodUnit.WEEK -> R.plurals.pretty_period_week
-            PeriodUnit.MONTH -> R.plurals.pretty_period_month
-        }, period, period
-    )
+fun getPrettyPeriod(period: Int, periodUnit: PeriodUnit): ResStringWrapper =
+    when (periodUnit) {
+        PeriodUnit.DAY -> ResStringWrapper(R.plurals.pretty_period_day, period, period)
+        PeriodUnit.WEEK -> ResStringWrapper(R.plurals.pretty_period_week, period, period)
+        PeriodUnit.MONTH -> ResStringWrapper(R.plurals.pretty_period_month, period, period)
+    }
 
-fun calculateTargetDate(date: Date): TodoListItem.TargetDate {
+fun calculateTargetDate(date: Date): ResStringWrapper {
     val targetDate = DateTime(date).withTimeAtStartOfDay()
     val currentDate = DateTime().withTimeAtStartOfDay()
 
@@ -34,11 +31,11 @@ fun calculateTargetDate(date: Date): TodoListItem.TargetDate {
     val diffDays = Days.daysBetween(currentDate, targetDate).days
 
     return when {
-        diffDays == 0 -> TodoListItem.TargetDate(R.string.target_date_today, null, 0)
-        diffDays == 1 -> TodoListItem.TargetDate(R.string.target_date_tomorrow, null, 0)
-        diffDays == 7 -> TodoListItem.TargetDate(R.string.target_date_week, null, 0)
-        diffDays in 2..6 -> TodoListItem.TargetDate(R.string.target_date_days, diffDays, 0)
-        diffDays == -1 -> TodoListItem.TargetDate(R.string.target_date_yesterday, null, 0)
+        diffDays == 0 -> ResStringWrapper(R.string.target_date_today, null, 0)
+        diffDays == 1 -> ResStringWrapper(R.string.target_date_tomorrow, null, 0)
+        diffDays == 7 -> ResStringWrapper(R.string.target_date_week, null, 0)
+        diffDays in 2..6 -> ResStringWrapper(R.string.target_date_days, diffDays, 0)
+        diffDays == -1 -> ResStringWrapper(R.string.target_date_yesterday, null, 0)
         diffDays < -1 -> {
             val (resId, quantity) = when {
                 period.years < 0 -> Pair(R.plurals.target_date_last_years, Math.abs(period.years))
@@ -46,9 +43,9 @@ fun calculateTargetDate(date: Date): TodoListItem.TargetDate {
                 period.weeks < 0 -> Pair(R.plurals.target_date_last_weeks, Math.abs(period.weeks))
                 else -> Pair(R.plurals.target_date_last_days, Math.abs(period.days))
             }
-            TodoListItem.TargetDate(resId, quantity, quantity)
+            ResStringWrapper(resId, quantity, quantity)
         }
-        else -> TodoListItem.TargetDate(R.string.target_date_empty, null, 0)
+        else -> ResStringWrapper(R.string.target_date_empty, null, 0)
     }
 }
 
