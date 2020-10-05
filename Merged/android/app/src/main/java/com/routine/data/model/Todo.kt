@@ -1,6 +1,7 @@
 package com.routine.data.model
 
 import android.graphics.Color
+import com.routine.App
 import com.routine.common.calculateTargetDate
 import com.routine.common.pickColorBetween
 import com.routine.common.prettyPeriod
@@ -53,9 +54,11 @@ sealed class TodoListItem {
         val id: String,
         val title: String,
         val periodStr: String,
-        val targetDate: String,
+        val targetDate: TargetDate,
         val background: Int
     ): TodoListItem()
+
+    data class TargetDate(val resId: Int, val args: Any?, val quantity: Int)
 
     class Separator : TodoListItem()
 }

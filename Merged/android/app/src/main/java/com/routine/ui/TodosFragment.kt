@@ -203,7 +203,19 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
             this.todo = todo
             binding.title.text = todo.title
             binding.periodStr.text = todo.periodStr
-            binding.targetDate.text = todo.targetDate
+            binding.targetDate.text = if (todo.targetDate.quantity > 0) {
+                if (todo.targetDate.args != null) {
+                    itemView.resources.getQuantityString(todo.targetDate.resId, todo.targetDate.quantity, todo.targetDate.args)
+                } else {
+                    itemView.resources.getQuantityString(todo.targetDate.resId, todo.targetDate.quantity)
+                }
+            } else {
+                if (todo.targetDate.args != null) {
+                    itemView.resources.getString(todo.targetDate.resId, todo.targetDate.args)
+                } else {
+                    itemView.resources.getString(todo.targetDate.resId)
+                }
+            }
 
             val drawable = binding.root.background.mutate() as GradientDrawable
             drawable.setColor(todo.background)

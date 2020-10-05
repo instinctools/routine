@@ -1,15 +1,14 @@
 package com.routine.common
 
 import android.graphics.Color
-import android.view.View
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.routine.App
 import com.routine.R
 import com.routine.data.db.entity.PeriodUnit
 import com.routine.data.db.entity.ResetType
 import com.routine.data.model.Event
+import com.routine.data.model.TodoListItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.joda.time.DateTime
@@ -27,19 +26,19 @@ fun prettyPeriod(period: Int, periodUnit: PeriodUnit): String =
         }, period, period
     )
 
-fun calculateTargetDate(date: Date): String {
-    val targetDate = DateTime(date)
+fun calculateTargetDate(date: Date): TodoListItem.TargetDate {
+    val targetDate = DateTime(date).withTimeAtStartOfDay()
     val currentDate = DateTime().withTimeAtStartOfDay()
 
     val period = Period(currentDate, targetDate)
     val diffDays = Days.daysBetween(currentDate, targetDate).days
 
-    val (resId, quantity) = when {
-        diffDays == 0 -> Pair(R.string.target_date_today, 0)
-        diffDays == 1 -> Pair(R.string.target_date_tomorrow, 0)
-        diffDays == 7 -> Pair(R.string.target_date_week, 0)
-        diffDays in 2..6 -> Pair(R.string.target_date_days, diffDays)
-        diffDays == -1 -> Pair(R.string.target_date_yesterday, 0)
+    return when {
+        diffDays == 0 -> TodoListItem.TargetDate(R.string.target_date_today, null, 0)
+        diffDays == 1 -> TodoListItem.TargetDate(R.string.target_date_tomorrow, null, 0)
+        diffDays == 7 -> TodoListItem.TargetDate(R.string.target_date_week, null, 0)
+        diffDays in 2..6 -> TodoListItem.TargetDate(R.string.target_date_days, diffDays, 0)
+        diffDays == -1 -> TodoListItem.TargetDate(R.string.target_date_yesterday, null, 0)
         diffDays < -1 -> {
             val (resId, quantity) = when {
                 period.years < 0 -> Pair(R.plurals.target_date_last_years, Math.abs(period.years))
@@ -47,11 +46,10 @@ fun calculateTargetDate(date: Date): String {
                 period.weeks < 0 -> Pair(R.plurals.target_date_last_weeks, Math.abs(period.weeks))
                 else -> Pair(R.plurals.target_date_last_days, Math.abs(period.days))
             }
-            return App.CONTEXT.resources.getQuantityString(resId, quantity, quantity)
+            TodoListItem.TargetDate(resId, quantity, quantity)
         }
-        else -> Pair(R.string.target_date_empty, 0)
+        else -> TodoListItem.TargetDate(R.string.target_date_empty, null, 0)
     }
-    return App.CONTEXT.getString(resId, quantity)
 }
 
 fun pickColorBetween(index: Int, maxIndex: Int = 15, color1: IntArray = intArrayOf(255, 190, 67), color2: IntArray = intArrayOf(255, 57, 55)): Int {
