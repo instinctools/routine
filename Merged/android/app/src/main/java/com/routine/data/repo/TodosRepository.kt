@@ -100,20 +100,11 @@ object TodosRepository {
     val resetTodoStore = StoreBuilder.from(Fetcher.of<String, Boolean> {
         val todoEntity = database().todos().getTodo(it)
 
-        if (todoEntity.resetType == ResetType.BY_DATE){
-            val timestamp = DateTime(todoEntity.timestamp)
-            val checkDate = when (todoEntity.periodUnit) {
-                PeriodUnit.DAY -> timestamp.minusDays(todoEntity.period)
-                PeriodUnit.WEEK -> timestamp.minusWeeks(todoEntity.period)
-                PeriodUnit.MONTH -> timestamp.minusMonths(todoEntity.period)
-            }
-
-            if (checkDate.isAfter(DateTime().withTimeAtStartOfDay())){
-                return@of true
-            }
-        }
-
         val newtodoEntity = todoEntity.run { copy(timestamp = calculateTimestamp(period, periodUnit, resetType, timestamp)) }
+
+        if (todoEntity == newtodoEntity) {
+            return@of true
+        }
 
         Firebase.firestore
             .collection("users")

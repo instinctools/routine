@@ -68,6 +68,20 @@ fun calculateTimestamp(
     resetType: ResetType = ResetType.BY_PERIOD,
     currentTimestamp: Date? = null
 ): Date {
+
+    if (resetType == ResetType.BY_DATE && currentTimestamp != null) {
+        val timestamp = DateTime(currentTimestamp)
+        val checkDate = when (periodUnit) {
+            PeriodUnit.DAY -> timestamp.minusDays(period)
+            PeriodUnit.WEEK -> timestamp.minusWeeks(period)
+            PeriodUnit.MONTH -> timestamp.minusMonths(period)
+        }
+
+        if (checkDate.isAfter(DateTime().withTimeAtStartOfDay())) {
+            return currentTimestamp
+        }
+    }
+
     val dateTime = if (resetType == ResetType.BY_PERIOD || currentTimestamp == null || DateTime(currentTimestamp).isBefore(DateTime().withTimeAtStartOfDay())) {
         DateTime()
     } else {
