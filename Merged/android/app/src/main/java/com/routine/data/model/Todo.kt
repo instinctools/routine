@@ -3,7 +3,7 @@ package com.routine.data.model
 import android.graphics.Color
 import com.routine.common.calculateTargetDate
 import com.routine.common.pickColorBetween
-import com.routine.common.prettyPeriod
+import com.routine.common.getPrettyPeriod
 import com.routine.data.db.entity.TodoEntity
 import org.joda.time.DateTime
 
@@ -34,7 +34,7 @@ sealed class TodoListItem {
                     Todo(
                         list[i].id,
                         list[i].title,
-                        prettyPeriod(
+                        getPrettyPeriod(
                             list[i].period,
                             list[i].periodUnit
                         ),
@@ -52,10 +52,11 @@ sealed class TodoListItem {
     data class Todo(
         val id: String,
         val title: String,
-        val periodStr: String,
-        val targetDate: String,
+        val period: ResStringWrapper,
+        val targetDate: ResStringWrapper,
         val background: Int
     ): TodoListItem()
 
     class Separator : TodoListItem()
 }
+

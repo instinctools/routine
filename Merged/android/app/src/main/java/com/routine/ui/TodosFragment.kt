@@ -31,7 +31,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import reactivecircus.flowbinding.android.view.clicks
-import timber.log.Timber
 import kotlin.math.abs
 
 @ExperimentalStdlibApi
@@ -202,8 +201,8 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
         fun bind(todo: TodoListItem.Todo) {
             this.todo = todo
             binding.title.text = todo.title
-            binding.periodStr.text = todo.periodStr
-            binding.targetDate.text = todo.targetDate
+            binding.periodStr.text = todo.period.getString(itemView.resources)
+            binding.targetDate.text = todo.targetDate.getString(itemView.resources)
 
             val drawable = binding.root.background.mutate() as GradientDrawable
             drawable.setColor(todo.background)
