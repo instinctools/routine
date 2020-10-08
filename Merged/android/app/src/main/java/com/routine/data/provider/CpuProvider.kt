@@ -2,7 +2,6 @@ package com.routine.data.provider
 
 import android.annotation.SuppressLint
 import android.os.Build
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,23 +11,23 @@ import java.io.FileFilter
 import java.io.RandomAccessFile
 import java.util.regex.Pattern
 import kotlin.coroutines.coroutineContext
+import kotlin.math.roundToInt
 
 private const val CPU_INFO_DIR = "/sys/devices/system/cpu/"
 
 @SuppressLint("ObsoleteSdkInt")
 class CpuProvider {
 
-    @InternalCoroutinesApi
-    fun cpuFlow(delay: Long): Flow<List<CpuCore>> =
+    fun cpuFlow(delay: Long): Flow<HardwareInfo.Cpu> =
         flow {
             val numberCores = getNumberOfCores()
-            val cores = mutableListOf<CpuCore>()
             while (coroutineContext.isActive) {
+                val cores = mutableListOf<CpuCore>()
                 for (i in 0 until numberCores) {
                     val (minFreq, maxFreq) = getMinMaxFreq(i)
                     cores.add(CpuCore(minFreq, maxFreq, getCurrentFreq(i)))
                 }
-                emit(cores)
+                emit(HardwareInfo.Cpu(cores))
                 delay(delay)
             }
         }

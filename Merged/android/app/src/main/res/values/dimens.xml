@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_horizontal">16dp</dimen>
+    <dimen name="margin_vertical">16dp</dimen>
     <dimen name="margin_horizontal_double">32dp</dimen>
     <dimen name="swipeable_btn_width">96dp</dimen>
     <dimen name="swipeable_activate_distance">125dp</dimen>
@@ -10,4 +11,6 @@
     <!--splash_screen-->
     <dimen name="status_message_margin">32dp</dimen>
 
+    <!--Home-->
+    <dimen name="home_profiler_text">16sp</dimen>
 </resources>

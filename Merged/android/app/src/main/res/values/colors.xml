@@ -4,4 +4,8 @@
     <color name="period_tint">#1f000000</color>
 
     <color name="std_brown">#835D51</color>
+
+    <!--Home-->
+    <color name="home_profiler_text">#FFDA00</color>
+    <color name="home_profiler_bg">#75000000</color>
 </resources>

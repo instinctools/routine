@@ -3,7 +3,6 @@ package com.routine.data.provider
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.os.Build
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,8 +16,7 @@ class MemoryProvider(private val activityManager: ActivityManager) {
     private val memoryInfo = ActivityManager.MemoryInfo()
 
     @SuppressLint("ObsoleteSdkInt")
-    @InternalCoroutinesApi
-    private fun memoryFlow(delay: Long): Flow<Memory> =
+    fun memoryFlow(delay: Long): Flow<HardwareInfo.Memory> =
         flow {
             while (coroutineContext.isActive) {
                 activityManager.getMemoryInfo(memoryInfo)
@@ -28,7 +26,7 @@ class MemoryProvider(private val activityManager: ActivityManager) {
                 } else {
                     getTotalRamForOldApi()
                 }
-                emit(Memory(totalMemory, memoryInfo.availMem, memoryInfo.threshold))
+                emit(HardwareInfo.Memory(totalMemory, memoryInfo.availMem, memoryInfo.threshold))
                 delay(delay)
             }
         }
@@ -62,8 +60,3 @@ class MemoryProvider(private val activityManager: ActivityManager) {
     }
 }
 
-data class Memory(
-    val totalMemory: Long,
-    val availableMemory: Long,
-    val threshold: Long
-)

@@ -25,12 +25,8 @@ import dev.chrisbanes.insetter.Side
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.lang.ref.WeakReference
 
 @ExperimentalCoroutinesApi
@@ -49,9 +45,20 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        Insetter.setEdgeToEdgeSystemUiFlags(binding.root, true)
+
+        Insetter.builder()
+            .applySystemWindowInsetsToMargin(Side.BOTTOM)
+            .applyToView(binding.homeProfiler)
+
+        viewModel.hardwareInfo
+            .flowOn(Dispatchers.Default)
+            .onEach {
+                binding.homeProfiler.setText(
+                    getString(R.string.home_profiler, it.first.cpuUsagePercent, it.second.memoryInUseMb, it.third.fps)
+                )
+            }
+            .launchIn(lifecycleScope)
 
         binding.menu.adapter = adapter
 

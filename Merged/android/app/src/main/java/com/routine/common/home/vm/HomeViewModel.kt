@@ -1,6 +1,7 @@
 package com.routine.common.home.vm
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.preference.PreferenceManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,26 +10,35 @@ import com.routine.common.home.menu.Menu
 import com.routine.common.home.menu.MenuData
 import com.routine.common.home.menu.MenuData.MenuTechnology
 import com.routine.data.model.Event
+import com.routine.data.provider.CpuProvider
+import com.routine.data.provider.FpsProvider
+import com.routine.data.provider.MemoryProvider
 import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-
-const val PREF_MENU = "MENU"
 
 @ExperimentalCoroutinesApi
 class HomeViewModel : ViewModel() {
 
     private val menus_ = MutableStateFlow(listOf(MenuData.HeaderMenu(), MenuTechnology(false, Menu.ANDROID_NATIVE)))
     private val menuClicks_ = MutableStateFlow(Event(Any()))
+    private val profilingEnabled_ = MutableStateFlow(true)
 
     val menus: Flow<List<MenuData>> = menus_
     val menuClicks: Flow<Event<Any>> = menuClicks_
+
+    private val cpuProvider = CpuProvider()
+    private val memoryProvider = MemoryProvider(App.CONTEXT.getSystemService(ActivityManager::class.java))
+    private val fpsProvider = FpsProvider()
+
+    companion object {
+        const val PREF_MENU = "MENU"
+        const val PROFILER = "PROFILER"
+    }
 
     @FlowPreview
     val content by wrapWithAction(initialAction = Any()) {
@@ -45,6 +55,25 @@ class HomeViewModel : ViewModel() {
                     emit(Event(selectedMenu))
                 }
         }
+    }
+
+    @FlowPreview
+    val hardwareInfo by wrapWithAction(PROFILER, initialAction = Any()) {
+        profilingEnabled_
+            .flatMapLatest {
+                if (it) {
+                    combine(
+                        // TODO: 08.10.2020 Check errors
+                        cpuProvider.cpuFlow(1000),
+                        memoryProvider.memoryFlow(1000),
+                        fpsProvider.fpsFlow(1000)
+                    ) { cpu, memory, fps ->
+                        Triple(cpu, memory, fps)
+                    }
+                } else {
+                    emptyFlow()
+                }
+            }
     }
 
     @FlowPreview

@@ -5,6 +5,8 @@
     <string name="error">An error occurred!</string>
     <string name="retry">Retry</string>
 
+    <!--Home-->
+    <string name="home_profiler">CPU: %1$d%%  Memory in use: %2$dmb  FPS: %3$d</string>
     <!--Splashscreen-->
     <string name="splash_screen_status_progress">Setting up account</string>
     <string name="splash_screen_status_error">An error occurred!</string>
