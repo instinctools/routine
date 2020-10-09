@@ -1,5 +1,6 @@
 package com.routine.vm
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.StoreRequest
 import com.routine.data.repo.TodosRepository
@@ -9,7 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
 @ExperimentalCoroutinesApi
-class SplashViewModel : ViewModel() {
+class SplashViewModel @ViewModelInject constructor(private val todosRepository: TodosRepository): ViewModel() {
 
     companion object {
         const val ACTION_LOGIN = "ACTION_LOGIN"
@@ -23,7 +24,7 @@ class SplashViewModel : ViewModel() {
     @ExperimentalStdlibApi
     @FlowPreview
     val login by wrapWithAction(ACTION_LOGIN, Any()) {
-        TodosRepository
+        todosRepository
             .loginStore
             .stream(StoreRequest.fresh(Any()))
     }

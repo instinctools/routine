@@ -1,6 +1,5 @@
 package com.routine
 
-import android.app.Application
 import android.content.Context
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
@@ -10,10 +9,12 @@ import com.facebook.soloader.SoLoader
 import com.routine.common.react.ReactAppPackage
 import com.routine.schedulenotification.ScheduleNotification
 import com.routine.schedulenotification.react.ScheduleNotificationPackage
+import dagger.hilt.android.HiltAndroidApp
 import io.flutter.app.FlutterApplication
 import timber.log.Timber
 import java.lang.reflect.InvocationTargetException
 
+@HiltAndroidApp
 class App : FlutterApplication(), ReactApplication {
 
     companion object {

@@ -20,7 +20,7 @@ import java.util.*
 @FlowPreview
 @ExperimentalStdlibApi
 @ExperimentalCoroutinesApi
-class  DetailsViewModel(val id: String?) : ViewModel() {
+class  DetailsViewModel(private val id: String?, private val todosRepository: TodosRepository) : ViewModel() {
 
     companion object {
         const val GET_TODO = "GET_TODO"
@@ -40,7 +40,7 @@ class  DetailsViewModel(val id: String?) : ViewModel() {
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
     val todo by wrapWithAction(GET_TODO, id ?: "") {
-        TodosRepository.getTodoStore
+        todosRepository.getTodoStore
             .stream(StoreRequest.cached(it, false))
             .onEach {
                 if (it is StoreResponse.Data) {
@@ -70,7 +70,7 @@ class  DetailsViewModel(val id: String?) : ViewModel() {
                 val period = it.third?.period ?: 1
                 val periodUnit = it.third?.periodUnit ?: PeriodUnit.DAY
 
-                TodosRepository.addTodoStore.stream(
+                todosRepository.addTodoStore.stream(
                     StoreRequest.fresh(
                         TodoEntity(
                             id ?: UUID.randomUUID().toString(),

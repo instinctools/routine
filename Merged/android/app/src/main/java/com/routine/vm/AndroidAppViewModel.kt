@@ -1,5 +1,6 @@
 package com.routine.vm
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.merge
 @FlowPreview
 @ExperimentalCoroutinesApi
 @ExperimentalStdlibApi
-class AndroidAppViewModel : ViewModel() {
+class AndroidAppViewModel @ViewModelInject constructor(private val todosRepository: TodosRepository): ViewModel() {
 
     companion object {
         const val GET_TODOS = "GET_TODOS"
@@ -25,17 +26,17 @@ class AndroidAppViewModel : ViewModel() {
     }
 
     private val todos by wrapWithAction(GET_TODOS, Any()) {
-        TodosRepository.todosStore
+        todosRepository.todosStore
             .stream(StoreRequest.cached(Pair("", true), true))
     }
 
     private val removeTodo by wrapWithAction<String, StoreResponse<Boolean>>(REMOVE_TODO) {
-        TodosRepository.removeTodoStore
+        todosRepository.removeTodoStore
             .stream(StoreRequest.fresh(it))
     }
 
     private val resetTodo by wrapWithAction<String, StoreResponse<Boolean>>(RESET_TODO) {
-        TodosRepository.resetTodoStore
+        todosRepository.resetTodoStore
             .stream(StoreRequest.fresh(it))
     }
 

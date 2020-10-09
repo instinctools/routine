@@ -24,6 +24,7 @@ import com.routine.data.model.TodoListItem
 import com.routine.databinding.FragmentTodosBinding
 import com.routine.databinding.ItemTodoBinding
 import com.routine.vm.AndroidAppViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,7 @@ import kotlin.math.abs
 @ExperimentalStdlibApi
 @FlowPreview
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class TodosFragment : Fragment(R.layout.fragment_todos) {
 
     private val homeViewModel by activityViewModels<HomeViewModel>()

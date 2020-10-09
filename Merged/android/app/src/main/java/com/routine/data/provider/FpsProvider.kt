@@ -46,6 +46,9 @@ class FpsProvider {
                 }
             }
             choreographer.postFrameCallback(frameCallback)
-            awaitClose { cancel() }
+            awaitClose {
+                choreographer.removeFrameCallback(frameCallback)
+                cancel()
+            }
         }
 }

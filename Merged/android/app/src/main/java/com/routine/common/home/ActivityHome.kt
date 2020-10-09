@@ -20,6 +20,7 @@ import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import com.routine.ui.AndroidAppFragment
+import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
 import io.flutter.embedding.android.FlutterFragment
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.*
 import java.lang.ref.WeakReference
 
 @ExperimentalCoroutinesApi
+@AndroidEntryPoint
 class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
     private val viewModel by viewModels<HomeViewModel>()
