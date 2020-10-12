@@ -27,8 +27,6 @@ import com.routine.vm.DetailsViewModel
 import com.routine.vm.DetailsViewModelFactory
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -40,9 +38,6 @@ import reactivecircus.flowbinding.android.widget.textChanges
 const val ARG_PERIOD = "ARG_PERIOD"
 const val ARG_PERIOD_UNIT = "ARG_PERIOD_UNIT"
 
-@FlowPreview
-@ExperimentalStdlibApi
-@ExperimentalCoroutinesApi
 open class DetailsFragment : Fragment(R.layout.fragment_details) {
 
     private val args: DetailsFragmentArgs by navArgs()

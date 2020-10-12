@@ -8,15 +8,10 @@ import com.routine.data.model.TodoListItem
 import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 
-@FlowPreview
-@ExperimentalCoroutinesApi
-@ExperimentalStdlibApi
 class AndroidAppViewModel @ViewModelInject constructor(private val todosRepository: TodosRepository): ViewModel() {
 
     companion object {

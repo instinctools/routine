@@ -24,7 +24,7 @@ apply plugin: 'dagger.hilt.android.plugin'
 import com.android.build.OutputFile
 
 project.ext.react = [
-        entryFile: "index.js",
+        entryFile   : "index.js",
         enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -85,6 +85,10 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += ['-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
+                             '-Xopt-in=kotlinx.coroutines.FlowPreview',
+                             '-Xopt-in=kotlin.ExperimentalStdlibApi',
+                             '-Xopt-in=kotlin.time.ExperimentalTime']
     }
 
     buildFeatures {

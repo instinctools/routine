@@ -17,11 +17,9 @@ import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
 class HomeViewModel : ViewModel() {
 
     private val menus_ = MutableStateFlow(listOf(MenuData.HeaderMenu(), MenuTechnology(false, Menu.ANDROID_NATIVE)))
@@ -40,7 +38,6 @@ class HomeViewModel : ViewModel() {
         const val PROFILER = "PROFILER"
     }
 
-    @FlowPreview
     val content by wrapWithAction(initialAction = Any()) {
         flow {
             PreferenceManager.getDefaultSharedPreferences(App.CONTEXT)
@@ -57,7 +54,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    @FlowPreview
     val hardwareInfo by wrapWithAction(PROFILER, initialAction = Any()) {
         profilingEnabled_
             .flatMapLatest {
@@ -76,7 +72,6 @@ class HomeViewModel : ViewModel() {
             }
     }
 
-    @FlowPreview
     @SuppressLint("ApplySharedPref")
     fun onMenuSelected(menu: Menu) {
         menus_.value = menus_.value.map {

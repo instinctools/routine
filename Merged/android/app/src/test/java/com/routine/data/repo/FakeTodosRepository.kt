@@ -1,19 +1,9 @@
 package com.routine.data.repo
 
-import com.dropbox.android.external.store4.*
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.routine.App
-import com.routine.common.calculateTimestamp
-import com.routine.common.userIdOrEmpty
-import com.routine.data.db.database
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.StoreBuilder
 import com.routine.data.db.entity.TodoEntity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class FakeTodosRepository: TodosRepository {
 
     var loginError: Throwable? = null
@@ -22,7 +12,6 @@ class FakeTodosRepository: TodosRepository {
         loginError?.let {
             throw it
         }
-
         true
     })
         .disableCache()

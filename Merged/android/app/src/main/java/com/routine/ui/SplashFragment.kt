@@ -12,20 +12,15 @@ import com.routine.common.viewBinding
 import com.routine.databinding.FragmentSplashBinding
 import com.routine.vm.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     private val binding by viewBinding(FragmentSplashBinding::bind)
     private val viewModel by viewModels<SplashViewModel>()
 
-    @ExperimentalStdlibApi
-    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

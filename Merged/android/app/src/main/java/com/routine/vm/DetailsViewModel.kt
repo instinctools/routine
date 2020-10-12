@@ -12,14 +12,9 @@ import com.routine.data.model.Event
 import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.getAction
 import com.routine.vm.status.wrapWithAction
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import java.util.*
 
-@FlowPreview
-@ExperimentalStdlibApi
-@ExperimentalCoroutinesApi
 class  DetailsViewModel(private val id: String?, private val todosRepository: TodosRepository) : ViewModel() {
 
     companion object {

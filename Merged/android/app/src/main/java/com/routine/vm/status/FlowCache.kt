@@ -4,8 +4,6 @@ import androidx.collection.ArrayMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
@@ -13,16 +11,12 @@ import kotlin.reflect.KProperty
 
 const val DEF_ACTION = "DEF_ACTION"
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 fun <T : Any, R : Any> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
                                                 initialAction: T? = null,
                                                 function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
     return Delegate(actionKey, initialAction, viewModelScope, function)
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 @Throws(ClassCastException::class)
 fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
     val delegate = LazyRegistry.find(this, actionKey)
@@ -32,8 +26,6 @@ fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
     return delegate
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 private class Delegate<T: Any, R : Any>(
         val actionKey: String,
         val initialAction: T?,
@@ -75,8 +67,6 @@ private class Delegate<T: Any, R : Any>(
     }
 }
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 private object LazyRegistry {
     private val lazyMap = WeakHashMap<Any, MutableMap<String, Delegate<*, *>>>()
 

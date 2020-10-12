@@ -30,7 +30,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.lang.ref.WeakReference
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
 
@@ -42,7 +41,6 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         viewModel.onMenuClicked()
     }
 
-    @FlowPreview
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)

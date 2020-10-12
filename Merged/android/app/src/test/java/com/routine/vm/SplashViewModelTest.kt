@@ -12,10 +12,6 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.time.ExperimentalTime
 
-@ExperimentalTime
-@ExperimentalStdlibApi
-@FlowPreview
-@ExperimentalCoroutinesApi
 class SplashViewModelTest {
 
     private lateinit var todosRepository: FakeTodosRepository

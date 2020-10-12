@@ -13,16 +13,10 @@ import com.routine.common.calculateTimestamp
 import com.routine.common.userIdOrEmpty
 import com.routine.data.db.database
 import com.routine.data.db.entity.TodoEntity
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
-import org.joda.time.DateTime
 import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-@FlowPreview
-@ExperimentalStdlibApi
 class TodosRepositoryImpl @Inject constructor(): TodosRepository {
 
     override val loginStore = StoreBuilder.from<Any, Boolean>(Fetcher.of {

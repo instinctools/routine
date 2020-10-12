@@ -28,15 +28,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import reactivecircus.flowbinding.android.view.clicks
 import kotlin.math.abs
 
-@ExperimentalStdlibApi
-@FlowPreview
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class TodosFragment : Fragment(R.layout.fragment_todos) {
 
