@@ -1,6 +1,6 @@
 package com.routine.vm.status
 
-import android.util.ArrayMap
+import androidx.collection.ArrayMap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
