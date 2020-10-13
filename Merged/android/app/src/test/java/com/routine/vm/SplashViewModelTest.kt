@@ -55,4 +55,35 @@ class SplashViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
     }
+
+    @Test
+    fun login_errorRepeatSuccess() = runBlocking {
+        val loginThrowable = Exception("Error login")
+        todosRepository.loginError = loginThrowable
+        splashViewModel.login
+            .test {
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
+                todosRepository.loginError = null
+                splashViewModel.onRefreshClicked()
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertEquals(expectItem(), StoreResponse.Data(true, ResponseOrigin.Fetcher))
+                cancelAndIgnoreRemainingEvents()
+            }
+    }
+
+    @Test
+    fun login_errorRepeatError() = runBlocking {
+        val loginThrowable = Exception("Error login")
+        todosRepository.loginError = loginThrowable
+        splashViewModel.login
+            .test {
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
+                splashViewModel.onRefreshClicked()
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
+                cancelAndIgnoreRemainingEvents()
+            }
+    }
 }

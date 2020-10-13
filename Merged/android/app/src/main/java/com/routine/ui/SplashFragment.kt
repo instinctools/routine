@@ -12,7 +12,6 @@ import com.routine.R
 import com.routine.common.viewBinding
 import com.routine.databinding.FragmentSplashBinding
 import com.routine.vm.SplashViewModel
-import com.routine.vm.status.StatusCache
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
