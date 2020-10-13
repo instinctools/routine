@@ -10,8 +10,8 @@ import com.routine.data.db.entity.ResetType
 import com.routine.data.db.entity.TodoEntity
 import com.routine.data.model.Event
 import com.routine.data.repo.TodosRepository
-import com.routine.vm.status.getAction
-import com.routine.vm.status.wrapWithAction
+import com.routine.vm.status.cache
+import com.routine.vm.status.findAction
 import kotlinx.coroutines.flow.*
 import java.util.*
 
@@ -34,7 +34,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
 
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
-    val todo by wrapWithAction(GET_TODO, id ?: "") {
+    val todo by cache(GET_TODO, id ?: "") {
         todosRepository.getTodoStore
             .stream(StoreRequest.cached(it, false))
             .onEach {
@@ -53,7 +53,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
             }
     }
 
-    val addTodo by wrapWithAction<Any, StoreResponse<Boolean>>(ADD_TODO) {
+    val addTodo by cache<Any, StoreResponse<Boolean>>(ADD_TODO) {
         combine(
             titleFlow,
             resetTypeFlow,
@@ -90,7 +90,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
         todo is StoreResponse.Loading || addTodo is StoreResponse.Loading
     }
 
-    val errorFlow by wrapWithAction(initialAction = Any()) {
+    val errorFlow by cache(initialAction = Any()) {
         merge(todo, addTodo)
             .filter { it is StoreResponse.Error.Exception }
             .map {
@@ -99,7 +99,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
     }
 
     fun saveTodo() {
-        getAction<Any>(ADD_TODO)?.proceed(Any())
+        findAction<Any>(ADD_TODO)?.proceed(Any())
     }
 
     fun onTextChanged(text: String) {

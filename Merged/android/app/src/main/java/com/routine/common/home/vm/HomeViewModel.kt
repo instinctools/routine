@@ -13,10 +13,9 @@ import com.routine.data.model.Event
 import com.routine.data.provider.CpuProvider
 import com.routine.data.provider.FpsProvider
 import com.routine.data.provider.MemoryProvider
-import com.routine.vm.status.getAction
+import com.routine.vm.status.findAction
 import com.routine.vm.status.wrapWithAction
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -86,7 +85,7 @@ class HomeViewModel : ViewModel() {
                                         .edit()
                                         .putString(PREF_MENU, menu.name)
                                         .commit()
-                                    getAction<Any>()?.proceed(Any())
+                                    findAction<Any>()?.proceed(Any())
                                 }
                             }
                     else -> MenuTechnology(it.expanded, it.selectedSubMenu)

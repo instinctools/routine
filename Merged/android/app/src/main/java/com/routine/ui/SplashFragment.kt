@@ -1,19 +1,18 @@
 package com.routine.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.dropbox.android.external.store4.StoreResponse
 import com.routine.R
 import com.routine.common.viewBinding
 import com.routine.databinding.FragmentSplashBinding
 import com.routine.vm.SplashViewModel
+import com.routine.vm.status.StatusCache
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class SplashFragment : Fragment(R.layout.fragment_splash) {
@@ -26,14 +25,15 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
         viewModel.login
             .onEach {
+                Log.d("TEST123", "$it")
                 when (it) {
-                    is StoreResponse.Loading -> adjustVisibility(true)
-                    is StoreResponse.Data -> {
+                    is StatusCache.Status.Loading -> adjustVisibility(true)
+                    is StatusCache.Status.Data -> {
                         if (it.value) {
                             findNavController().navigate(R.id.action_splash_todos)
                         }
                     }
-                    is StoreResponse.Error.Exception -> adjustVisibility(false)
+                    is StatusCache.Status.Error -> adjustVisibility(false)
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

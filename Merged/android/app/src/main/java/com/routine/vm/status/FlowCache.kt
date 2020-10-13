@@ -11,14 +11,20 @@ import kotlin.reflect.KProperty
 
 const val DEF_ACTION = "DEF_ACTION"
 
-fun <T : Any, R : Any> ViewModel.wrapWithAction(actionKey: String = DEF_ACTION,
-                                                initialAction: T? = null,
-                                                function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
-    return Delegate(actionKey, initialAction, viewModelScope, function)
+fun <T : Any, R : Any> ViewModel.cache(actionKey: String = DEF_ACTION,
+                                       initialAction: T? = null,
+                                       function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+    return Cache(actionKey, initialAction, viewModelScope, function)
+}
+
+fun <T : Any, R : Any> ViewModel.statusCache(actionKey: String = DEF_ACTION,
+                                             initialAction: T? = null,
+                                             function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
+    return StatusCache(actionKey, initialAction, viewModelScope, function)
 }
 
 @Throws(ClassCastException::class)
-fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
+fun <T> ViewModel.findAction(actionKey: String = DEF_ACTION): Action<T>? {
     val delegate = LazyRegistry.find(this, actionKey)
     if (delegate != null) {
         return delegate as Action<T>
@@ -26,7 +32,7 @@ fun <T> ViewModel.getAction(actionKey: String = DEF_ACTION): Action<T>? {
     return delegate
 }
 
-private class Delegate<T: Any, R : Any>(
+private class Cache<T : Any, R : Any>(
         val actionKey: String,
         val initialAction: T?,
         val scope: CoroutineScope,
@@ -67,10 +73,56 @@ private class Delegate<T: Any, R : Any>(
     }
 }
 
-private object LazyRegistry {
-    private val lazyMap = WeakHashMap<Any, MutableMap<String, Delegate<*, *>>>()
+class StatusCache<T : Any, R : Any>(
+        val actionKey: String,
+        val initialAction: T?,
+        val scope: CoroutineScope,
+        val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<Status<R>>>, Action<T> {
 
-    fun <T : Any, R : Any> register(target: ViewModel, actionKey: String, lazy: Delegate<T, R>) {
+    private val flow = MutableStateFlow<T?>(null)
+    private val cache = MutableStateFlow<Status<R>?>(null)
+    private var isInitialized = false
+    private val lock = this
+
+    override fun getValue(thisRef: ViewModel,
+                          property: KProperty<*>): Flow<Status<R>> {
+        if (!isInitialized) {
+            synchronized(lock) {
+                if (!isInitialized) {
+                    LazyRegistry.register(thisRef, actionKey, this)
+                    flow.filterNotNull()
+                        .onStart {
+                            if (initialAction != null) {
+                                emit(initialAction)
+                            }
+                        }
+                        .onEach { cache.value = Status.Loading }
+                        .flatMapLatest {
+                            function(it).catch {
+                                cache.value = Status.Error(it)
+                            }
+                        }
+                        .onEach { cache.value = Status.Data(it) }
+                        .onEach { flow.value = null }
+                        .onCompletion { LazyRegistry.unregister(thisRef, actionKey) }
+                        .launchIn(scope)
+
+                    isInitialized = true
+                }
+            }
+        }
+        return cache.filterNotNull()
+    }
+
+    override fun proceed(value: T) {
+        flow.value = value
+    }
+}
+
+private object LazyRegistry {
+    private val lazyMap = WeakHashMap<Any, MutableMap<String, Action<*>>>()
+
+    fun <T : Any> register(target: ViewModel, actionKey: String, lazy: Action<T>) {
         lazyMap.getOrPut(target) { ArrayMap() }[actionKey] = lazy
     }
 

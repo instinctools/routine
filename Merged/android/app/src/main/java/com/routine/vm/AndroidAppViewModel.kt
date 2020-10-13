@@ -6,8 +6,8 @@ import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.routine.data.model.TodoListItem
 import com.routine.data.repo.TodosRepository
-import com.routine.vm.status.getAction
-import com.routine.vm.status.wrapWithAction
+import com.routine.vm.status.cache
+import com.routine.vm.status.findAction
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -20,17 +20,17 @@ class AndroidAppViewModel @ViewModelInject constructor(private val todosReposito
         const val RESET_TODO = "RESET_TODO"
     }
 
-    private val todos by wrapWithAction(GET_TODOS, Any()) {
+    private val todos by cache (GET_TODOS, Any()) {
         todosRepository.todosStore
             .stream(StoreRequest.cached(Pair("", true), true))
     }
 
-    private val removeTodo by wrapWithAction<String, StoreResponse<Boolean>>(REMOVE_TODO) {
+    private val removeTodo by cache<String, StoreResponse<Boolean>>(REMOVE_TODO) {
         todosRepository.removeTodoStore
             .stream(StoreRequest.fresh(it))
     }
 
-    private val resetTodo by wrapWithAction<String, StoreResponse<Boolean>>(RESET_TODO) {
+    private val resetTodo by cache<String, StoreResponse<Boolean>>(RESET_TODO) {
         todosRepository.resetTodoStore
             .stream(StoreRequest.fresh(it))
     }
@@ -50,14 +50,14 @@ class AndroidAppViewModel @ViewModelInject constructor(private val todosReposito
     val actionTodo = merge(removeTodo, resetTodo)
 
     fun refresh() {
-        getAction<Any>(GET_TODOS)?.proceed(Any())
+        findAction<Any>(GET_TODOS)?.proceed(Any())
     }
 
     fun removeTodo(todo: TodoListItem.Todo) {
-        getAction<String>(REMOVE_TODO)?.proceed(todo.id)
+        findAction<String>(REMOVE_TODO)?.proceed(todo.id)
     }
 
     fun resetTodo(todo: TodoListItem.Todo) {
-        getAction<String>(RESET_TODO)?.proceed(todo.id)
+        findAction<String>(RESET_TODO)?.proceed(todo.id)
     }
 }
