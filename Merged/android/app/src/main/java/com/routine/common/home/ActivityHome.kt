@@ -20,6 +20,7 @@ import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import com.routine.ui.AndroidAppFragment
+import com.routine.vm.status.Status
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
@@ -54,9 +55,21 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
         viewModel.hardwareInfo
             .flowOn(Dispatchers.Default)
             .onEach {
-                binding.homeProfiler.setText(
-                    getString(R.string.home_profiler, it.first.cpuUsagePercent, it.second.memoryInUseMb, it.third.fps)
-                )
+                when(it){
+                    Status.Loading -> {}
+                    is Status.Data -> {
+                        binding.homeProfiler.setText(
+                                getString(R.string.home_profiler,
+                                        it.value.first.cpuUsagePercent,
+                                        it.value.second.memoryInUseMb,
+                                        it.value.third.fps)
+                        )
+                    }
+                    is Status.Error -> {
+                        binding.homeProfiler.setText(getString(R.string.home_profiler_error))
+                    }
+                }
+
             }
             .launchIn(lifecycleScope)
 

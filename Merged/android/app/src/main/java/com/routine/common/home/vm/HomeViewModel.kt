@@ -16,6 +16,7 @@ import com.routine.data.provider.MemoryProvider
 import com.routine.vm.status.cache
 import com.routine.vm.status.paramCache
 import com.routine.vm.status.repeatAction
+import com.routine.vm.status.statusCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -55,12 +56,11 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    val hardwareInfo by cache (PROFILER, true) {
+    val hardwareInfo by statusCache (PROFILER, true) {
         profilingEnabled_
             .flatMapLatest {
                 if (it) {
                     combine(
-                        // TODO: 08.10.2020 Check errors
                         cpuProvider.cpuFlow(1000),
                         memoryProvider.memoryFlow(1000),
                         fpsProvider.fpsFlow(1000)
