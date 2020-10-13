@@ -11,7 +11,8 @@ import com.routine.data.db.entity.TodoEntity
 import com.routine.data.model.Event
 import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.cache
-import com.routine.vm.status.findAction
+import com.routine.vm.status.paramCache
+import com.routine.vm.status.runAction
 import kotlinx.coroutines.flow.*
 import java.util.*
 
@@ -34,7 +35,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
 
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
-    val todo by cache(GET_TODO, id ?: "") {
+    val todo by paramCache(GET_TODO, id ?: "") {
         todosRepository.getTodoStore
             .stream(StoreRequest.cached(it, false))
             .onEach {
@@ -53,7 +54,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
             }
     }
 
-    val addTodo by cache<Any, StoreResponse<Boolean>>(ADD_TODO) {
+    val addTodo by cache (ADD_TODO, false) {
         combine(
             titleFlow,
             resetTypeFlow,
@@ -90,7 +91,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
         todo is StoreResponse.Loading || addTodo is StoreResponse.Loading
     }
 
-    val errorFlow by cache(initialAction = Any()) {
+    val errorFlow by cache {
         merge(todo, addTodo)
             .filter { it is StoreResponse.Error.Exception }
             .map {
@@ -99,7 +100,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
     }
 
     fun saveTodo() {
-        findAction<Any>(ADD_TODO)?.proceed(Any())
+        runAction(Any(), ADD_TODO )
     }
 
     fun onTextChanged(text: String) {

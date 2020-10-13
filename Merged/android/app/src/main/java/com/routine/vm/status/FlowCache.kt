@@ -9,32 +9,54 @@ import java.util.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-const val DEF_ACTION = "DEF_ACTION"
+private const val DEF_ACTION = "DEF_ACTION"
 
-fun <T : Any, R : Any> ViewModel.cache(actionKey: String = DEF_ACTION,
-                                       initialAction: T? = null,
-                                       function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+fun <T : Any, R : Any> ViewModel.paramCache(actionKey: String = DEF_ACTION,
+                                            initialAction: T? = null,
+                                            function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
     return Cache(actionKey, initialAction, viewModelScope, function)
 }
 
-fun <T : Any, R : Any> ViewModel.statusCache(actionKey: String = DEF_ACTION,
-                                             initialAction: T? = null,
-                                             function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
+fun <R : Any> ViewModel.cache(actionKey: String = DEF_ACTION,
+                              start: Boolean = true,
+                              function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+    return Cache(actionKey, if (start) Any() else null, viewModelScope, {
+        function()
+    })
+}
+
+fun <T : Any, R : Any> ViewModel.paramStatusCache(actionKey: String = DEF_ACTION,
+                                                  initialAction: T? = null,
+                                                  function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
     return StatusCache(actionKey, initialAction, viewModelScope, function)
 }
 
+fun <R : Any> ViewModel.statusCache(actionKey: String = DEF_ACTION,
+                                             start: Boolean = true,
+                                             function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
+    return StatusCache(actionKey, if (start) Any() else null, viewModelScope, {
+        function()
+    })
+}
+
 @Throws(ClassCastException::class)
-fun <T> ViewModel.findAction(actionKey: String = DEF_ACTION): Action<T>? {
-    val delegate = LazyRegistry.find(this, actionKey)
+fun <T> ViewModel.runAction(param: T, actionKey: String = DEF_ACTION) {
+    val delegate: Action<*>? = LazyRegistry.find(this, actionKey)
     if (delegate != null) {
-        return delegate as Action<T>
+        (delegate as? Action<T>)?.run(param)
     }
-    return delegate
+}
+
+fun ViewModel.repeatAction(actionKey: String = DEF_ACTION) {
+    val delegate: Action<*>? = LazyRegistry.find(this, actionKey)
+    if (delegate != null) {
+        (delegate as? Action)?.repeat()
+    }
 }
 
 private class Cache<T : Any, R : Any>(
         val actionKey: String,
-        val initialAction: T?,
+        var action: T?,
         val scope: CoroutineScope,
         val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
@@ -51,8 +73,8 @@ private class Cache<T : Any, R : Any>(
                     LazyRegistry.register(thisRef, actionKey, this)
                     flow.filterNotNull()
                         .onStart {
-                            if (initialAction != null) {
-                                emit(initialAction)
+                            action?.let {
+                                emit(it)
                             }
                         }
                         .flatMapLatest { function(it) }
@@ -68,14 +90,19 @@ private class Cache<T : Any, R : Any>(
         return cache.filterNotNull()
     }
 
-    override fun proceed(value: T) {
+    override fun run(value: T) {
         flow.value = value
+        action = value
+    }
+
+    override fun repeat() {
+        flow.value = action
     }
 }
 
 class StatusCache<T : Any, R : Any>(
         val actionKey: String,
-        val initialAction: T?,
+        var action: T?,
         val scope: CoroutineScope,
         val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<Status<R>>>, Action<T> {
 
@@ -92,8 +119,8 @@ class StatusCache<T : Any, R : Any>(
                     LazyRegistry.register(thisRef, actionKey, this)
                     flow.filterNotNull()
                         .onStart {
-                            if (initialAction != null) {
-                                emit(initialAction)
+                            action?.let {
+                                emit(it)
                             }
                         }
                         .onEach { cache.value = Status.Loading }
@@ -114,8 +141,13 @@ class StatusCache<T : Any, R : Any>(
         return cache.filterNotNull()
     }
 
-    override fun proceed(value: T) {
+    override fun run(value: T) {
         flow.value = value
+        action = value
+    }
+
+    override fun repeat() {
+        flow.value = action
     }
 }
 
@@ -132,5 +164,7 @@ private object LazyRegistry {
 }
 
 interface Action<T> {
-    fun proceed(value: T)
+    fun run(value: T)
+
+    fun repeat()
 }

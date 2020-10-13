@@ -13,8 +13,9 @@ import com.routine.data.model.Event
 import com.routine.data.provider.CpuProvider
 import com.routine.data.provider.FpsProvider
 import com.routine.data.provider.MemoryProvider
-import com.routine.vm.status.findAction
-import com.routine.vm.status.wrapWithAction
+import com.routine.vm.status.cache
+import com.routine.vm.status.paramCache
+import com.routine.vm.status.repeatAction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -34,10 +35,11 @@ class HomeViewModel : ViewModel() {
 
     companion object {
         const val PREF_MENU = "MENU"
+        const val CONTENT = "CONTENT"
         const val PROFILER = "PROFILER"
     }
 
-    val content by wrapWithAction(initialAction = Any()) {
+    val content by cache (CONTENT, start = true) {
         flow {
             PreferenceManager.getDefaultSharedPreferences(App.CONTEXT)
                 .getString(PREF_MENU, Menu.ANDROID_NATIVE.name)?.let {
@@ -53,7 +55,7 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    val hardwareInfo by wrapWithAction(PROFILER, initialAction = Any()) {
+    val hardwareInfo by cache (PROFILER, true) {
         profilingEnabled_
             .flatMapLatest {
                 if (it) {
@@ -85,7 +87,7 @@ class HomeViewModel : ViewModel() {
                                         .edit()
                                         .putString(PREF_MENU, menu.name)
                                         .commit()
-                                    findAction<Any>()?.proceed(Any())
+                                    repeatAction(CONTENT)
                                 }
                             }
                     else -> MenuTechnology(it.expanded, it.selectedSubMenu)
