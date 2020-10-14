@@ -16,6 +16,7 @@ import com.routine.common.home.menu.Menu
 import com.routine.common.home.menu.MenuAdapter
 import com.routine.common.home.vm.HomeViewModel
 import com.routine.common.react.ReactAppModule
+import com.routine.common.settings.SettingsFragment
 import com.routine.common.viewBinding
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
@@ -139,6 +140,9 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
                     .build<FlutterAppFragment>())
             }
             Menu.KMP -> {
+            }
+            Menu.SETTINGS -> {
+                openApp(SettingsFragment())
             }
             else -> {
             }

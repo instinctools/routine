@@ -33,7 +33,7 @@ class MenuAdapter(private val coroutineScope: CoroutineScope) : ListAdapter<Menu
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         if (item is MenuData.SimpleMenu && holder is MenuViewHolder) {
-            holder.bind(item.menu)
+            holder.bind(item)
         } else if (item is MenuData.MenuTechnology && holder is TechnologyViewHolder) {
             holder.bind(item)
         }
@@ -73,7 +73,7 @@ object MenuDiff : DiffUtil.ItemCallback<MenuData>() {
     override fun areItemsTheSame(oldItem: MenuData, newItem: MenuData): Boolean =
         (oldItem is MenuData.HeaderMenu && newItem is MenuData.HeaderMenu) ||
                 (oldItem is MenuData.MenuTechnology && newItem is MenuData.MenuTechnology) ||
-                ((oldItem is MenuData.SimpleMenu && newItem is MenuData.SimpleMenu))
+                ((oldItem is MenuData.SimpleMenu && newItem is MenuData.SimpleMenu) && (oldItem.menu.id == newItem.menu.id))
 
     override fun areContentsTheSame(oldItem: MenuData, newItem: MenuData): Boolean {
         return oldItem == newItem

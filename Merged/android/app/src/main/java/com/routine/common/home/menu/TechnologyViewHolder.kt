@@ -20,6 +20,12 @@ class TechnologyViewHolder(val binding: ItemMenuTechnologyBinding, val menuClick
             binding.root.transitionToEnd()
         }
 
+        binding.title.setTypeface(null, if (menuTechnology.isSelected) {
+            Typeface.BOLD
+        } else {
+            Typeface.NORMAL
+        })
+
         views.forEach { it.setTypeface(null, Typeface.NORMAL) }
 
         val view = when (menuTechnology.selectedSubMenu) {
@@ -27,9 +33,9 @@ class TechnologyViewHolder(val binding: ItemMenuTechnologyBinding, val menuClick
             Menu.REACT_NATIVE -> binding.technologyReactNative
             Menu.FLUTTER -> binding.technologyFlutter
             Menu.KMP -> binding.technologyKmp
-            else -> throw UnsupportedOperationException("Unknown type")
+            else -> null
         }
 
-        view.setTypeface(null, Typeface.BOLD)
+        view?.setTypeface(null, Typeface.BOLD)
     }
 }
