@@ -5,6 +5,27 @@
     <string name="error">An error occurred!</string>
     <string name="retry">Retry</string>
 
+    <!--Settings-->
+    <string name="settings_profiler">Profiler</string>
+    <string name="settings_profiler_enabled">Enable profiler</string>
+    <string name="settings_profiler_interval">Update interval</string>
+    <string-array name="settings_profiler_interval_entries">
+        <item>0.5s</item>
+        <item>1s</item>
+        <item>2s</item>
+        <item>3s</item>
+    </string-array>
+    <string-array name="settings_profiler_interval_values">
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>3000</item>
+    </string-array>
+    <string name="settings_profiler_interval_def_value">1000</string>
+
+    <string name="settings_key_profiler_enabled">settings_key_profiler_enabled</string>
+    <string name="settings_key_profiler_interval">settings_key_profiler_interval</string>
+
     <!--Home-->
     <string name="home_profiler">CPU: %1$d%%  Memory in use: %2$dmb  FPS: %3$d</string>
     <string name="home_profiler_error">@string/error</string>

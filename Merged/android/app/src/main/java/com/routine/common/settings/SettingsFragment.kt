@@ -1,15 +1,20 @@
 package com.routine.common.settings
 
-import androidx.fragment.app.Fragment
+import android.os.Bundle
+import androidx.preference.PreferenceDataStore
+import androidx.preference.PreferenceFragmentCompat
 import com.routine.R
-import com.routine.common.viewBinding
-import com.routine.databinding.FragmentSettingsBinding
-import com.routine.databinding.FragmentSplashBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+@AndroidEntryPoint
+class SettingsFragment : PreferenceFragmentCompat() {
 
-    private val binding by viewBinding(FragmentSettingsBinding::bind)
+    @Inject
+    lateinit var preferenceDataStore: PreferenceDataStore
 
-
-    
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceManager.preferenceDataStore = preferenceDataStore
+        setPreferencesFromResource(R.xml.settings, rootKey)
+    }
 }
