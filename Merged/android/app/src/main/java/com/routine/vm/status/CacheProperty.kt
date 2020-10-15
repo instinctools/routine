@@ -3,8 +3,6 @@ package com.routine.vm.status
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -15,43 +13,34 @@ class CacheProperty<T : Any, R : Any>(
         private val dispatcher: CoroutineDispatcher,
         private val function: (T) -> Flow<R>) : ReadOnlyProperty<ViewModel, Flow<R>>, Action<T> {
 
-    private val flow = MutableStateFlow<T?>(null)
-    private val cache = MutableStateFlow<R?>(null)
-    private var isInitialized = false
-    private val lock = this
+    private val flow = MutableSharedFlow<T>(extraBufferCapacity = 1)
+    private lateinit var cache: Flow<R>
 
     override fun getValue(thisRef: ViewModel,
                           property: KProperty<*>): Flow<R> {
-        if (!isInitialized) {
-            synchronized(lock) {
-                if (!isInitialized) {
-                    LazyRegistry.register(thisRef, key, this)
-                    flow.filterNotNull()
-                        .onStart {
-                            action?.let {
-                                emit(it)
-                            }
-                        }
-                        .flatMapLatest { function(it) }
-                        .onEach { cache.value = it }
-                        .onEach { flow.value = null }
-                        .onCompletion { LazyRegistry.unregister(thisRef, key) }
-                        .flowOn(dispatcher)
-                        .launchIn(thisRef.viewModelScope)
-
-                    isInitialized = true
+        if (!::cache.isInitialized) {
+            LazyRegistry.register(thisRef, key, this)
+            cache = flow.onStart {
+                action?.let {
+                    emit(it)
                 }
             }
+                .flatMapLatest { function(it) }
+                .onCompletion { LazyRegistry.unregister(thisRef, key) }
+                .flowOn(dispatcher)
+                .shareIn(thisRef.viewModelScope, SharingStarted.Lazily, 1)
         }
-        return cache.filterNotNull()
+        return cache
     }
 
     override fun run(value: T) {
-        flow.value = value
+        flow.tryEmit(value)
         action = value
     }
 
     override fun repeat() {
-        flow.value = action
+        action?.let {
+            flow.tryEmit(it)
+        }
     }
 }
