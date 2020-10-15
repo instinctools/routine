@@ -72,7 +72,7 @@ class HomeViewModel @ViewModelInject constructor(private val settingsRepository:
         settingsRepository.isProfilerEnabled()
     }
 
-    val hardwareInfo by statusCache(PROFILER, true) {
+    val hardwareInfo by statusCache(PROFILER, dispatcher = Dispatchers.Default) {
         profilerEnabled
             .filterIsInstance<Status.Data<Boolean>>()
             .map { it.value }

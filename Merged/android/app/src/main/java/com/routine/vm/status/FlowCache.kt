@@ -2,53 +2,54 @@ package com.routine.vm.status
 
 import androidx.collection.ArrayMap
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlin.properties.ReadOnlyProperty
 
 private const val DEF_ACTION = "DEF_ACTION"
 
-fun <T : Any, R : Any> ViewModel.paramCache(actionKey: String = DEF_ACTION,
-                                            initialAction: T? = null,
-                                            function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
-    return CacheProperty(actionKey, initialAction, viewModelScope, function)
+fun <T : Any, R : Any> paramCache(key: String = DEF_ACTION,
+                                  initialAction: T? = null,
+                                  dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                                  function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+    return CacheProperty(key, initialAction, dispatcher, function)
 }
 
-fun <R : Any> ViewModel.cache(actionKey: String = DEF_ACTION,
-                              start: Boolean = true,
-                              function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
-    return CacheProperty(actionKey, if (start) Any() else null, viewModelScope, {
-        function()
-    })
+fun <R : Any> cache(key: String = DEF_ACTION,
+                    start: Boolean = true,
+                    dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                    function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<R>> {
+    return CacheProperty(key, if (start) Any() else null, dispatcher, { function() })
 }
 
-fun <T : Any, R : Any> ViewModel.paramStatusCache(actionKey: String = DEF_ACTION,
-                                                  initialAction: T? = null,
-                                                  function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
-    return StatusCacheProperty(actionKey, initialAction, viewModelScope, function)
+fun <T : Any, R : Any> paramStatusCache(actionKey: String = DEF_ACTION,
+                                        initialAction: T? = null,
+                                        dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                                        function: (T) -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
+    return StatusCacheProperty(actionKey, initialAction, dispatcher, function)
 }
 
-fun <R : Any> ViewModel.statusCache(actionKey: String = DEF_ACTION,
-                                    start: Boolean = true,
-                                    function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
-    return StatusCacheProperty(actionKey, if (start) Any() else null, viewModelScope, {
-        function()
-    })
+fun <R : Any> statusCache(actionKey: String = DEF_ACTION,
+                          start: Boolean = true,
+                          dispatcher: CoroutineDispatcher = Dispatchers.IO,
+                          function: () -> Flow<R>): ReadOnlyProperty<ViewModel, Flow<Status<R>>> {
+    return StatusCacheProperty(actionKey, if (start) Any() else null, dispatcher, { function() })
 }
 
 @Throws(ClassCastException::class)
 fun <T> ViewModel.runAction(param: T, actionKey: String = DEF_ACTION) {
     val delegate: Action<*>? = LazyRegistry.find(this, actionKey)
     if (delegate != null) {
-        (delegate as? Action<T>)?.run(param)
+        (delegate as Action<T>).run(param)
     }
 }
 
 fun ViewModel.repeatAction(actionKey: String = DEF_ACTION) {
     val delegate: Action<*>? = LazyRegistry.find(this, actionKey)
-    if (delegate != null) {
-        (delegate as? Action)?.repeat()
+    if (delegate is Action) {
+        delegate.repeat()
     }
 }
 
