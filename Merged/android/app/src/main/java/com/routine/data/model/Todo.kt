@@ -17,8 +17,9 @@ sealed class TodoListItem {
             var lastExpiredTodoFound = false
             var lastExpiredTodoIndex = 0
 
-            for (i in list.indices) {
-                val todoTime = DateTime(list[i].timestamp)
+            val sortedList = list.sortedBy { it.timestamp }
+            for (i in sortedList.indices) {
+                val todoTime = DateTime(sortedList[i].timestamp)
                 if (!lastExpiredTodoFound && todoTime.isAfter(currentDate)) {
                     if (uiTodos.size > 0) {
                         uiTodos.add(Separator())
@@ -27,22 +28,22 @@ sealed class TodoListItem {
                     lastExpiredTodoFound = true
                 }
                 val color = if (lastExpiredTodoFound) pickColorBetween(
-                    i - lastExpiredTodoIndex + 1
+                        i - lastExpiredTodoIndex + 1
                 ) else Color.parseColor("#FF0000")
 
                 uiTodos.add(
-                    Todo(
-                        list[i].id,
-                        list[i].title,
-                        getPrettyPeriod(
-                            list[i].period,
-                            list[i].periodUnit
-                        ),
-                        calculateTargetDate(
-                            list[i].timestamp
-                        ),
-                        color
-                    )
+                        Todo(
+                                sortedList[i].id,
+                                sortedList[i].title,
+                                getPrettyPeriod(
+                                        sortedList[i].period,
+                                        sortedList[i].periodUnit
+                                ),
+                                calculateTargetDate(
+                                        sortedList[i].timestamp
+                                ),
+                                color
+                        )
                 )
             }
             return uiTodos

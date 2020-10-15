@@ -3,10 +3,14 @@ package com.routine.data.repo
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.StoreBuilder
 import com.routine.data.db.entity.TodoEntity
+import com.routine.data.model.TodoListItem
 
 class FakeTodosRepository: TodosRepository {
 
     var loginError: Throwable? = null
+    var todosStoreData: List<TodoEntity> = emptyList()
+    var todosStoreError: Throwable? = null
+
 
     override val loginStore = StoreBuilder.from<Any, Boolean>(Fetcher.of {
         loginError?.let {
@@ -18,8 +22,12 @@ class FakeTodosRepository: TodosRepository {
         .build()
 
     override val todosStore = StoreBuilder
-        .from(Fetcher.of<Pair<String, Boolean>, List<TodoEntity>>{
-            listOf<TodoEntity>()
+        .from(Fetcher.of<Pair<String, Boolean>, List<TodoEntity>> {
+            println("todosStore")
+            todosStoreError?.let {
+                throw it
+            }
+            todosStoreData
         })
         .disableCache()
         .build()

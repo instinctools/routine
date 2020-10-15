@@ -41,8 +41,7 @@ class AndroidAppViewModel @ViewModelInject constructor(private val todosReposito
         todos.filter { it is StoreResponse.Data }
             .map { it as StoreResponse.Data }
             .map { list ->
-                val newList = TodoListItem.from(list.value
-                    .sortedBy { it.timestamp })
+                val newList = TodoListItem.from(list.value)
                 return@map StoreResponse.Data(newList, list.origin)
             }
 
