@@ -1,4 +1,4 @@
-package com.routine.common.home.menu
+package com.routine.common.ui.home.menu
 
 import android.view.View
 import com.routine.databinding.ItemMenuTechnologyBinding

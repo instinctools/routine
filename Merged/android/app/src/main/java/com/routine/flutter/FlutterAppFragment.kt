@@ -3,7 +3,7 @@ package com.routine.flutter
 import androidx.annotation.NonNull
 import androidx.fragment.app.activityViewModels
 import com.routine.App
-import com.routine.common.home.vm.HomeViewModel
+import com.routine.common.vm.HomeViewModel
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry

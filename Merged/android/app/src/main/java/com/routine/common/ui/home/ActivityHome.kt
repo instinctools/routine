@@ -1,4 +1,4 @@
-package com.routine.common.home
+package com.routine.common.ui.home
 
 import android.os.Bundle
 import android.view.View
@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.facebook.react.ReactFragment
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.routine.R
-import com.routine.common.home.menu.Menu
-import com.routine.common.home.menu.MenuAdapter
-import com.routine.common.home.vm.HomeViewModel
+import com.routine.common.ui.home.menu.Menu
+import com.routine.common.ui.home.menu.MenuAdapter
 import com.routine.common.react.ReactAppModule
-import com.routine.common.settings.SettingsFragment
+import com.routine.common.ui.SettingsFragment
 import com.routine.common.viewBinding
+import com.routine.common.vm.HomeViewModel
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import com.routine.ui.AndroidAppFragment
@@ -28,8 +28,12 @@ import dev.chrisbanes.insetter.Side
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import java.lang.ref.WeakReference
 
 @AndroidEntryPoint
@@ -53,8 +57,16 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             .applySystemWindowInsetsToMargin(Side.BOTTOM)
             .applyToView(binding.homeProfiler)
 
+        viewModel.profilerEnabled
+            .onEach {
+                when (it) {
+                    is Status.Data -> binding.homeProfiler.visibility = if (it.value) View.VISIBLE else View.GONE
+                    is Status.Error -> Timber.e(it.throwable, "viewModel.profilerEnabled")
+                }
+            }
+            .launchIn(lifecycleScope)
+
         viewModel.hardwareInfo
-            .flowOn(Dispatchers.Default)
             .onEach {
                 when(it){
                     Status.Loading -> {}

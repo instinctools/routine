@@ -18,7 +18,7 @@ import com.dropbox.android.external.store4.StoreResponse
 import com.google.android.material.snackbar.Snackbar
 import com.routine.R
 import com.routine.common.*
-import com.routine.common.home.vm.HomeViewModel
+import com.routine.common.vm.HomeViewModel
 import com.routine.data.model.Event
 import com.routine.data.model.TodoListItem
 import com.routine.databinding.FragmentTodosBinding

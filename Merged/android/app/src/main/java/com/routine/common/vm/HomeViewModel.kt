@@ -1,25 +1,28 @@
-package com.routine.common.home.vm
+package com.routine.common.vm
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.preference.PreferenceManager
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.routine.App
-import com.routine.common.home.menu.Menu
-import com.routine.common.home.menu.MenuData
-import com.routine.common.home.menu.MenuData.MenuTechnology
+import com.routine.common.data.repo.SettingsRepository
+import com.routine.common.ui.home.menu.Menu
+import com.routine.common.ui.home.menu.MenuData
+import com.routine.common.ui.home.menu.MenuData.MenuTechnology
 import com.routine.data.model.Event
 import com.routine.data.provider.CpuProvider
 import com.routine.data.provider.FpsProvider
 import com.routine.data.provider.MemoryProvider
+import com.routine.vm.status.Status
 import com.routine.vm.status.cache
 import com.routine.vm.status.statusCache
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(private val settingsRepository: SettingsRepository): ViewModel() {
 
     private val menus_ = MutableStateFlow(listOf(
             MenuData.HeaderMenu(),
@@ -65,17 +68,26 @@ class HomeViewModel : ViewModel() {
             .filterNotNull()
     }
 
-    val hardwareInfo by statusCache (PROFILER, true) {
-        profilingEnabled_
+    val profilerEnabled by statusCache {
+        settingsRepository.isProfilerEnabled()
+    }
+
+    val hardwareInfo by statusCache(PROFILER, true) {
+        profilerEnabled
+            .filterIsInstance<Status.Data<Boolean>>()
+            .map { it.value }
             .flatMapLatest {
                 if (it) {
-                    combine(
-                        cpuProvider.cpuFlow(1000),
-                        memoryProvider.memoryFlow(1000),
-                        fpsProvider.fpsFlow(1000)
-                    ) { cpu, memory, fps ->
-                        Triple(cpu, memory, fps)
-                    }
+                    settingsRepository.profilerInterval()
+                        .flatMapLatest {
+                            combine(
+                                    cpuProvider.cpuFlow(it),
+                                    memoryProvider.memoryFlow(it),
+                                    fpsProvider.fpsFlow(it)
+                            ) { cpu, memory, fps ->
+                                Triple(cpu, memory, fps)
+                            }
+                        }
                 } else {
                     emptyFlow()
                 }

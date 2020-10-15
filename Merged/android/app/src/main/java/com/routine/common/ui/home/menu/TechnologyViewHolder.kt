@@ -1,4 +1,4 @@
-package com.routine.common.home.menu
+package com.routine.common.ui.home.menu
 
 import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView

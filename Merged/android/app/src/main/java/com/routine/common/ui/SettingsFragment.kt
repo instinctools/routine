@@ -1,4 +1,4 @@
-package com.routine.common.settings
+package com.routine.common.ui
 
 import android.os.Bundle
 import androidx.preference.PreferenceDataStore
