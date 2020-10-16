@@ -112,7 +112,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.errorFlow
+        viewModel.errorFlow.cache
             .onEach {
                 it.getContentIfNotHandled()?.let {
                     snackbar.applyTextAndVisibility(getString(R.string.error))
@@ -131,7 +131,7 @@ open class DetailsFragment : Fragment(R.layout.fragment_details) {
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.addTodo
+        viewModel.addTodo.cache
             .onEach {
                 if (it is StoreResponse.Data && it.value) popBackStack()
             }

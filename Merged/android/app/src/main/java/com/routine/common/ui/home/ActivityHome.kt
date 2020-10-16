@@ -57,7 +57,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             .applySystemWindowInsetsToMargin(Side.BOTTOM)
             .applyToView(binding.homeProfiler)
 
-        viewModel.profilerEnabled
+        viewModel.profilerEnabled.cache
             .onEach {
                 when (it) {
                     is Status.Data -> binding.homeProfiler.visibility = if (it.value) View.VISIBLE else View.GONE
@@ -66,7 +66,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             }
             .launchIn(lifecycleScope)
 
-        viewModel.hardwareInfo
+        viewModel.hardwareInfo.cache
             .onEach {
                 when(it){
                     Status.Loading -> {}
@@ -108,7 +108,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
             }
             .launchIn(lifecycleScope)
 
-        viewModel.content
+        viewModel.content.cache
             .flowOn(Dispatchers.IO)
             .onEach {
                 it.getContentIfNotHandled()?.let {

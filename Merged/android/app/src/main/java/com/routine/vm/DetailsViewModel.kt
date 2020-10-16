@@ -12,16 +12,10 @@ import com.routine.data.model.Event
 import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.cache
 import com.routine.vm.status.paramCache
-import com.routine.vm.status.runAction
 import kotlinx.coroutines.flow.*
 import java.util.*
 
 class  DetailsViewModel(private val id: String?, private val todosRepository: TodosRepository) : ViewModel() {
-
-    companion object {
-        const val GET_TODO = "GET_TODO"
-        const val ADD_TODO = "ADD_TODO"
-    }
 
     val titleFlow = MutableStateFlow("")
     val resetTypeFlow = MutableStateFlow(ResetType.BY_PERIOD)
@@ -35,7 +29,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
 
     val wheelPickerFlow = MutableStateFlow<Event<PeriodSelectorData>?>(null)
 
-    val todo by paramCache(GET_TODO, id ?: "") {
+    val todo by paramCache(id ?: "") {
         todosRepository.getTodoStore
             .stream(StoreRequest.cached(it, false))
             .onEach {
@@ -54,7 +48,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
             }
     }
 
-    val addTodo by cache (ADD_TODO, false) {
+    val addTodo by cache (start = false) {
         combine(
             titleFlow,
             resetTypeFlow,
@@ -81,18 +75,18 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
             }
     }
 
-    val isSaveButtonEnabledFlow = combine(titleFlow, todo,
-        addTodo.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { text, todo, addTodo ->
+    val isSaveButtonEnabledFlow = combine(titleFlow, todo.cache,
+        addTodo.cache.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { text, todo, addTodo ->
         text.isNotEmpty() && todo !is StoreResponse.Loading && addTodo !is StoreResponse.Loading
     }
 
-    val progressFlow = combine(todo,
-        addTodo.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { todo, addTodo ->
+    val progressFlow = combine(todo.cache,
+        addTodo.cache.onStart { emit(StoreResponse.Data(false, ResponseOrigin.Fetcher)) }) { todo, addTodo ->
         todo is StoreResponse.Loading || addTodo is StoreResponse.Loading
     }
 
     val errorFlow by cache {
-        merge(todo, addTodo)
+        merge(todo.cache, addTodo.cache)
             .filter { it is StoreResponse.Error.Exception }
             .map {
                 Event(it as StoreResponse.Error.Exception)
@@ -100,7 +94,7 @@ class  DetailsViewModel(private val id: String?, private val todosRepository: To
     }
 
     fun saveTodo() {
-        runAction(Any(), ADD_TODO )
+        addTodo.run()
     }
 
     fun onTextChanged(text: String) {

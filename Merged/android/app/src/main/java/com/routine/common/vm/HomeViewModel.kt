@@ -32,7 +32,6 @@ class HomeViewModel @ViewModelInject constructor(private val settingsRepository:
     private val content_ = MutableStateFlow<Menu?>(null)
 
     private val menuClicks_ = MutableStateFlow(Event(Any()))
-    private val profilingEnabled_ = MutableStateFlow(true)
 
     val menus: Flow<List<MenuData>> = menus_
     val menuClicks: Flow<Event<Any>> = menuClicks_
@@ -43,11 +42,9 @@ class HomeViewModel @ViewModelInject constructor(private val settingsRepository:
 
     companion object {
         const val PREF_MENU = "MENU"
-        const val CONTENT = "CONTENT"
-        const val PROFILER = "PROFILER"
     }
 
-    val content by cache(CONTENT, start = true) {
+    val content by cache {
         content_.map {
             if (it != null) {
                 (Event(it))
@@ -72,8 +69,8 @@ class HomeViewModel @ViewModelInject constructor(private val settingsRepository:
         settingsRepository.isProfilerEnabled()
     }
 
-    val hardwareInfo by statusCache(PROFILER, dispatcher = Dispatchers.Default) {
-        profilerEnabled
+    val hardwareInfo by statusCache(dispatcher = Dispatchers.Default) {
+        profilerEnabled.cache
             .filterIsInstance<Status.Data<Boolean>>()
             .map { it.value }
             .flatMapLatest {

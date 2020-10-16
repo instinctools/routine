@@ -86,7 +86,7 @@ class TodosFragment : Fragment(R.layout.fragment_todos) {
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.todosStatus
+        viewModel.todosStatus.cache
             .sample(400)
             .onEach { data: StoreResponse<List<Any>> ->
                 when (data) {

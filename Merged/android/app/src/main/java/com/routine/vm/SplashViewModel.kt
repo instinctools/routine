@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModel
 import com.dropbox.android.external.store4.StoreRequest
 import com.routine.data.repo.TodosRepository
 import com.routine.vm.status.cache
-import com.routine.vm.status.repeatAction
 
 class SplashViewModel @ViewModelInject constructor(private val todosRepository: TodosRepository) : ViewModel() {
 
     fun onRefreshClicked() {
-        repeatAction()
+        login.run()
     }
 
     val login by cache {

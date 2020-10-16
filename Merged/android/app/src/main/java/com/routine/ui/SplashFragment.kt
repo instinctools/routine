@@ -25,7 +25,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.login
+        viewModel.login.cache
             .onEach {
                 when (it) {
                     is StoreResponse.Loading -> adjustVisibility(true)
