@@ -12,6 +12,7 @@ import com.routine.data.model.TodoListItem
 import com.routine.test_utils.CommonRule
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,8 +31,9 @@ class AndroidAppViewModelTest {
         androidAppViewModel = AndroidAppViewModel(commonRule.todosRepository)
     }
 
+
     @Test
-    fun todosData() = runBlocking {
+    fun loadTodos_Success() = runBlocking {
         val todoEntities = getTestTodoEntities()
         val todoItems = TodoListItem.from(todoEntities)
         commonRule.todosRepository.todosStoreData = todoEntities
@@ -39,6 +41,38 @@ class AndroidAppViewModelTest {
             .test {
                 assertEquals(expectItem(), StoreResponse.Data(todoItems, ResponseOrigin.Fetcher))
                 cancelAndIgnoreRemainingEvents()
+            }
+    }
+
+    @Test
+    fun loadTodos_SuccessStatus() = runBlocking {
+        val todoEntities = getTestTodoEntities()
+        commonRule.todosRepository.todosStoreData = todoEntities
+        androidAppViewModel.todosStatus
+            .test {
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertTrue(expectItem() is StoreResponse.Data)
+            }
+    }
+
+    @Test
+    fun loadTodos_Error() = runBlocking {
+        val exception = Exception("Error")
+        commonRule.todosRepository.todosStoreError = exception
+        androidAppViewModel.todosData
+            .test {
+                expectNoEvents()
+            }
+    }
+
+    @Test
+    fun loadTodos_ErrorStatus() = runBlocking {
+        val exception = Exception("Error")
+        commonRule.todosRepository.todosStoreError = exception
+        androidAppViewModel.todosStatus
+            .test {
+                assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
+                assertEquals(expectItem(), StoreResponse.Error.Exception(exception, ResponseOrigin.Fetcher))
             }
     }
 
