@@ -27,7 +27,6 @@ class AndroidAppViewModelTest {
 
     @Before
     fun init() {
-        commonRule.pauseDispatcher()
         androidAppViewModel = AndroidAppViewModel(commonRule.todosRepository)
     }
 
@@ -38,7 +37,6 @@ class AndroidAppViewModelTest {
         commonRule.todosRepository.todosStoreData = todoEntities
         androidAppViewModel.todosData
             .test {
-                commonRule.resumeDispatcher()
                 assertEquals(expectItem(), StoreResponse.Data(todoItems, ResponseOrigin.Fetcher))
                 cancelAndIgnoreRemainingEvents()
             }
