@@ -48,7 +48,7 @@ class AndroidAppViewModelTest {
     fun loadTodos_SuccessStatus() = runBlocking {
         val todoEntities = getTestTodoEntities()
         commonRule.todosRepository.todosStoreData = todoEntities
-        androidAppViewModel.todosStatus
+        androidAppViewModel.todosStatus.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertTrue(expectItem() is StoreResponse.Data)
@@ -69,7 +69,7 @@ class AndroidAppViewModelTest {
     fun loadTodos_ErrorStatus() = runBlocking {
         val exception = Exception("Error")
         commonRule.todosRepository.todosStoreError = exception
-        androidAppViewModel.todosStatus
+        androidAppViewModel.todosStatus.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertEquals(expectItem(), StoreResponse.Error.Exception(exception, ResponseOrigin.Fetcher))

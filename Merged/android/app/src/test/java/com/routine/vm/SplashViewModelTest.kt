@@ -24,7 +24,7 @@ class SplashViewModelTest {
 
     @Test
     fun login_success() = runBlocking {
-        splashViewModel.login
+        splashViewModel.login.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertEquals(expectItem(), StoreResponse.Data(true, ResponseOrigin.Fetcher))
@@ -37,7 +37,7 @@ class SplashViewModelTest {
     fun login_error() = runBlocking {
         val loginThrowable = Exception("Error login")
         commonRule.todosRepository.loginError = loginThrowable
-        splashViewModel.login
+        splashViewModel.login.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
@@ -49,7 +49,7 @@ class SplashViewModelTest {
     fun login_errorRepeatSuccess() = runBlocking {
         val loginThrowable = Exception("Error login")
         commonRule.todosRepository.loginError = loginThrowable
-        splashViewModel.login
+        splashViewModel.login.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
@@ -65,7 +65,7 @@ class SplashViewModelTest {
     fun login_errorRepeatError() = runBlocking {
         val loginThrowable = Exception("Error login")
         commonRule.todosRepository.loginError = loginThrowable
-        splashViewModel.login
+        splashViewModel.login.cache
             .test {
                 assertEquals(expectItem(), StoreResponse.Loading(ResponseOrigin.Fetcher))
                 assertEquals(expectItem(), StoreResponse.Error.Exception(loginThrowable, ResponseOrigin.Fetcher))
