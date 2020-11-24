@@ -20,27 +20,22 @@ version = "1.0"
 
 kotlin {
     //select iOS target platform depending on the Xcode environment variables
-    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
-    if (onPhone) {
-        iosArm64("ios")
-    } else {
-        iosX64("ios")
-    }
+    ios()
+    android()
+
     targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=
         listOf("-Xobjc-generics", "-Xg0")
-
-    android()
 
     sourceSets {
         all {
             languageSettings.apply {
+                useExperimentalAnnotation("kotlin.RequiresOptIn")
                 useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             }
         }
     }
 
     sourceSets["commonMain"].dependencies {
-        implementation(kotlin("stdlib-common", Versions.kotlin))
         implementation(Deps.SqlDelight.runtime)
         implementation(Deps.SqlDelight.coroutinesKtx)
         implementation(Deps.Coroutines.common)
@@ -49,7 +44,6 @@ kotlin {
     }
 
     sourceSets["androidMain"].dependencies {
-        implementation(kotlin("stdlib", Versions.kotlin))
         implementation(Deps.SqlDelight.driverAndroid)
         implementation(Deps.Coroutines.android)
         implementation(Deps.Coroutines.playServices)
