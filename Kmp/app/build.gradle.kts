@@ -30,9 +30,6 @@ android {
         }
     }
     compileOptions {
-        // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled = true
-
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -49,8 +46,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
     implementation(project(":shared"))
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.5")
-
     /* Android X */
     implementation(Deps.AndroidX.appCompat)
     implementation(Deps.AndroidX.coreKtx)
@@ -59,11 +54,13 @@ dependencies {
     implementation(Deps.AndroidX.fragment)
     implementation(Deps.AndroidX.fragmentKtx)
     implementation(Deps.AndroidX.lifecycle)
+    /* Android X */
 
+    /* Android X Views*/
     implementation(Deps.AndroidX.recyclerView)
     implementation(Deps.AndroidX.constraintLayout)
     implementation(Deps.AndroidX.swipeRefresh)
-    /* Android X */
+    /* Android X Views*/
 
     /* Views */
     implementation(Deps.AndroidView.material)

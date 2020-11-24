@@ -3,23 +3,23 @@ object Versions {
     const val targetSdk = 29
     const val compileSdk = 29
 
-    const val kotlin = "1.3.72"
+    const val kotlin = "1.4.20"
 
-    const val sqlDelight = "1.3.0"
+    const val sqlDelight = "1.4.3"
     const val coroutines = "1.3.5-native-mt"
     const val stately = "1.0.2"
 
-    const val activityX = "1.2.0-alpha05"
-    const val fragmentX = "1.3.0-alpha05"
-    const val lifecycle = "2.3.0-alpha03"
+    const val activityX = "1.2.0-beta01"
+    const val fragmentX = "1.3.0-beta01"
+    const val lifecycle = "2.3.0-beta01"
 
-    const val dagger = "2.28"
+    const val dagger = "2.30.1"
 }
 
 object Deps {
     object AndroidX {
-        const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
-        const val coreKtx = "androidx.core:core-ktx:1.4.0-alpha01"
+        const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
+        const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha05"
         const val activity = "androidx.activity:activity:${Versions.activityX}}"
         const val activityKtx = "androidx.activity:activity-ktx:${Versions.activityX}"
         const val fragment = "androidx.fragment:fragment:${Versions.fragmentX}"
@@ -27,13 +27,13 @@ object Deps {
 
         const val lifecycle = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycle}"
 
-        const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta6"
-        const val swipeRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-rc01"
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.2.0-alpha06"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.4"
+        const val swipeRefresh = "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
     }
 
     object AndroidView {
-        const val material = "com.google.android.material:material:1.3.0-alpha01"
+        const val material = "com.google.android.material:material:1.3.0-alpha03"
         const val wheelPicker = "cn.aigestudio.wheelpicker:WheelPicker:1.1.3"
     }
 
@@ -63,8 +63,8 @@ object Deps {
     }
 
     object Firebase {
-        const val auth = "com.google.firebase:firebase-auth-ktx:19.3.1"
-        const val firestore = "com.google.firebase:firebase-firestore-ktx:21.4.3"
-        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.1"
+        const val auth = "com.google.firebase:firebase-auth-ktx:20.0.1"
+        const val firestore = "com.google.firebase:firebase-firestore-ktx:22.0.0"
+        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.3.0"
     }
 }
