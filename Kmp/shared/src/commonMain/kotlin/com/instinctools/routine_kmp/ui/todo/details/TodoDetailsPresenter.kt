@@ -3,7 +3,7 @@ package com.instinctools.routine_kmp.ui.todo.details
 import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
-import com.instinctools.routine_kmp.ui.Presenter
+import com.instinctools.routine_kmp.domain.Store
 import com.instinctools.routine_kmp.ui.todo.details.model.*
 import com.instinctools.routine_kmp.util.ConsumableEvent
 import kotlinx.coroutines.CancellationException
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class TodoDetailsPresenter(
     private val todoId: String?,
     private val todoRepository: TodoRepository
-) : Presenter<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>() {
+) : Store<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>() {
 
     private val _states = ConflatedBroadcastChannel(State())
     override val states: Flow<State> get() = _states.asFlow()

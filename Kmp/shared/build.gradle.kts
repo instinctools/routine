@@ -20,7 +20,12 @@ version = "1.0"
 
 kotlin {
     //select iOS target platform depending on the Xcode environment variables
-    ios()
+    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+    if (onPhone) {
+        iosArm64("ios")
+    } else {
+        iosX64("ios")
+    }
     android()
 
     targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=

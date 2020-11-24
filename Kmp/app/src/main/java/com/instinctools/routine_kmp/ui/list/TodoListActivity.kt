@@ -107,12 +107,12 @@ class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
         }
 
         binding.swipeToRefresh.setOnRefreshListener {
-            presenter.events.offer(TodoListPresenter.Event.Refresh)
+            presenter.events.offer(TodoListPresenter.Action.Refresh)
         }
     }
 
     private fun onResetTodoSelected(item: TodoListUiModel) {
-        val event = TodoListPresenter.Event.Reset(item.todo.id)
+        val event = TodoListPresenter.Action.ResetTask(item.todo.id)
         presenter.events.offer(event)
     }
 
@@ -120,7 +120,7 @@ class TodoListActivity : RetainPresenterActivity<TodoListPresenter>() {
         AlertDialog.Builder(this)
             .setMessage(R.string.todos_delete_message)
             .setPositiveButton(R.string.todos_delete_ok) { _, _ ->
-                val event = TodoListPresenter.Event.Delete(item.todo.id)
+                val event = TodoListPresenter.Action.DeleteTask(item.todo.id)
                 presenter.events.offer(event)
             }
             .setNegativeButton(R.string.todos_delete_cancel, null)

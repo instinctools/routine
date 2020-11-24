@@ -1,6 +1,7 @@
 package com.instinctools.routine_kmp.ui
 
 import com.instinctools.routine_kmp.data.auth.AuthRepository
+import com.instinctools.routine_kmp.domain.Store
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class SplashPresenter(
     private val authRepository: AuthRepository
-) : Presenter<SplashPresenter.State, SplashPresenter.Event>() {
+) : Store<SplashPresenter.State, SplashPresenter.Event>() {
 
     private val _states = ConflatedBroadcastChannel<State>()
     override val states: Flow<State> get() = _states.asFlow()

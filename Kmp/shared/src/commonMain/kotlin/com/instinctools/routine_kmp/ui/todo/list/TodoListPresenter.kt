@@ -5,31 +5,35 @@ import com.instinctools.routine_kmp.data.date.compareTo
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.dateForTimestamp
 import com.instinctools.routine_kmp.data.date.daysBetween
+import com.instinctools.routine_kmp.domain.SideEffectTrigger
+import com.instinctools.routine_kmp.domain.Store
+import com.instinctools.routine_kmp.domain.task.DeleteTaskSideEffect
 import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
-import com.instinctools.routine_kmp.ui.Presenter
+import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.*
 import com.instinctools.routine_kmp.util.ConsumableEvent
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.flow.*
 
 class TodoListPresenter(
-    private val todoRepository: TodoRepository
-) : Presenter<TodoListPresenter.State, TodoListPresenter.Event>() {
+    private val todoRepository: TodoRepository,
 
-    private val _states = ConflatedBroadcastChannel<State>()
-    override val states: Flow<State> get() = _states.asFlow()
+    private val deleteTaskSideEffect: DeleteTaskSideEffect,
+) : Store<Action, State>(
+    initialState = State(),
+    sideEffectsTriggers = arrayOf(
+        SideEffectTrigger(
+            sideEffect = deleteTaskSideEffect,
+            triggerActions = arrayOf(null),
+            inputCreator = { action, state -> null },
+            outputCreator = { effectStatus -> null }
+        )
+    )
+) {
 
-    private val _events = Channel<Event>(Channel.RENDEZVOUS)
-    override val events: SendChannel<Event> get() = _events
-
-    private val state: State get() = _states.valueOrNull ?: State()
-
-    override fun start() {
+    init {
         scope.launch {
             tryRefresh()
         }
@@ -38,38 +42,12 @@ class TodoListPresenter(
             .flowOn(Dispatchers.Default)
             .onEach { updateUiTodos(it) }
             .launchIn(scope)
-
-        scope.launch {
-            for (event in _events) {
-                when (event) {
-                    is Event.Reset -> tryReset(event.id)
-                    is Event.Delete -> tryDelete(event.id)
-                    Event.Refresh -> tryRefresh()
-                }
-            }
-        }
     }
 
-    private suspend fun tryRefresh() {
-        try {
-            sendState(state.copy(refreshing = true, refreshError = null))
-            todoRepository.refresh()
-            sendState(state.copy(refreshing = false))
-        } catch (error: Throwable) {
-            if (error is CancellationException) return
-            sendState(state.copy(refreshing = false, refreshError = ConsumableEvent(error)))
-        }
-    }
-
-    private suspend fun tryDelete(todoId: String) = withContext(NonCancellable) {
-        try {
-            sendState(state.copy(refreshing = true, deleteError = null))
-            todoRepository.delete(todoId)
-            sendState(state.copy(refreshing = false))
-        } catch (error: Throwable) {
-            if (error is CancellationException) return@withContext
-            sendState(state.copy(refreshing = false, deleteError = ConsumableEvent(error)))
-        }
+    override suspend fun reduce(oldState: State, action: Action): State = when (action) {
+        is Action.ResetTask -> tryReset(action.taskId)
+        is Action.DeleteTask -> tryDelete(action.taskId)
+        Action.Refresh -> tryRefresh()
     }
 
     private suspend fun tryReset(todoId: String) {
@@ -113,14 +91,10 @@ class TodoListPresenter(
         sendState(newState)
     }
 
-    private fun sendState(newState: State) {
-        _states.offer(newState)
-    }
-
-    sealed class Event {
-        class Reset(val id: String) : Event()
-        class Delete(val id: String) : Event()
-        object Refresh : Event()
+    sealed class Action {
+        class ResetTask(val taskId: String) : Action()
+        class DeleteTask(val taskId: String) : Action()
+        object Refresh : Action()
     }
 
     data class State(

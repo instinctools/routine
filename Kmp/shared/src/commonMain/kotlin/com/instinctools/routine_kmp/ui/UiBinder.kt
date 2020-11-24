@@ -1,5 +1,6 @@
 package com.instinctools.routine_kmp.ui
 
+import com.instinctools.routine_kmp.domain.Store
 import com.instinctools.routine_kmp.util.cancelChildren
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@ class UiBinder<State : Any, Event : Any> {
 
     private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    fun bindTo(presenter: Presenter<State, Event>, listener: StateListener<State>) {
+    fun bindTo(presenter: Store<State, Event>, listener: StateListener<State>) {
         var oldState: State? = null
         presenter.states
             .onEach { state ->

@@ -6,7 +6,7 @@ object Versions {
     const val kotlin = "1.4.20"
 
     const val sqlDelight = "1.4.3"
-    const val coroutines = "1.4.1-native-mt-2"
+    const val coroutines = "1.4.1-native-mt"
     const val stately = "1.1.0"
 
     const val activityX = "1.2.0-beta01"

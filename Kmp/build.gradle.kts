@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.1.0")
+        classpath("com.android.tools.build:gradle:4.1.1")
         classpath(Deps.SqlDelight.gradle)
         classpath(kotlin("gradle-plugin", Versions.kotlin))
         classpath("com.google.gms:google-services:4.3.4")
@@ -17,6 +17,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven(url = "https://kotlin.bintray.com/kotlinx") // TODO remove line after kotlinx.datetime migrate to jcenter
     }
 }
 
