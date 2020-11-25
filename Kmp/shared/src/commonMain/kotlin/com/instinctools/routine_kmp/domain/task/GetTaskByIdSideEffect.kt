@@ -5,7 +5,7 @@ import com.instinctools.routine_kmp.domain.ActionSideEffect
 import com.instinctools.routine_kmp.domain.EffectStatus
 import com.instinctools.routine_kmp.domain.task.GetTaskByIdSideEffect.Input
 import com.instinctools.routine_kmp.domain.task.GetTaskByIdSideEffect.Output
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import kotlinx.coroutines.flow.FlowCollector
 
 class GetTaskByIdSideEffect(

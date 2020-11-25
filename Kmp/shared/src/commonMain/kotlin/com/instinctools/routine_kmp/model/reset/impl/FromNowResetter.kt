@@ -3,7 +3,7 @@ package com.instinctools.routine_kmp.model.reset.impl
 import com.instinctools.routine_kmp.data.date.currentDate
 import com.instinctools.routine_kmp.data.date.plus
 import com.instinctools.routine_kmp.data.date.timestamp
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import com.instinctools.routine_kmp.model.reset.TodoResetter
 
 class FromNowResetter : TodoResetter {

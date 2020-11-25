@@ -1,14 +1,20 @@
 package com.instinctools.routine_kmp.ui.todo.details
 
+import com.instinctools.routine_kmp.domain.EffectStatus
 import com.instinctools.routine_kmp.domain.Store
 import com.instinctools.routine_kmp.domain.task.GetTaskByIdSideEffect
 import com.instinctools.routine_kmp.domain.task.SaveTaskSideEffect
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
-import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter.*
-import com.instinctools.routine_kmp.ui.todo.details.model.*
+import com.instinctools.routine_kmp.model.todo.EditableTodo
+import com.instinctools.routine_kmp.model.todo.edit
+import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter.Action
+import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenter.State
+import com.instinctools.routine_kmp.ui.todo.details.model.PeriodUnitUiModel
+import com.instinctools.routine_kmp.ui.todo.details.model.ValidationError
+import com.instinctools.routine_kmp.ui.todo.details.model.adjustCount
+import com.instinctools.routine_kmp.ui.todo.details.model.allPeriodUiModels
 import com.instinctools.routine_kmp.util.OneTimeEvent
-import kotlinx.coroutines.launch
 
 class TodoDetailsPresenter(
     private val todoId: String?,
@@ -17,72 +23,101 @@ class TodoDetailsPresenter(
 ) : Store<Action, State>(State()) {
 
     init {
-        if (todoId != null) {
-            scope.launch {
-                val todo = todoRepository.getTodoById(todoId) ?: return@launch
-                val periods = state.periods.adjustCount(todo.periodUnit, todo.periodValue)
-                sendState(state.copy(todo = todo.edit(), periods = periods))
-            }
-        }
+        registerSideEffect(
+            sideEffect = getTaskByIdSideEffect,
+            inputCreator = { if (it is Action.GetTask) GetTaskByIdSideEffect.Input(it.taskId) else null },
+            outputConverter = { Action.TaskLoadingChanged(it) }
+        )
+        registerSideEffect(
+            sideEffect = saveTaskSideEffect,
+            inputCreator = { if (it == Action.SaveTask) SaveTaskSideEffect.Input(states.value.todo) else null },
+            outputConverter = { Action.SaveStateChanged(it) }
+        )
+
+        if (todoId != null) sendAction(Action.GetTask(todoId))
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {
-        is Action.ChangeTitle -> {
-            val todo = oldState.todo.copy(title = action.title)
-            if (todo != oldState.todo) sendState(oldState.copy(todo = todo))
-        }
-        is Action.ChangePeriodUnit -> {
-            val todo = oldState.todo
+        is Action.GetTask, Action.SaveTask -> oldState
+        is Action.TaskLoadingChanged -> oldState.withLoadedTodo(action.status)
+
+        is Action.ChangeTitle -> oldState.withEditTodo { todo.copy(title = action.title) }
+        is Action.ChangePeriodStrategy -> oldState.withEditTodo { todo.copy(periodStrategy = action.periodStrategy) }
+        is Action.ChangePeriodUnit -> oldState.withEditTodo {
             val count = if (todo.periodUnit != action.periodUnit) 1 else todo.periodValue
-            val newTodo = todo.copy(periodUnit = action.periodUnit, periodValue = count)
-            sendState(oldState.copy(todo = newTodo))
+            todo.copy(periodUnit = action.periodUnit, periodValue = count)
         }
         is Action.ChangePeriod -> {
             val todo = oldState.todo.copy(periodValue = action.period)
             val selectedUnit = todo.periodUnit ?: PeriodUnit.DAY
             val newPeriods = oldState.periods.adjustCount(selectedUnit, action.period)
-            sendState(oldState.copy(todo = todo, periods = newPeriods))
+            oldState.copy(todo = todo, periods = newPeriods)
         }
-        is Action.ChangePeriodStrategy -> {
-            val todo = oldState.todo.copy(periodStrategy = action.periodStrategy)
-            sendState(oldState.copy(todo = todo))
-        }
-        Action.Save -> trySave()
+
+        is Action.SaveStateChanged -> oldState.copy(
+            saveProgress = action.status.progress,
+            saveError = OneTimeEvent(action.status.error),
+            saved = OneTimeEvent(action.status.data)
+        )
     }
-
-
-    private fun validState(newState: State): State {
-        val errors = mutableSetOf<ValidationError>()
-        val todo = newState.todo
-        if (todo.title.isNullOrEmpty()) {
-            errors += ValidationError.EmptyTitle
-        }
-        if (todo.periodUnit == null) {
-            errors += ValidationError.PeriodNotSelected
-        }
-        val saveEnabled = errors.isEmpty()
-        return newState.copy(saveEnabled = saveEnabled, validationErrors = errors)
-    }
-
-    private fun sendState(newState: State) {
-        val state = validState(newState)
-        _states.offer(state)
-    }
-
-    data class State(
-        val todo: EditableTodoUiModel = EditableTodoUiModel(),
-        val periods: List<PeriodUnitUiModel> = allPeriodUiModels(),
-        val saved: Boolean = false,
-        val saveEnabled: Boolean = false,
-        val validationErrors: Set<ValidationError> = emptySet(),
-        val saveError: OneTimeEvent<Throwable>? = null
-    )
 
     sealed class Action {
-        object Save : Action()
         class ChangeTitle(val title: String?) : Action()
         class ChangePeriodUnit(val periodUnit: PeriodUnit) : Action()
         class ChangePeriod(val period: Int) : Action()
         class ChangePeriodStrategy(val periodStrategy: PeriodResetStrategy) : Action()
+
+        class GetTask(val taskId: String) : Action()
+        class TaskLoadingChanged(val status: EffectStatus<GetTaskByIdSideEffect.Output>) : Action()
+
+        object SaveTask : Action()
+        class SaveStateChanged(val status: EffectStatus<Boolean>) : Action()
+    }
+
+    data class State(
+        val todo: EditableTodo = EditableTodo(),
+        val periods: List<PeriodUnitUiModel> = allPeriodUiModels(),
+
+        val loadingProgress: Boolean = false,
+        val loadingError: OneTimeEvent<Throwable> = OneTimeEvent(),
+
+        val saveProgress: Boolean = false,
+        val saved: OneTimeEvent<Boolean> = OneTimeEvent(),
+        val saveError: OneTimeEvent<Throwable> = OneTimeEvent()
+    ) {
+
+        val progress = saveProgress || loadingProgress
+
+        val validationErrors = mutableSetOf<ValidationError>()
+        val saveEnabled: Boolean
+
+        init {
+            if (todo.title.isNullOrEmpty()) {
+                validationErrors += ValidationError.EmptyTitle
+            }
+            if (todo.periodUnit == null) {
+                validationErrors += ValidationError.PeriodNotSelected
+            }
+            saveEnabled = validationErrors.isEmpty()
+        }
+
+        fun withEditTodo(editor: State.() -> EditableTodo): State {
+            val todo = editor()
+            return copy(todo = todo)
+        }
+
+        fun withLoadedTodo(status: EffectStatus<GetTaskByIdSideEffect.Output>): State {
+            val loadedTask = status.data?.task
+            return if (loadedTask == null) copy(
+                loadingProgress = status.progress,
+                loadingError = OneTimeEvent(status.error)
+            )
+            else copy(
+                todo = loadedTask.edit(),
+                periods = periods.adjustCount(loadedTask.periodUnit, loadedTask.periodValue),
+                loadingProgress = status.progress,
+                loadingError = OneTimeEvent(status.error)
+            )
+        }
     }
 }

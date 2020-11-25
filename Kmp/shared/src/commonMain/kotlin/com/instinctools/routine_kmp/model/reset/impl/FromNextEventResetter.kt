@@ -1,7 +1,7 @@
 package com.instinctools.routine_kmp.model.reset.impl
 
 import com.instinctools.routine_kmp.data.date.*
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import com.instinctools.routine_kmp.model.reset.TodoResetter
 
 class FromNextEventResetter : TodoResetter {

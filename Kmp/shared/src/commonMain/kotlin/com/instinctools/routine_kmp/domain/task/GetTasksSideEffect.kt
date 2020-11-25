@@ -8,7 +8,7 @@ import com.instinctools.routine_kmp.data.date.daysBetween
 import com.instinctools.routine_kmp.domain.EffectStatus
 import com.instinctools.routine_kmp.domain.SideEffect
 import com.instinctools.routine_kmp.domain.task.GetTasksSideEffect.Output
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import com.instinctools.routine_kmp.model.color.ColorEvaluator
 import com.instinctools.routine_kmp.model.color.TodoColor
 import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
