@@ -8,7 +8,7 @@ import com.instinctools.routine_kmp.domain.task.RefreshTasksSideEffect
 import com.instinctools.routine_kmp.domain.task.ResetTaskSideEffect
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.Action
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.State
-import com.instinctools.routine_kmp.util.ConsumableEvent
+import com.instinctools.routine_kmp.util.OneTimeEvent
 
 class TodoListPresenter(
     getTasksSideEffect: GetTasksSideEffect,
@@ -38,14 +38,18 @@ class TodoListPresenter(
             inputCreator = { if (it == Action.GetTasks) Unit else null },
             outputConverter = { Action.TasksLoaded(it) }
         )
+
+        sendAction(Action.Refresh)
+        sendAction(Action.GetTasks)
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {
-        Action.GetTasks -> oldState
         is Action.TasksLoaded -> oldState.withTasksOutput(action.status)
-        is Action.ResetTask -> oldState.
+        is Action.ResetTaskStatusChanged -> oldState.withResetState(action.status)
+        is Action.DeleteTaskStatusChanged -> oldState.withDeleteState(action.status)
+        is Action.RefreshStatusChanged -> oldState.withRefreshState(action.status)
 
-        is Action.ResetTask, is Action.DeleteTask, is Action.Refresh -> oldState
+        Action.GetTasks, is Action.ResetTask, is Action.DeleteTask, is Action.Refresh -> oldState
     }
 
     sealed class Action {
@@ -65,17 +69,41 @@ class TodoListPresenter(
     data class State(
         val expiredTodos: List<TodoListUiModel> = emptyList(),
         val futureTodos: List<TodoListUiModel> = emptyList(),
-        val progress: Boolean = false,
 
-        val refreshError: ConsumableEvent<Throwable>? = null,
-        val deleteError: ConsumableEvent<Throwable>? = null,
-        val resetError: ConsumableEvent<Throwable>? = null
+        val refreshProgress: Boolean = false,
+        val resetProgress: Boolean = false,
+        val deleteProgress: Boolean = false,
+
+        val deleteDone: OneTimeEvent<Boolean> = OneTimeEvent(),
+        val resetDone: OneTimeEvent<Boolean> = OneTimeEvent(),
+
+        val refreshError: OneTimeEvent<Throwable>? = null,
+        val deleteError: OneTimeEvent<Throwable>? = null,
+        val resetError: OneTimeEvent<Throwable>? = null
     ) {
-        fun withTasksOutput(status: EffectStatus<GetTasksSideEffect.Output>): State {
-            return if (status.data != null) copy(
-                expiredTodos = status.data.expiredTodos,
-                futureTodos = status.data.futureTodos
-            ) else this
-        }
+
+        val progress: Boolean = refreshProgress || resetProgress || deleteProgress
+
+        fun withTasksOutput(status: EffectStatus<GetTasksSideEffect.Output>) = if (status.data != null) copy(
+            expiredTodos = status.data.expiredTodos,
+            futureTodos = status.data.futureTodos
+        ) else this
+
+        fun withResetState(status: EffectStatus<Boolean>): State = copy(
+            resetProgress = status.progress,
+            resetError = OneTimeEvent(status.error),
+            resetDone = OneTimeEvent(status.done)
+        )
+
+        fun withDeleteState(status: EffectStatus<Boolean>): State = copy(
+            deleteProgress = status.progress,
+            deleteError = OneTimeEvent(status.error),
+            deleteDone = OneTimeEvent(status.done)
+        )
+
+        fun withRefreshState(status: EffectStatus<Boolean>): State = copy(
+            refreshProgress = status.progress,
+            refreshError = OneTimeEvent(status.error),
+        )
     }
 }

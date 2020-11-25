@@ -7,7 +7,7 @@ import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
 import com.instinctools.routine_kmp.model.Todo
 
-data class EditTodoUiModel(
+data class EditableTodoUiModel(
     val id: String? = null,
     val title: String? = null,
     val periodUnit: PeriodUnit? = null,
@@ -16,16 +16,16 @@ data class EditTodoUiModel(
     val nextTimestamp: Long? = null
 )
 
-fun Todo.toEditModel() = EditTodoUiModel(id, title, periodUnit, periodValue, periodStrategy, nextTimestamp)
+fun Todo.edit() = EditableTodoUiModel(id, title, periodUnit, periodValue, periodStrategy, nextTimestamp)
 
-fun EditTodoUiModel.buildNewTodoModel(): Todo {
+fun EditableTodoUiModel.buildNewTodoModel(): Todo {
     val title = checkNotNull(title) { "Title should not be empty" }
     val periodUnit = checkNotNull(periodUnit) { "Period unit should be selected" }
     val nextTimestamp = nextTimestamp ?: currentDate().plus(periodUnit, periodValue).timestamp
     return Todo(title, periodUnit, periodValue, periodStrategy, nextTimestamp)
 }
 
-fun EditTodoUiModel.buildUpdatedTodoModel(): Todo {
+fun EditableTodoUiModel.buildUpdatedTodoModel(): Todo {
     val id = checkNotNull(id) { "Id should not be empty for already existed task" }
     val title = checkNotNull(title) { "Title should not be empty" }
     val nextTimestamp = nextTimestamp ?: currentDate().timestamp
