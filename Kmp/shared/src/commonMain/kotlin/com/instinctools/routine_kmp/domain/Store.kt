@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 
 abstract class Store<Action, State>(
     initialState: State,
-    sideEffectsTriggers: Array<SideEffectTrigger<*, *, Action, State>>
 ) {
 
     protected val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
@@ -30,28 +29,26 @@ abstract class Store<Action, State>(
                 _states.value = reduce(_states.value, action)
             }
         }
-
-        for (sideEffectTrigger in sideEffectsTriggers) {
-            actions.asFlow()
-                .filter { it in sideEffectTrigger.triggerActions }
-                .map { action ->
-                    val input = sideEffectTrigger.inputCreator(action, states.value)
-                    sideEffectTrigger.sideEffect.call(input)
-                }
-                .flattenConcat()
-                .onEach { output ->
-                    val action = sideEffectTrigger.outputCreator(output)
-                    actions.send(action)
-                }
-                .catch { }
-                .launchIn(scope)
-        }
     }
 
     abstract suspend fun reduce(oldState: State, action: Action): State
 
     fun sendAction(action: Action) {
         if (!actions.isClosedForSend) actions.offer(action)
+    }
+
+    protected fun <Input, Output> registerSideEffect(
+        sideEffect: SideEffect<Input, Output>,
+        inputCreator: (Action) -> Input?,
+        outputConverter: (EffectStatus<Output>) -> Action
+    ) {
+        actions.asFlow()
+            .map { inputCreator(it) }
+            .filter { it != null }
+            .flatMapConcat { sideEffect.call(it!!) }
+            .map { outputConverter(it) }
+            .onEach { sendAction(it) }
+            .launchIn(scope)
     }
 
     fun stop() {

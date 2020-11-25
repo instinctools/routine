@@ -3,10 +3,11 @@ package com.instinctools.routine_kmp.domain.task
 import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.domain.ActionSideEffect
 import com.instinctools.routine_kmp.domain.EffectStatus
-import com.instinctools.routine_kmp.domain.task.DeleteTaskSideEffect.Input
+import com.instinctools.routine_kmp.domain.task.ResetTaskSideEffect.Input
+import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
 import kotlinx.coroutines.flow.FlowCollector
 
-class DeleteTaskSideEffect(
+class ResetTaskSideEffect(
     private val todoRepository: TodoRepository
 ) : ActionSideEffect<Input, Boolean>() {
 
@@ -15,7 +16,11 @@ class DeleteTaskSideEffect(
     )
 
     override suspend fun FlowCollector<EffectStatus<Boolean>>.doWork(input: Input) {
-        todoRepository.delete(input.taskId)
-        emit(EffectStatus.data(true))
+        val todo = requireNotNull(todoRepository.getTodoById(input.taskId)) { "Failed to load todo with id=${input.taskId}" }
+        val resetter = TodoResetterFactory.get(todo.periodStrategy)
+        val resetTodo = resetter.reset(todo)
+
+        todoRepository.update(resetTodo)
+        emitData(true)
     }
 }

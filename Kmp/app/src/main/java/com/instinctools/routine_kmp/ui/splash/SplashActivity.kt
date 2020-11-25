@@ -59,7 +59,7 @@ class SplashActivity : RetainPresenterActivity<SplashPresenter>() {
 
     private fun setupUi() {
         binding.btnRetry.setOnClickListener {
-            presenter.events.offer(SplashPresenter.Event.Retry)
+            presenter.events.offer(SplashPresenter.Action.Retry)
         }
     }
 }

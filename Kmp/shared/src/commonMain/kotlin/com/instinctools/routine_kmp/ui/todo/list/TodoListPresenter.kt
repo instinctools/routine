@@ -1,109 +1,81 @@
 package com.instinctools.routine_kmp.ui.todo.list
 
-import com.instinctools.routine_kmp.data.TodoRepository
-import com.instinctools.routine_kmp.data.date.compareTo
-import com.instinctools.routine_kmp.data.date.currentDate
-import com.instinctools.routine_kmp.data.date.dateForTimestamp
-import com.instinctools.routine_kmp.data.date.daysBetween
-import com.instinctools.routine_kmp.domain.SideEffectTrigger
+import com.instinctools.routine_kmp.domain.EffectStatus
 import com.instinctools.routine_kmp.domain.Store
 import com.instinctools.routine_kmp.domain.task.DeleteTaskSideEffect
-import com.instinctools.routine_kmp.model.Todo
-import com.instinctools.routine_kmp.model.color.ColorEvaluator
-import com.instinctools.routine_kmp.model.color.TodoColor
-import com.instinctools.routine_kmp.model.reset.TodoResetterFactory
-import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.*
+import com.instinctools.routine_kmp.domain.task.GetTasksSideEffect
+import com.instinctools.routine_kmp.domain.task.RefreshTasksSideEffect
+import com.instinctools.routine_kmp.domain.task.ResetTaskSideEffect
+import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.Action
+import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.State
 import com.instinctools.routine_kmp.util.ConsumableEvent
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 
 class TodoListPresenter(
-    private val todoRepository: TodoRepository,
-
-    private val deleteTaskSideEffect: DeleteTaskSideEffect,
-) : Store<Action, State>(
-    initialState = State(),
-    sideEffectsTriggers = arrayOf(
-        SideEffectTrigger(
-            sideEffect = deleteTaskSideEffect,
-            triggerActions = arrayOf(null),
-            inputCreator = { action, state -> null },
-            outputCreator = { effectStatus -> null }
-        )
-    )
-) {
+    getTasksSideEffect: GetTasksSideEffect,
+    deleteTaskSideEffect: DeleteTaskSideEffect,
+    resetTaskSideEffect: ResetTaskSideEffect,
+    refreshTasksSideEffect: RefreshTasksSideEffect,
+) : Store<Action, State>(State()) {
 
     init {
-        scope.launch {
-            tryRefresh()
-        }
-
-        todoRepository.getTodosSortedByDate()
-            .flowOn(Dispatchers.Default)
-            .onEach { updateUiTodos(it) }
-            .launchIn(scope)
+        registerSideEffect(
+            sideEffect = refreshTasksSideEffect,
+            inputCreator = { if (it == Action.Refresh) Unit else null },
+            outputConverter = { Action.RefreshStatusChanged(it) }
+        )
+        registerSideEffect(
+            sideEffect = resetTaskSideEffect,
+            inputCreator = { if (it is Action.ResetTask) ResetTaskSideEffect.Input(it.taskId) else null },
+            outputConverter = { Action.ResetTaskStatusChanged(it) }
+        )
+        registerSideEffect(
+            sideEffect = deleteTaskSideEffect,
+            inputCreator = { if (it is Action.DeleteTask) DeleteTaskSideEffect.Input(it.taskId) else null },
+            outputConverter = { Action.DeleteTaskStatusChanged(it) }
+        )
+        registerSideEffect(
+            sideEffect = getTasksSideEffect,
+            inputCreator = { if (it == Action.GetTasks) Unit else null },
+            outputConverter = { Action.TasksLoaded(it) }
+        )
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {
-        is Action.ResetTask -> tryReset(action.taskId)
-        is Action.DeleteTask -> tryDelete(action.taskId)
-        Action.Refresh -> tryRefresh()
-    }
+        Action.GetTasks -> oldState
+        is Action.TasksLoaded -> oldState.withTasksOutput(action.status)
+        is Action.ResetTask -> oldState.
 
-    private suspend fun tryReset(todoId: String) {
-        try {
-            sendState(state.copy(refreshing = true, resetError = null))
-            val todo = requireNotNull(todoRepository.getTodoById(todoId)) { "Failed to load todo with id=${todoId}" }
-            val resetter = TodoResetterFactory.get(todo.periodStrategy)
-            val resetTodo = resetter.reset(todo)
-
-            todoRepository.update(resetTodo)
-            sendState(state.copy(refreshing = false))
-        } catch (error: Throwable) {
-            if (error is CancellationException) return
-            sendState(state.copy(refreshing = false, resetError = ConsumableEvent(error)))
-        }
-    }
-
-    private fun updateUiTodos(todos: List<Todo>) {
-        val expiredTodos = mutableListOf<TodoListUiModel>()
-        val futureTodos = mutableListOf<TodoListUiModel>()
-
-        val todosCount = todos.count()
-        val currentDate = currentDate()
-        todos.forEachIndexed { index, todo ->
-            val todoDate = dateForTimestamp(todo.nextTimestamp)
-            if (todoDate < currentDate) {
-                val daysLeft = daysBetween(todoDate, currentDate)
-                expiredTodos += TodoListUiModel(todo, TodoColor.EXPIRED_TODO, daysLeft)
-            } else {
-                val daysLeft = daysBetween(currentDate, todoDate)
-                val fraction = index / todosCount.toFloat()
-                val color = ColorEvaluator.evaluate(fraction, TodoColor.TODOS_START, TodoColor.TODOS_END)
-                futureTodos += TodoListUiModel(todo, color, daysLeft)
-            }
-        }
-
-        val newState = state.copy(
-            expiredTodos = expiredTodos,
-            futureTodos = futureTodos
-        )
-        sendState(newState)
+        is Action.ResetTask, is Action.DeleteTask, is Action.Refresh -> oldState
     }
 
     sealed class Action {
+        object GetTasks : Action()
+        class TasksLoaded(val status: EffectStatus<GetTasksSideEffect.Output>) : Action()
+
         class ResetTask(val taskId: String) : Action()
+        class ResetTaskStatusChanged(val status: EffectStatus<Boolean>) : Action()
+
         class DeleteTask(val taskId: String) : Action()
+        class DeleteTaskStatusChanged(val status: EffectStatus<Boolean>) : Action()
+
         object Refresh : Action()
+        class RefreshStatusChanged(val status: EffectStatus<Boolean>) : Action()
     }
 
     data class State(
         val expiredTodos: List<TodoListUiModel> = emptyList(),
         val futureTodos: List<TodoListUiModel> = emptyList(),
-        val refreshing: Boolean = false,
+        val progress: Boolean = false,
 
         val refreshError: ConsumableEvent<Throwable>? = null,
         val deleteError: ConsumableEvent<Throwable>? = null,
         val resetError: ConsumableEvent<Throwable>? = null
-    )
+    ) {
+        fun withTasksOutput(status: EffectStatus<GetTasksSideEffect.Output>): State {
+            return if (status.data != null) copy(
+                expiredTodos = status.data.expiredTodos,
+                futureTodos = status.data.futureTodos
+            ) else this
+        }
+    }
 }

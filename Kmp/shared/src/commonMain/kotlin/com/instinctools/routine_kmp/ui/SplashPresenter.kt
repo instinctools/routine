@@ -2,25 +2,15 @@ package com.instinctools.routine_kmp.ui
 
 import com.instinctools.routine_kmp.data.auth.AuthRepository
 import com.instinctools.routine_kmp.domain.Store
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.channels.SendChannel
+import com.instinctools.routine_kmp.ui.SplashPresenter.*
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 class SplashPresenter(
     private val authRepository: AuthRepository
-) : Store<SplashPresenter.State, SplashPresenter.Event>() {
+) : Store<Action, State>(State.Loading) {
 
-    private val _states = ConflatedBroadcastChannel<State>()
-    override val states: Flow<State> get() = _states.asFlow()
-
-    private val _events = Channel<Event>(Channel.RENDEZVOUS)
-    override val events: SendChannel<Event> get() = _events
-
-    override fun start() {
+    init {
         scope.launch {
             val userId = authRepository.getUserId()
             if (userId == null) {
@@ -34,11 +24,15 @@ class SplashPresenter(
 
         scope.launch {
             for (event in _events) {
-                if (event == Event.Retry) {
+                if (event == Action.Retry) {
                     tryLogin()
                 }
             }
         }
+    }
+
+    override suspend fun reduce(oldState: State, action: Action): State {
+        TODO("Not yet implemented")
     }
 
     private suspend fun tryLogin() {
@@ -52,17 +46,13 @@ class SplashPresenter(
         }
     }
 
-    private fun sendState(newState: State) {
-        _states.offer(newState)
-    }
-
     sealed class State {
         object Loading : State()
         class Error(val error: Throwable?) : State()
         object Success : State()
     }
 
-    sealed class Event {
-        object Retry : Event()
+    sealed class Action {
+        object Retry : Action()
     }
 }
