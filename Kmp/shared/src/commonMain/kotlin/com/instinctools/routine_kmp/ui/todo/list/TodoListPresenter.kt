@@ -77,9 +77,9 @@ class TodoListPresenter(
         val deleteDone: OneTimeEvent<Boolean> = OneTimeEvent(),
         val resetDone: OneTimeEvent<Boolean> = OneTimeEvent(),
 
-        val refreshError: OneTimeEvent<Throwable>? = null,
-        val deleteError: OneTimeEvent<Throwable>? = null,
-        val resetError: OneTimeEvent<Throwable>? = null
+        val refreshError: OneTimeEvent<Throwable> = OneTimeEvent(),
+        val deleteError: OneTimeEvent<Throwable> = OneTimeEvent(),
+        val resetError: OneTimeEvent<Throwable> = OneTimeEvent()
     ) {
 
         val progress: Boolean = refreshProgress || resetProgress || deleteProgress

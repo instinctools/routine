@@ -6,6 +6,8 @@ import com.instinctools.routine_kmp.R
 import com.instinctools.routine_kmp.databinding.ActivitySplashBinding
 import com.instinctools.routine_kmp.ui.RetainPresenterActivity
 import com.instinctools.routine_kmp.ui.SplashPresenter
+import com.instinctools.routine_kmp.ui.SplashPresenter.Action
+import com.instinctools.routine_kmp.ui.SplashPresenter.State
 import com.instinctools.routine_kmp.ui.list.TodoListActivity
 import com.instinctools.routine_kmp.util.appComponent
 import kotlinx.coroutines.flow.launchIn
@@ -37,19 +39,19 @@ class SplashActivity : RetainPresenterActivity<SplashPresenter>() {
 
     override fun onStart() {
         super.onStart()
-        presenter.states.onEach { state ->
+        presenter.states.onEach { state: State ->
             when (state) {
-                SplashPresenter.State.Loading -> {
+                State.Loading -> {
                     binding.btnRetry.visibility = View.GONE
                     binding.authMessage.setText(R.string.splash_auth_progress)
                     binding.progress.visibility = View.VISIBLE
                 }
-                is SplashPresenter.State.Error -> {
+                is State.Error -> {
                     binding.btnRetry.visibility = View.VISIBLE
                     binding.authMessage.setText(R.string.splash_auth_error)
                     binding.progress.visibility = View.GONE
                 }
-                SplashPresenter.State.Success -> {
+                State.Success -> {
                     startActivity(TodoListActivity.buildIntent(this))
                 }
             }
@@ -59,7 +61,7 @@ class SplashActivity : RetainPresenterActivity<SplashPresenter>() {
 
     private fun setupUi() {
         binding.btnRetry.setOnClickListener {
-            presenter.events.offer(SplashPresenter.Action.Retry)
+            presenter.sendAction(Action.Login)
         }
     }
 }

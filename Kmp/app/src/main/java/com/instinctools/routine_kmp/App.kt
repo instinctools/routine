@@ -3,7 +3,6 @@ package com.instinctools.routine_kmp
 import android.app.Application
 import com.instinctools.routine_kmp.di.ComponentsProvider
 import com.instinctools.routine_kmp.di.DaggerAppComponent
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 class App : Application(), ComponentsProvider {
 
@@ -14,7 +13,6 @@ class App : Application(), ComponentsProvider {
     override fun onCreate() {
         super.onCreate()
         app = this
-        MutableSharedFlow<>()
     }
 
     companion object {

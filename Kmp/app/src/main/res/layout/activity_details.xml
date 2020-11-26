@@ -16,6 +16,17 @@
         app:menu="@menu/details"
         app:navigationIcon="@drawable/ic_back" />
 
+    <com.google.android.material.progressindicator.ProgressIndicator
+        android:id="@+id/progress"
+        style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:visibility="visible" />
+
     <EditText
         android:id="@+id/titleInput"
         android:layout_width="0dp"

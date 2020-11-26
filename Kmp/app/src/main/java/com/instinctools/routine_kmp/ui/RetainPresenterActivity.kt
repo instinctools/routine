@@ -16,7 +16,7 @@ abstract class RetainPresenterActivity<ScreenPresenter : Store<*, *>> : AppCompa
 
     protected fun createPresenter() {
         presenter = lastCustomNonConfigurationInstance as? ScreenPresenter
-            ?: presenterCreator().also { it.start() }
+            ?: presenterCreator()
     }
 
     override fun onStop() {

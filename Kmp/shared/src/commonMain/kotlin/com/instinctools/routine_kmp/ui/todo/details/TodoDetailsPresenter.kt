@@ -17,10 +17,10 @@ import com.instinctools.routine_kmp.ui.todo.details.model.allPeriodUiModels
 import com.instinctools.routine_kmp.util.OneTimeEvent
 
 class TodoDetailsPresenter(
-    private val todoId: String?,
+    todoId: String?,
     getTaskByIdSideEffect: GetTaskByIdSideEffect,
     saveTaskSideEffect: SaveTaskSideEffect
-) : Store<Action, State>(State()) {
+) : Store<Action, State>(State(todoId)) {
 
     init {
         registerSideEffect(
@@ -75,6 +75,7 @@ class TodoDetailsPresenter(
     }
 
     data class State(
+        val todoId: String?,
         val todo: EditableTodo = EditableTodo(),
         val periods: List<PeriodUnitUiModel> = allPeriodUiModels(),
 

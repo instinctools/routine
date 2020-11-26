@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.di
+package com.instinctools.routine_kmp.di.module
 
 import android.content.Context
 import com.instinctools.routine_kmp.TodoDatabase
@@ -6,7 +6,6 @@ import com.instinctools.routine_kmp.data.AndroidDatabaseProvider
 import com.instinctools.routine_kmp.data.LocalTodoStore
 import com.instinctools.routine_kmp.data.TodoRepository
 import com.instinctools.routine_kmp.data.auth.AuthRepository
-import com.instinctools.routine_kmp.data.auth.FirebaseAuthenticator
 import com.instinctools.routine_kmp.data.database.SqlTodoStore
 import com.instinctools.routine_kmp.data.firestore.FirebaseTodoStore
 import dagger.Module

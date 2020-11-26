@@ -1,6 +1,10 @@
 package com.instinctools.routine_kmp.di
 
 import android.content.Context
+import com.instinctools.routine_kmp.di.module.AuthModule
+import com.instinctools.routine_kmp.di.module.PresentationModule
+import com.instinctools.routine_kmp.di.module.SideEffectsModule
+import com.instinctools.routine_kmp.di.module.StoreModule
 import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
 import com.instinctools.routine_kmp.ui.list.TodoListActivity
 import com.instinctools.routine_kmp.ui.splash.SplashActivity
@@ -13,7 +17,8 @@ import javax.inject.Singleton
     modules = [
         StoreModule::class,
         PresentationModule::class,
-        AuthModule::class
+        AuthModule::class,
+        SideEffectsModule::class
     ]
 )
 interface AppComponent {
