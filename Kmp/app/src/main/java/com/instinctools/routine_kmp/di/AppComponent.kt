@@ -5,9 +5,9 @@ import com.instinctools.routine_kmp.di.module.AuthModule
 import com.instinctools.routine_kmp.di.module.PresentationModule
 import com.instinctools.routine_kmp.di.module.SideEffectsModule
 import com.instinctools.routine_kmp.di.module.StoreModule
-import com.instinctools.routine_kmp.ui.details.TodoDetailsActivity
-import com.instinctools.routine_kmp.ui.list.TodoListActivity
-import com.instinctools.routine_kmp.ui.splash.SplashActivity
+import com.instinctools.routine_kmp.ui.SplashPresenter
+import com.instinctools.routine_kmp.ui.todo.details.TodoDetailsPresenterFactory
+import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -23,9 +23,9 @@ import javax.inject.Singleton
 )
 interface AppComponent {
 
-    fun inject(activity: TodoListActivity)
-    fun inject(activity: TodoDetailsActivity)
-    fun inject(activity: SplashActivity)
+    val splashPresenter: SplashPresenter
+    val todoListPresenter: TodoListPresenter
+    val todoDetailsPresenterFactory: TodoDetailsPresenterFactory
 
     @Component.Factory
     interface Factory {
