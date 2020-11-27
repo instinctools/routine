@@ -8,5 +8,5 @@ fun Todo.toFirebaseMap(): Map<String, Any> = mapOf(
     FirebaseConst.Todo.periodInit to periodUnit.id,
     FirebaseConst.Todo.periodValue to periodValue,
     FirebaseConst.Todo.periodStrategy to periodStrategy.id,
-    FirebaseConst.Todo.nextTimestamp to nextTimestamp
+    FirebaseConst.Todo.nextTimestamp to nextDate
 )

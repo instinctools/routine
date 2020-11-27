@@ -1,24 +1,26 @@
 package com.instinctools.routine_kmp.model.reset.impl
 
-import com.instinctools.routine_kmp.data.date.*
-import com.instinctools.routine_kmp.model.todo.Todo
 import com.instinctools.routine_kmp.model.reset.TodoResetter
+import com.instinctools.routine_kmp.model.todo.Todo
+import com.instinctools.routine_kmp.util.currentDate
+import kotlinx.datetime.plus
 
 class FromNextEventResetter : TodoResetter {
 
     override fun reset(todo: Todo): Todo {
         val currentDate = currentDate()
-        var nextDate = dateForTimestamp(todo.nextTimestamp)
 
         // do not allow increase next event date more then one interval
-        if (nextDate > currentDate && currentDate.plus(todo.periodUnit, todo.periodValue) < nextDate) {
+        val nearestDate = currentDate.plus(todo.periodValue, todo.periodUnit.dateTimeUnit)
+        if (todo.nextDate > currentDate && nearestDate < todo.nextDate) {
             return todo
         }
 
+        var nextDate = todo.nextDate
         do {
-            nextDate = nextDate.plus(todo.periodUnit, todo.periodValue)
+            nextDate = nextDate.plus(todo.periodValue, todo.periodUnit.dateTimeUnit)
         } while (nextDate < currentDate)
 
-        return todo.copy(nextTimestamp = nextDate.timestamp)
+        return todo.copy(nextDate = nextDate)
     }
 }

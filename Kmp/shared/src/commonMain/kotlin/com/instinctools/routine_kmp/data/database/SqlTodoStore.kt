@@ -41,11 +41,12 @@ class SqlTodoStore(
     }
 
     override suspend fun insert(todo: Todo) = withContext(Dispatchers.Default) {
-        database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp)
+        todo.nextDate
+        database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate)
     }
 
     override suspend fun update(todo: Todo) = withContext(Dispatchers.Default) {
-        database.todoQueries.updateById(todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp, todo.id)
+        database.todoQueries.updateById(todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate, todo.id)
     }
 
     override suspend fun delete(id: String) = withContext(Dispatchers.Default) {
@@ -56,7 +57,7 @@ class SqlTodoStore(
         database.transaction {
             database.todoQueries.deleteAll()
             for (todo in todos) {
-                database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp)
+                database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate)
             }
         }
     }

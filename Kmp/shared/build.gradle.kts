@@ -46,6 +46,7 @@ kotlin {
         implementation(Deps.Coroutines.common)
         implementation(Deps.Stately.concurrency)
         implementation(Deps.Stately.common)
+        implementation(Deps.DayTime.common)
     }
 
     sourceSets["androidMain"].dependencies {

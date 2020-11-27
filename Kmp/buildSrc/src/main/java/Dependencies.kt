@@ -44,6 +44,10 @@ object Deps {
         const val playServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
     }
 
+    object DayTime {
+        const val common = "org.jetbrains.kotlinx:kotlinx-datetime:0.1.1"
+    }
+
     object Dagger {
         const val library = "com.google.dagger:dagger:${Versions.dagger}"
         const val compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"

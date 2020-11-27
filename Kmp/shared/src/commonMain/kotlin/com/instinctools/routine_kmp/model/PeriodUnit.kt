@@ -1,10 +1,15 @@
 package com.instinctools.routine_kmp.model
 
-enum class PeriodUnit(val id: String) {
-    DAY("day"),
-    WEEK("week"),
-    MONTH("month"),
-    YEAR("year");
+import kotlinx.datetime.DateTimeUnit
+
+enum class PeriodUnit(
+    val id: String,
+    val dateTimeUnit: DateTimeUnit.DateBased
+) {
+    DAY("day", DateTimeUnit.DAY),
+    WEEK("week", DateTimeUnit.WEEK),
+    MONTH("month", DateTimeUnit.MONTH),
+    YEAR("year", DateTimeUnit.YEAR);
 
     companion object {
         val possiblePeriodValues = (1..59).toList()
