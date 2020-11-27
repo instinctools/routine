@@ -1,8 +1,8 @@
 package com.instinctools.routine_kmp.model
 
 enum class PeriodResetStrategy(val id: String) {
-    FromNextEvent("from_event"),
-    FromNow("from_now"),
+    FromNextEvent("BY_PERIOD"),
+    FromNow("BY_DATE"),
     ;
 
     companion object {
