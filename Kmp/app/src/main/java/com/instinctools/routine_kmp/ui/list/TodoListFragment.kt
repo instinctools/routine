@@ -17,6 +17,7 @@ import com.instinctools.routine_kmp.ui.todo.list.TodoListUiModel
 import com.instinctools.routine_kmp.util.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 class TodoListFragment : BaseFragment(R.layout.fragment_todos_list) {
 
@@ -66,9 +67,18 @@ class TodoListFragment : BaseFragment(R.layout.fragment_todos_list) {
             state.resetDone.consumeOneTimeEvent { binding.root.snackbarOf(R.string.tasks_reset_success) }
             state.deleteDone.consumeOneTimeEvent { binding.root.snackbarOf(R.string.tasks_delete_success) }
 
-            state.refreshError.consumeOneTimeEvent { binding.root.snackbarOf(R.string.tasks_error_refresh) }
-            state.deleteError.consumeOneTimeEvent { binding.root.snackbarOf(R.string.tasks_error_delete) }
-            state.resetError.consumeOneTimeEvent { binding.root.snackbarOf(R.string.tasks_error_reset) }
+            state.refreshError.consumeOneTimeEvent {
+                Timber.e(it, "Failed to refresh todos")
+                binding.root.snackbarOf(R.string.tasks_error_refresh)
+            }
+            state.deleteError.consumeOneTimeEvent {
+                Timber.e(it, "Failed to delete todo")
+                binding.root.snackbarOf(R.string.tasks_error_delete)
+            }
+            state.resetError.consumeOneTimeEvent {
+                Timber.e(it, "Failed to reset todo")
+                binding.root.snackbarOf(R.string.tasks_error_reset)
+            }
         }
             .launchIn(viewScope)
     }

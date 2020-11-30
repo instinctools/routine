@@ -17,6 +17,7 @@ import com.instinctools.routine_kmp.ui.widget.VerticalSpacingDecoration
 import com.instinctools.routine_kmp.util.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 class TodoDetailsFragment : BaseFragment(R.layout.fragment_todo_details) {
 
@@ -71,8 +72,14 @@ class TodoDetailsFragment : BaseFragment(R.layout.fragment_todo_details) {
             adapter.submitList(state.periods)
             adapter.setSelected(todo.periodUnit)
 
-            state.saveError.consumeOneTimeEvent { binding.root.snackbarOf(R.string.task_details_error_save) }
-            state.loadingError.consumeOneTimeEvent { binding.root.snackbarOf(R.string.task_details_error_load) }
+            state.saveError.consumeOneTimeEvent {
+                Timber.e(it, "Failed to save todo")
+                binding.root.snackbarOf(R.string.task_details_error_save)
+            }
+            state.loadingError.consumeOneTimeEvent {
+                Timber.e(it, "Failed to load todo details")
+                binding.root.snackbarOf(R.string.task_details_error_load)
+            }
         }
             .launchIn(viewScope)
     }

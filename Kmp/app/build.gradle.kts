@@ -73,4 +73,5 @@ dependencies {
     /* Dagger */
 
     implementation(Deps.Coroutines.android)
+    implementation(Deps.timber)
 }

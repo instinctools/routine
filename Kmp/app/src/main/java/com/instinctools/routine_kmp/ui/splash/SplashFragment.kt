@@ -14,6 +14,7 @@ import com.instinctools.routine_kmp.util.rootNavigator
 import com.instinctools.routine_kmp.util.viewBinding
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
@@ -31,6 +32,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
                     binding.progress.visibility = View.VISIBLE
                 }
                 is State.Error -> {
+                    Timber.e(state.error, "Failed to login")
                     binding.btnRetry.visibility = View.VISIBLE
                     binding.authMessage.setText(R.string.splash_auth_error)
                     binding.progress.visibility = View.GONE

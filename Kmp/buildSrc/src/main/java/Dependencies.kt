@@ -17,6 +17,9 @@ object Versions {
 }
 
 object Deps {
+
+    const val timber = "com.jakewharton.timber:timber:4.7.1"
+
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha05"
