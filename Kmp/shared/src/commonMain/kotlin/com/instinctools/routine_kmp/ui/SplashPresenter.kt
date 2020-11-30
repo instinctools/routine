@@ -16,6 +16,7 @@ class SplashPresenter(
             inputCreator = { if (it == Action.Login) Unit else null },
             outputConverter = { Action.LoginStateChanged(it) }
         )
+        sendAction(Action.Login)
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {
