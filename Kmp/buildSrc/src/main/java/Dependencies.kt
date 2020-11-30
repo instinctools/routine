@@ -6,7 +6,7 @@ object Versions {
     const val kotlin = "1.4.20"
 
     const val sqlDelight = "1.4.3"
-    const val coroutines = "1.4.1-native-mt"
+    const val coroutines = "1.4.2-native-mt"
     const val stately = "1.1.0"
 
     const val activityX = "1.2.0-beta01"
@@ -38,8 +38,7 @@ object Deps {
     }
 
     object Coroutines {
-        const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"
-        const val native = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.coroutines}"
+        const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
         const val playServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
     }

@@ -43,7 +43,11 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation(Deps.SqlDelight.runtime)
         implementation(Deps.SqlDelight.coroutinesKtx)
-        implementation(Deps.Coroutines.common)
+        implementation(Deps.Coroutines.common) {
+            version {
+                strictly(Versions.coroutines)
+            }
+        }
         implementation(Deps.Stately.concurrency)
         implementation(Deps.Stately.common)
         implementation(Deps.DayTime.common)
@@ -59,7 +63,6 @@ kotlin {
 
     sourceSets["iosMain"].dependencies {
         implementation(Deps.SqlDelight.driverIos)
-        implementation(Deps.Coroutines.native)
     }
 
     cocoapods {
