@@ -8,10 +8,10 @@ object FirebaseConst {
     }
 
     object Todo {
-        const val title = "title"
-        const val periodInit = "period_unit"
-        const val periodValue = "period_value"
-        const val periodStrategy = "period_strategy"
-        const val nextTimestamp = "next_timestamp"
+        const val FIELD_TITLE = "title"
+        const val FIELD_PERIOD_VALUE = "period"
+        const val FIELD_PERIOD_UNIT = "periodUnit"
+        const val FIELD_PERIOD_STRATEGY = "resetType"
+        const val FIELD_TIMESTAMP = "timestamp"
     }
 }
