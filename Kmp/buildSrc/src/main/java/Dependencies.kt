@@ -6,7 +6,7 @@ object Versions {
     const val kotlin = "1.4.20"
 
     const val sqlDelight = "1.4.3"
-    const val coroutines = "1.4.1-native-mt-2"
+    const val coroutines = "1.4.2-native-mt"
     const val stately = "1.1.0"
 
     const val activityX = "1.2.0-beta01"
@@ -17,6 +17,9 @@ object Versions {
 }
 
 object Deps {
+
+    const val timber = "com.jakewharton.timber:timber:4.7.1"
+
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha02"
         const val coreKtx = "androidx.core:core-ktx:1.5.0-alpha05"
@@ -38,10 +41,13 @@ object Deps {
     }
 
     object Coroutines {
-        const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.coroutines}"
-        const val native = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.coroutines}"
+        const val common = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
         const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
         const val playServices = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
+    }
+
+    object DayTime {
+        const val common = "org.jetbrains.kotlinx:kotlinx-datetime:0.1.1"
     }
 
     object Dagger {

@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.data
 
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import kotlinx.coroutines.flow.Flow
 
 interface LocalTodoStore {

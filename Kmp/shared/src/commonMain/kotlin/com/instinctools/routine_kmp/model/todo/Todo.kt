@@ -1,4 +1,8 @@
-package com.instinctools.routine_kmp.model
+package com.instinctools.routine_kmp.model.todo
+
+import com.instinctools.routine_kmp.model.PeriodResetStrategy
+import com.instinctools.routine_kmp.model.PeriodUnit
+import kotlinx.datetime.LocalDate
 
 data class Todo(
     val id: String,
@@ -6,7 +10,7 @@ data class Todo(
     val periodUnit: PeriodUnit,
     val periodValue: Int,
     val periodStrategy: PeriodResetStrategy,
-    val nextTimestamp: Long
+    val nextDate: LocalDate
 ) {
 
     constructor(
@@ -14,8 +18,8 @@ data class Todo(
         periodUnit: PeriodUnit,
         periodValue: Int,
         periodStrategy: PeriodResetStrategy,
-        nextTimestamp: Long
-    ) : this(NO_ID, title, periodUnit, periodValue, periodStrategy, nextTimestamp)
+        nextDate: LocalDate
+    ) : this(NO_ID, title, periodUnit, periodValue, periodStrategy, nextDate)
 
     companion object {
         const val NO_ID = ""

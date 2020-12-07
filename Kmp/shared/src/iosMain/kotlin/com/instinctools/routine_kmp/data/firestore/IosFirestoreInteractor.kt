@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.data.firestore
 
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 
 interface IosFirestoreInteractor {
 

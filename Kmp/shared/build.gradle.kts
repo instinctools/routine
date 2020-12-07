@@ -20,7 +20,12 @@ version = "1.0"
 
 kotlin {
     //select iOS target platform depending on the Xcode environment variables
-    ios()
+    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+    if (onPhone) {
+        iosArm64("ios")
+    } else {
+        iosX64("ios")
+    }
     android()
 
     targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=
@@ -38,9 +43,14 @@ kotlin {
     sourceSets["commonMain"].dependencies {
         implementation(Deps.SqlDelight.runtime)
         implementation(Deps.SqlDelight.coroutinesKtx)
-        implementation(Deps.Coroutines.common)
+        implementation(Deps.Coroutines.common) {
+            version {
+                strictly(Versions.coroutines)
+            }
+        }
         implementation(Deps.Stately.concurrency)
         implementation(Deps.Stately.common)
+        implementation(Deps.DayTime.common)
     }
 
     sourceSets["androidMain"].dependencies {
@@ -53,7 +63,6 @@ kotlin {
 
     sourceSets["iosMain"].dependencies {
         implementation(Deps.SqlDelight.driverIos)
-        implementation(Deps.Coroutines.native)
     }
 
     cocoapods {

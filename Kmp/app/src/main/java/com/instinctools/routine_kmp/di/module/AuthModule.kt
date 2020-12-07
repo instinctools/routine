@@ -1,4 +1,4 @@
-package com.instinctools.routine_kmp.di
+package com.instinctools.routine_kmp.di.module
 
 import com.instinctools.routine_kmp.data.auth.AuthRepository
 import com.instinctools.routine_kmp.data.auth.FirebaseAuthenticator
