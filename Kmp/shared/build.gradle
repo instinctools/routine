@@ -1,0 +1,82 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform'
+    id 'org.jetbrains.kotlin.native.cocoapods'
+    id 'com.android.library'
+    id 'com.squareup.sqldelight'
+}
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+    }
+}
+
+version = "1.0"
+
+kotlin {
+    ios()
+    android()
+
+
+//    tasks.withType(KotlinCompile).configureEach {
+//        kotlinOptions {
+//            freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
+//        }
+//    }
+//    targets.getByName<KotlinNativeTarget>("ios").compilations["main"].kotlinOptions.freeCompilerArgs +=
+//            listOf("-Xobjc-generics", "-Xg0")
+
+    sourceSets {
+        all {
+            languageSettings {
+                useExperimentalAnnotation("kotlin.RequiresOptIn")
+                useExperimentalAnnotation('org.mylibrary.OptInAnnotation')
+            }
+        }
+
+        commonMain {
+            dependencies {
+                implementation "com.squareup.sqldelight:runtime:1.4.3"
+                implementation "com.squareup.sqldelight:coroutines-extensions:1.4.3"
+                implementation('org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt') {
+                    version {
+                        strictly '1.4.2-native-mt'
+                    }
+                }
+                implementation "co.touchlab:stately-common:1.1.0"
+                implementation "co.touchlab:stately-concurrency:1.1.0"
+                implementation "org.jetbrains.kotlinx:kotlinx-datetime:0.1.1"
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation "com.squareup.sqldelight:android-driver:1.4.3"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2-native-mt"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2-native-mt"
+                implementation "com.google.firebase:firebase-auth-ktx:20.0.1"
+                implementation "com.google.firebase:firebase-firestore-ktx:22.0.0"
+            }
+        }
+
+        iosMain {
+            dependencies {
+                implementation "com.squareup.sqldelight:native-driver:1.4.3"
+            }
+        }
+    }
+
+    cocoapods {
+        summary = "Shared module for Routine project"
+        homepage = "https://github.com/instinctools/routine"
+        frameworkName = "RoutineShared"
+    }
+}
+
+sqldelight {
+    TodoDatabase {
+        packageName = "com.instinctools.routine_kmp"
+    }
+}

@@ -15,9 +15,9 @@
         app:menu="@menu/details"
         app:navigationIcon="@drawable/ic_back" />
 
-    <com.google.android.material.progressindicator.ProgressIndicator
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"
-        style="@style/Widget.MaterialComponents.ProgressIndicator.Linear.Indeterminate"
+        style="@style/Widget.MaterialComponents.LinearProgressIndicator"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:visibility="gone"

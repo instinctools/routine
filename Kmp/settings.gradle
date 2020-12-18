@@ -1,0 +1,3 @@
+rootProject.name = "KMP"
+include ':app'
+include ':shared'
