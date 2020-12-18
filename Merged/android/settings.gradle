@@ -20,7 +20,7 @@ plugins.each { name, path ->
 
 // kmp
 include(":kmp", ":shared")
-project(':kmp').projectDir = new File(settingsDir, '../../Kmp/app')
+project(':kmp').projectDir = new File(settingsDir, '../../Kmp/kmp_android')
 project(':shared').projectDir = new File(settingsDir, '../../Kmp/shared')
 
 enableFeaturePreview("GRADLE_METADATA")
