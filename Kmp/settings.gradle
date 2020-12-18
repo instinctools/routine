@@ -1,3 +1,4 @@
 rootProject.name = "KMP"
 include ':app'
+include ':kmp_android'
 include ':shared'
