@@ -8,10 +8,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
-import com.instinctools.routine_kmp.model.toFirebaseMap
 import com.instinctools.routine_kmp.model.todo.Todo
 import com.instinctools.routine_kmp.util.dateFromEpoch
+import com.instinctools.routine_kmp.util.timestampSystemTimeZone
 import kotlinx.coroutines.tasks.await
+import java.util.*
 
 actual class FirebaseTodoStore {
 
@@ -29,6 +30,14 @@ actual class FirebaseTodoStore {
 
         Todo(id, title, periodUnit, periodValue.toInt(), resetStrategy, dateFromEpoch(nextTimestamp.seconds))
     }
+
+    fun Todo.toFirebaseMap(): Map<String, Any> = mapOf(
+        FirebaseConst.Todo.FIELD_TITLE to title,
+        FirebaseConst.Todo.FIELD_PERIOD_UNIT to periodUnit.id,
+        FirebaseConst.Todo.FIELD_PERIOD_VALUE to periodValue,
+        FirebaseConst.Todo.FIELD_PERIOD_STRATEGY to periodStrategy.id,
+        FirebaseConst.Todo.FIELD_TIMESTAMP to Timestamp(Date(nextDate.timestampSystemTimeZone))
+    )
 
     actual suspend fun fetchTodos(userId: String): List<Todo> {
         val todosTask = todosCollection(userId).get(Source.SERVER)
