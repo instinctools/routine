@@ -46,7 +46,6 @@ class KmpAppFragment : BaseFragment(R.layout.fragment_kmp_app), RootNavigator, C
 
         childFragmentManager.addOnBackStackChangedListener {
             val childrenCount = childFragmentManager.backStackEntryCount
-            Timber.d("asd_asd: $childrenCount")
             backPressCallback.isEnabled = childrenCount > 0
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)
