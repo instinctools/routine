@@ -3,19 +3,23 @@ package com.routine.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import com.instinctools.routine_kmp.di.AppComponent
 import com.instinctools.routine_kmp.di.ComponentsProvider
 import com.instinctools.routine_kmp.di.DaggerAppComponent
 import com.instinctools.routine_kmp.ui.BaseFragment
 import com.instinctools.routine_kmp.ui.RootNavigator
+import com.instinctools.routine_kmp.ui.list.NavigationMenuCallback
 import com.instinctools.routine_kmp.ui.list.TodoListFragment
 import com.routine.R
+import com.routine.common.vm.HomeViewModel
 import dev.chrisbanes.insetter.Insetter
 import dev.chrisbanes.insetter.Side
 
-class KmpAppFragment : BaseFragment(R.layout.fragment_kmp_app), RootNavigator, ComponentsProvider {
+class KmpAppFragment : BaseFragment(R.layout.fragment_kmp_app), RootNavigator, ComponentsProvider, NavigationMenuCallback {
 
+    private val homeViewModel by activityViewModels<HomeViewModel>()
     override lateinit var appComponent: AppComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +33,7 @@ class KmpAppFragment : BaseFragment(R.layout.fragment_kmp_app), RootNavigator, C
             .applyToView(view)
 
         if (savedInstanceState == null) {
-            goto(TodoListFragment.newInstance(), addToBackStack = false)
+            goto(TodoListFragment.newInstance(navigationEnabled = true), addToBackStack = false)
         }
     }
 
@@ -42,5 +46,9 @@ class KmpAppFragment : BaseFragment(R.layout.fragment_kmp_app), RootNavigator, C
             replace(R.id.kmp_fragment_container, fragment)
             if (addToBackStack) addToBackStack(null)
         }
+    }
+
+    override fun onNavigationClicked() {
+        homeViewModel.onMenuClicked()
     }
 }
