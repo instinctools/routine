@@ -2,8 +2,7 @@ package com.instinctools.routine_kmp.data
 
 import com.instinctools.routine_kmp.data.auth.AuthRepository
 import com.instinctools.routine_kmp.data.firestore.FirebaseTodoStore
-import com.instinctools.routine_kmp.data.firestore.error.UnauthorizedFirebaseError
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import kotlinx.coroutines.flow.Flow
 
 class TodoRepository(

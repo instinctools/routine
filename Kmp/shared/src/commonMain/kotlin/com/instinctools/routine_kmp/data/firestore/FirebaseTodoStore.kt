@@ -1,7 +1,6 @@
 package com.instinctools.routine_kmp.data.firestore
 
-import com.instinctools.routine_kmp.model.Todo
-import kotlinx.coroutines.flow.Flow
+import com.instinctools.routine_kmp.model.todo.Todo
 
 expect class FirebaseTodoStore {
     suspend fun fetchTodos(userId: String): List<Todo>

@@ -4,12 +4,16 @@ import com.instinctools.routine_kmp.TodoDatabase
 import com.instinctools.routine_kmp.data.LocalTodoStore
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
+import com.instinctools.routine_kmp.util.dateFromEpoch
+import com.instinctools.routine_kmp.util.timestampSystemTimeZone
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 
 class SqlTodoStore(
     private val database: TodoDatabase
@@ -23,7 +27,7 @@ class SqlTodoStore(
         period_strategy: String,
         next_timestamp: Long
     ) -> Todo = { id, title, period_unit, period_value, period_strategy, next_timestamp ->
-        Todo(id, title, PeriodUnit.find(period_unit), period_value, PeriodResetStrategy.find(period_strategy), next_timestamp)
+        Todo(id, title, PeriodUnit.find(period_unit), period_value, PeriodResetStrategy.find(period_strategy), dateFromEpoch(next_timestamp))
     }
 
     override fun getTodos(): Flow<List<Todo>> = database.todoQueries
@@ -41,11 +45,12 @@ class SqlTodoStore(
     }
 
     override suspend fun insert(todo: Todo) = withContext(Dispatchers.Default) {
-        database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp)
+        todo.nextDate.atStartOfDayIn(TimeZone.currentSystemDefault()).epochSeconds
+        database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate.timestampSystemTimeZone)
     }
 
     override suspend fun update(todo: Todo) = withContext(Dispatchers.Default) {
-        database.todoQueries.updateById(todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp, todo.id)
+        database.todoQueries.updateById(todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate.timestampSystemTimeZone, todo.id)
     }
 
     override suspend fun delete(id: String) = withContext(Dispatchers.Default) {
@@ -56,7 +61,7 @@ class SqlTodoStore(
         database.transaction {
             database.todoQueries.deleteAll()
             for (todo in todos) {
-                database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextTimestamp)
+                database.todoQueries.insertTodo(todo.id, todo.title, todo.periodUnit.id, todo.periodValue, todo.periodStrategy.id, todo.nextDate.timestampSystemTimeZone)
             }
         }
     }

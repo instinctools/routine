@@ -21,6 +21,7 @@ import com.routine.common.vm.HomeViewModel
 import com.routine.databinding.ActivityHomeBinding
 import com.routine.flutter.FlutterAppFragment
 import com.routine.ui.AndroidAppFragment
+import com.routine.ui.KmpAppFragment
 import com.routine.vm.status.Status
 import dagger.hilt.android.AndroidEntryPoint
 import dev.chrisbanes.insetter.Insetter
@@ -152,6 +153,7 @@ class ActivityHome : AppCompatActivity(), DefaultHardwareBackBtnHandler {
                     .build<FlutterAppFragment>())
             }
             Menu.KMP -> {
+                openApp(KmpAppFragment())
             }
             Menu.SETTINGS -> {
                 openApp(SettingsFragment())

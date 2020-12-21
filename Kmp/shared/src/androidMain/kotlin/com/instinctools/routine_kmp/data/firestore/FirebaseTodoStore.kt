@@ -1,5 +1,6 @@
 package com.instinctools.routine_kmp.data.firestore
 
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.Source
@@ -7,25 +8,26 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.instinctools.routine_kmp.model.PeriodResetStrategy
 import com.instinctools.routine_kmp.model.PeriodUnit
-import com.instinctools.routine_kmp.model.Todo
 import com.instinctools.routine_kmp.model.toFirebaseMap
+import com.instinctools.routine_kmp.model.todo.Todo
+import com.instinctools.routine_kmp.util.dateFromEpoch
 import kotlinx.coroutines.tasks.await
 
 actual class FirebaseTodoStore {
 
     private val mapper: (QueryDocumentSnapshot) -> Todo = { document ->
         val id = document.id
-        val title = document.get(FirebaseConst.Todo.title) as String
+        val title = document.get(FirebaseConst.Todo.FIELD_TITLE) as String
 
-        val periodUnitId = document.get(FirebaseConst.Todo.periodInit) as String
+        val periodUnitId = document.get(FirebaseConst.Todo.FIELD_PERIOD_UNIT) as String
         val periodUnit = PeriodUnit.find(periodUnitId)
-        val periodValue = document.get(FirebaseConst.Todo.periodValue) as Long
+        val periodValue = document.get(FirebaseConst.Todo.FIELD_PERIOD_VALUE) as Long
 
-        val resetStrategyId = document.get(FirebaseConst.Todo.periodStrategy) as String
+        val resetStrategyId = document.get(FirebaseConst.Todo.FIELD_PERIOD_STRATEGY) as String
         val resetStrategy = PeriodResetStrategy.find(resetStrategyId)
-        val nextTimestamp = document.get(FirebaseConst.Todo.nextTimestamp) as Long
+        val nextTimestamp = document.get(FirebaseConst.Todo.FIELD_TIMESTAMP) as Timestamp
 
-        Todo(id, title, periodUnit, periodValue.toInt(), resetStrategy, nextTimestamp)
+        Todo(id, title, periodUnit, periodValue.toInt(), resetStrategy, dateFromEpoch(nextTimestamp.seconds))
     }
 
     actual suspend fun fetchTodos(userId: String): List<Todo> {

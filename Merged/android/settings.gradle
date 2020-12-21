@@ -19,8 +19,10 @@ plugins.each { name, path ->
 }
 
 // kmp
-//include(":kmp", ":shared")
+include(":kmp", ":shared")
+project(':kmp').projectDir = new File(settingsDir, '../../Kmp/kmp_android')
+project(':shared').projectDir = new File(settingsDir, '../../Kmp/shared')
 
 enableFeaturePreview("GRADLE_METADATA")
 
-rootProject.name='Routine-Merged'
+rootProject.name = 'Routine-Merged'

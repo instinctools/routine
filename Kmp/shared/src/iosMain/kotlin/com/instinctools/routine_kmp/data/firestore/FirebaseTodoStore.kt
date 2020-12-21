@@ -1,6 +1,6 @@
 package com.instinctools.routine_kmp.data.firestore
 
-import com.instinctools.routine_kmp.model.Todo
+import com.instinctools.routine_kmp.model.todo.Todo
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
