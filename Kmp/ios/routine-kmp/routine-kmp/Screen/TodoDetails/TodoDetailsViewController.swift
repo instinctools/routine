@@ -40,10 +40,13 @@ final class TodoDetailsViewController: UIViewController {
     private let todo: Todo?
     private lazy var presenter: TodoDetailsPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let presenter = TodoDetailsPresenter(todoId: todo?.id as String?, todoRepository: appDelegate.todoRepository)
-        return presenter
+        return TodoDetailsPresenter(
+            todoId: todo?.id as String?,
+            getTaskByIdSideEffect: appDelegate.getTaskByIdSideEffect,
+            saveTaskSideEffect: appDelegate.saveTaskSideEffect
+        )
     }()
-    private lazy var uiBinder = UiBinder<TodoDetailsPresenter.State, TodoDetailsPresenter.Event>()
+    private lazy var uiBinder = UiBinder<TodoDetailsPresenter.Action, TodoDetailsPresenter.State>()
     
     private let disposeBag = DisposeBag()
     
@@ -122,16 +125,16 @@ final class TodoDetailsViewController: UIViewController {
         
         doneButton.rx.tap
             .do(onNext: {
-                let event = TodoDetailsPresenter.EventSave()
-                self.presenter.events.offer(element: event)
+                let action = TodoDetailsPresenter.ActionSaveTask()
+                self.presenter.sendAction(action: action)
             })
             .subscribe()
             .disposed(by: disposeBag)
         
         periodSelectionView.selection
             .do(onNext: { period in
-                let event = TodoDetailsPresenter.EventChangePeriodUnit(periodUnit: period.unit)
-                self.presenter.events.offer(element: event)
+                let action = TodoDetailsPresenter.ActionChangePeriodUnit(periodUnit: period.unit)
+                self.presenter.sendAction(action: action)
             })
             .subscribe()
             .disposed(by: disposeBag)
@@ -160,10 +163,9 @@ final class TodoDetailsViewController: UIViewController {
 //            .disposed(by: disposeBag)
 //
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
-            if(state.saved) {
+            state.saved.consumeOneTimeEvent(consumer: { _ in
                 self.dismiss()
-                return
-            }
+            })
             
             let todo = state.todo
             self.titleView.textView.text = todo.title
@@ -177,8 +179,6 @@ final class TodoDetailsViewController: UIViewController {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 1
             }
         })
-        
-        presenter.start()
     }
     
     @objc func onStrategyChanged(target: UISegmentedControl) {
@@ -190,8 +190,8 @@ final class TodoDetailsViewController: UIViewController {
             } else {
                 newStrategy = .fromnextevent
             }
-            let event = TodoDetailsPresenter.EventChangePeriodStrategy(periodStrategy: newStrategy)
-            presenter.events.offer(element: event)
+            let action = TodoDetailsPresenter.ActionChangePeriodStrategy(periodStrategy: newStrategy)
+            presenter.sendAction(action: action)
         }
     }
     

@@ -5,11 +5,29 @@ import RoutineShared
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // MARK: DI
     lazy var database = IosDatabaseProvider().database()
     lazy var todoStore = SqlTodoStore(database: database)
     lazy var firebaseTodoStore = FirebaseTodoStore(interactor: FirebaseInteractor())
-    lazy var todoRepository = TodoRepository(firebaseTodoStore: firebaseTodoStore, localTodoStore: todoStore)
     
+    lazy var authRepository = AuthRepository(firebaseAuthenticator: FirebaseAuthenticator())
+    lazy var todoRepository = TodoRepository(
+        firebaseTodoStore: firebaseTodoStore,
+        localTodoStore: todoStore,
+        authRepository: authRepository
+    )
+    
+    lazy var ensureLoginSideEffect = EnsureLoginSideEffect(authRepository: authRepository)
+    
+    lazy var getTasksSideEffect = GetTasksSideEffect(todoRepository: todoRepository)
+    lazy var deleteTaskSideEffect = DeleteTaskSideEffect(todoRepository: todoRepository)
+    lazy var resetTaskSideEffect = ResetTaskSideEffect(todoRepository: todoRepository)
+    lazy var refreshTasksSideEffect = RefreshTasksSideEffect(todoRepository: todoRepository)
+    
+    lazy var getTaskByIdSideEffect = GetTaskByIdSideEffect(todoRepository: todoRepository)
+    lazy var saveTaskSideEffect = SaveTaskSideEffect(todoRepository: todoRepository)
+    
+    // MARK: App
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         FirebaseApp.configure()

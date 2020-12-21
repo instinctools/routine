@@ -70,3 +70,17 @@ class FirebaseInteractor : IosFirestoreInteractor {
             .collection(FirebaseConst.Collection().todos)
     }
 }
+
+extension Todo {
+    func toFirebaseMap() -> [String : Any] {
+        let consts =  FirebaseConst.Todo()
+        let timestamp = Double(self.nextDate.timestampSystemTimeZone)
+        return [
+            consts.FIELD_TITLE : self.title,
+            consts.FIELD_PERIOD_UNIT : self.periodUnit.id,
+            consts.FIELD_PERIOD_VALUE : self.periodValue,
+            consts.FIELD_PERIOD_STRATEGY : self.periodStrategy.id,
+            consts.FIELD_TIMESTAMP : Timestamp(date: Date(timeIntervalSince1970: timestamp))
+        ]
+    }
+}

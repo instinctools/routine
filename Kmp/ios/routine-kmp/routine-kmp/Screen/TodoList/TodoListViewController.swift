@@ -19,10 +19,14 @@ final class TodoListViewController: UIViewController {
 
     private lazy var presenter: TodoListPresenter = {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let presenter = TodoListPresenter(todoRepository: appDelegate.todoRepository)
-        return presenter
+        return TodoListPresenter(
+            getTasksSideEffect: appDelegate.getTasksSideEffect,
+            deleteTaskSideEffect: appDelegate.deleteTaskSideEffect,
+            resetTaskSideEffect: appDelegate.resetTaskSideEffect,
+            refreshTasksSideEffect: appDelegate.refreshTasksSideEffect
+        )
     }()
-    private lazy var uiBinder = UiBinder<TodoListPresenter.State, TodoListPresenter.Event>()
+    private lazy var uiBinder = UiBinder<TodoListPresenter.Action, TodoListPresenter.State>()
 
     
     private let todosSectionsSubject = PublishSubject<[TodosTableSection]>()
@@ -70,8 +74,6 @@ final class TodoListViewController: UIViewController {
         todosSectionsSubject.asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-        
-        presenter.start()
     }
 
     private func showTodoDetailsView(item: TodoListUiModel?) {
@@ -153,8 +155,8 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
         case .left:
             let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
                 let todoId = self.model(atIndexPath: indexPath).todo.id
-                let event = TodoListPresenter.EventReset(id: todoId)
-                self.presenter.events.offer(element: event)
+                let action = TodoListPresenter.ActionResetTask(taskId: todoId)
+                self.presenter.sendAction(action: action)
             }
             setup(swipeAction: reseteAction, image: UIImage(named: "reset"))
 
@@ -167,8 +169,8 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
                 alert.addAction(.init(title: "Cancel", style: .cancel))
                 alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
                     let todoId = self.model(atIndexPath: indexPath).todo.id
-                    let event = TodoListPresenter.EventDelete(id: todoId)
-                    self.presenter.events.offer(element: event)
+                    let action = TodoListPresenter.ActionDeleteTask(taskId: todoId)
+                    self.presenter.sendAction(action: action)
                 }))
 
                 self.present(alert, animated: true)

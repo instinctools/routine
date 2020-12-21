@@ -31,7 +31,7 @@ abstract class Store<Action, State>(
         }
     }
 
-    abstract suspend fun reduce(oldState: State, action: Action): State
+    protected abstract suspend fun reduce(oldState: State, action: Action): State
 
     fun sendAction(action: Action) {
         if (!actions.isClosedForSend) actions.offer(action)
