@@ -38,7 +38,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
                     binding.progress.visibility = View.GONE
                 }
                 State.Success -> {
-                    rootNavigator.goto(TodoListFragment.newInstance())
+                    rootNavigator.goto(TodoListFragment.newInstance(), addToBackStack = false)
                 }
             }
         }

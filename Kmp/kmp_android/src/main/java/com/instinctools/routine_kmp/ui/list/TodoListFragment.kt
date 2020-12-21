@@ -3,6 +3,7 @@ package com.instinctools.routine_kmp.ui.list
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,12 +26,20 @@ class TodoListFragment : BaseFragment(R.layout.fragment_todos_list) {
     private val container by presenterContainer { injector.todoListPresenter }
     private val presenter get() = container.presenter
 
+    private val navigationEnabled: Boolean by argument(ARG_NAVIGATION_ENABLED)
+
     @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.swipeToRefresh.setOnRefreshListener { presenter.sendAction(TodoListPresenter.Action.Refresh) }
         binding.toolbar.setOnMenuItemClickListener {
             rootNavigator.goto(TodoDetailsFragment.newInstance())
             true
+        }
+        if (navigationEnabled) {
+            binding.toolbar.setNavigationIcon(R.drawable.ic_navigation_menu)
+            binding.toolbar.setNavigationOnClickListener {
+                findFirstResponder<NavigationMenuCallback>()?.onNavigationClicked()
+            }
         }
 
         val adapter = TodosAdapter { _, item -> rootNavigator.goto(TodoDetailsFragment.newInstance(item.todo.id)) }
@@ -94,6 +103,10 @@ class TodoListFragment : BaseFragment(R.layout.fragment_todos_list) {
     }
 
     companion object {
-        fun newInstance() = TodoListFragment()
+        const val ARG_NAVIGATION_ENABLED = "arg_navigation_enabled"
+
+        fun newInstance(navigationEnabled: Boolean = false) = TodoListFragment().apply {
+            arguments = bundleOf(ARG_NAVIGATION_ENABLED to navigationEnabled)
+        }
     }
 }
