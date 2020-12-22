@@ -2,7 +2,7 @@ import Foundation
 import Firebase
 import RoutineShared
 
-class FirebaseInteractor : IosFirestoreInteractor {
+class FirestoreInteractor : IosFirestoreInteractor {
 
     lazy var firestore = Firestore.firestore()
     lazy var auth = Auth.auth()
@@ -46,20 +46,6 @@ class FirebaseInteractor : IosFirestoreInteractor {
                 listener(KotlinException(message: error.localizedDescription))
             } else {
                 listener(nil)
-            }
-        }
-    }
-    
-    func obtainUserId(listener: @escaping (String?, KotlinException?) -> Void) {
-        if let user = Auth.auth().currentUser {
-            listener(user.uid, nil)
-        } else {
-            auth.signInAnonymously { (authResult, error) in
-                if let error = error {
-                    listener(nil, KotlinException(message: error.localizedDescription))
-                } else if let user = authResult?.user {
-                    listener(user.uid, nil)
-                }
             }
         }
     }

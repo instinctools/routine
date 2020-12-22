@@ -8,9 +8,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: DI
     lazy var database = IosDatabaseProvider().database()
     lazy var todoStore = SqlTodoStore(database: database)
-    lazy var firebaseTodoStore = FirebaseTodoStore(interactor: FirebaseInteractor())
+    lazy var firebaseTodoStore = FirebaseTodoStore(interactor: FirestoreInteractor())
     
-    lazy var authRepository = AuthRepository(firebaseAuthenticator: FirebaseAuthenticator())
+    lazy var authRepository = AuthRepository(firebaseAuthenticator: FirebaseAuthenticator(interactor: FirebaseAuthInteractor()))
     lazy var todoRepository = TodoRepository(
         firebaseTodoStore: firebaseTodoStore,
         localTodoStore: todoStore,

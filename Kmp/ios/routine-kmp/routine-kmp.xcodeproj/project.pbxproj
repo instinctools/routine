@@ -30,7 +30,7 @@
 		2656FCCA249A1DE2009718C4 /* PeriodSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCC9249A1DE2009718C4 /* PeriodSelectionView.swift */; };
 		2656FCCC249A1E18009718C4 /* Optional+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCCB249A1E18009718C4 /* Optional+Default.swift */; };
 		2656FCCE249A1E31009718C4 /* LabelledDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCCD249A1E31009718C4 /* LabelledDivider.swift */; };
-		2656FCD1249A1E59009718C4 /* FirebaseInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCD0249A1E59009718C4 /* FirebaseInteractor.swift */; };
+		2656FCD1249A1E59009718C4 /* FirestoreInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCD0249A1E59009718C4 /* FirestoreInteractor.swift */; };
 		2656FCD3249A1EAE009718C4 /* BottomCardTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCD2249A1EAE009718C4 /* BottomCardTransition.swift */; };
 		2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCD4249A1EC4009718C4 /* BottomCardViewController.swift */; };
 		2656FCD8249A1F25009718C4 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCD7249A1F25009718C4 /* SnapKit */; };
@@ -40,6 +40,7 @@
 		2656FCE3249A1FA6009718C4 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE2249A1FA6009718C4 /* Differentiator */; };
 		2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE4249A1FA6009718C4 /* RxDataSources */; };
 		2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE7249A1FB9009718C4 /* RxBiBinding */; };
+		2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2659905925922F09001C631C /* FirebaseAuthInteractor.swift */; };
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
@@ -71,9 +72,10 @@
 		2656FCC9249A1DE2009718C4 /* PeriodSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodSelectionView.swift; sourceTree = "<group>"; };
 		2656FCCB249A1E18009718C4 /* Optional+Default.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Default.swift"; sourceTree = "<group>"; };
 		2656FCCD249A1E31009718C4 /* LabelledDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledDivider.swift; sourceTree = "<group>"; };
-		2656FCD0249A1E59009718C4 /* FirebaseInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseInteractor.swift; sourceTree = "<group>"; };
+		2656FCD0249A1E59009718C4 /* FirestoreInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreInteractor.swift; sourceTree = "<group>"; };
 		2656FCD2249A1EAE009718C4 /* BottomCardTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardTransition.swift; sourceTree = "<group>"; };
 		2656FCD4249A1EC4009718C4 /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
+		2659905925922F09001C631C /* FirebaseAuthInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthInteractor.swift; sourceTree = "<group>"; };
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -229,7 +231,8 @@
 		2656FCCF249A1E49009718C4 /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
-				2656FCD0249A1E59009718C4 /* FirebaseInteractor.swift */,
+				2656FCD0249A1E59009718C4 /* FirestoreInteractor.swift */,
+				2659905925922F09001C631C /* FirebaseAuthInteractor.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -388,13 +391,14 @@
 				2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */,
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
+				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
 				2656FC9F249A1A76009718C4 /* AppDelegate.swift in Sources */,
 				2656FCB4249A1C7E009718C4 /* View+UIView.swift in Sources */,
 				2656FCB6249A1C95009718C4 /* UIControl+Responder.swift in Sources */,
 				2656FCC8249A1DC6009718C4 /* PlaceholderTextView.swift in Sources */,
 				2656FCAA249A1BBB009718C4 /* TodoRowView.swift in Sources */,
-				2656FCD1249A1E59009718C4 /* FirebaseInteractor.swift in Sources */,
+				2656FCD1249A1E59009718C4 /* FirestoreInteractor.swift in Sources */,
 				2656FCC1249A1D68009718C4 /* Period.swift in Sources */,
 				2656FCBA249A1CD4009718C4 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
 				2656FCC6249A1DA8009718C4 /* PeriodView.swift in Sources */,
