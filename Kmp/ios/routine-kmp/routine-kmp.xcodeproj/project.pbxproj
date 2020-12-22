@@ -42,6 +42,7 @@
 		2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE7249A1FB9009718C4 /* RxBiBinding */; };
 		2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2659905925922F09001C631C /* FirebaseAuthInteractor.swift */; };
 		2659905C25923CD9001C631C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2659905B25923CD9001C631C /* GoogleService-Info.plist */; };
+		2659905F25924BB7001C631C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2659905E25924BB7001C631C /* SplashViewController.swift */; };
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
@@ -78,6 +79,7 @@
 		2656FCD4249A1EC4009718C4 /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
 		2659905925922F09001C631C /* FirebaseAuthInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthInteractor.swift; sourceTree = "<group>"; };
 		2659905B25923CD9001C631C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2659905E25924BB7001C631C /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -161,6 +163,7 @@
 		2656FCA3249A1AB1009718C4 /* Screen */ = {
 			isa = PBXGroup;
 			children = (
+				2659905D25924B9C001C631C /* Splash */,
 				2656FCBB249A1D12009718C4 /* BottomCard */,
 				2656FCAF249A1C39009718C4 /* TodoDetails */,
 				2656FCAB249A1BD8009718C4 /* TodoList */,
@@ -238,6 +241,14 @@
 				2659905925922F09001C631C /* FirebaseAuthInteractor.swift */,
 			);
 			path = Firebase;
+			sourceTree = "<group>";
+		};
+		2659905D25924B9C001C631C /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				2659905E25924BB7001C631C /* SplashViewController.swift */,
+			);
+			path = Splash;
 			sourceTree = "<group>";
 		};
 		805364D11829E24165E7EA45 /* Pods */ = {
@@ -407,6 +418,7 @@
 				2656FCBA249A1CD4009718C4 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
 				2656FCC6249A1DA8009718C4 /* PeriodView.swift in Sources */,
 				2656FCCE249A1E31009718C4 /* LabelledDivider.swift in Sources */,
+				2659905F25924BB7001C631C /* SplashViewController.swift in Sources */,
 				2656FCD3249A1EAE009718C4 /* BottomCardTransition.swift in Sources */,
 				2656FCBF249A1D39009718C4 /* PresentDismissAnimation.swift in Sources */,
 				2656FCAD249A1C12009718C4 /* TodoTableViewCell.swift in Sources */,

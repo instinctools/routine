@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         //guard let _ = (scene as? UIWindowScene) else { return }
         
         if let windowScene = scene as? UIWindowScene {
-          let viewController = TodoListViewController()
+          let viewController = SplashViewController()
           let rootViewController = UINavigationController(rootViewController: viewController)
           rootViewController.navigationBar.prefersLargeTitles = true
 

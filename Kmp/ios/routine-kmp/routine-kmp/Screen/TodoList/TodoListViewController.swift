@@ -27,7 +27,6 @@ final class TodoListViewController: UIViewController {
         )
     }()
     private lazy var uiBinder = UiBinder<TodoListPresenter.Action, TodoListPresenter.State>()
-
     
     private let todosSectionsSubject = PublishSubject<[TodosTableSection]>()
     private let disposeBag = DisposeBag()
