@@ -38,9 +38,7 @@ class SplashViewController : UIViewController {
     
     private func showTodoListView() {
         let rootViewController = TodoListViewController()
-        let viewController = UINavigationController(rootViewController: rootViewController)
-        viewController.modalPresentationStyle = .fullScreen
-        navigationController?.setViewControllers([viewController], animated: true)
+        navigationController?.setViewControllers([rootViewController], animated: true)
     }
 }
 
