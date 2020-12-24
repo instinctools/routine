@@ -221,6 +221,6 @@ final class TodoDetailsViewController: UIViewController {
 
 func weakify <T: AnyObject>(_ owner: T, _ f: @escaping (T) -> () -> Void) -> () -> Void {
     return { [weak owner] in
-        return owner.map { f($0)() }
+        return owner.map { f($0)() } as! Void
     }
 }

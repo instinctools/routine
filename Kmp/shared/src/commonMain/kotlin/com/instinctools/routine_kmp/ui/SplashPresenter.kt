@@ -5,6 +5,8 @@ import com.instinctools.routine_kmp.domain.Store
 import com.instinctools.routine_kmp.domain.auth.EnsureLoginSideEffect
 import com.instinctools.routine_kmp.ui.SplashPresenter.Action
 import com.instinctools.routine_kmp.ui.SplashPresenter.State
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SplashPresenter(
     ensureLoginSideEffect: EnsureLoginSideEffect
@@ -16,7 +18,10 @@ class SplashPresenter(
             inputCreator = { if (it == Action.Login) Unit else null },
             outputConverter = { Action.LoginStateChanged(it) }
         )
-        sendAction(Action.Login)
+        scope.launch {
+            delay(1000)
+            sendAction(Action.Login)
+        }
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {

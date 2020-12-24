@@ -8,7 +8,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 abstract class Store<Action, State>(
     initialState: State,
@@ -24,11 +23,10 @@ abstract class Store<Action, State>(
     init {
         ensureNeverFrozen()
 
-        scope.launch {
-            for (action in actions.openSubscription()) {
-                _states.value = reduce(_states.value, action)
-            }
-        }
+        actions.asFlow()
+            .map { reduce(_states.value, it) }
+            .onEach { _states.value = it }
+            .launchIn(scope)
     }
 
     protected abstract suspend fun reduce(oldState: State, action: Action): State

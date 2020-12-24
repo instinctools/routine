@@ -11,6 +11,7 @@
 		263036A3249919DD009B237D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A2249919DD009B237D /* Assets.xcassets */; };
 		263036A6249919DD009B237D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A5249919DD009B237D /* Preview Assets.xcassets */; };
 		263036A9249919DD009B237D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263036A7249919DD009B237D /* LaunchScreen.storyboard */; };
+		263DEA9825933E4700D5486B /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DEA9725933E4700D5486B /* Colors.swift */; };
 		2656FC9F249A1A76009718C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FC9E249A1A76009718C4 /* AppDelegate.swift */; };
 		2656FCA1249A1A97009718C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCA0249A1A97009718C4 /* SceneDelegate.swift */; };
 		2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCA7249A1B9A009718C4 /* TodoListViewController.swift */; };
@@ -46,6 +47,7 @@
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
+		26D96DCD2594849A00022F30 /* ObservableWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D96DCC2594849A00022F30 /* ObservableWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +57,7 @@
 		263036A5249919DD009B237D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		263036A8249919DD009B237D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		263036AA249919DD009B237D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		263DEA9725933E4700D5486B /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		2656FC9E249A1A76009718C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2656FCA0249A1A97009718C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2656FCA7249A1B9A009718C4 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
@@ -83,6 +86,7 @@
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		26D96DCC2594849A00022F30 /* ObservableWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableWrapper.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -131,6 +135,7 @@
 		2630369B249919DC009B237D /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
+				26D96DCB2594848100022F30 /* Util */,
 				2656FCCF249A1E49009718C4 /* Firebase */,
 				2656FCB2249A1C6B009718C4 /* Extensions */,
 				2656FCA3249A1AB1009718C4 /* Screen */,
@@ -208,6 +213,7 @@
 				2656FCB9249A1CD4009718C4 /* UITableViewCell+ReuseIdentifier.swift */,
 				2656FCC0249A1D68009718C4 /* Period.swift */,
 				2656FCCB249A1E18009718C4 /* Optional+Default.swift */,
+				263DEA9725933E4700D5486B /* Colors.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -249,6 +255,14 @@
 				2659905E25924BB7001C631C /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		26D96DCB2594848100022F30 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				26D96DCC2594849A00022F30 /* ObservableWrapper.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		805364D11829E24165E7EA45 /* Pods */ = {
@@ -407,8 +421,10 @@
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
 				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
+				26D96DCD2594849A00022F30 /* ObservableWrapper.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
 				2656FC9F249A1A76009718C4 /* AppDelegate.swift in Sources */,
+				263DEA9825933E4700D5486B /* Colors.swift in Sources */,
 				2656FCB4249A1C7E009718C4 /* View+UIView.swift in Sources */,
 				2656FCB6249A1C95009718C4 /* UIControl+Responder.swift in Sources */,
 				2656FCC8249A1DC6009718C4 /* PlaceholderTextView.swift in Sources */,

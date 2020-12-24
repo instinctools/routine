@@ -9,14 +9,22 @@ class SplashViewController : UIViewController {
     }()
     private lazy var uiBinder = UiBinder<SplashPresenter.Action, SplashPresenter.State>()
 
-    let contentView = UIHostingController(rootView: SplashScreen())
-
+    private lazy var rootView = SplashScreen(state: presenter.states.value as! SplashPresenter.State)
+    private lazy var contentView = UIHostingController(rootView: rootView)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addChild(contentView)
         view.addSubview(contentView.view)
         setupConstrains()
+        
+        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+            if (state is SplashPresenter.StateSuccess) {
+                self.showTodoListView()
+            } else {
+                self.rootView.state = state
+            }
+        })
     }
     
     fileprivate func setupConstrains() {
@@ -27,31 +35,66 @@ class SplashViewController : UIViewController {
         contentView.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
     }
+    
+    private func showTodoListView() {
+        let rootViewController = TodoListViewController()
+        let viewController = UINavigationController(rootViewController: rootViewController)
+        viewController.modalPresentationStyle = .fullScreen
+        navigationController?.setViewControllers([viewController], animated: true)
+    }
 }
 
 struct SplashScreen: View {
+    
+    @State var state: SplashPresenter.State
 
     var body: some View {
-        VStack(alignment: .center, spacing: 50) {
+        VStack(spacing: 16) {
             Image("Splash Logo")
             Text("Setting up account")
-            circularProgress
-            Button("Retry", action: {})
+            if(state is SplashPresenter.StateLoading) {
+                SpinnerView()
+            } else {
+                Button("Retry", action: {})
+                    .padding()
+                    .foregroundColor(Color.white)
+                    .background(UIColor.splashPrimary())
+                    .cornerRadius(4)
+            }
         }
-    }
-    
-    var circularProgress: some View {
-        Circle()
-        .size(width: 60, height: 60)
-            .stroke(lineWidth: 4)
-            .opacity(0.3)
-            .foregroundColor(.blue)
-//            .foregroundColor(Color(red: 0x83, green: 0x5D, blue: 0x51))
     }
 }
 
-struct SplashViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        SplashScreen()
+struct SpinnerView: View {
+    
+    let timer = Timer.publish(every: 1.6, on: .main, in: .common).autoconnect()
+    @State var leftOffset: CGFloat = -100
+    @State var rightOffset: CGFloat = 100
+    
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 20, height: 20)
+                .offset(x: leftOffset)
+                .opacity(0.7)
+                .animation(Animation.easeInOut(duration: 1))
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 20, height: 20)
+                .offset(x: leftOffset)
+                .opacity(0.7)
+                .animation(Animation.easeInOut(duration: 1).delay(0.2))
+            Circle()
+                .fill(Color.blue)
+                .frame(width: 20, height: 20)
+                .offset(x: leftOffset)
+                .opacity(0.7)
+                .animation(Animation.easeInOut(duration: 1).delay(0.4))
+        }
+        .onReceive(timer) { (_) in
+            swap(&self.leftOffset, &self.rightOffset)
+        }
     }
+    
 }
