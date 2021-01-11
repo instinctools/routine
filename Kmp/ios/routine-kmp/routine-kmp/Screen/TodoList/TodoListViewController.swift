@@ -13,6 +13,33 @@ final class TodoListViewController: UIViewController {
                 forCellReuseIdentifier: TodoTableViewCell.reuseIdentifier)
         return tableView
     }()
+    
+    private lazy var emptyView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 0.0
+        stackView.distribution = .fill
+        stackView.backgroundColor = .clear
+        return stackView
+    }()
+    
+    private lazy var emptyTitle: UITextView = {
+        let textView = UITextView()
+        textView.textColor = UIColor(red: 0x4E, green: 0x4E, blue: 0x53)
+        textView.text = "Oh! It\'s still empty"
+        return textView
+    }()
+    private lazy var emptyMessage: UITextView = {
+        let textView = UITextView()
+        textView.textColor = UIColor(red: 0x9A, green: 0x99, blue: 0xA2)
+        textView.text = "There are no routine tasks"
+        return textView
+    }()
+    private lazy var emptyIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "No todos")
+        return imageView
+    }()
 
     private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add)
     private lazy var dataSource = makeDataSource()
@@ -33,7 +60,6 @@ final class TodoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
         bindPresenter()
     }
@@ -54,6 +80,13 @@ final class TodoListViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
         
+        emptyView.isHidden = false
+        view.addSubview(emptyView)
+        
+        emptyView.addArrangedSubview(emptyIcon)
+        emptyView.addArrangedSubview(emptyTitle)
+        emptyView.addArrangedSubview(emptyMessage)
+        
         addButton.rx.tap
             .do(onNext: showTaskCreationView)
             .subscribe()
@@ -68,6 +101,9 @@ final class TodoListViewController: UIViewController {
                 TodosTableSection(section: 1, items: state.futureTodos)
             ]
             self.todosSectionsSubject.onNext(sections)
+            
+//            self.tableView.isHidden = state.expiredTodos.isEmpty
+//            self.emptyView.isHidden = !state.expiredTodos.isEmpty
         })
         
         todosSectionsSubject.asDriver(onErrorJustReturn: [])

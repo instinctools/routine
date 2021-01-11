@@ -62,8 +62,8 @@ class TodoListFragment : BaseFragment(R.layout.fragment_todos_list) {
 
         presenter.states.onEach { state: TodoListPresenter.State ->
             val mergedItems = buildList {
-                addAll(state.expiredTodos)
                 if (state.expiredTodos.isNotEmpty()) {
+                    addAll(state.expiredTodos)
                     add(Unit)
                 }
                 addAll(state.futureTodos)
