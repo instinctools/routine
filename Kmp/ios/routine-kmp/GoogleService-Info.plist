@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>714449343672-f65ra1o72cia5r7fch8ktlgj7g4f4f93.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.714449343672-f65ra1o72cia5r7fch8ktlgj7g4f4f93</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC1qAEh8hL8TBFGpWUQuthJ6KHcheEY8LM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>714449343672</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.instinctools.Routine</string>
+	<key>PROJECT_ID</key>
+	<string>instinctools-routine</string>
+	<key>STORAGE_BUCKET</key>
+	<string>instinctools-routine.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:714449343672:ios:271197e49b196d3202d04d</string>
+	<key>DATABASE_URL</key>
+	<string>https://instinctools-routine.firebaseio.com</string>
+</dict>
+</plist>

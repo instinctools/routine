@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */; };
+		262A695D25AC842F001168C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 262A695C25AC842F001168C7 /* GoogleService-Info.plist */; };
 		263036A3249919DD009B237D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A2249919DD009B237D /* Assets.xcassets */; };
 		263036A6249919DD009B237D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A5249919DD009B237D /* Preview Assets.xcassets */; };
 		263036A9249919DD009B237D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263036A7249919DD009B237D /* LaunchScreen.storyboard */; };
@@ -42,7 +43,6 @@
 		2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE4249A1FA6009718C4 /* RxDataSources */; };
 		2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */ = {isa = PBXBuildFile; productRef = 2656FCE7249A1FB9009718C4 /* RxBiBinding */; };
 		2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2659905925922F09001C631C /* FirebaseAuthInteractor.swift */; };
-		2659905C25923CD9001C631C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2659905B25923CD9001C631C /* GoogleService-Info.plist */; };
 		2659905F25924BB7001C631C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2659905E25924BB7001C631C /* SplashViewController.swift */; };
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
@@ -51,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routine_kmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		262A695C25AC842F001168C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		26303699249919DC009B237D /* routine-kmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "routine-kmp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263036A2249919DD009B237D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		263036A5249919DD009B237D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -80,7 +81,6 @@
 		2656FCD2249A1EAE009718C4 /* BottomCardTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardTransition.swift; sourceTree = "<group>"; };
 		2656FCD4249A1EC4009718C4 /* BottomCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomCardViewController.swift; sourceTree = "<group>"; };
 		2659905925922F09001C631C /* FirebaseAuthInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthInteractor.swift; sourceTree = "<group>"; };
-		2659905B25923CD9001C631C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2659905E25924BB7001C631C /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -114,7 +114,7 @@
 		26303690249919DC009B237D = {
 			isa = PBXGroup;
 			children = (
-				2659905B25923CD9001C631C /* GoogleService-Info.plist */,
+				262A695C25AC842F001168C7 /* GoogleService-Info.plist */,
 				2630369B249919DC009B237D /* routine-kmp */,
 				2630369A249919DC009B237D /* Products */,
 				805364D11829E24165E7EA45 /* Pods */,
@@ -351,7 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				263036A9249919DD009B237D /* LaunchScreen.storyboard in Resources */,
-				2659905C25923CD9001C631C /* GoogleService-Info.plist in Resources */,
+				262A695D25AC842F001168C7 /* GoogleService-Info.plist in Resources */,
 				263036A6249919DD009B237D /* Preview Assets.xcassets in Resources */,
 				263036A3249919DD009B237D /* Assets.xcassets in Resources */,
 			);
