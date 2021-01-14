@@ -4,7 +4,7 @@ import RxSwift
 import RxCocoa
 import RoutineShared
 
-final class TodoDetailsViewController: UIViewController {
+final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -196,7 +196,13 @@ final class TodoDetailsViewController: UIViewController {
     }
     
     private func showCountSelectionAlert(initialCount: Int) {
-        present(PeriodPickerViewController(initialCount: initialCount), animated: true)
+        let pickerController = PeriodPickerViewController(initialCount: initialCount)
+        pickerController.pickerCallback = self
+        present(pickerController, animated: true)
+    }
+    
+    func onPeriodPicked(count: Int) {
+        self.presenter.sendAction(action: TodoDetailsPresenter.ActionChangePeriod(period: Int32(count)))
     }
     
     private func keyboardWillShow(notification: Notification) {

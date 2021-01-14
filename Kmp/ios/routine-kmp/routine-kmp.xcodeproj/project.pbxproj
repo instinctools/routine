@@ -47,6 +47,7 @@
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
+		26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +86,7 @@
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickedCallback.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,6 +199,7 @@
 				2656FCC4249A1D9B009718C4 /* View */,
 				2656FCB0249A1C4E009718C4 /* TodoDetailsViewController.swift */,
 				2656FCC2249A1D8E009718C4 /* PeriodPickerViewController.swift */,
+				26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */,
 			);
 			path = TodoDetails;
 			sourceTree = "<group>";
@@ -431,6 +434,7 @@
 				2656FCA1249A1A97009718C4 /* SceneDelegate.swift in Sources */,
 				2656FCCC249A1E18009718C4 /* Optional+Default.swift in Sources */,
 				2656FCBD249A1D26009718C4 /* PresentationController.swift in Sources */,
+				26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

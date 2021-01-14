@@ -7,6 +7,8 @@ import RoutineShared
 
 final class PeriodPickerViewController: BottomCardViewController {
     
+    var pickerCallback: PeriodPickedCallback?
+    
     private let pickerView = UIPickerView()
     
     private let titleLabel: UILabel = {
@@ -105,12 +107,13 @@ final class PeriodPickerViewController: BottomCardViewController {
         pickerView.rx.modelSelected(String.self)
             .do(onNext: { newCount in
                 print(newCount)
+                self.selectedCount = Int(newCount[0]) ?? 0
             })
             .subscribe().disposed(by: disposeBag)
         
         doneButton.rx.tap
             .do(onNext: {
-                //do smth
+                self.pickerCallback?.onPeriodPicked(count: self.selectedCount)
             })
             .subscribe().disposed(by: disposeBag)
         
