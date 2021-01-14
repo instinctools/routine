@@ -24,7 +24,7 @@ final class PeriodView: UIView {
     
     private let countSelectionView: UIButton = {
         let button = UIButton()
-        button.setImage(#imageLiteral(resourceName: "menu-black-18dp.pdf"), for: .normal)
+        button.setImage(UIImage(named: "Period Selection"), for: .normal)
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
         button.imageView?.contentMode = .scaleToFill
