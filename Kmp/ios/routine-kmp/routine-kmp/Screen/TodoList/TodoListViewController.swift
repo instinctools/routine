@@ -9,31 +9,31 @@ final class TodoListViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
-        tableView.register(TodoTableViewCell.self,
-                forCellReuseIdentifier: TodoTableViewCell.reuseIdentifier)
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: TodoTableViewCell.reuseIdentifier)
         return tableView
     }()
     
     private lazy var emptyView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0.0
+        stackView.axis = .vertical
+        stackView.spacing = 0
         stackView.distribution = .fill
+        stackView.alignment = .center
         stackView.backgroundColor = .clear
         return stackView
     }()
     
-    private lazy var emptyTitle: UITextView = {
-        let textView = UITextView()
-        textView.textColor = UIColor(red: 0x4E, green: 0x4E, blue: 0x53)
-        textView.text = "Oh! It\'s still empty"
-        return textView
+    private lazy var emptyTitle: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(red: 0x4E, green: 0x4E, blue: 0x53)
+        label.text = "Oh! It\'s still empty"
+        return label
     }()
-    private lazy var emptyMessage: UITextView = {
-        let textView = UITextView()
-        textView.textColor = UIColor(red: 0x9A, green: 0x99, blue: 0xA2)
-        textView.text = "There are no routine tasks"
-        return textView
+    private lazy var emptyMessage: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(red: 0x9A, green: 0x99, blue: 0xA2)
+        label.text = "There are no routine tasks"
+        return label
     }()
     private lazy var emptyIcon: UIImageView = {
         let imageView = UIImageView()
@@ -80,12 +80,15 @@ final class TodoListViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        emptyView.isHidden = false
         view.addSubview(emptyView)
         
         emptyView.addArrangedSubview(emptyIcon)
         emptyView.addArrangedSubview(emptyTitle)
         emptyView.addArrangedSubview(emptyMessage)
+        
+        emptyView.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
         
         addButton.rx.tap
             .do(onNext: showTaskCreationView)
@@ -95,15 +98,16 @@ final class TodoListViewController: UIViewController {
     
     private func bindPresenter() {
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
-            print("state loaded, items \(state.expiredTodos.count + state.futureTodos.count)")
+            let itemsCount = state.expiredTodos.count + state.futureTodos.count
+            print("state loaded, items \(itemsCount)")
             let sections = [
                 TodosTableSection(section: 0, items: state.expiredTodos),
                 TodosTableSection(section: 1, items: state.futureTodos)
             ]
             self.todosSectionsSubject.onNext(sections)
             
-//            self.tableView.isHidden = state.expiredTodos.isEmpty
-//            self.emptyView.isHidden = !state.expiredTodos.isEmpty
+            self.tableView.isHidden = itemsCount == 0
+            self.emptyView.isHidden = itemsCount != 0
         })
         
         todosSectionsSubject.asDriver(onErrorJustReturn: [])
