@@ -111,7 +111,7 @@ final class PeriodView: UIView {
     }
     
     func adjustSelection(selectedUnit: PeriodUnit?) {
-        setSelected(selectedUnit == period)
+        setSelected(selectedUnit == period.unit)
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
