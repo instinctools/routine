@@ -29,6 +29,12 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
         return textView
     }()
     
+    private lazy var progressView: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.startAnimating()
+        return activityIndicator
+    }()
+    
     private lazy var resetTypeSegmentControl = UISegmentedControl(
            items: ["Reset to period", "Reset to date"]
     )
@@ -101,6 +107,8 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
         contentView.addArrangedSubview(dividerView)
         
         contentView.addArrangedSubview(periodSelectionView)
+        view.addSubview(progressView)
+
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -115,6 +123,10 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.width.equalToSuperview()
+        }
+        
+        progressView.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
         }
     }
     
@@ -148,17 +160,6 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
         
         resetTypeSegmentControl.addTarget(self, action: #selector(onStrategyChanged), for: .valueChanged)
                 
-//        let input = TaskDetailsViewModel.Input(
-//            doneButtonAction: doneButton.rx.tap.asDriver(),
-//            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
-//        )
-//        let output = viewModel.transform(input: input)
-//
-//        output.doneButtonEnabled
-//            .drive(doneButton.rx.isEnabled)
-//            .disposed(by: disposeBag)
-//
-//
         titleView.textView.rx.text.orEmpty
             .do(onNext: { title in
                 let action = TodoDetailsPresenter.ActionChangeTitle(title: title)
@@ -178,11 +179,21 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
             self.periodSelectionView.showPeriods(periods: state.periods)
             self.periodSelectionView.selectPeriod(unit: todo.periodUnit)
             
+            self.progressView.isHidden = !state.progress
+            self.doneButton.isEnabled = state.saveEnabled
+            
             if todo.periodStrategy == PeriodResetStrategy.fromnow {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 0
             } else {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 1
             }
+            
+            state.saveError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to save your task. Try again later", buttonTitle: "Ok")
+            })
+            state.loadingError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to load info about your task. Try again later", buttonTitle: "Ok")
+            })
         })
     }
     
@@ -208,6 +219,16 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
     
     func onPeriodPicked(count: Int) {
         self.presenter.sendAction(action: TodoDetailsPresenter.ActionChangePeriod(period: Int32(count)))
+    }
+    
+    private func showErrorAlert(
+        title: String,
+        message: String,
+        buttonTitle: String
+    ) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func keyboardWillShow(notification: Notification) {
