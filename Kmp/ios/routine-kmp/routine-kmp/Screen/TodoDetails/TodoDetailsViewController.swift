@@ -159,9 +159,14 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
 //            .disposed(by: disposeBag)
 //
 //
-//        (textView.rx.title <-> viewModel.title)
-//            .disposed(by: disposeBag)
-//
+        titleView.textView.rx.text.orEmpty
+            .do(onNext: { title in
+                let action = TodoDetailsPresenter.ActionChangeTitle(title: title)
+                self.presenter.sendAction(action: action)
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
+
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
             state.saved.consumeOneTimeEvent(consumer: { _ in
                 self.dismiss()
