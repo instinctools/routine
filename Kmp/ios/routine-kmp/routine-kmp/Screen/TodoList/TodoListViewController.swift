@@ -42,6 +42,8 @@ final class TodoListViewController: UIViewController {
     }()
 
     private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add)
+    private lazy var menuButton = UIBarButtonItem(image: UIImage(named: "Side Menu")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(menuClicked))
+    
     private lazy var dataSource = makeDataSource()
 
     private lazy var presenter: TodoListPresenter = {
@@ -66,8 +68,9 @@ final class TodoListViewController: UIViewController {
 
     private func setupView() {
         navigationItem.title = "Routine"
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .never
         navigationItem.setRightBarButton(addButton, animated: false)
+        navigationItem.setLeftBarButton(menuButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
 
         view.backgroundColor = .systemBackground
@@ -124,6 +127,9 @@ final class TodoListViewController: UIViewController {
 
     private func showTaskCreationView() {
         showTodoDetailsView(item: nil)
+    }
+    
+    @objc private func menuClicked() {
     }
 
     private func makeDataSource() -> RxTableViewSectionedAnimatedDataSource<TodosTableSection> {
