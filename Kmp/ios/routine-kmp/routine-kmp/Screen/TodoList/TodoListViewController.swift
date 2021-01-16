@@ -214,32 +214,34 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
                    for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
 
         switch orientation {
-        case .left:
-            let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
-                let todoId = self.model(atIndexPath: indexPath).todo.id
-                let action = TodoListPresenter.ActionResetTask(taskId: todoId)
-                self.presenter.sendAction(action: action)
-            }
-            setup(swipeAction: reseteAction, image: UIImage(named: "reset"))
-
-            return [reseteAction]
-        case .right:
-            let deleteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
-//                let message = "Are you sure you want to delete the task?"
-                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-                alert.addAction(.init(title: "Cancel", style: .cancel))
-                alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+            case .left:
+                let reseteAction = SwipeAction(style: .default, title: "Reset") { action, indexPath in
                     let todoId = self.model(atIndexPath: indexPath).todo.id
-                    let action = TodoListPresenter.ActionDeleteTask(taskId: todoId)
+                    let action = TodoListPresenter.ActionResetTask(taskId: todoId)
                     self.presenter.sendAction(action: action)
-                }))
+                }
+                setup(swipeAction: reseteAction, image: UIImage(named: "Reset Task"))
+                reseteAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
+                reseteAction.textColor = .white
+                return [reseteAction]
+            case .right:
+                let deleteAction = SwipeAction(style: .default, title: "Delete") { action, indexPath in
+                    let message = "Are you sure you want to delete the task?"
+                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .actionSheet)
 
-                self.present(alert, animated: true)
-            }
-            setup(swipeAction: deleteAction, image: UIImage(named: "delete"))
+                    alert.addAction(.init(title: "Cancel", style: .cancel))
+                    alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                        let todoId = self.model(atIndexPath: indexPath).todo.id
+                        let action = TodoListPresenter.ActionDeleteTask(taskId: todoId)
+                        self.presenter.sendAction(action: action)
+                    }))
 
-            return [deleteAction]
+                    self.present(alert, animated: true)
+                }
+                setup(swipeAction: deleteAction, image: UIImage(named: "Delete Task"))
+                deleteAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
+                deleteAction.textColor = .white
+                return [deleteAction]
         }
     }
 
