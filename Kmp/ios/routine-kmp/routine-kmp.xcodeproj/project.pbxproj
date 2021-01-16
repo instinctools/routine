@@ -47,6 +47,8 @@
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
+		2691AC3625B1C640005463AD /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691AC3525B1C640005463AD /* UIViewController.swift */; };
+		2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 2691AC3925B1C727005463AD /* MBProgressHUD */; };
 		26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */; };
 /* End PBXBuildFile section */
 
@@ -86,6 +88,7 @@
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		2691AC3525B1C640005463AD /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickedCallback.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 				266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */,
 				2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */,
 				2656FCDE249A1F7B009718C4 /* RxSwift in Frameworks */,
+				2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */,
 				2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */,
 				2656FCE3249A1FA6009718C4 /* Differentiator in Frameworks */,
 				2656FCD8249A1F25009718C4 /* SnapKit in Frameworks */,
@@ -214,6 +218,7 @@
 				2656FCC0249A1D68009718C4 /* Period.swift */,
 				2656FCCB249A1E18009718C4 /* Optional+Default.swift */,
 				263DEA9725933E4700D5486B /* Colors.swift */,
+				2691AC3525B1C640005463AD /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -303,6 +308,7 @@
 				2656FCE2249A1FA6009718C4 /* Differentiator */,
 				2656FCE4249A1FA6009718C4 /* RxDataSources */,
 				2656FCE7249A1FB9009718C4 /* RxBiBinding */,
+				2691AC3925B1C727005463AD /* MBProgressHUD */,
 			);
 			productName = "routine-kmp";
 			productReference = 26303699249919DC009B237D /* routine-kmp.app */;
@@ -338,6 +344,7 @@
 				2656FCDC249A1F7B009718C4 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				2656FCE1249A1FA6009718C4 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				2656FCE6249A1FB9009718C4 /* XCRemoteSwiftPackageReference "RxBiBinding" */,
+				2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 			);
 			productRefGroup = 2630369A249919DC009B237D /* Products */;
 			projectDirPath = "";
@@ -411,6 +418,7 @@
 			files = (
 				2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */,
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
+				2691AC3625B1C640005463AD /* UIViewController.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
 				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
@@ -676,6 +684,14 @@
 				minimumVersion = 0.2.5;
 			};
 		};
+		2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jdg/MBProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -713,6 +729,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2656FCE6249A1FB9009718C4 /* XCRemoteSwiftPackageReference "RxBiBinding" */;
 			productName = RxBiBinding;
+		};
+		2691AC3925B1C727005463AD /* MBProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
+			productName = MBProgressHUD;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

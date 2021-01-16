@@ -5,8 +5,8 @@
     <string name="tasks_empty_title">Oh! It\'s still empty</string>
     <string name="tasks_empty_description">There are no routine tasks</string>
 
-    <string name="tasks_reset_success">The task was successfully reset</string>
-    <string name="tasks_delete_success">The task was deleted</string>
+    <string name="tasks_reset_success">Task renewed</string>
+    <string name="tasks_delete_success">Task deleted</string>
     <string name="tasks_error_refresh">Failed to refresh routines!</string>
     <string name="tasks_error_delete">Failed to delete routine</string>
     <string name="tasks_error_reset">Failed to reset routine</string>

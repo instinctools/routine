@@ -111,6 +111,23 @@ final class TodoListViewController: UIViewController {
             
             self.tableView.isHidden = itemsCount == 0
             self.emptyView.isHidden = itemsCount != 0
+            
+            state.resetDone.consumeOneTimeEvent(consumer: { _ in
+                self.showToastMessage(message: "Task renewed")
+            })
+            state.deleteDone.consumeOneTimeEvent(consumer: { _ in
+                self.showToastMessage(message: "Task deleted")
+            })
+            
+            state.refreshError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to refresh todos", buttonTitle: "Ok")
+            })
+            state.deleteError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to delete todo", buttonTitle: "Ok")
+            })
+            state.resetError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to reset todo", buttonTitle: "Ok")
+            })
         })
         
         todosSectionsSubject.asDriver(onErrorJustReturn: [])

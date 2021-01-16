@@ -221,16 +221,6 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
         self.presenter.sendAction(action: TodoDetailsPresenter.ActionChangePeriod(period: Int32(count)))
     }
     
-    private func showErrorAlert(
-        title: String,
-        message: String,
-        buttonTitle: String
-    ) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(UIAlertAction(title: buttonTitle, style: UIAlertAction.Style.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
     private func keyboardWillShow(notification: Notification) {
         let value = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue
         if let keyboardSize = value?.cgRectValue {
