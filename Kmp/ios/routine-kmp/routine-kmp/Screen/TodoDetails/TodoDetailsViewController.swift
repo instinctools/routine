@@ -188,7 +188,7 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 1
             }
             
-            state.saveError.consumeOneTimeEvent(consumer: { _ in
+            state.saveError.consumeOneTimeEvent(consumer: { error in
                 self.showErrorAlert(title: "Error", message: "Failed to save your task. Try again later", buttonTitle: "Ok")
             })
             state.loadingError.consumeOneTimeEvent(consumer: { _ in
