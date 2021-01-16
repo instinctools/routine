@@ -15,6 +15,7 @@ import com.instinctools.routine_kmp.ui.todo.details.model.ValidationError
 import com.instinctools.routine_kmp.ui.todo.details.model.adjustCount
 import com.instinctools.routine_kmp.ui.todo.details.model.allPeriodUiModels
 import com.instinctools.routine_kmp.util.OneTimeEvent
+import kotlinx.coroutines.launch
 
 class TodoDetailsPresenter(
     todoId: String?,
@@ -34,7 +35,9 @@ class TodoDetailsPresenter(
             outputConverter = { Action.SaveStateChanged(it) }
         )
 
-        if (todoId != null) sendAction(Action.GetTask(todoId))
+        scope.launch {
+            if (todoId != null) sendAction(Action.GetTask(todoId))
+        }
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {
