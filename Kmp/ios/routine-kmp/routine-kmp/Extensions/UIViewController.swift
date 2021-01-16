@@ -22,8 +22,9 @@ extension UIViewController {
             hud.mode = MBProgressHUDMode.text
             hud.label.text = message
             hud.margin = 10;
-            //hud.yOffset = 150;
+            hud.offset.y = 200;
             hud.removeFromSuperViewOnHide = true;
+            hud.isUserInteractionEnabled = false
 
             hud.hide(animated: true, afterDelay: 3)
         }
