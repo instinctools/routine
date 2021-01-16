@@ -102,7 +102,6 @@ final class TodoListViewController: UIViewController {
     private func bindPresenter() {
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
             let itemsCount = state.expiredTodos.count + state.futureTodos.count
-            print("state loaded, items \(itemsCount)")
             let sections = [
                 TodosTableSection(section: 0, items: state.expiredTodos),
                 TodosTableSection(section: 1, items: state.futureTodos)
@@ -133,6 +132,15 @@ final class TodoListViewController: UIViewController {
         todosSectionsSubject.asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                let cell = self?.tableView.cellForRow(at: indexPath) as! TodoTableViewCell
+                let todo = cell.todo
+                if (todo != nil) {
+                    self?.showTodoDetailsView(item: cell.todo)
+                }
+            }).disposed(by: disposeBag)
     }
 
     private func showTodoDetailsView(item: TodoListUiModel?) {
@@ -201,8 +209,9 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
     private func setup(swipeAction: SwipeAction, image: UIImage?) {
         swipeAction.hidesWhenSelected = false
         swipeAction.image = image
-        swipeAction.backgroundColor = .systemBackground
-        swipeAction.highlightedBackgroundColor = .systemBackground
+        swipeAction.highlightedBackgroundColor = UIColor(red: 0xB2, green: 0xB2, blue: 0xB2)
+        swipeAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
+        swipeAction.textColor = .white
     }
 
     private func model(atIndexPath indexPath: IndexPath) -> TodoListUiModel {
@@ -239,8 +248,6 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
                     self.present(alert, animated: true)
                 }
                 setup(swipeAction: deleteAction, image: UIImage(named: "Delete Task"))
-                deleteAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
-                deleteAction.textColor = .white
                 return [deleteAction]
         }
     }
