@@ -4,16 +4,17 @@ import RoutineShared
 extension PeriodUnit {
     
     func title(count: Int? = nil) -> String {
-        let hasPeriod = (count ?? 0) > 1
+        let countOrZero = count ?? 0
+        let hasPeriod = countOrZero > 1
         switch self {
             case .day:
-                return hasPeriod ? "Days" : "Day"
+                return hasPeriod ? "\(countOrZero) Days" : "Day"
             case .week:
-                return hasPeriod ? "Weeks" : "Week"
+                return hasPeriod ? "\(countOrZero) Weeks" : "Week"
             case .month:
-                return hasPeriod ? "Months" : "Month"
+                return hasPeriod ? "\(countOrZero) Months" : "Month"
             case .year:
-                return hasPeriod ? "Years" : "Year"
+                return hasPeriod ? "\(countOrZero) Years" : "Year"
             default:
                 return "Unknwon"
         }

@@ -9,6 +9,7 @@ import com.instinctools.routine_kmp.domain.task.ResetTaskSideEffect
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.Action
 import com.instinctools.routine_kmp.ui.todo.list.TodoListPresenter.State
 import com.instinctools.routine_kmp.util.OneTimeEvent
+import kotlinx.coroutines.launch
 
 class TodoListPresenter(
     getTasksSideEffect: GetTasksSideEffect,
@@ -39,8 +40,11 @@ class TodoListPresenter(
             outputConverter = { Action.TasksLoaded(it) }
         )
 
-        sendAction(Action.Refresh)
-        sendAction(Action.GetTasks)
+        // TODO workaround for not working Dispatcher.Main.immediate in Kotlin/Native: https://github.com/Kotlin/kotlinx.coroutines/issues/2283
+        scope.launch {
+            sendAction(Action.Refresh)
+            sendAction(Action.GetTasks)
+        }
     }
 
     override suspend fun reduce(oldState: State, action: Action): State = when (action) {

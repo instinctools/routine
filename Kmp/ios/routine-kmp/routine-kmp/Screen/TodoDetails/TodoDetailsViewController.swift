@@ -4,7 +4,7 @@ import RxSwift
 import RxCocoa
 import RoutineShared
 
-final class TodoDetailsViewController: UIViewController {
+final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -27,6 +27,12 @@ final class TodoDetailsViewController: UIViewController {
         textView.placeholder = "Type recurring task name..."
         textView.font = .systemFont(ofSize: 30, weight: .medium)
         return textView
+    }()
+    
+    private lazy var progressView: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.startAnimating()
+        return activityIndicator
     }()
     
     private lazy var resetTypeSegmentControl = UISegmentedControl(
@@ -101,6 +107,8 @@ final class TodoDetailsViewController: UIViewController {
         contentView.addArrangedSubview(dividerView)
         
         contentView.addArrangedSubview(periodSelectionView)
+        view.addSubview(progressView)
+
         
         scrollView.snp.makeConstraints { (make) in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -115,6 +123,10 @@ final class TodoDetailsViewController: UIViewController {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.width.equalToSuperview()
+        }
+        
+        progressView.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
         }
     }
     
@@ -148,20 +160,14 @@ final class TodoDetailsViewController: UIViewController {
         
         resetTypeSegmentControl.addTarget(self, action: #selector(onStrategyChanged), for: .valueChanged)
                 
-//        let input = TaskDetailsViewModel.Input(
-//            doneButtonAction: doneButton.rx.tap.asDriver(),
-//            selection: repeatPeriodsView.selection.asDriver(onErrorDriveWith: .never())
-//        )
-//        let output = viewModel.transform(input: input)
-//
-//        output.doneButtonEnabled
-//            .drive(doneButton.rx.isEnabled)
-//            .disposed(by: disposeBag)
-//
-//
-//        (textView.rx.title <-> viewModel.title)
-//            .disposed(by: disposeBag)
-//
+        titleView.textView.rx.text.orEmpty
+            .do(onNext: { title in
+                let action = TodoDetailsPresenter.ActionChangeTitle(title: title)
+                self.presenter.sendAction(action: action)
+            })
+            .subscribe()
+            .disposed(by: disposeBag)
+
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
             state.saved.consumeOneTimeEvent(consumer: { _ in
                 self.dismiss()
@@ -173,11 +179,21 @@ final class TodoDetailsViewController: UIViewController {
             self.periodSelectionView.showPeriods(periods: state.periods)
             self.periodSelectionView.selectPeriod(unit: todo.periodUnit)
             
+            self.progressView.isHidden = !state.progress
+            self.doneButton.isEnabled = state.saveEnabled
+            
             if todo.periodStrategy == PeriodResetStrategy.fromnow {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 0
             } else {
                 self.resetTypeSegmentControl.selectedSegmentIndex = 1
             }
+            
+            state.saveError.consumeOneTimeEvent(consumer: { error in
+                self.showErrorAlert(title: "Error", message: "Failed to save your task. Try again later", buttonTitle: "Ok")
+            })
+            state.loadingError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to load info about your task. Try again later", buttonTitle: "Ok")
+            })
         })
     }
     
@@ -196,7 +212,13 @@ final class TodoDetailsViewController: UIViewController {
     }
     
     private func showCountSelectionAlert(initialCount: Int) {
-        present(PeriodPickerViewController(initialCount: initialCount), animated: true)
+        let pickerController = PeriodPickerViewController(initialCount: initialCount)
+        pickerController.pickerCallback = self
+        present(pickerController, animated: true)
+    }
+    
+    func onPeriodPicked(count: Int) {
+        self.presenter.sendAction(action: TodoDetailsPresenter.ActionChangePeriod(period: Int32(count)))
     }
     
     private func keyboardWillShow(notification: Notification) {

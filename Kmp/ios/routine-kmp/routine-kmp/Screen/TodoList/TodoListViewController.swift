@@ -9,31 +9,31 @@ final class TodoListViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
-        tableView.register(TodoTableViewCell.self,
-                forCellReuseIdentifier: TodoTableViewCell.reuseIdentifier)
+        tableView.register(TodoTableViewCell.self, forCellReuseIdentifier: TodoTableViewCell.reuseIdentifier)
         return tableView
     }()
     
     private lazy var emptyView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 0.0
+        stackView.axis = .vertical
+        stackView.spacing = 0
         stackView.distribution = .fill
+        stackView.alignment = .center
         stackView.backgroundColor = .clear
         return stackView
     }()
     
-    private lazy var emptyTitle: UITextView = {
-        let textView = UITextView()
-        textView.textColor = UIColor(red: 0x4E, green: 0x4E, blue: 0x53)
-        textView.text = "Oh! It\'s still empty"
-        return textView
+    private lazy var emptyTitle: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(red: 0x4E, green: 0x4E, blue: 0x53)
+        label.text = "Oh! It\'s still empty"
+        return label
     }()
-    private lazy var emptyMessage: UITextView = {
-        let textView = UITextView()
-        textView.textColor = UIColor(red: 0x9A, green: 0x99, blue: 0xA2)
-        textView.text = "There are no routine tasks"
-        return textView
+    private lazy var emptyMessage: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(red: 0x9A, green: 0x99, blue: 0xA2)
+        label.text = "There are no routine tasks"
+        return label
     }()
     private lazy var emptyIcon: UIImageView = {
         let imageView = UIImageView()
@@ -42,6 +42,8 @@ final class TodoListViewController: UIViewController {
     }()
 
     private lazy var addButton = UIBarButtonItem(barButtonSystemItem: .add)
+    private lazy var menuButton = UIBarButtonItem(image: UIImage(named: "Side Menu")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(menuClicked))
+    
     private lazy var dataSource = makeDataSource()
 
     private lazy var presenter: TodoListPresenter = {
@@ -66,8 +68,9 @@ final class TodoListViewController: UIViewController {
 
     private func setupView() {
         navigationItem.title = "Routine"
-        navigationItem.largeTitleDisplayMode = .always
+        navigationItem.largeTitleDisplayMode = .never
         navigationItem.setRightBarButton(addButton, animated: false)
+        navigationItem.setLeftBarButton(menuButton, animated: false)
         navigationController?.navigationBar.tintColor = .label
 
         view.backgroundColor = .systemBackground
@@ -80,12 +83,15 @@ final class TodoListViewController: UIViewController {
             make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        emptyView.isHidden = false
         view.addSubview(emptyView)
         
         emptyView.addArrangedSubview(emptyIcon)
         emptyView.addArrangedSubview(emptyTitle)
         emptyView.addArrangedSubview(emptyMessage)
+        
+        emptyView.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+        }
         
         addButton.rx.tap
             .do(onNext: showTaskCreationView)
@@ -95,20 +101,46 @@ final class TodoListViewController: UIViewController {
     
     private func bindPresenter() {
         uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
-            print("state loaded, items \(state.expiredTodos.count + state.futureTodos.count)")
+            let itemsCount = state.expiredTodos.count + state.futureTodos.count
             let sections = [
                 TodosTableSection(section: 0, items: state.expiredTodos),
                 TodosTableSection(section: 1, items: state.futureTodos)
             ]
             self.todosSectionsSubject.onNext(sections)
             
-//            self.tableView.isHidden = state.expiredTodos.isEmpty
-//            self.emptyView.isHidden = !state.expiredTodos.isEmpty
+            self.tableView.isHidden = itemsCount == 0
+            self.emptyView.isHidden = itemsCount != 0
+            
+            state.resetDone.consumeOneTimeEvent(consumer: { _ in
+                self.showToastMessage(message: "Task renewed")
+            })
+            state.deleteDone.consumeOneTimeEvent(consumer: { _ in
+                self.showToastMessage(message: "Task deleted")
+            })
+            
+            state.refreshError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to refresh todos", buttonTitle: "Ok")
+            })
+            state.deleteError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to delete todo", buttonTitle: "Ok")
+            })
+            state.resetError.consumeOneTimeEvent(consumer: { _ in
+                self.showErrorAlert(title: "Error", message: "Failed to reset todo", buttonTitle: "Ok")
+            })
         })
         
         todosSectionsSubject.asDriver(onErrorJustReturn: [])
             .drive(tableView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        tableView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                let cell = self?.tableView.cellForRow(at: indexPath) as! TodoTableViewCell
+                let todo = cell.todo
+                if (todo != nil) {
+                    self?.showTodoDetailsView(item: cell.todo)
+                }
+            }).disposed(by: disposeBag)
     }
 
     private func showTodoDetailsView(item: TodoListUiModel?) {
@@ -120,6 +152,9 @@ final class TodoListViewController: UIViewController {
 
     private func showTaskCreationView() {
         showTodoDetailsView(item: nil)
+    }
+    
+    @objc private func menuClicked() {
     }
 
     private func makeDataSource() -> RxTableViewSectionedAnimatedDataSource<TodosTableSection> {
@@ -174,8 +209,9 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
     private func setup(swipeAction: SwipeAction, image: UIImage?) {
         swipeAction.hidesWhenSelected = false
         swipeAction.image = image
-        swipeAction.backgroundColor = .systemBackground
-        swipeAction.highlightedBackgroundColor = .systemBackground
+        swipeAction.highlightedBackgroundColor = UIColor(red: 0xB2, green: 0xB2, blue: 0xB2)
+        swipeAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
+        swipeAction.textColor = .white
     }
 
     private func model(atIndexPath indexPath: IndexPath) -> TodoListUiModel {
@@ -187,32 +223,32 @@ extension TodoListViewController: SwipeTableViewCellDelegate {
                    for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
 
         switch orientation {
-        case .left:
-            let reseteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
-                let todoId = self.model(atIndexPath: indexPath).todo.id
-                let action = TodoListPresenter.ActionResetTask(taskId: todoId)
-                self.presenter.sendAction(action: action)
-            }
-            setup(swipeAction: reseteAction, image: UIImage(named: "reset"))
-
-            return [reseteAction]
-        case .right:
-            let deleteAction = SwipeAction(style: .default, title: nil) { action, indexPath in
-//                let message = "Are you sure you want to delete the task?"
-                let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-                alert.addAction(.init(title: "Cancel", style: .cancel))
-                alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+            case .left:
+                let reseteAction = SwipeAction(style: .default, title: "Reset") { action, indexPath in
                     let todoId = self.model(atIndexPath: indexPath).todo.id
-                    let action = TodoListPresenter.ActionDeleteTask(taskId: todoId)
+                    let action = TodoListPresenter.ActionResetTask(taskId: todoId)
                     self.presenter.sendAction(action: action)
-                }))
+                }
+                setup(swipeAction: reseteAction, image: UIImage(named: "Reset Task"))
+                reseteAction.backgroundColor = UIColor(red: 0xE3, green: 0xE3, blue: 0xE3)
+                reseteAction.textColor = .white
+                return [reseteAction]
+            case .right:
+                let deleteAction = SwipeAction(style: .default, title: "Delete") { action, indexPath in
+                    let message = "Are you sure you want to delete the task?"
+                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .actionSheet)
 
-                self.present(alert, animated: true)
-            }
-            setup(swipeAction: deleteAction, image: UIImage(named: "delete"))
+                    alert.addAction(.init(title: "Cancel", style: .cancel))
+                    alert.addAction(.init(title: "Delete", style: .destructive, handler: { _ in
+                        let todoId = self.model(atIndexPath: indexPath).todo.id
+                        let action = TodoListPresenter.ActionDeleteTask(taskId: todoId)
+                        self.presenter.sendAction(action: action)
+                    }))
 
-            return [deleteAction]
+                    self.present(alert, animated: true)
+                }
+                setup(swipeAction: deleteAction, image: UIImage(named: "Delete Task"))
+                return [deleteAction]
         }
     }
 

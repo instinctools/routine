@@ -35,6 +35,9 @@ class HostingTableViewCell<Content: View>: SwipeTableViewCell {
 }
 
 final class TodoTableViewCell: HostingTableViewCell<TodoRowView> {
+    
+    var todo: TodoListUiModel? = nil
+        
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -45,6 +48,7 @@ final class TodoTableViewCell: HostingTableViewCell<TodoRowView> {
     }
 
     func bind(to uiModel: TodoListUiModel, parent: UIViewController) {
+        self.todo = uiModel
         host(TodoRowView(uiModel: uiModel), parent: parent)
     }
 }

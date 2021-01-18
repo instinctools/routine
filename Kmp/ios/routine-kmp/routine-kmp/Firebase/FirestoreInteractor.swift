@@ -12,20 +12,22 @@ class FirestoreInteractor : IosFirestoreInteractor {
             if let error = error {
                 listener(nil, KotlinException(message: error.localizedDescription))
             } else {
+                var todos = [Todo]()
                 for document in querySnapshot!.documents {
-                    print("\(document.documentID) => \(document.data())")
+                    todos.append(self.todoFrom(document: document))
                 }
-                listener([], nil)
+                listener(todos, nil)
             }
         }
     }
 
     func addTodo(userId: String, todo: Todo, listener: @escaping (String?, KotlinException?) -> Void) {
-         todosCollection(userId: userId).addDocument(data: todo.toFirebaseMap()) { error in
+        let document = todosCollection(userId: userId).document()
+        document.setData(todo.toFirebaseMap()) { error in
             if let error = error {
                 listener(nil, KotlinException(message: error.localizedDescription))
             } else {
-                listener("", nil)
+                listener(document.documentID, nil)
             }
         }
     }
@@ -54,6 +56,28 @@ class FirestoreInteractor : IosFirestoreInteractor {
         return firestore.collection(FirebaseConst.Collection().users)
             .document(userId)
             .collection(FirebaseConst.Collection().todos)
+    }
+    
+    func todoFrom(document: QueryDocumentSnapshot) -> Todo {
+        let consts =  FirebaseConst.Todo()
+        
+        let periodUnitId = document.get(consts.FIELD_PERIOD_UNIT) as! String
+        let periodUnit = PeriodUnit.Companion().find(id: periodUnitId)
+        
+        let resetStrategyId = document.get(consts.FIELD_PERIOD_STRATEGY) as! String
+        let resetStrategy = PeriodResetStrategy.Companion().find(id: resetStrategyId)
+        
+        let nextTimestamp = document.get(consts.FIELD_TIMESTAMP) as! Timestamp
+        let nextDate = DatesKt.dateFromEpoch(timestamp: nextTimestamp.seconds)
+
+        return Todo(
+            id: document.documentID,
+            title: document.get(consts.FIELD_TITLE) as! String,
+            periodUnit: periodUnit,
+            periodValue: document.get(consts.FIELD_PERIOD_VALUE) as! Int32,
+            periodStrategy: resetStrategy,
+            nextDate: nextDate
+        )
     }
 }
 

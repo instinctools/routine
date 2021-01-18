@@ -18,7 +18,6 @@ class PeriodViewHolder(
 
     fun bind(item: PeriodUnitUiModel) {
         this.item = item
-        binding.periodTitle.text = item.unit.name
         binding.periodTitle.text = item.unit.title(item.count)
     }
 
