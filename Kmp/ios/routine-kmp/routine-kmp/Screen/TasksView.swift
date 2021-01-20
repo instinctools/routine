@@ -24,16 +24,20 @@ struct TasksView: View {
     }
     
     var body: some View {
-        List {
-            ForEach(state.expiredTodos, id: \.todo.id) { task in
-                TaskView(task: task)
+        ScrollView {
+            LazyVStack {
+                let _ = print("count is \(state.expiredTodos.count)")
+                ForEach(state.expiredTodos, id: \.todo.id) { task in
+                    TaskView(task: task)
+                }
+                if(!state.expiredTodos.isEmpty) {
+                    Divider()
+                }
+                ForEach(state.futureTodos, id: \.todo.id) { task in
+                    TaskView(task: task)
+                }
             }
-            if(!state.expiredTodos.isEmpty) {
-                Divider()
-            }
-            ForEach(state.futureTodos, id: \.todo.id) { task in
-                TaskView(task: task)
-            }
+            .padding(.horizontal, 16)
         }
         .toolbar {
             ToolbarItem(placement: .navigation) {
