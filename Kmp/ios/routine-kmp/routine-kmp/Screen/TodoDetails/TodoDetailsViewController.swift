@@ -168,7 +168,7 @@ final class TodoDetailsViewController: UIViewController, PeriodPickedCallback {
             .subscribe()
             .disposed(by: disposeBag)
 
-        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+        uiBinder.bindTo(presenter: presenter, listener: { state in
             state.saved.consumeOneTimeEvent(consumer: { _ in
                 self.dismiss()
             })

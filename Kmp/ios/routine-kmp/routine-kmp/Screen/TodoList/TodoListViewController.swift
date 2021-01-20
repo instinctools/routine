@@ -100,7 +100,7 @@ final class TodoListViewController: UIViewController {
     }
     
     private func bindPresenter() {
-        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+        uiBinder.bindTo(presenter: presenter, listener: { state in
             let itemsCount = state.expiredTodos.count + state.futureTodos.count
             let sections = [
                 TodosTableSection(section: 0, items: state.expiredTodos),

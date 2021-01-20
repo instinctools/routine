@@ -8,7 +8,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-typealias StateListener<State> = (state: State, oldState: State?) -> Unit
+typealias StateListener<State> = (state: State) -> Unit
 
 class UiBinder<Action : Any, State : Any> {
 
@@ -18,7 +18,7 @@ class UiBinder<Action : Any, State : Any> {
         var oldState: State? = null
         presenter.states
             .onEach { state ->
-                listener(state, oldState)
+                listener(state)
                 oldState = state
             }
             .launchIn(uiScope)

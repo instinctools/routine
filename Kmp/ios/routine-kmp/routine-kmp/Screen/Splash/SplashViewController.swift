@@ -18,7 +18,7 @@ class SplashViewController : UIViewController {
         view.addSubview(contentView.view)
         setupConstrains()
         
-        uiBinder.bindTo(presenter: presenter, listener: { state, oldState in
+        uiBinder.bindTo(presenter: presenter, listener: { state in
             if (state is SplashPresenter.StateSuccess) {
                 self.showTodoListView()
             } else {
@@ -60,6 +60,7 @@ struct SplashScreen: View {
                     .cornerRadius(4)
             }
         }
+        .navigationBarHidden(true)
     }
 }
 

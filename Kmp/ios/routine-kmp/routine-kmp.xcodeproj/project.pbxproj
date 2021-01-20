@@ -8,13 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */; };
+		2627D0E725B7165200752223 /* Mvi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627D0E625B7165200752223 /* Mvi.swift */; };
 		262A695D25AC842F001168C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 262A695C25AC842F001168C7 /* GoogleService-Info.plist */; };
 		263036A3249919DD009B237D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A2249919DD009B237D /* Assets.xcassets */; };
 		263036A6249919DD009B237D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A5249919DD009B237D /* Preview Assets.xcassets */; };
 		263036A9249919DD009B237D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 263036A7249919DD009B237D /* LaunchScreen.storyboard */; };
 		263DEA9825933E4700D5486B /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263DEA9725933E4700D5486B /* Colors.swift */; };
-		2656FC9F249A1A76009718C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FC9E249A1A76009718C4 /* AppDelegate.swift */; };
-		2656FCA1249A1A97009718C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCA0249A1A97009718C4 /* SceneDelegate.swift */; };
 		2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCA7249A1B9A009718C4 /* TodoListViewController.swift */; };
 		2656FCAA249A1BBB009718C4 /* TodoRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCA9249A1BBB009718C4 /* TodoRowView.swift */; };
 		2656FCAD249A1C12009718C4 /* TodoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2656FCAC249A1C12009718C4 /* TodoTableViewCell.swift */; };
@@ -47,13 +46,22 @@
 		266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C5249A3AB900A54842 /* libsqlite3.tbd */; };
 		266171C8249A3AE600A54842 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C7249A3ADB00A54842 /* libz.tbd */; };
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
+		2676998A25B5BCBF002E57DD /* RoutineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2676998925B5BCBF002E57DD /* RoutineApp.swift */; };
+		2676998D25B5D66A002E57DD /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2676998C25B5D66A002E57DD /* TasksView.swift */; };
 		2691AC3625B1C640005463AD /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691AC3525B1C640005463AD /* UIViewController.swift */; };
 		2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 2691AC3925B1C727005463AD /* MBProgressHUD */; };
+		26B9B10225B6DA7000E37E9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9B10125B6DA7000E37E9A /* AppDelegate.swift */; };
+		26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */; };
 		26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */; };
+		26F7CD0025B8259300AE0DC3 /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CCFF25B8259300AE0DC3 /* Injector.swift */; };
+		26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0325B8301F00AE0DC3 /* SplashView.swift */; };
+		26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */; };
+		26F7CD1025B849CA00AE0DC3 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0F25B849C900AE0DC3 /* TaskView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routine_kmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2627D0E625B7165200752223 /* Mvi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mvi.swift; sourceTree = "<group>"; };
 		262A695C25AC842F001168C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		26303699249919DC009B237D /* routine-kmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "routine-kmp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		263036A2249919DD009B237D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,8 +69,6 @@
 		263036A8249919DD009B237D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		263036AA249919DD009B237D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		263DEA9725933E4700D5486B /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
-		2656FC9E249A1A76009718C4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2656FCA0249A1A97009718C4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		2656FCA7249A1B9A009718C4 /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
 		2656FCA9249A1BBB009718C4 /* TodoRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoRowView.swift; sourceTree = "<group>"; };
 		2656FCAC249A1C12009718C4 /* TodoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoTableViewCell.swift; sourceTree = "<group>"; };
@@ -88,8 +94,16 @@
 		266171C5249A3AB900A54842 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		266171C7249A3ADB00A54842 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		2676998925B5BCBF002E57DD /* RoutineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineApp.swift; sourceTree = "<group>"; };
+		2676998C25B5D66A002E57DD /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		2691AC3525B1C640005463AD /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		26B9B10125B6DA7000E37E9A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../../../../../../../.Trash/AppDelegate.swift; sourceTree = "<group>"; };
+		26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../Screen/SceneDelegate.swift; sourceTree = "<group>"; };
 		26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickedCallback.swift; sourceTree = "<group>"; };
+		26F7CCFF25B8259300AE0DC3 /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
+		26F7CD0325B8301F00AE0DC3 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsView.swift; sourceTree = "<group>"; };
+		26F7CD0F25B849C900AE0DC3 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -139,6 +153,7 @@
 		2630369B249919DC009B237D /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
+				26F7CCFE25B8258100AE0DC3 /* DI */,
 				2656FCCF249A1E49009718C4 /* Firebase */,
 				2656FCB2249A1C6B009718C4 /* Extensions */,
 				2656FCA3249A1AB1009718C4 /* Screen */,
@@ -147,6 +162,7 @@
 				263036A7249919DD009B237D /* LaunchScreen.storyboard */,
 				263036AA249919DD009B237D /* Info.plist */,
 				263036A4249919DD009B237D /* Preview Content */,
+				2676998925B5BCBF002E57DD /* RoutineApp.swift */,
 			);
 			path = "routine-kmp";
 			sourceTree = "<group>";
@@ -162,8 +178,8 @@
 		2656FCA2249A1A9E009718C4 /* Delegates */ = {
 			isa = PBXGroup;
 			children = (
-				2656FC9E249A1A76009718C4 /* AppDelegate.swift */,
-				2656FCA0249A1A97009718C4 /* SceneDelegate.swift */,
+				26B9B10125B6DA7000E37E9A /* AppDelegate.swift */,
+				26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -175,6 +191,10 @@
 				2656FCBB249A1D12009718C4 /* BottomCard */,
 				2656FCAF249A1C39009718C4 /* TodoDetails */,
 				2656FCAB249A1BD8009718C4 /* TodoList */,
+				2676998C25B5D66A002E57DD /* TasksView.swift */,
+				26F7CD0325B8301F00AE0DC3 /* SplashView.swift */,
+				26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */,
+				26F7CD0F25B849C900AE0DC3 /* TaskView.swift */,
 			);
 			path = Screen;
 			sourceTree = "<group>";
@@ -219,6 +239,7 @@
 				2656FCCB249A1E18009718C4 /* Optional+Default.swift */,
 				263DEA9725933E4700D5486B /* Colors.swift */,
 				2691AC3525B1C640005463AD /* UIViewController.swift */,
+				2627D0E625B7165200752223 /* Mvi.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -260,6 +281,14 @@
 				2659905E25924BB7001C631C /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		26F7CCFE25B8258100AE0DC3 /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				26F7CCFF25B8259300AE0DC3 /* Injector.swift */,
+			);
+			path = DI;
 			sourceTree = "<group>";
 		};
 		805364D11829E24165E7EA45 /* Pods */ = {
@@ -418,17 +447,23 @@
 			files = (
 				2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */,
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
+				26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */,
+				2676998A25B5BCBF002E57DD /* RoutineApp.swift in Sources */,
 				2691AC3625B1C640005463AD /* UIViewController.swift in Sources */,
+				26B9B10225B6DA7000E37E9A /* AppDelegate.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
 				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
-				2656FC9F249A1A76009718C4 /* AppDelegate.swift in Sources */,
 				263DEA9825933E4700D5486B /* Colors.swift in Sources */,
 				2656FCB4249A1C7E009718C4 /* View+UIView.swift in Sources */,
 				2656FCB6249A1C95009718C4 /* UIControl+Responder.swift in Sources */,
 				2656FCC8249A1DC6009718C4 /* PlaceholderTextView.swift in Sources */,
+				26F7CD0025B8259300AE0DC3 /* Injector.swift in Sources */,
+				26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */,
 				2656FCAA249A1BBB009718C4 /* TodoRowView.swift in Sources */,
+				2676998D25B5D66A002E57DD /* TasksView.swift in Sources */,
 				2656FCD1249A1E59009718C4 /* FirestoreInteractor.swift in Sources */,
+				26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */,
 				2656FCC1249A1D68009718C4 /* Period.swift in Sources */,
 				2656FCBA249A1CD4009718C4 /* UITableViewCell+ReuseIdentifier.swift in Sources */,
 				2656FCC6249A1DA8009718C4 /* PeriodView.swift in Sources */,
@@ -437,9 +472,10 @@
 				2656FCD3249A1EAE009718C4 /* BottomCardTransition.swift in Sources */,
 				2656FCBF249A1D39009718C4 /* PresentDismissAnimation.swift in Sources */,
 				2656FCAD249A1C12009718C4 /* TodoTableViewCell.swift in Sources */,
+				26F7CD1025B849CA00AE0DC3 /* TaskView.swift in Sources */,
+				2627D0E725B7165200752223 /* Mvi.swift in Sources */,
 				2656FCCA249A1DE2009718C4 /* PeriodSelectionView.swift in Sources */,
 				2656FCB8249A1CB2009718C4 /* UIBarButtonItem+Init.swift in Sources */,
-				2656FCA1249A1A97009718C4 /* SceneDelegate.swift in Sources */,
 				2656FCCC249A1E18009718C4 /* Optional+Default.swift in Sources */,
 				2656FCBD249A1D26009718C4 /* PresentationController.swift in Sources */,
 				26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */,
@@ -511,7 +547,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -566,7 +602,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -586,7 +622,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "routine-kmp/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -608,7 +644,7 @@
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "routine-kmp/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
