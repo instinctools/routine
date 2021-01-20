@@ -11,9 +11,9 @@ struct TaskView: View {
                 .font(.headline)
             Spacer()
             HStack {
-                Text("Period")
+                Text(task.todo.periodFriendlyTitle())
                 Spacer()
-                Text("Remaing")
+                Text(task.daysLeftTitle())
             }
             .font(.caption)
         }
@@ -26,7 +26,8 @@ struct TaskView: View {
 struct TaskView_Previews: PreviewProvider {
 
     static var previews: some View {
-        TaskView(task: TodoListUiModel.Companion().MOCK.get(index: 0)!)
+        let mockedTask = TodoListUiModel.Companion().MOCK.get(index: 0)!
+        TaskView(task: mockedTask)
             .previewLayout(.fixed(width: 400, height: 60))
     }
 }
