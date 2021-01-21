@@ -1,5 +1,6 @@
 import SwiftUI
 import RoutineShared
+import SwipeCell
 
 struct TasksView: View {
     
@@ -27,13 +28,22 @@ struct TasksView: View {
         ScrollView {
             LazyVStack {
                 ForEach(state.expiredTodos, id: \.todo.id) { task in
+                    let leftSlot = resetButton(task: task)
+                    let rightSlot = deleteButton(task: task)
                     TaskView(task: task)
+                        .swipeCell(cellPosition: .both, leftSlot: leftSlot, rightSlot: rightSlot)
+                        .dismissSwipeCellForScrollViewForLazyVStack()
                 }
+                
                 if(!state.expiredTodos.isEmpty) {
                     Divider()
                 }
                 ForEach(state.futureTodos, id: \.todo.id) { task in
+                    let leftSlot = resetButton(task: task)
+                    let rightSlot = deleteButton(task: task)
                     TaskView(task: task)
+                        .swipeCell(cellPosition: .both, leftSlot: leftSlot, rightSlot: rightSlot)
+                        .dismissSwipeCellForScrollViewForLazyVStack()
                 }
             }
             .padding(.horizontal, 16)
@@ -48,6 +58,36 @@ struct TasksView: View {
         }
         .navigationBarTitle("Routine")
         .attachPresenter(presenter: presenter, bindedState: $state)
+    }
+    
+    func resetButton(task: TodoListUiModel) -> SwipeCellSlot {
+        let resetButton = SwipeCellButton(
+            buttonStyle: .title,
+            title: "Reset",
+            systemImage: nil,
+            view: nil,
+            backgroundColor: Color(red: 0.698, green:0.698, blue: 0.698),
+            action: {
+                let action = TodoListPresenter.ActionResetTask(taskId: task.todo.id)
+                presenter.sendAction(action: action)
+            }
+        )
+        return SwipeCellSlot(slots: [resetButton])
+    }
+    
+    func deleteButton(task: TodoListUiModel) -> SwipeCellSlot {
+        let resetButton = SwipeCellButton(
+            buttonStyle: .title,
+            title: "Delete",
+            systemImage: nil,
+            view: nil,
+            backgroundColor: Color(red: 0.698, green:0.698, blue: 0.698),
+            action: {
+                let action = TodoListPresenter.ActionDeleteTask(taskId: task.todo.id)
+                presenter.sendAction(action: action)
+            }
+        )
+        return SwipeCellSlot(slots: [resetButton])
     }
 }
 

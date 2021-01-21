@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */; };
+		261C46B025B9B44700A9DB26 /* SwipeCell in Frameworks */ = {isa = PBXBuildFile; productRef = 261C46AF25B9B44700A9DB26 /* SwipeCell */; };
+		261C46B425B9C95500A9DB26 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 261C46B325B9C95500A9DB26 /* SwiftUIRefresh */; };
 		2627D0E725B7165200752223 /* Mvi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627D0E625B7165200752223 /* Mvi.swift */; };
 		262A695D25AC842F001168C7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 262A695C25AC842F001168C7 /* GoogleService-Info.plist */; };
 		263036A3249919DD009B237D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 263036A2249919DD009B237D /* Assets.xcassets */; };
@@ -57,7 +59,6 @@
 		26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0325B8301F00AE0DC3 /* SplashView.swift */; };
 		26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */; };
 		26F7CD1025B849CA00AE0DC3 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0F25B849C900AE0DC3 /* TaskView.swift */; };
-		26F7CD2D25B876A600AE0DC3 /* Swiper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD2C25B876A600AE0DC3 /* Swiper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,7 +106,6 @@
 		26F7CD0325B8301F00AE0DC3 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsView.swift; sourceTree = "<group>"; };
 		26F7CD0F25B849C900AE0DC3 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
-		26F7CD2C25B876A600AE0DC3 /* Swiper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swiper.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,7 +121,9 @@
 				266171C6249A3AC600A54842 /* libsqlite3.tbd in Frameworks */,
 				2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */,
 				2656FCDE249A1F7B009718C4 /* RxSwift in Frameworks */,
+				261C46B025B9B44700A9DB26 /* SwipeCell in Frameworks */,
 				2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */,
+				261C46B425B9C95500A9DB26 /* SwiftUIRefresh in Frameworks */,
 				2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */,
 				2656FCE3249A1FA6009718C4 /* Differentiator in Frameworks */,
 				2656FCD8249A1F25009718C4 /* SnapKit in Frameworks */,
@@ -155,7 +157,6 @@
 		2630369B249919DC009B237D /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
-				26F7CD2B25B8769700AE0DC3 /* Views */,
 				26F7CCFE25B8258100AE0DC3 /* DI */,
 				2656FCCF249A1E49009718C4 /* Firebase */,
 				2656FCB2249A1C6B009718C4 /* Extensions */,
@@ -294,14 +295,6 @@
 			path = DI;
 			sourceTree = "<group>";
 		};
-		26F7CD2B25B8769700AE0DC3 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				26F7CD2C25B876A600AE0DC3 /* Swiper.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		805364D11829E24165E7EA45 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -349,6 +342,8 @@
 				2656FCE4249A1FA6009718C4 /* RxDataSources */,
 				2656FCE7249A1FB9009718C4 /* RxBiBinding */,
 				2691AC3925B1C727005463AD /* MBProgressHUD */,
+				261C46AF25B9B44700A9DB26 /* SwipeCell */,
+				261C46B325B9C95500A9DB26 /* SwiftUIRefresh */,
 			);
 			productName = "routine-kmp";
 			productReference = 26303699249919DC009B237D /* routine-kmp.app */;
@@ -385,6 +380,8 @@
 				2656FCE1249A1FA6009718C4 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				2656FCE6249A1FB9009718C4 /* XCRemoteSwiftPackageReference "RxBiBinding" */,
 				2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
+				261C46AE25B9B44700A9DB26 /* XCRemoteSwiftPackageReference "SwipeCell" */,
+				261C46B225B9C95500A9DB26 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
 			);
 			productRefGroup = 2630369A249919DC009B237D /* Products */;
 			projectDirPath = "";
@@ -473,7 +470,6 @@
 				26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */,
 				2656FCAA249A1BBB009718C4 /* TodoRowView.swift in Sources */,
 				2676998D25B5D66A002E57DD /* TasksView.swift in Sources */,
-				26F7CD2D25B876A600AE0DC3 /* Swiper.swift in Sources */,
 				2656FCD1249A1E59009718C4 /* FirestoreInteractor.swift in Sources */,
 				26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */,
 				2656FCC1249A1D68009718C4 /* Period.swift in Sources */,
@@ -692,6 +688,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		261C46AE25B9B44700A9DB26 /* XCRemoteSwiftPackageReference "SwipeCell" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fatbobman/SwipeCell";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.2;
+			};
+		};
+		261C46B225B9C95500A9DB26 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUIRefresh";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.3;
+			};
+		};
 		2656FCD6249A1F25009718C4 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
@@ -743,6 +755,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		261C46AF25B9B44700A9DB26 /* SwipeCell */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 261C46AE25B9B44700A9DB26 /* XCRemoteSwiftPackageReference "SwipeCell" */;
+			productName = SwipeCell;
+		};
+		261C46B325B9C95500A9DB26 /* SwiftUIRefresh */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 261C46B225B9C95500A9DB26 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */;
+			productName = SwiftUIRefresh;
+		};
 		2656FCD7249A1F25009718C4 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2656FCD6249A1F25009718C4 /* XCRemoteSwiftPackageReference "SnapKit" */;
