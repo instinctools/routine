@@ -33,12 +33,11 @@ struct RowContent<Content: View> : View {
         
         maxStartOffset = CGFloat(startButtons.count) * width
         maxEndOffset = CGFloat(endButtons.count) * width
-        _offset = State<CGSize>.init(initialValue: CGSize(width: -60, height: 0))
+        _offset = State<CGSize>.init(initialValue: CGSize(width: -maxStartOffset, height: 0))
     }
     
     var body : some View {
         GeometryReader { geo in
-            Text("Offset = \(self.offset.width)")
             HStack (spacing : 0){
                 ForEach (startButtons, id: \.title) { button in
                     SwipeButtonView(
@@ -66,19 +65,18 @@ struct RowContent<Content: View> : View {
             .animation(.spring())
             .gesture(DragGesture()
                         .onChanged { gesture in
-                            print("offset is \(gesture.translation.width)")
                             self.offset.width = gesture.translation.width
                         }
                         .onEnded { _ in
-                            if self.offset.width < -50 {
+                            if(self.offset.width > -10) {
                                 self.scale = 1
-                                self.offset.width = -maxEndOffset
-                            } else if self.offset.width > 50 {
+                                self.offset.width = 0
+                            } else if self.offset.width < -110 {
                                 self.scale = 1
-                                self.offset.width = maxStartOffset
+                                self.offset.width = -120
                             } else {
                                 self.scale = 0.5
-                                self.offset = .zero
+                                self.offset.width = -self.maxStartOffset
                             }
                         }
             )
