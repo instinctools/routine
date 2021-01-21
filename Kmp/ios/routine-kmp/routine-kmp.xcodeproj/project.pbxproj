@@ -57,6 +57,7 @@
 		26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0325B8301F00AE0DC3 /* SplashView.swift */; };
 		26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */; };
 		26F7CD1025B849CA00AE0DC3 /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0F25B849C900AE0DC3 /* TaskView.swift */; };
+		26F7CD2D25B876A600AE0DC3 /* Swiper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD2C25B876A600AE0DC3 /* Swiper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +105,7 @@
 		26F7CD0325B8301F00AE0DC3 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsView.swift; sourceTree = "<group>"; };
 		26F7CD0F25B849C900AE0DC3 /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		26F7CD2C25B876A600AE0DC3 /* Swiper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swiper.swift; sourceTree = "<group>"; };
 		F12FA1D939B8422AA3BD22B0 /* Pods-routine-kmp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.release.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.release.xcconfig"; sourceTree = "<group>"; };
 		F8BD1D0C698DBD821EDC302D /* Pods-routine-kmp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routine-kmp.debug.xcconfig"; path = "Target Support Files/Pods-routine-kmp/Pods-routine-kmp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +155,7 @@
 		2630369B249919DC009B237D /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
+				26F7CD2B25B8769700AE0DC3 /* Views */,
 				26F7CCFE25B8258100AE0DC3 /* DI */,
 				2656FCCF249A1E49009718C4 /* Firebase */,
 				2656FCB2249A1C6B009718C4 /* Extensions */,
@@ -289,6 +292,14 @@
 				26F7CCFF25B8259300AE0DC3 /* Injector.swift */,
 			);
 			path = DI;
+			sourceTree = "<group>";
+		};
+		26F7CD2B25B8769700AE0DC3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				26F7CD2C25B876A600AE0DC3 /* Swiper.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		805364D11829E24165E7EA45 /* Pods */ = {
@@ -462,6 +473,7 @@
 				26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */,
 				2656FCAA249A1BBB009718C4 /* TodoRowView.swift in Sources */,
 				2676998D25B5D66A002E57DD /* TasksView.swift in Sources */,
+				26F7CD2D25B876A600AE0DC3 /* Swiper.swift in Sources */,
 				2656FCD1249A1E59009718C4 /* FirestoreInteractor.swift in Sources */,
 				26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */,
 				2656FCC1249A1D68009718C4 /* Period.swift in Sources */,

@@ -26,7 +26,6 @@ struct TasksView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                let _ = print("count is \(state.expiredTodos.count)")
                 ForEach(state.expiredTodos, id: \.todo.id) { task in
                     TaskView(task: task)
                 }
