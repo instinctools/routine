@@ -2,7 +2,6 @@ import UIKit
 import Firebase
 import RoutineShared
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: DI

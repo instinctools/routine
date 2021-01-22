@@ -8,7 +8,16 @@ struct TasksView: View {
     let menuClickAction: () -> Void
     let itemClickAction: (_ taskId: String) -> Void
     let presenter: TodoListPresenter
+    
     @State var state: TodoListPresenter.State
+    
+    @State var refreshErrorHappened: Bool = false
+    @State var resetErrorHappened: Bool = false
+    @State var deleteErrorHappened: Bool = false
+    @State var successReset: Bool = false
+    @State var successDelete: Bool = false
+    
+    @State var deleteConfirmation = DeleteConfirmation(isShown: false, taskId: nil)
     
     init(
         presenter: TodoListPresenter,
@@ -53,11 +62,37 @@ struct TasksView: View {
                 Button(action: menuClickAction) { Image("Side Menu") }
             }
             ToolbarItem(placement: .primaryAction) {
+                Button(action: {
+                    let action = TodoListPresenter.ActionRefresh()
+                    presenter.sendAction(action: action)
+                }) { Image(systemName: "icloud.and.arrow.down") }
                 Button(action: addTaskAction) { Image(systemName: "plus") }
             }
         }
+        .alert(isPresented: $refreshErrorHappened, content: {
+            Alert(title: Text("Error"), message: Text("Failed to refresh tasks"), dismissButton: .default(Text("Ok")))
+        })
+        .alert(isPresented: $resetErrorHappened, content: {
+            Alert(title: Text("Error"), message: Text("Failed to reset task"), dismissButton: .default(Text("Ok")))
+        })
+        .alert(isPresented: $deleteErrorHappened, content: {
+            Alert( title: Text("Error"), message: Text("Failed to delete task"), dismissButton: .default(Text("Ok")))
+        })
+        .alert(isPresented: $deleteConfirmation.isShown, content: {
+            Alert( title: Text("Error"), message: Text("Failed to delete task"), dismissButton: .default(Text("Ok")))
+        })
+        .snackBar(isShowing: $successReset, text: Text("Task deleted"))
+        .snackBar(isShowing: $successDelete, text: Text("Task renewed"))
+
         .navigationBarTitle("Routine")
         .attachPresenter(presenter: presenter, bindedState: $state)
+        .onAppear {
+            self.refreshErrorHappened = state.refreshError.eventFired
+            self.resetErrorHappened = state.resetError.eventFired
+            self.deleteErrorHappened = state.deleteError.eventFired
+            self.successReset = state.resetDone.eventFired
+            self.successDelete = state.deleteDone.eventFired
+        }
     }
     
     func resetButton(task: TodoListUiModel) -> SwipeCellSlot {
@@ -83,12 +118,20 @@ struct TasksView: View {
             view: nil,
             backgroundColor: Color(red: 0.698, green:0.698, blue: 0.698),
             action: {
+                self.deleteConfirmation.isShown = true
+                self.deleteConfirmation.taskId = task.todo.id
                 let action = TodoListPresenter.ActionDeleteTask(taskId: task.todo.id)
                 presenter.sendAction(action: action)
             }
         )
         return SwipeCellSlot(slots: [resetButton])
     }
+}
+
+struct DeleteConfirmation {
+    
+    var isShown: Bool
+    var taskId: String? = nil
 }
 
 struct TodoListView_Previews: PreviewProvider {

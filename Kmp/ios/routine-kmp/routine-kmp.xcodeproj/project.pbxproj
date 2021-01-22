@@ -52,9 +52,10 @@
 		2676998D25B5D66A002E57DD /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2676998C25B5D66A002E57DD /* TasksView.swift */; };
 		2691AC3625B1C640005463AD /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691AC3525B1C640005463AD /* UIViewController.swift */; };
 		2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 2691AC3925B1C727005463AD /* MBProgressHUD */; };
-		26B9B10225B6DA7000E37E9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9B10125B6DA7000E37E9A /* AppDelegate.swift */; };
 		26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */; };
 		26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */; };
+		26E7D2E025BAE82E0054B724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E7D2DF25BAE82E0054B724 /* AppDelegate.swift */; };
+		26E7D2E425BAE97E0054B724 /* Snackbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E7D2E325BAE97E0054B724 /* Snackbar.swift */; };
 		26F7CD0025B8259300AE0DC3 /* Injector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CCFF25B8259300AE0DC3 /* Injector.swift */; };
 		26F7CD0425B8301F00AE0DC3 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0325B8301F00AE0DC3 /* SplashView.swift */; };
 		26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */; };
@@ -99,9 +100,10 @@
 		2676998925B5BCBF002E57DD /* RoutineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineApp.swift; sourceTree = "<group>"; };
 		2676998C25B5D66A002E57DD /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		2691AC3525B1C640005463AD /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
-		26B9B10125B6DA7000E37E9A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../../../../../../../.Trash/AppDelegate.swift; sourceTree = "<group>"; };
 		26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../Screen/SceneDelegate.swift; sourceTree = "<group>"; };
 		26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickedCallback.swift; sourceTree = "<group>"; };
+		26E7D2DF25BAE82E0054B724 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		26E7D2E325BAE97E0054B724 /* Snackbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snackbar.swift; sourceTree = "<group>"; };
 		26F7CCFF25B8259300AE0DC3 /* Injector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Injector.swift; sourceTree = "<group>"; };
 		26F7CD0325B8301F00AE0DC3 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailsView.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		2630369B249919DC009B237D /* routine-kmp */ = {
 			isa = PBXGroup;
 			children = (
+				26E7D2E225BAE96F0054B724 /* View */,
 				26F7CCFE25B8258100AE0DC3 /* DI */,
 				2656FCCF249A1E49009718C4 /* Firebase */,
 				2656FCB2249A1C6B009718C4 /* Extensions */,
@@ -182,7 +185,7 @@
 		2656FCA2249A1A9E009718C4 /* Delegates */ = {
 			isa = PBXGroup;
 			children = (
-				26B9B10125B6DA7000E37E9A /* AppDelegate.swift */,
+				26E7D2DF25BAE82E0054B724 /* AppDelegate.swift */,
 				26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */,
 			);
 			path = Delegates;
@@ -285,6 +288,14 @@
 				2659905E25924BB7001C631C /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		26E7D2E225BAE96F0054B724 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				26E7D2E325BAE97E0054B724 /* Snackbar.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		26F7CCFE25B8258100AE0DC3 /* DI */ = {
@@ -458,8 +469,8 @@
 				26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */,
 				2676998A25B5BCBF002E57DD /* RoutineApp.swift in Sources */,
 				2691AC3625B1C640005463AD /* UIViewController.swift in Sources */,
-				26B9B10225B6DA7000E37E9A /* AppDelegate.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
+				26E7D2E425BAE97E0054B724 /* Snackbar.swift in Sources */,
 				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
 				263DEA9825933E4700D5486B /* Colors.swift in Sources */,
@@ -486,6 +497,7 @@
 				2656FCB8249A1CB2009718C4 /* UIBarButtonItem+Init.swift in Sources */,
 				2656FCCC249A1E18009718C4 /* Optional+Default.swift in Sources */,
 				2656FCBD249A1D26009718C4 /* PresentationController.swift in Sources */,
+				26E7D2E025BAE82E0054B724 /* AppDelegate.swift in Sources */,
 				26E65FB925B05D3F00474D46 /* PeriodPickedCallback.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

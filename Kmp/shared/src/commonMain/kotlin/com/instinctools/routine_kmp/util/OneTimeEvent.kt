@@ -5,6 +5,12 @@ open class OneTimeEvent<out T>(private val content: T? = null) {
     var isConsumed = false
         private set
 
+    val eventFired: Boolean
+        get() {
+            val consumedData = consumeContent()
+            return consumedData != null
+        }
+
     fun consumeContent(): T? = if (isConsumed) null else content.also {
         isConsumed = true
     }
