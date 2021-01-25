@@ -36,6 +36,10 @@ struct TasksView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
+                if(state.progress) {
+                    ProgressView()
+                        .padding()
+                }
                 ForEach(state.expiredTodos, id: \.todo.id) { task in
                     let leftSlot = resetButton(task: task)
                     let rightSlot = deleteButton(task: task)
@@ -87,6 +91,7 @@ struct TasksView: View {
         .snackBar(isShowing: $successDelete, text: Text("Task renewed"))
         
         .navigationBarTitle("Routine")
+        .progressViewStyle(CircularProgressViewStyle())
         .attachPresenter(presenter: presenter, bindedState: $state)
         .onChange(of: state, perform: { value in
             self.refreshErrorHappened = state.refreshError.eventFired
