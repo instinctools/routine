@@ -61,12 +61,14 @@ struct TasksView: View {
             ToolbarItem(placement: .navigation) {
                 Button(action: menuClickAction) { Image("Side Menu") }
             }
-            ToolbarItem(placement: .primaryAction) {
-                Button(action: {
-                    let action = TodoListPresenter.ActionRefresh()
-                    presenter.sendAction(action: action)
-                }) { Image(systemName: "icloud.and.arrow.down") }
-                Button(action: addTaskAction) { Image(systemName: "plus") }
+            ToolbarItemGroup(placement: .primaryAction) {
+                HStack {
+                    Button(action: {
+                        let action = TodoListPresenter.ActionRefresh()
+                        presenter.sendAction(action: action)
+                    }) { Image(systemName: "icloud.and.arrow.down") }
+                    Button(action: addTaskAction) { Image(systemName: "plus") }
+                }
             }
         }
         .alert(isPresented: $refreshErrorHappened, content: {
@@ -83,16 +85,16 @@ struct TasksView: View {
         })
         .snackBar(isShowing: $successReset, text: Text("Task deleted"))
         .snackBar(isShowing: $successDelete, text: Text("Task renewed"))
-
+        
         .navigationBarTitle("Routine")
         .attachPresenter(presenter: presenter, bindedState: $state)
-        .onAppear {
+        .onChange(of: state, perform: { value in
             self.refreshErrorHappened = state.refreshError.eventFired
             self.resetErrorHappened = state.resetError.eventFired
             self.deleteErrorHappened = state.deleteError.eventFired
             self.successReset = state.resetDone.eventFired
             self.successDelete = state.deleteDone.eventFired
-        }
+        })
     }
     
     func resetButton(task: TodoListUiModel) -> SwipeCellSlot {
