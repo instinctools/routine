@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TaskDetailsView: View {
+
     var body: some View {
         Text("Hello, World!")
     }

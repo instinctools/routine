@@ -50,6 +50,8 @@
 		266171CA249A3AF600A54842 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 266171C9249A3AF100A54842 /* libc++.tbd */; };
 		2676998A25B5BCBF002E57DD /* RoutineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2676998925B5BCBF002E57DD /* RoutineApp.swift */; };
 		2676998D25B5D66A002E57DD /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2676998C25B5D66A002E57DD /* TasksView.swift */; };
+		268692D625BEE6C300EE119D /* NavigationStack in Frameworks */ = {isa = PBXBuildFile; productRef = 268692D525BEE6C300EE119D /* NavigationStack */; };
+		268692DD25BF07A700EE119D /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268692DC25BF07A700EE119D /* Router.swift */; };
 		2691AC3625B1C640005463AD /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691AC3525B1C640005463AD /* UIViewController.swift */; };
 		2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 2691AC3925B1C727005463AD /* MBProgressHUD */; };
 		26B9B10525B6DA7800E37E9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */; };
@@ -99,6 +101,7 @@
 		266171C9249A3AF100A54842 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		2676998925B5BCBF002E57DD /* RoutineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineApp.swift; sourceTree = "<group>"; };
 		2676998C25B5D66A002E57DD /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		268692DC25BF07A700EE119D /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		2691AC3525B1C640005463AD /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		26B9B10425B6DA7800E37E9A /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../Screen/SceneDelegate.swift; sourceTree = "<group>"; };
 		26E65FB825B05D3F00474D46 /* PeriodPickedCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodPickedCallback.swift; sourceTree = "<group>"; };
@@ -124,6 +127,7 @@
 				2656FCE8249A1FB9009718C4 /* RxBiBinding in Frameworks */,
 				2656FCDE249A1F7B009718C4 /* RxSwift in Frameworks */,
 				261C46B025B9B44700A9DB26 /* SwipeCell in Frameworks */,
+				268692D625BEE6C300EE119D /* NavigationStack in Frameworks */,
 				2691AC3A25B1C727005463AD /* MBProgressHUD in Frameworks */,
 				261C46B425B9C95500A9DB26 /* SwiftUIRefresh in Frameworks */,
 				2656FCE5249A1FA6009718C4 /* RxDataSources in Frameworks */,
@@ -170,6 +174,7 @@
 				263036AA249919DD009B237D /* Info.plist */,
 				263036A4249919DD009B237D /* Preview Content */,
 				2676998925B5BCBF002E57DD /* RoutineApp.swift */,
+				268692DC25BF07A700EE119D /* Router.swift */,
 			);
 			path = "routine-kmp";
 			sourceTree = "<group>";
@@ -355,6 +360,7 @@
 				2691AC3925B1C727005463AD /* MBProgressHUD */,
 				261C46AF25B9B44700A9DB26 /* SwipeCell */,
 				261C46B325B9C95500A9DB26 /* SwiftUIRefresh */,
+				268692D525BEE6C300EE119D /* NavigationStack */,
 			);
 			productName = "routine-kmp";
 			productReference = 26303699249919DC009B237D /* routine-kmp.app */;
@@ -393,6 +399,7 @@
 				2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 				261C46AE25B9B44700A9DB26 /* XCRemoteSwiftPackageReference "SwipeCell" */,
 				261C46B225B9C95500A9DB26 /* XCRemoteSwiftPackageReference "SwiftUIRefresh" */,
+				268692D425BEE6C300EE119D /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */,
 			);
 			productRefGroup = 2630369A249919DC009B237D /* Products */;
 			projectDirPath = "";
@@ -468,6 +475,7 @@
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
 				26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */,
 				2676998A25B5BCBF002E57DD /* RoutineApp.swift in Sources */,
+				268692DD25BF07A700EE119D /* Router.swift in Sources */,
 				2691AC3625B1C640005463AD /* UIViewController.swift in Sources */,
 				2656FCB1249A1C4E009718C4 /* TodoDetailsViewController.swift in Sources */,
 				26E7D2E425BAE97E0054B724 /* Snackbar.swift in Sources */,
@@ -756,6 +764,14 @@
 				minimumVersion = 0.2.5;
 			};
 		};
+		268692D425BEE6C300EE119D /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matteopuc/swiftui-navigation-stack";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 		2691AC3825B1C727005463AD /* XCRemoteSwiftPackageReference "MBProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jdg/MBProgressHUD.git";
@@ -811,6 +827,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2656FCE6249A1FB9009718C4 /* XCRemoteSwiftPackageReference "RxBiBinding" */;
 			productName = RxBiBinding;
+		};
+		268692D525BEE6C300EE119D /* NavigationStack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 268692D425BEE6C300EE119D /* XCRemoteSwiftPackageReference "swiftui-navigation-stack" */;
+			productName = NavigationStack;
 		};
 		2691AC3925B1C727005463AD /* MBProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;

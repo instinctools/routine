@@ -56,6 +56,15 @@
         }
       },
       {
+        "package": "NavigationStack",
+        "repositoryURL": "https://github.com/matteopuc/swiftui-navigation-stack",
+        "state": {
+          "branch": null,
+          "revision": "061b1b5a8356ce42d50418992ab22b5eec9bb9c3",
+          "version": "1.0.2"
+        }
+      },
+      {
         "package": "SwiftUIRefresh",
         "repositoryURL": "https://github.com/siteline/SwiftUIRefresh",
         "state": {
