@@ -10,6 +10,9 @@ struct TaskDetailsView: View {
     @State var state: TodoDetailsPresenter.State
     @State private var selectionStrategy = PeriodResetStrategy.fromnow
     
+    @State var loadingErrorHappened: Bool = false
+    @State var saveErrorHappened: Bool = false
+    
     init(
         presenter: TodoDetailsPresenter,
         cancelAction: @escaping () -> Void,
@@ -60,6 +63,13 @@ struct TaskDetailsView: View {
                 Button(action: {}) { Text("Done") }
             }
         }
+        .alert(isPresented: $loadingErrorHappened, content: {
+            Alert(title: Text("Error"), message: Text("Failed to load task details"), dismissButton: .default(Text("Ok")))
+        })
+        .alert(isPresented: $saveErrorHappened, content: {
+            Alert(title: Text("Error"), message: Text("Failed to save task"), dismissButton: .default(Text("Ok")))
+        })
+
         .disabled(state.progress)
         .progressViewStyle(CircularProgressViewStyle())
         .attachPresenter(presenter: presenter, bindedState: $state)
@@ -67,6 +77,10 @@ struct TaskDetailsView: View {
         .onChange(of: selectionStrategy, perform: { value in
             let action = TodoDetailsPresenter.ActionChangePeriodStrategy(periodStrategy: value)
             presenter.sendAction(action: action)
+        })
+        .onChange(of: state, perform: { value in
+            self.loadingErrorHappened = state.loadingError.eventFired
+            self.saveErrorHappened = state.saveError.eventFired
         })
     }
 }
