@@ -34,14 +34,18 @@ struct RoutineApp: App {
                             },
                             menuClickAction: { print("Menu clicked") },
                             itemClickAction: { taskId in
+                                print("item clicked \(taskId)")
                                 self.router.push(destination: .taskDetails(todoId: taskId))
                             }
                         )
-                    case .taskDetails(let todoId):
+                    case .taskDetails:
                         TaskDetailsView(
+                            presenter: presenter as! TodoDetailsPresenter,
+                            cancelAction: { router.pop() },
+                            savedAction: { router.pop() }
                         )
                     }
-
+                    
                 } else {
                     EmptyView()
                 }

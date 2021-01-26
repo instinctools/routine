@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1DCDDF6CB12710EAC033F7D3 /* Pods_routine_kmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */; };
+		2612011B25C0211000EFCA07 /* PlaceholderTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2612011A25C0211000EFCA07 /* PlaceholderTextField.swift */; };
+		2612012225C0396E00EFCA07 /* PeriodItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2612012125C0396E00EFCA07 /* PeriodItemView.swift */; };
 		261C46B025B9B44700A9DB26 /* SwipeCell in Frameworks */ = {isa = PBXBuildFile; productRef = 261C46AF25B9B44700A9DB26 /* SwipeCell */; };
 		261C46B425B9C95500A9DB26 /* SwiftUIRefresh in Frameworks */ = {isa = PBXBuildFile; productRef = 261C46B325B9C95500A9DB26 /* SwiftUIRefresh */; };
 		2627D0E725B7165200752223 /* Mvi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2627D0E625B7165200752223 /* Mvi.swift */; };
@@ -66,6 +68,8 @@
 
 /* Begin PBXFileReference section */
 		0F375CECDEEF2001BFD90752 /* Pods_routine_kmp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routine_kmp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2612011A25C0211000EFCA07 /* PlaceholderTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderTextField.swift; sourceTree = "<group>"; };
+		2612012125C0396E00EFCA07 /* PeriodItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodItemView.swift; sourceTree = "<group>"; };
 		2627D0E625B7165200752223 /* Mvi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mvi.swift; sourceTree = "<group>"; };
 		262A695C25AC842F001168C7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		26303699249919DC009B237D /* routine-kmp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "routine-kmp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -205,6 +209,7 @@
 				2656FCAB249A1BD8009718C4 /* TodoList */,
 				2676998C25B5D66A002E57DD /* TasksView.swift */,
 				26F7CD0325B8301F00AE0DC3 /* SplashView.swift */,
+				2612012125C0396E00EFCA07 /* PeriodItemView.swift */,
 				26F7CD0C25B8437700AE0DC3 /* TaskDetailsView.swift */,
 				26F7CD0F25B849C900AE0DC3 /* TaskView.swift */,
 			);
@@ -299,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				26E7D2E325BAE97E0054B724 /* Snackbar.swift */,
+				2612011A25C0211000EFCA07 /* PlaceholderTextField.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -471,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2612011B25C0211000EFCA07 /* PlaceholderTextField.swift in Sources */,
 				2656FCA8249A1B9A009718C4 /* TodoListViewController.swift in Sources */,
 				2656FCC3249A1D8E009718C4 /* PeriodPickerViewController.swift in Sources */,
 				26F7CD0D25B8437700AE0DC3 /* TaskDetailsView.swift in Sources */,
@@ -482,6 +489,7 @@
 				2659905A25922F09001C631C /* FirebaseAuthInteractor.swift in Sources */,
 				2656FCD5249A1EC4009718C4 /* BottomCardViewController.swift in Sources */,
 				263DEA9825933E4700D5486B /* Colors.swift in Sources */,
+				2612012225C0396E00EFCA07 /* PeriodItemView.swift in Sources */,
 				2656FCB4249A1C7E009718C4 /* View+UIView.swift in Sources */,
 				2656FCB6249A1C95009718C4 /* UIControl+Responder.swift in Sources */,
 				2656FCC8249A1DC6009718C4 /* PlaceholderTextView.swift in Sources */,

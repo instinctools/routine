@@ -15,11 +15,9 @@ class UiBinder<Action : Any, State : Any> {
     private val uiScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     fun bindTo(presenter: Store<Action, State>, listener: StateListener<State>) {
-        var oldState: State? = null
         presenter.states
             .onEach { state ->
                 listener(state)
-                oldState = state
             }
             .launchIn(uiScope)
     }

@@ -44,6 +44,7 @@ struct TasksView: View {
                     let leftSlot = resetButton(task: task)
                     let rightSlot = deleteButton(task: task)
                     TaskView(task: task)
+                        .onTapGesture { itemClickAction(task.todo.id) }
                         .swipeCell(cellPosition: .both, leftSlot: leftSlot, rightSlot: rightSlot)
                         .dismissSwipeCellForScrollViewForLazyVStack()
                 }
@@ -55,6 +56,7 @@ struct TasksView: View {
                     let leftSlot = resetButton(task: task)
                     let rightSlot = deleteButton(task: task)
                     TaskView(task: task)
+                        .onTapGesture { itemClickAction(task.todo.id) }
                         .swipeCell(cellPosition: .both, leftSlot: leftSlot, rightSlot: rightSlot)
                         .dismissSwipeCellForScrollViewForLazyVStack()
                 }
