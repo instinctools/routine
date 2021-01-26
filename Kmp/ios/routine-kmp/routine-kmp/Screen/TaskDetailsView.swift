@@ -42,7 +42,9 @@ struct TaskDetailsView: View {
                 Picker(selection: $selectionStrategy, label: Text("Reset strategy")) {
                     Text("Reset to period").tag(PeriodResetStrategy.fromnow)
                     Text("Reset to date").tag(PeriodResetStrategy.fromnextevent)
-                }.pickerStyle(SegmentedPickerStyle())
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.top, 16)
                 
                 LabelledDivider(label: "Repeat every", color: Color(red: 0.667, green: 0.663, blue: 0.663))
                 ForEach(state.periods, id: \.unit) { period in

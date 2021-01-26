@@ -34,7 +34,6 @@ struct RoutineApp: App {
                             },
                             menuClickAction: { print("Menu clicked") },
                             itemClickAction: { taskId in
-                                print("item clicked \(taskId)")
                                 self.router.push(destination: .taskDetails(todoId: taskId))
                             }
                         )
