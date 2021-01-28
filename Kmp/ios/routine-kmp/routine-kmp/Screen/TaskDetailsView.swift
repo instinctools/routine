@@ -18,6 +18,8 @@ struct TaskDetailsView: View {
     @State private var selectedPickerValue: Int = 1
     @State private var pickerShown = false
     
+    private let fadeModalColor = Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.05)
+    
     init(
         presenter: TodoDetailsPresenter,
         cancelAction: @escaping () -> Void,
@@ -41,7 +43,13 @@ struct TaskDetailsView: View {
                     PlaceholderTextField(
                         placeholder: Text("Type recurring task name…")
                             .foregroundColor(Color(red: 0.678, green: 0.682, blue: 0.686)),
-                        text: self.state.todo.title ?? ""
+                        text: self.state.todo.title ?? "",
+                        editingChanged: { boolValue in
+                            print("Editing changed \(boolValue)")
+                        },
+                        commit: {
+                            print("Committed smth")
+                        }
                     )
                     .font(.title)
                     
@@ -109,15 +117,17 @@ struct TaskDetailsView: View {
     
     var periodPicker: some View {
         VStack {
-            Color.clear
-                .onTapGesture { self.pickerShown = false}
+            fadeModalColor
+                .onTapGesture {
+                    self.pickerShown = false
+                    
+                }
             VStack {
                 HStack {
                     Text("Choose period")
                         .font(.headline)
                     Spacer()
                     Button("Done", action: {
-                        print(self.selectedPickerValue)
                         let action = TodoDetailsPresenter.ActionChangePeriod(period: Int32(self.selectedPickerValue))
                         presenter.sendAction(action: action)
                         self.pickerShown = false
