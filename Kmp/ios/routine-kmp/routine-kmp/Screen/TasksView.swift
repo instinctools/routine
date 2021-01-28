@@ -84,10 +84,20 @@ struct TasksView: View {
             Alert(title: Text("Error"), message: Text("Failed to reset task"), dismissButton: .default(Text("Ok")))
         })
         .alert(isPresented: $deleteErrorHappened, content: {
-            Alert( title: Text("Error"), message: Text("Failed to delete task"), dismissButton: .default(Text("Ok")))
+            Alert(title: Text("Error"), message: Text("Failed to delete task"), dismissButton: .default(Text("Ok")))
         })
         .alert(isPresented: $deleteConfirmation.isShown, content: {
-            Alert( title: Text("Error"), message: Text("Failed to delete task"), dismissButton: .default(Text("Ok")))
+            Alert(
+                title: Text("Are you sure?"),
+                message: Text("This action couldn't be undone"),
+                primaryButton: .default(Text("Cancel")),
+                secondaryButton: .destructive(Text("Delete"), action: {
+                    if let taskId = deleteConfirmation.taskId {
+                        let action = TodoListPresenter.ActionDeleteTask(taskId: taskId)
+                        presenter.sendAction(action: action)
+                    }
+                })
+            )
         })
         .snackBar(isShowing: $successReset, text: Text("Task deleted"))
         .snackBar(isShowing: $successDelete, text: Text("Task renewed"))
@@ -129,8 +139,6 @@ struct TasksView: View {
             action: {
                 self.deleteConfirmation.isShown = true
                 self.deleteConfirmation.taskId = task.todo.id
-                let action = TodoListPresenter.ActionDeleteTask(taskId: task.todo.id)
-                presenter.sendAction(action: action)
             }
         )
         return SwipeCellSlot(slots: [resetButton])
