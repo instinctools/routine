@@ -5,13 +5,15 @@ struct PeriodItemView: View {
     
     let period: PeriodUnitUiModel
     let selected: Bool
+    let iconAction: () -> Void
     
     let textColor: Color
     let backgroundColor: Color
     
-    init(period: PeriodUnitUiModel, selected: Bool) {
+    init(period: PeriodUnitUiModel, selected: Bool, iconAction: @escaping () -> Void) {
         self.period = period
         self.selected = selected
+        self.iconAction = iconAction
         
         if selected {
             self.textColor = Color(red: 0.882, green: 0.882, blue: 0.878)
@@ -25,6 +27,7 @@ struct PeriodItemView: View {
     var body: some View {
         HStack {
             Image("Period Selection")
+                .onTapGesture { self.iconAction() }
             Spacer()
             Text(period.unit.title(count: Int(period.count)))
                 .font(.title2)
@@ -41,8 +44,8 @@ struct PeriodItemView_Previews: PreviewProvider {
         let period = PeriodUnitUiModel(unit: PeriodUnit.week, count: 2)
         let period2 = PeriodUnitUiModel(unit: PeriodUnit.day, count: 0)
         VStack {
-            PeriodItemView(period: period, selected: true)
-            PeriodItemView(period: period2, selected: false)
+            PeriodItemView(period: period, selected: true, iconAction: {})
+            PeriodItemView(period: period2, selected: false, iconAction: {})
         }
     }
 }

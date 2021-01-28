@@ -7,11 +7,16 @@ struct TaskDetailsView: View {
     let savedAction: () -> Void
     let presenter: TodoDetailsPresenter
     
+    let possiblePeriodValues = PeriodUnit.Companion().possiblePeriodValuesZeroPadded
+
     @State var state: TodoDetailsPresenter.State
     @State private var selectionStrategy = PeriodResetStrategy.fromnow
     
     @State var loadingErrorHappened: Bool = false
     @State var saveErrorHappened: Bool = false
+    
+    @State private var selectedPickerValue: Int = 1
+    @State private var pickerShown = false
     
     init(
         presenter: TodoDetailsPresenter,
@@ -26,37 +31,53 @@ struct TaskDetailsView: View {
     }
     
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                if(state.progress) {
-                    ProgressView()
-                        .padding()
-                }
-                PlaceholderTextField(
-                    placeholder: Text("Type recurring task name…")
-                        .foregroundColor(Color(red: 0.678, green: 0.682, blue: 0.686)),
-                    text: self.state.todo.title ?? ""
-                )
-                .font(.title)
-                
-                Picker(selection: $selectionStrategy, label: Text("Reset strategy")) {
-                    Text("Reset to period").tag(PeriodResetStrategy.fromnow)
-                    Text("Reset to date").tag(PeriodResetStrategy.fromnextevent)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.top, 16)
-                
-                LabelledDivider(label: "Repeat every", color: Color(red: 0.667, green: 0.663, blue: 0.663))
-                ForEach(state.periods, id: \.unit) { period in
-                    PeriodItemView(period: period, selected: period.unit == state.todo.periodUnit)
+        ZStack {
+            ScrollView {
+                LazyVStack {
+                    if(state.progress) {
+                        ProgressView()
+                            .padding()
+                    }
+                    PlaceholderTextField(
+                        placeholder: Text("Type recurring task name…")
+                            .foregroundColor(Color(red: 0.678, green: 0.682, blue: 0.686)),
+                        text: self.state.todo.title ?? ""
+                    )
+                    .font(.title)
+                    
+                    Picker(selection: $selectionStrategy, label: Text("Reset strategy")) {
+                        Text("Reset to period").tag(PeriodResetStrategy.fromnow)
+                        Text("Reset to date").tag(PeriodResetStrategy.fromnextevent)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.top, 16)
+                    
+                    LabelledDivider(label: "Repeat every", color: Color(red: 0.667, green: 0.663, blue: 0.663))
+                    ForEach(state.periods, id: \.unit) { period in
+                        PeriodItemView(
+                            period: period,
+                            selected: period.unit == state.todo.periodUnit,
+                            iconAction: {
+                                let action = TodoDetailsPresenter.ActionChangePeriodUnit(periodUnit: period.unit)
+                                presenter.sendAction(action: action)
+
+                                self.pickerShown = true
+                                self.selectedPickerValue = Int(period.count)
+                            }
+                        )
                         .onTapGesture {
                             let action = TodoDetailsPresenter.ActionChangePeriodUnit(periodUnit: period.unit)
                             presenter.sendAction(action: action)
                         }
+                    }
                 }
             }
+            .padding(.horizontal, 16)
+            
+            if(pickerShown) {
+                periodPicker
+            }
         }
-        .padding(.horizontal, 16)
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Button(action: self.cancelAction) { Text("Cancel") }
@@ -71,7 +92,7 @@ struct TaskDetailsView: View {
         .alert(isPresented: $saveErrorHappened, content: {
             Alert(title: Text("Error"), message: Text("Failed to save task"), dismissButton: .default(Text("Ok")))
         })
-
+        
         .disabled(state.progress)
         .progressViewStyle(CircularProgressViewStyle())
         .attachPresenter(presenter: presenter, bindedState: $state)
@@ -84,6 +105,36 @@ struct TaskDetailsView: View {
             self.loadingErrorHappened = state.loadingError.eventFired
             self.saveErrorHappened = state.saveError.eventFired
         })
+    }
+    
+    var periodPicker: some View {
+        VStack {
+            Color.clear
+                .onTapGesture { self.pickerShown = false}
+            VStack {
+                HStack {
+                    Text("Choose period")
+                        .font(.headline)
+                    Spacer()
+                    Button("Done", action: {
+                        print(self.selectedPickerValue)
+                        let action = TodoDetailsPresenter.ActionChangePeriod(period: Int32(self.selectedPickerValue))
+                        presenter.sendAction(action: action)
+                        self.pickerShown = false
+                    })
+                }
+                Picker(selection: $selectedPickerValue, label: Text("Choose period")) {
+                    ForEach(possiblePeriodValues, id: \.self) { value in
+                        let tag = Int(value) ?? 0
+                        Text(value).tag(tag)
+                    }
+                }
+            }
+            .padding(16)
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(radius: 8)
+        }
     }
 }
 
