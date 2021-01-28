@@ -99,8 +99,8 @@ struct TasksView: View {
                 })
             )
         })
-        .snackBar(isShowing: $successReset, text: Text("Task deleted"))
-        .snackBar(isShowing: $successDelete, text: Text("Task renewed"))
+        .snackBar(isShowing: $successReset, text: Text("Task renewed"))
+        .snackBar(isShowing: $successDelete, text: Text("Task deleted"))
         
         .navigationBarTitle("Routine")
         .progressViewStyle(CircularProgressViewStyle())
@@ -109,8 +109,13 @@ struct TasksView: View {
             self.refreshErrorHappened = state.refreshError.eventFired
             self.resetErrorHappened = state.resetError.eventFired
             self.deleteErrorHappened = state.deleteError.eventFired
-            self.successReset = state.resetDone.eventFired
-            self.successDelete = state.deleteDone.eventFired
+            
+            if value.resetDone.eventFired {
+                self.successReset = true
+            }
+            if value.deleteDone.eventFired {
+                self.successDelete = true
+            }
         })
     }
     
