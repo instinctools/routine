@@ -111,11 +111,12 @@ struct TaskDetailsView: View {
             presenter.sendAction(action: action)
         })
         .onChange(of: state, perform: { value in
-            self.loadingErrorHappened = state.loadingError.eventFired
-            self.saveErrorHappened = state.saveError.eventFired
-            self.currentTitle = self.state.todo.title ?? ""
+            self.loadingErrorHappened = value.loadingError.eventFired
+            self.saveErrorHappened = value.saveError.eventFired
+            self.currentTitle = value.todo.title ?? ""
+            self.selectionStrategy = value.todo.periodStrategy
             
-            if(state.saved.eventFired) {
+            if(value.saved.eventFired) {
                 savedAction()
             }
         })
