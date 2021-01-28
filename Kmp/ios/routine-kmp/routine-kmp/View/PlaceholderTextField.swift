@@ -20,9 +20,3 @@ struct PlaceholderTextField: View {
         })
     }
 }
-
-//struct PlaceholderTextField_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaceholderTextField(placeholder: Text("Placeholder"), text: "", textChangedAction: {newText in })
-//    }
-//}

@@ -90,7 +90,9 @@ struct TaskDetailsView: View {
                 Button(action: self.cancelAction) { Text("Cancel") }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: {}) { Text("Done") }
+                Button(action: {
+                    presenter.sendAction(action: TodoDetailsPresenter.ActionSaveTask())
+                }) { Text("Done") }.disabled(!state.saveEnabled)
             }
         }
         .alert(isPresented: $loadingErrorHappened, content: {
@@ -112,6 +114,10 @@ struct TaskDetailsView: View {
             self.loadingErrorHappened = state.loadingError.eventFired
             self.saveErrorHappened = state.saveError.eventFired
             self.currentTitle = self.state.todo.title ?? ""
+            
+            if(state.saved.eventFired) {
+                savedAction()
+            }
         })
     }
     
