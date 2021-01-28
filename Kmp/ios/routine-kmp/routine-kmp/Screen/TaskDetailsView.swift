@@ -17,6 +17,7 @@ struct TaskDetailsView: View {
     
     @State private var selectedPickerValue: Int = 1
     @State private var pickerShown = false
+    @State private var currentTitle = ""
     
     private let fadeModalColor = Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.05)
     
@@ -43,12 +44,10 @@ struct TaskDetailsView: View {
                     PlaceholderTextField(
                         placeholder: Text("Type recurring task name…")
                             .foregroundColor(Color(red: 0.678, green: 0.682, blue: 0.686)),
-                        text: self.state.todo.title ?? "",
-                        editingChanged: { boolValue in
-                            print("Editing changed \(boolValue)")
-                        },
-                        commit: {
-                            print("Committed smth")
+                        text: $currentTitle,
+                        textChangedAction: { newTitle in
+                            let action = TodoDetailsPresenter.ActionChangeTitle(title: newTitle)
+                            presenter.sendAction(action: action)
                         }
                     )
                     .font(.title)
@@ -112,6 +111,7 @@ struct TaskDetailsView: View {
         .onChange(of: state, perform: { value in
             self.loadingErrorHappened = state.loadingError.eventFired
             self.saveErrorHappened = state.saveError.eventFired
+            self.currentTitle = self.state.todo.title ?? ""
         })
     }
     

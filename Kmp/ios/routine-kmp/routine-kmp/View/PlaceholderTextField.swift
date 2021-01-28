@@ -1,22 +1,28 @@
 import SwiftUI
 
 struct PlaceholderTextField: View {
-    var placeholder: Text
-    @State var text: String = ""
-    var editingChanged: (Bool) -> Void = { _ in }
-    var commit: () -> Void = { }
     
+    var placeholder: Text
+    @Binding var text: String
+    
+    var textChangedAction: (String) -> Void
+        
     var body: some View {
         ZStack(alignment: .leading) {
-            if text.isEmpty { placeholder }
-            TextField("", text: $text, onEditingChanged: editingChanged, onCommit: commit)
+            let isTextEmpty = text.isEmpty
+            if isTextEmpty { placeholder }
+            TextEditor(text: $text)
                 .lineLimit(2)
+                .opacity(isTextEmpty ? 0.2 : 1)
         }
+        .onChange(of: text, perform: { value in
+            textChangedAction(value)
+        })
     }
 }
 
-struct PlaceholderTextField_Previews: PreviewProvider {
-    static var previews: some View {
-        PlaceholderTextField(placeholder: Text("Placeholder"))
-    }
-}
+//struct PlaceholderTextField_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlaceholderTextField(placeholder: Text("Placeholder"), text: "", textChangedAction: {newText in })
+//    }
+//}
